@@ -43,6 +43,10 @@ public class Sale extends Discount{
         return null;
     }
 
+    public Sale getSaleById(String id){
+        return null;
+    }
+
     public void importAllData(){
 
     }

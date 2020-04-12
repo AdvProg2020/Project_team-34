@@ -55,26 +55,32 @@ public class Cart {
     //Setters:
     private void setProductsIn(ArrayList<Product> productsIn) {
         this.productsIn = productsIn;
+        //file modification required
     }
 
     private void setProductsQuantity(HashMap<Product, Integer> productsQuantity) {
         this.productsQuantity = productsQuantity;
+        //file modification required
     }
 
     private void setProductsSupplier(HashMap<Product, Supplier> productsSupplier) {
         this.productsSupplier = productsSupplier;
+        //file modification required
     }
 
     private void setProductsSales(HashMap<Product, Sale> productsSales) {
         this.productsSales = productsSales;
+        //file modification required
     }
 
     private void setCodedDiscount(CodedDiscount codedDiscount) {
         this.codedDiscount = codedDiscount;
+        //file modification required
     }
 
     private void setShippingInfo(ShippingInfo shippingInfo) {
         this.shippingInfo = shippingInfo;
+        //file modification required
     }
 
     //Modeling methods:

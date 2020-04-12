@@ -35,18 +35,22 @@ public class Category {
     //Setters:
     public void setName(String name) {
         this.name = name;
+        //file modification required
     }
 
     private void setParentCategory(Category parentCategory) {
         this.parentCategory = parentCategory;
+        //file modification required
     }
 
     private void setAllProductsIn(ArrayList<Product> allProductsIn) {
         this.allProductsIn = allProductsIn;
+        //file modification required
     }
 
     private void setAllCategoriesIn(ArrayList<Category> allCategoriesIn) {
         this.allCategoriesIn = allCategoriesIn;
+        //file modification required
     }
 
     //Modeling methods:

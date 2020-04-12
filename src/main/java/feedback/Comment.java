@@ -2,7 +2,6 @@ package feedback;
 
 import account.Customer;
 import product.Product;
-import state.State;
 
 import java.util.ArrayList;
 
@@ -11,13 +10,14 @@ enum CommentState{
 }
 
 public class Comment {
+    private static ArrayList<Comment> comments;
     private Customer customer;
     private Product product;
     private String title;
     private String content;
     private CommentState state;
     private boolean customerBoughtThisProduct;
-    private static ArrayList<Comment> comments;
+
 
     public Comment(Customer customer, Product product, String title, String content, boolean customerBoughtThisProduct) {
         this.title = title;
@@ -36,10 +36,22 @@ public class Comment {
     }
 
     public boolean hasCustomerBoughtThisProduct(Customer customer){
-        return true;
+        return customerBoughtThisProduct;
     }
 
     public void setCustomerBoughtThisProduct(boolean customerBoughtThisProduct) {
         this.customerBoughtThisProduct = customerBoughtThisProduct;
+    }
+
+    @Override
+    public String toString() {
+        return "Comment{" +
+                "customer=" + customer +
+                ", product=" + product +
+                ", title='" + title + '\'' +
+                ", content='" + content + '\'' +
+                ", state=" + state +
+                ", customerBoughtThisProduct=" + customerBoughtThisProduct +
+                '}';
     }
 }

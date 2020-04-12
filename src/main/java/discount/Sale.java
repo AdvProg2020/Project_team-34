@@ -38,6 +38,14 @@ public class Sale extends Discount{
         return null;
     }
 
-    //setter
 
+    @Override
+    public String toString() {
+        return "Sale{" +
+                "offId='" + offId + '\'' +
+                ", products=" + products +
+                ", state=" + state +
+                ", percent=" + percent +
+                '}';
+    }
 }

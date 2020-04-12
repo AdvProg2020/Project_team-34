@@ -37,4 +37,14 @@ public class CodedDiscount extends Discount{
     public void removeCodeFromList(CodedDiscount codedDiscount){
 
     }
+
+    @Override
+    public String toString() {
+        return "CodedDiscount{" +
+                "discountCode='" + discountCode + '\'' +
+                ", maxDiscountPercent=" + maxDiscountPercent +
+                ", customers=" + customers +
+                ", percent=" + percent +
+                '}';
+    }
 }

@@ -9,9 +9,11 @@ import java.util.ArrayList;
 public class Score {
     private Customer customer;
     private Product product;
+    private float score;
     private static ArrayList<Score> scores;
 
-    public Score(Customer customer, Product product) {
+    public Score(float score, Customer customer, Product product) {
+        this.score = score;
         this.customer = customer;
         this.product = product;
     }
@@ -22,5 +24,14 @@ public class Score {
 
     public static float getAverageScoreForProduct(Product product){
         return 1;
+    }
+
+    @Override
+    public String toString() {
+        return "Score{" +
+                "customer=" + customer +
+                ", product=" + product +
+                ", score=" + score +
+                '}';
     }
 }

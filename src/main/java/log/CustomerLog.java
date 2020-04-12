@@ -101,6 +101,7 @@ public class CustomerLog {
     //Modeling Methods:
     private String generateIdentifier() {
         return "T34CL" + String.format("%015d", allCustomerLogCreatedCount);
+        //completed
     }
 
     public boolean proceedToNextStep() {
@@ -109,10 +110,19 @@ public class CustomerLog {
         }
         deliveryStatus = deliveryStatus.nextStep();
         return true;
+        //completed
     }
 
     public static ArrayList<CustomerLog> getCustomerCustomerLogs(Customer customer) {
-        return null;
+        ArrayList<CustomerLog> customerLogs = new ArrayList<>();
+        if (allCustomerLogs.size() != 0) {
+            for (CustomerLog customerLog: allCustomerLogs) {
+                if (customerLog.getCustomer() == customer) {
+                    customerLogs.add(customerLog);
+                }
+            }
+        }
+        return customerLogs;
     }
 
     public ArrayList<SupplierLog> getSubLogForSuppliers() {

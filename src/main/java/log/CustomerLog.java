@@ -170,6 +170,22 @@ public class CustomerLog {
         return 0;
     }
 
+    public boolean isProductInCart(Product product) {
+        return cart.isProductInCart(product);
+    }
+
+    public static ArrayList<Customer> getCustomerBoughtProduct(Product product) {
+        ArrayList<Customer> customerBoughtProduct = new ArrayList<>();
+        if (allCustomerLogs.size() != 0) {
+            for (CustomerLog customerLog : allCustomerLogs) {
+                if (customerLog.isProductInCart(product)) {
+                    customerBoughtProduct.add(customerLog.getCustomer());
+                }
+            }
+        }
+        return customerBoughtProduct;
+    }
+
     public static void exportAll() {
 
     }

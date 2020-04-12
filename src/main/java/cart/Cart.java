@@ -170,4 +170,9 @@ public class Cart {
         }
         return allSuppliers;
     }
+
+    public boolean isProductInCart(Product product) {
+        return productsIn.contains(product);
+        //completed
+    }
 }

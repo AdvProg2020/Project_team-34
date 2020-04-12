@@ -68,7 +68,15 @@ public class Category {
         return false;
     }
 
+    public boolean removeProduct(Product product) {
+        return false;
+    }
+
     public boolean addSubCategory(Category subCategory) {
+        return false;
+    }
+
+    public boolean removeSubCategory(Category subCategory) {
         return false;
     }
 

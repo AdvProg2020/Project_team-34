@@ -1,6 +1,7 @@
 package discount;
 
 import product.Product;
+import state.State;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,7 +10,7 @@ public class Sale extends Discount{
     private String offId;
     private ArrayList<Product> products;
     private static ArrayList<Sale> sales;
-    //enumeration
+    private State state;
 
 
     public Sale(Date start, Date end, int percent, String offId) {

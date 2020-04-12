@@ -5,6 +5,7 @@ import product.Product;
 
 import java.util.ArrayList;
 
+
 public class Score {
     private Customer customer;
     private Product product;

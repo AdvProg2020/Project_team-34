@@ -2,15 +2,20 @@ package feedback;
 
 import account.Customer;
 import product.Product;
+import state.State;
 
 import java.util.ArrayList;
+
+enum CommentState{
+    PENDING , CONFIRMED , DENIED_BY_MANAGER
+}
 
 public class Comment {
     private Customer customer;
     private Product product;
     private String title;
     private String content;
-    //enum
+    private CommentState state;
     private boolean customerBoughtThisProduct;
     private static ArrayList<Comment> comments;
 

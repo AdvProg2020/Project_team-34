@@ -9,6 +9,7 @@ import java.util.Date;
 
 public class CustomerLog {
     private static ArrayList<CustomerLog> allCustomerLogs = new ArrayList<>();
+    private static int allCustomerLogCreatedCount = 0;
 
     private String identifier;
     private Date date;
@@ -99,7 +100,7 @@ public class CustomerLog {
 
     //Modeling Methods:
     private String generateIdentifier() {
-        return null;
+        return "T34CL" + String.format("%015d", allCustomerLogCreatedCount);
     }
 
     public void proceedToNextStep() {

@@ -3,6 +3,7 @@ package log;
 import account.Customer;
 import account.Supplier;
 import cart.Cart;
+import product.Product;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -125,16 +126,19 @@ public class CustomerLog {
         return customerLogs;
     }
 
-    public ArrayList<SupplierLog> getSubLogForSuppliers() {
-        return null;
+    public void addSubLogForSuppliers() {
+        ArrayList<Supplier> allSupplierInThisLog = getAllSuppliers();
+        for (Supplier supplier : allSupplierInThisLog) {
+            addSubLogForSupplier(supplier);
+        }
     }
 
-    public SupplierLog getSubLogForSupplier(Supplier supplier) {
-        return null;
+    public void addSubLogForSupplier(Supplier supplier) {
+        new SupplierLog(this, supplier);
     }
 
     public ArrayList<Supplier> getAllSuppliers() {
-        return null;
+        return cart.getAllSupplier();
     }
 
     public static ArrayList<SupplierLog> getAllSubLogsForSupplier(Supplier supplier) {

@@ -160,4 +160,14 @@ public class Cart {
     public int getBill() {
         return getValueOfCartWithoutDiscounts() - (getAmountOfSale() + getAmountOfCodedDiscount());
     }
+
+    public ArrayList<Supplier> getAllSupplier() {
+        ArrayList<Supplier> allSuppliers = new ArrayList<>();
+        for (Product product : productsIn) {
+            if (!allSuppliers.contains(productsSupplier.get(product))) {
+                allSuppliers.add(productsSupplier.get(product));
+            }
+        }
+        return allSuppliers;
+    }
 }

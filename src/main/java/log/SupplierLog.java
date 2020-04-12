@@ -88,6 +88,11 @@ public class SupplierLog {
         //completed
     }
 
+    public boolean proceedToNextStep() {
+        return customerLog.proceedToNextStep();
+        //completed
+    }
+
     public ArrayList<SupplierLog> getSupplierSupplierLog(Supplier supplier) {
         ArrayList<SupplierLog> supplierLogs = new ArrayList<>();
         if (allSupplierLogs.size() != 0) {

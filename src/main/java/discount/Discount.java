@@ -2,6 +2,13 @@ package discount;
 
 import java.util.Date;
 
+/**
+ * @author soheil
+ * @since 0.00
+ * This class represents the parent for the all kinds of discounts Online Market!
+ */
+
+
 public abstract class Discount {
     private Date start;
     private Date end;

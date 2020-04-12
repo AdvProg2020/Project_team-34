@@ -5,6 +5,12 @@ import product.Product;
 
 import java.util.ArrayList;
 
+/**
+ * @author soheil
+ * @since 0.00
+ * This class represents the NOMRE for Online Market!
+ */
+
 
 public class Score {
     private Customer customer;
@@ -26,6 +32,10 @@ public class Score {
         return 1;
     }
 
+    /**
+     *
+     * @return returns the String form of a JSON object for storing in the database.
+     */
     @Override
     public String toString() {
         return "Score{" +

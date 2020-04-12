@@ -5,6 +5,12 @@ import product.Product;
 
 import java.util.ArrayList;
 
+/**
+ * @author soheil
+ * @since 0.00
+ * This class represents the NAZAR for the Online Market!
+ */
+
 enum CommentState{
     PENDING , CONFIRMED , DENIED_BY_MANAGER
 }
@@ -43,6 +49,10 @@ public class Comment {
         this.customerBoughtThisProduct = customerBoughtThisProduct;
     }
 
+    /**
+     *
+     * @return returns the String form of a JSON object for storing in the database.
+     */
     @Override
     public String toString() {
         return "Comment{" +

@@ -6,12 +6,17 @@ import state.State;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * @author soheil
+ * @since 0.00
+ * This class represents the HARAJ for the Online Market!
+ */
+
 public class Sale extends Discount{
     private String offId;
     private ArrayList<Product> products;
     private static ArrayList<Sale> sales;
     private State state;
-
 
     public Sale(Date start, Date end, int percent, String offId) {
         super(start, end, percent);
@@ -38,7 +43,10 @@ public class Sale extends Discount{
         return null;
     }
 
-
+    /**
+     *
+     * @return returns the String form of a JSON object for storing in the database.
+     */
     @Override
     public String toString() {
         return "Sale{" +

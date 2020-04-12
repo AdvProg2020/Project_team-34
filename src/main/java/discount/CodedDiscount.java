@@ -6,6 +6,12 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
+/**
+ * @author soheil
+ * @since 0.00
+ * This class represents the TakhfifeCodDar for the Online Market!
+ */
+
 public class CodedDiscount extends Discount{
     private String discountCode;
     private int maxDiscountPercent;
@@ -38,6 +44,10 @@ public class CodedDiscount extends Discount{
 
     }
 
+    /**
+     *
+     * @return returns the String form of a JSON object for storing in the database.
+     */
     @Override
     public String toString() {
         return "CodedDiscount{" +

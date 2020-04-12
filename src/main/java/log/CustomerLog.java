@@ -153,14 +153,6 @@ public class CustomerLog {
         //completed
     }
 
-    public static ArrayList<SupplierLog> getAllSubLogsForSupplier(Supplier supplier) {
-        return null;
-    }
-
-    public static ArrayList<SupplierLog> getAllLogsForAllSuppliers() {
-        return null;
-    }
-
     public static void exportAll() {
 
     }

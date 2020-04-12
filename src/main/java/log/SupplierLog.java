@@ -88,6 +88,19 @@ public class SupplierLog {
         //completed
     }
 
+    public ArrayList<SupplierLog> getSupplierSupplierLog(Supplier supplier) {
+        ArrayList<SupplierLog> supplierLogs = new ArrayList<>();
+        if (allSupplierLogs.size() != 0) {
+            for (SupplierLog supplierLog : allSupplierLogs) {
+                if (supplierLog.getSupplier() == supplier) {
+                    supplierLogs.add(supplierLog);
+                }
+            }
+        }
+        return supplierLogs;
+        //completed
+    }
+
     @Override
     public String toString() {
         return null;

@@ -3,12 +3,14 @@ package log;
 import account.Customer;
 import account.Supplier;
 import cart.Cart;
+import product.Product;
 
 import java.util.ArrayList;
 import java.util.Date;
 
 public class CustomerLog {
     private static ArrayList<CustomerLog> allCustomerLogs = new ArrayList<>();
+    private static int allCustomerLogCreatedCount = 0;
 
     private String identifier;
     private Date date;
@@ -23,6 +25,15 @@ public class CustomerLog {
     public CustomerLog(Customer customer, Cart cart) {
         this.customer = customer;
         this.cart = cart;
+        this.identifier = generateIdentifier();
+        this.date = new Date(System.currentTimeMillis());
+        this.paidAmount = cart.getBill();
+        this.codedDiscountAmount = cart.getAmountOfCodedDiscount();
+        this.deliveryStatus = LogStatus.PENDING;
+        allCustomerLogs.add(this);
+        allCustomerLogCreatedCount++;
+        //file modification required
+        //completed
     }
 
     public CustomerLog(String identifier, Date date, int paidAmount, int codedDiscountAmount, Customer customer, LogStatus deliveryStatus, Cart cart) {
@@ -71,63 +82,108 @@ public class CustomerLog {
     //Setters:
     private void setIdentifier(String identifier) {
         this.identifier = identifier;
+        //file modification required
     }
 
     private void setDate(Date date) {
         this.date = date;
+        //file modification required
     }
 
     private void setPaidAmount(int paidAmount) {
         this.paidAmount = paidAmount;
+        //file modification required
     }
 
     public void setCodedDiscountAmount(int codedDiscountAmount) {
         this.codedDiscountAmount = codedDiscountAmount;
+        //file modification required
     }
 
     private void setCustomer(Customer customer) {
         this.customer = customer;
+        //file modification required
     }
 
     public void setDeliveryStatus(LogStatus deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+        //file modification required
     }
 
     public void setCart(Cart cart) {
         this.cart = cart;
+        //file modification required
     }
 
     //Modeling Methods:
     private String generateIdentifier() {
-        return null;
+        return "T34CL" + String.format("%015d", allCustomerLogCreatedCount + 1);
+        //completed
     }
 
-    public void proceedToNextStep() {
-
+    public boolean proceedToNextStep() {
+        if (deliveryStatus == LogStatus.DELIVERED) {
+            return false;
+        }
+        deliveryStatus = deliveryStatus.nextStep();
+        return true;
+        //file modification required
+        //completed
     }
 
     public static ArrayList<CustomerLog> getCustomerCustomerLogs(Customer customer) {
-        return null;
+        ArrayList<CustomerLog> customerLogs = new ArrayList<>();
+        if (allCustomerLogs.size() != 0) {
+            for (CustomerLog customerLog: allCustomerLogs) {
+                if (customerLog.getCustomer() == customer) {
+                    customerLogs.add(customerLog);
+                }
+            }
+        }
+        return customerLogs;
+        //completed
     }
 
-    public ArrayList<SupplierLog> getSubLogForSuppliers() {
-        return null;
+    public void addSubLogForSuppliers() {
+        ArrayList<Supplier> allSupplierInThisLog = getAllSuppliers();
+        for (Supplier supplier : allSupplierInThisLog) {
+            addSubLogForSupplier(supplier);
+        }
+        //completed
     }
 
-    public SupplierLog getSubLogForSupplier(Supplier supplier) {
-        return null;
+    public void addSubLogForSupplier(Supplier supplier) {
+        new SupplierLog(this, supplier);
+        //completed
     }
 
     public ArrayList<Supplier> getAllSuppliers() {
-        return null;
+        return cart.getAllSupplier();
+        //completed
     }
 
-    public static ArrayList<SupplierLog> getAllSubLogsForSupplier(Supplier supplier) {
-        return null;
+    public int getSupplierEarnedMoney(Supplier supplier) {
+        return 0;
     }
 
-    public static ArrayList<SupplierLog> getAllLogsForAllSuppliers() {
-        return null;
+    public int getSupplierSaleAmount(Supplier supplier) {
+        return 0;
+    }
+
+    public boolean isProductInCart(Product product) {
+        return cart.isProductInCart(product);
+    }
+
+    public static ArrayList<Customer> getCustomerBoughtProduct(Product product) {
+        ArrayList<Customer> customerBoughtProduct = new ArrayList<>();
+        if (allCustomerLogs.size() != 0) {
+            for (CustomerLog customerLog : allCustomerLogs) {
+                if (customerLog.isProductInCart(product)) {
+                    customerBoughtProduct.add(customerLog.getCustomer());
+                }
+            }
+        }
+        return customerBoughtProduct;
     }
 
     public static void exportAll() {

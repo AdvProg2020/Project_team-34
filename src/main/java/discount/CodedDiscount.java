@@ -44,6 +44,10 @@ public class CodedDiscount extends Discount{
 
     }
 
+    public void importAllData(){
+
+    }
+
     /**
      *
      * @return returns the String form of a JSON object for storing in the database.

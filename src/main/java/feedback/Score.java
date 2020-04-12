@@ -8,7 +8,7 @@ import java.util.ArrayList;
 /**
  * @author soheil
  * @since 0.00
- * This class represents the NOMRE for Online Market!
+ * This class represents the NOMRE for the Online Market!
  */
 
 
@@ -30,6 +30,10 @@ public class Score {
 
     public static float getAverageScoreForProduct(Product product){
         return 1;
+    }
+
+    public void importAllData(){
+
     }
 
     /**

@@ -49,6 +49,10 @@ public class Comment {
         this.customerBoughtThisProduct = customerBoughtThisProduct;
     }
 
+    public void importAllData(){
+
+    }
+
     /**
      *
      * @return returns the String form of a JSON object for storing in the database.

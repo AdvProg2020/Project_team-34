@@ -6,7 +6,16 @@ public enum LogStatus {
     SENDING,
     DELIVERED;
 
-    public void proceedToNextStep() {
+    private LogStatus next;
 
+    static {
+        PENDING.next = PREPARING;
+        PREPARING.next = SENDING;
+        SENDING.next = DELIVERED;
+        DELIVERED.next = DELIVERED;
+    }
+
+    public LogStatus nextStep() {
+        return next;
     }
 }

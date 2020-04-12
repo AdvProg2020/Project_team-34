@@ -103,8 +103,12 @@ public class CustomerLog {
         return "T34CL" + String.format("%015d", allCustomerLogCreatedCount);
     }
 
-    public void proceedToNextStep() {
-
+    public boolean proceedToNextStep() {
+        if (deliveryStatus == LogStatus.DELIVERED) {
+            return false;
+        }
+        deliveryStatus = deliveryStatus.nextStep();
+        return true;
     }
 
     public static ArrayList<CustomerLog> getCustomerCustomerLogs(Customer customer) {

@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 public class SupplierLog {
     private static ArrayList<SupplierLog> allSupplierLogs = new ArrayList<>();
+    private static int allSupplierLogCreatedCount = 0;
 
     private String identifier;
     private int earnedMoney;
@@ -63,7 +64,7 @@ public class SupplierLog {
 
     //Modeling methods:
     private String generateIdentifier() {
-        return null;
+        return "T34SL" + String.format("%015d", allSupplierLogCreatedCount + 1);
     }
 
     public static ArrayList<Supplier> getAllSupplierLogs(Supplier supplier) {

@@ -25,6 +25,14 @@ public class CustomerLog {
     public CustomerLog(Customer customer, Cart cart) {
         this.customer = customer;
         this.cart = cart;
+        this.identifier = generateIdentifier();
+        this.date = new Date(System.currentTimeMillis());
+        this.paidAmount = cart.getBill();
+        this.codedDiscountAmount = cart.getAmountOfCodedDiscount();
+        this.deliveryStatus = LogStatus.PENDING;
+        allCustomerLogs.add(this);
+        allCustomerLogCreatedCount++;
+        //completed
     }
 
     public CustomerLog(String identifier, Date date, int paidAmount, int codedDiscountAmount, Customer customer, LogStatus deliveryStatus, Cart cart) {
@@ -124,6 +132,7 @@ public class CustomerLog {
             }
         }
         return customerLogs;
+        //completed
     }
 
     public void addSubLogForSuppliers() {
@@ -131,14 +140,17 @@ public class CustomerLog {
         for (Supplier supplier : allSupplierInThisLog) {
             addSubLogForSupplier(supplier);
         }
+        //completed
     }
 
     public void addSubLogForSupplier(Supplier supplier) {
         new SupplierLog(this, supplier);
+        //completed
     }
 
     public ArrayList<Supplier> getAllSuppliers() {
         return cart.getAllSupplier();
+        //completed
     }
 
     public static ArrayList<SupplierLog> getAllSubLogsForSupplier(Supplier supplier) {

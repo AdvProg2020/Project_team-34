@@ -3,7 +3,7 @@ package product;
 import java.util.ArrayList;
 
 public class Category {
-    public static final Category superCategory = new Category("All Products", true, null);
+    public static Category superCategory = new Category("All Products", true, null);
 
     private String name;
     private Category parentCategory;
@@ -12,7 +12,19 @@ public class Category {
 
     //Constructors:
     public Category(String name, boolean isParentCategory, Category parentCategory) {
-
+        this.name = name;
+        if (isParentCategory) {
+            allCategoriesIn = new ArrayList<>();
+            allProductsIn = null;
+        } else {
+            allProductsIn = new ArrayList<>();
+            allCategoriesIn = null;
+        }
+        this.parentCategory = parentCategory;
+        //exception might occur, parent category is a product saver;
+        if (parentCategory != null) {
+            parentCategory.addSubCategory(this);
+        }
     }
 
     //Getters:
@@ -54,16 +66,6 @@ public class Category {
     }
 
     //Modeling methods:
-    public void switchType() {
-        if (allProductsIn == null) {
-            allCategoriesIn = null;
-            allProductsIn = new ArrayList<>();
-        } else {
-            allCategoriesIn = new ArrayList<>();
-            allProductsIn = null;
-        }
-    }
-
     public boolean addProduct(Product product) {
         if (allProductsIn != null) {
             allProductsIn.add(product);
@@ -76,8 +78,11 @@ public class Category {
         return false;
     }
 
-    public boolean addSubCategory(Category subCategory) {
+    public boolean canBeParentCategory() {
         return false;
+    }
+
+    public void addSubCategory(Category subCategory) {
     }
 
     public boolean removeSubCategory(Category subCategory) {
@@ -85,7 +90,16 @@ public class Category {
     }
 
     public ArrayList<Category> getReference() {
-        return null;
+        ArrayList<Category> previousReference;
+        if (this == superCategory) {
+            previousReference = new ArrayList<>();
+            previousReference.add(superCategory);
+            return previousReference;
+        }
+        previousReference = parentCategory.getReference();
+        previousReference.add(this);
+        return previousReference;
+        //completed
     }
 
     public ArrayList<Product> allProductInAllSubCategories() {

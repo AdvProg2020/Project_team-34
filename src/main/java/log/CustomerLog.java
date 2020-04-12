@@ -32,6 +32,7 @@ public class CustomerLog {
         this.deliveryStatus = LogStatus.PENDING;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
+        //file modification required
         //completed
     }
 
@@ -81,30 +82,37 @@ public class CustomerLog {
     //Setters:
     private void setIdentifier(String identifier) {
         this.identifier = identifier;
+        //file modification required
     }
 
     private void setDate(Date date) {
         this.date = date;
+        //file modification required
     }
 
     private void setPaidAmount(int paidAmount) {
         this.paidAmount = paidAmount;
+        //file modification required
     }
 
     public void setCodedDiscountAmount(int codedDiscountAmount) {
         this.codedDiscountAmount = codedDiscountAmount;
+        //file modification required
     }
 
     private void setCustomer(Customer customer) {
         this.customer = customer;
+        //file modification required
     }
 
     public void setDeliveryStatus(LogStatus deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+        //file modification required
     }
 
     public void setCart(Cart cart) {
         this.cart = cart;
+        //file modification required
     }
 
     //Modeling Methods:
@@ -119,6 +127,7 @@ public class CustomerLog {
         }
         deliveryStatus = deliveryStatus.nextStep();
         return true;
+        //file modification required
         //completed
     }
 
@@ -151,6 +160,14 @@ public class CustomerLog {
     public ArrayList<Supplier> getAllSuppliers() {
         return cart.getAllSupplier();
         //completed
+    }
+
+    public int getSupplierEarnedMoney(Supplier supplier) {
+        return 0;
+    }
+
+    public int getSupplierSaleAmount(Supplier supplier) {
+        return 0;
     }
 
     public static void exportAll() {

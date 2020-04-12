@@ -18,6 +18,13 @@ public class SupplierLog {
     public SupplierLog(CustomerLog customerLog, Supplier supplier) {
         this.customerLog = customerLog;
         this.supplier = supplier;
+        this.earnedMoney = customerLog.getSupplierEarnedMoney(supplier);
+        this.discountAmount = customerLog.getSupplierSaleAmount(supplier);
+        this.identifier = generateIdentifier();
+        allSupplierLogs.add(this);
+        allSupplierLogCreatedCount++;
+        //file modification required
+        //completed
     }
 
     //Getters:
@@ -41,38 +48,44 @@ public class SupplierLog {
         return supplier;
     }
 
+    public static ArrayList<SupplierLog> getAllSupplierLogs() {
+        return allSupplierLogs;
+    }
+
+    public static int getAllSupplierLogCreatedCount() {
+        return allSupplierLogCreatedCount;
+    }
+
     //Setters:
     private void setIdentifier(String identifier) {
         this.identifier = identifier;
+        //file modification required
     }
 
     private void setEarnedMoney(int earnedMoney) {
         this.earnedMoney = earnedMoney;
+        //file modification required
     }
 
     private void setDiscountAmount(int discountAmount) {
         this.discountAmount = discountAmount;
+        //file modification required
     }
 
     private void setCustomerLog(CustomerLog customerLog) {
         this.customerLog = customerLog;
+        //file modification required
     }
 
     private void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+        //file modification required
     }
 
     //Modeling methods:
     private String generateIdentifier() {
         return "T34SL" + String.format("%015d", allSupplierLogCreatedCount + 1);
-    }
-
-    public static ArrayList<Supplier> getAllSupplierLogs(Supplier supplier) {
-        return null;
-    }
-
-    public static void importAll() {
-
+        //completed
     }
 
     @Override

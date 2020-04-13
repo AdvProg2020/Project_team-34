@@ -9,14 +9,14 @@ import java.util.HashMap;
 /**
  * @author soheil
  * @since 0.00
- * This class represents the TakhfifeCodDar for the Online Market!
  */
 
 public class CodedDiscount extends Discount{
+    private static ArrayList<CodedDiscount> codedDiscounts;
     private String discountCode;
     private int maxDiscountPercent;
     private HashMap<Customer, Integer> customers;
-    private static ArrayList<CodedDiscount> codedDiscounts;
+
 
     public CodedDiscount(Date start, Date end, int percent, String discountCode, int maxDiscountPercent) {
         super(start, end, percent);
@@ -44,7 +44,7 @@ public class CodedDiscount extends Discount{
 
     }
 
-    public void importAllData(){
+    public static void importAllData(){
 
     }
 

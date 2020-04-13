@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * @author soheil
  * @since 0.00
- * This class represents the parent for all kinds of discounts of the Online Market!
+ * This class represents the parent for all kinds of discounts in the Online Market!
  */
 
 

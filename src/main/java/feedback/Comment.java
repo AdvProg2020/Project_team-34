@@ -8,12 +8,12 @@ import java.util.ArrayList;
 /**
  * @author soheil
  * @since 0.00
- * This class represents the NAZAR for the Online Market!
  */
 
 enum CommentState{
     PENDING , CONFIRMED , DENIED_BY_MANAGER
 }
+
 
 public class Comment {
     private static ArrayList<Comment> comments;
@@ -49,10 +49,6 @@ public class Comment {
         this.title = title;
     }
 
-    public void setState(CommentState state) {
-        this.state = state;
-    }
-
     public boolean hasCustomerBoughtThisProduct(Customer customer){
         return customerBoughtThisProduct;
     }
@@ -61,7 +57,7 @@ public class Comment {
         this.customerBoughtThisProduct = customerBoughtThisProduct;
     }
 
-    public void importAllData(){
+    public static void importAllData(){
 
     }
 
@@ -76,8 +72,8 @@ public class Comment {
                 ", product=" + product +
                 ", title='" + title + '\'' +
                 ", content='" + content + '\'' +
-                ", state=" + state +
                 ", customerBoughtThisProduct=" + customerBoughtThisProduct +
                 '}';
     }
+
 }

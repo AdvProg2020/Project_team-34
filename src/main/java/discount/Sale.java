@@ -9,18 +9,22 @@ import java.util.Date;
 /**
  * @author soheil
  * @since 0.00
- * This class represents the HARAJ for the Online Market!
  */
 
 public class Sale extends Discount{
+    private static ArrayList<Sale> sales;
     private String offId;
     private ArrayList<Product> products;
-    private static ArrayList<Sale> sales;
+
     private State state;
 
-    public Sale(Date start, Date end, int percent, String offId) {
+    public Sale(Date start, Date end, int percent) {
         super(start, end, percent);
-        this.offId = offId;
+        this.offId = generateOffId();
+    }
+
+    private String generateOffId(){
+        return null;
     }
 
     public void addSale(Sale sale){
@@ -47,8 +51,12 @@ public class Sale extends Discount{
         return null;
     }
 
-    public void importAllData(){
+    public static void importAllData(){
 
+    }
+
+    public boolean isProductInSale(Product product){
+        return false;
     }
 
     /**

@@ -8,15 +8,15 @@ import java.util.ArrayList;
 /**
  * @author soheil
  * @since 0.00
- * This class represents the NOMRE for the Online Market!
  */
 
 
 public class Score {
+    private static ArrayList<Score> scores;
     private Customer customer;
     private Product product;
     private float score;
-    private static ArrayList<Score> scores;
+
 
     public Score(float score, Customer customer, Product product) {
         this.score = score;
@@ -32,7 +32,7 @@ public class Score {
         return 1;
     }
 
-    public void importAllData(){
+    public static void importAllData(){
 
     }
 

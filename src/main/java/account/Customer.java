@@ -2,6 +2,11 @@ package account;
 
 import log.CustomerLog;
 
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ * This class represents a customer which is also an account
+ */
 public class Customer extends Account {
     private CustomerLog customerLog;
 

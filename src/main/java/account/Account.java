@@ -3,6 +3,11 @@ package account;
 
 import java.util.ArrayList;
 
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ * This class represents a user
+ */
 public abstract class Account {
     private String userName , name , familyName , email , phoneNumber , password;
     private int credit;

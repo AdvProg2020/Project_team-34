@@ -32,6 +32,7 @@ public class CustomerLog {
         this.deliveryStatus = LogStatus.PENDING;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
+        addSubLogForSuppliers();
         //file modification required
         //completed
     }

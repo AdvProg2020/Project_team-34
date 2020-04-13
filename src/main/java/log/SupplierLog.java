@@ -4,6 +4,11 @@ import account.Supplier;
 
 import java.util.ArrayList;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public class SupplierLog {
     private static ArrayList<SupplierLog> allSupplierLogs = new ArrayList<>();
     private static int allSupplierLogCreatedCount = 0;

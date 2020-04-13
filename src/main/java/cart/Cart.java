@@ -9,6 +9,11 @@ import product.Product;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public class Cart {
     private ArrayList<Product> productsIn;
     private HashMap<Product, Integer> productsQuantity;

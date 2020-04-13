@@ -8,6 +8,11 @@ import product.Product;
 import java.util.ArrayList;
 import java.util.Date;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public class CustomerLog {
     private static ArrayList<CustomerLog> allCustomerLogs = new ArrayList<>();
     private static int allCustomerLogCreatedCount = 0;

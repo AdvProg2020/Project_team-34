@@ -9,7 +9,7 @@ public class ProductRequest extends Request {
     private static int allCreatedProductRequestNum = 0;
 
     public ProductRequest() {
-        super();
+        super(generateRequestId());
     }
 
 
@@ -23,7 +23,6 @@ public class ProductRequest extends Request {
         this.removeRequest();
     }
 
-    @Override
     public static String generateRequestId() {
         return "T34PR" + String.format("%015d",allCreatedProductRequestNum  + 1);
     }

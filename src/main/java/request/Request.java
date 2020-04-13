@@ -41,5 +41,4 @@ public abstract class Request {
 
     public abstract void doRequest(boolean acceptedOrNot);
 
-    public abstract String generateRequestId();
 }

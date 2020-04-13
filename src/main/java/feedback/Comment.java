@@ -10,6 +10,9 @@ import java.util.ArrayList;
  * @since 0.00
  */
 
+enum CommentState{
+    PENDING , CONFIRMED , DENIED_BY_MANAGER
+}
 
 
 public class Comment {
@@ -18,6 +21,7 @@ public class Comment {
     private Product product;
     private String title;
     private String content;
+    private CommentState state;
     private boolean customerBoughtThisProduct;
 
 

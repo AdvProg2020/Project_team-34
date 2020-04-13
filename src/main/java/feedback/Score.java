@@ -12,10 +12,11 @@ import java.util.ArrayList;
 
 
 public class Score {
+    private static ArrayList<Score> scores;
     private Customer customer;
     private Product product;
     private float score;
-    private static ArrayList<Score> scores;
+
 
     public Score(float score, Customer customer, Product product) {
         this.score = score;

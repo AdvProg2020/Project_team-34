@@ -12,9 +12,10 @@ import java.util.Date;
  */
 
 public class Sale extends Discount{
+    private static ArrayList<Sale> sales;
     private String offId;
     private ArrayList<Product> products;
-    private static ArrayList<Sale> sales;
+
     private State state;
 
     public Sale(Date start, Date end, int percent) {
@@ -52,6 +53,10 @@ public class Sale extends Discount{
 
     public static void importAllData(){
 
+    }
+
+    public boolean isProductInSale(Product product){
+        return false;
     }
 
     /**

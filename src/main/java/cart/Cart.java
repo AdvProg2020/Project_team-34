@@ -55,26 +55,32 @@ public class Cart {
     //Setters:
     private void setProductsIn(ArrayList<Product> productsIn) {
         this.productsIn = productsIn;
+        //file modification required
     }
 
     private void setProductsQuantity(HashMap<Product, Integer> productsQuantity) {
         this.productsQuantity = productsQuantity;
+        //file modification required
     }
 
     private void setProductsSupplier(HashMap<Product, Supplier> productsSupplier) {
         this.productsSupplier = productsSupplier;
+        //file modification required
     }
 
     private void setProductsSales(HashMap<Product, Sale> productsSales) {
         this.productsSales = productsSales;
+        //file modification required
     }
 
     private void setCodedDiscount(CodedDiscount codedDiscount) {
         this.codedDiscount = codedDiscount;
+        //file modification required
     }
 
     private void setShippingInfo(ShippingInfo shippingInfo) {
         this.shippingInfo = shippingInfo;
+        //file modification required
     }
 
     //Modeling methods:
@@ -159,5 +165,20 @@ public class Cart {
 
     public int getBill() {
         return getValueOfCartWithoutDiscounts() - (getAmountOfSale() + getAmountOfCodedDiscount());
+    }
+
+    public ArrayList<Supplier> getAllSupplier() {
+        ArrayList<Supplier> allSuppliers = new ArrayList<>();
+        for (Product product : productsIn) {
+            if (!allSuppliers.contains(productsSupplier.get(product))) {
+                allSuppliers.add(productsSupplier.get(product));
+            }
+        }
+        return allSuppliers;
+    }
+
+    public boolean isProductInCart(Product product) {
+        return productsIn.contains(product);
+        //completed
     }
 }

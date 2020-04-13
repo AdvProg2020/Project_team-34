@@ -15,13 +15,26 @@ public class Product {
     private boolean isAvailable ;
     private Category category;
     private String description;
-    //private int averageScore ;
     private ArrayList<Comment> comments;
     private static ArrayList<Product> allProduct = new ArrayList<>();
 
 
-    public Product(String name, String nameOfCompany, int price, ArrayList<Supplier> listOfSuppliers, boolean isAvailable,
-                   Category category, String description, ArrayList<Comment> comments) {
+    public Product(String name, String nameOfCompany, int price, boolean isAvailable,
+                   Category category, String description) {
+        this.name = name;
+        this.nameOfCompany = nameOfCompany;
+        this.price = price;
+        listOfSuppliers = new ArrayList<>();
+        this.isAvailable = isAvailable;
+        this.category = category;
+        this.description = description;
+        comments = new ArrayList<>();
+        this.productState = State.PREPARING_TO_BUILD;
+    }
+
+    public Product(String name, String nameOfCompany, int price, ArrayList<Supplier> listOfSuppliers,
+                   boolean isAvailable, Category category, String description, ArrayList<Comment> comments) {
+        this.productState = State.PREPARING_TO_BUILD;
         this.name = name;
         this.nameOfCompany = nameOfCompany;
         this.price = price;
@@ -30,7 +43,22 @@ public class Product {
         this.category = category;
         this.description = description;
         this.comments = comments;
-        this.productState = State.PREPARING_TO_BUILD;
+    }
+
+    public String getProductId() {
+        return productId;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public ArrayList<Comment> getComments() {
+        return comments;
+    }
+
+    public ArrayList<Supplier> getListOfSuppliers() {
+        return listOfSuppliers;
     }
 
     public static Product getProductById(String productId){return null;}
@@ -42,6 +70,27 @@ public class Product {
     public void addProduct(){
         productState = State.CONFIRMED;
         allProduct.add(this);
-
     }
+
+    public boolean doesSupplierSellThisProduct (Supplier supplier){
+        return listOfSuppliers.contains(supplier);
+    }
+
+    public static ArrayList<String> getProductIdForSupplier(Supplier supplier){
+        ArrayList<String> result = new ArrayList<>();
+        for (Product product : allProduct) {
+            if(product.doesSupplierSellThisProduct(supplier))
+                result.add(product.getProductId());
+        }
+        return result;
+    }
+
+    public static Product getProductByName (String name){
+        for (Product product : allProduct) {
+            if(product.getName().equals(name))
+                return product;
+        }
+        return null;
+    }
+
 }

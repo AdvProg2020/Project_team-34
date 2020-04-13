@@ -109,4 +109,5 @@ public class Category {
     public static boolean isProductInSubCategories(Product product) {
         return false;
     }
+
 }

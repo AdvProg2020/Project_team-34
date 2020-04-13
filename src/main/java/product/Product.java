@@ -6,6 +6,11 @@ import state.State;
 
 import java.util.ArrayList;
 
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ * This class represents a product
+ */
 public class Product {
     private String productId;
     private State productState;

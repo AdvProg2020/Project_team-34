@@ -8,7 +8,6 @@ import java.util.ArrayList;
 /**
  * @author soheil
  * @since 0.00
- * This class represents the NOMRE for the Online Market!
  */
 
 
@@ -32,7 +31,7 @@ public class Score {
         return 1;
     }
 
-    public void importAllData(){
+    public static void importAllData(){
 
     }
 

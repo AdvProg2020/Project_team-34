@@ -9,7 +9,6 @@ import java.util.HashMap;
 /**
  * @author soheil
  * @since 0.00
- * This class represents the TakhfifeCodDar for the Online Market!
  */
 
 public class CodedDiscount extends Discount{
@@ -44,7 +43,7 @@ public class CodedDiscount extends Discount{
 
     }
 
-    public void importAllData(){
+    public static void importAllData(){
 
     }
 

@@ -1,6 +1,7 @@
 package product;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Aryan Ahadinia
@@ -13,6 +14,7 @@ public class Category {
     private Category parentCategory;
     private ArrayList<Product> allProductsIn;
     private ArrayList<Category> allCategoriesIn;
+    private HashMap<String, ArrayList<String>> specificationFilter;
 
     //Constructors:
     public Category(String name, boolean isParentCategory, Category parentCategory) {

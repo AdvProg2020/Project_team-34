@@ -5,8 +5,11 @@ import feedback.Comment;
 import state.State;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Product {
+    private static ArrayList<Product> allProduct = new ArrayList<>();
+
     private String productId;
     private State productState;
     private String name , nameOfCompany;
@@ -16,7 +19,7 @@ public class Product {
     private Category category;
     private String description;
     private ArrayList<Comment> comments;
-    private static ArrayList<Product> allProduct = new ArrayList<>();
+    private HashMap<String, String> specification; //method check
 
 
     public Product(String name, String nameOfCompany, int price, boolean isAvailable,

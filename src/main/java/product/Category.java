@@ -1,6 +1,7 @@
 package product;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Category {
     public static Category superCategory = new Category("All Products", true, null);
@@ -9,6 +10,7 @@ public class Category {
     private Category parentCategory;
     private ArrayList<Product> allProductsIn;
     private ArrayList<Category> allCategoriesIn;
+    private HashMap<String, ArrayList<String>> specificationFilter;
 
     //Constructors:
     public Category(String name, boolean isParentCategory, Category parentCategory) {

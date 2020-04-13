@@ -47,8 +47,7 @@ public class SaleRequest extends Request{
         return false;
     }
 
-    @Override
-    public String generateRequestId() {
+    public static String generateRequestId() {
         return null;
     }
 

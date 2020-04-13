@@ -122,7 +122,7 @@ public class CustomerLog {
     }
 
     //Modeling Methods:
-    private String generateIdentifier() {
+    private static String generateIdentifier() {
         return "T34CL" + String.format("%015d", allCustomerLogCreatedCount + 1);
         //completed
     }

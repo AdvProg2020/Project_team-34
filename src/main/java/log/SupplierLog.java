@@ -88,7 +88,7 @@ public class SupplierLog {
     }
 
     //Modeling methods:
-    private String generateIdentifier() {
+    private static String generateIdentifier() {
         return "T34SL" + String.format("%015d", allSupplierLogCreatedCount + 1);
         //completed
     }

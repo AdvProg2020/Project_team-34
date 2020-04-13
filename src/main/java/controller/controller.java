@@ -4,6 +4,9 @@ import account.Account;
 import cart.Cart;
 
 public class controller {
+
+    private boolean isFirstSupervisorCreated;
+    
     public boolean controlAddToCart(Account account, Cart cart) {
         return false;
     }
@@ -51,4 +54,6 @@ public class controller {
     public boolean controlRemoveProductFromCategory(Account account, String categoryName, String productIdentifier) {
         return false;
     }
+
+
 }

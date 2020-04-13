@@ -6,6 +6,10 @@ public abstract class Request {
     private String requestId;
     private static ArrayList<ProductRequest> allRequest = new ArrayList<>();
 
+    public Request(String requestId) {
+        this.requestId = requestId;
+    }
+
     public String getRequestId() {
         return requestId;
     }
@@ -27,9 +31,15 @@ public abstract class Request {
         return null;
     }
 
+    public static void importAllData(){
+
+    }
+
     public void removeRequest(){
         allRequest.remove(this);
     }
 
-    public abstract void doRequest();
+    public abstract void doRequest(boolean acceptedOrNot);
+
+    public abstract String generateRequestId();
 }

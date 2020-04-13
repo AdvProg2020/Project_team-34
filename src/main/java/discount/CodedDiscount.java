@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 /**
  * @author soheil
- * @since 0.00
+ * @since 0.01
  */
 
 public class CodedDiscount extends Discount{

@@ -14,6 +14,7 @@ import java.util.HashMap;
  */
 public class Product {
     private static ArrayList<Product> allProduct = new ArrayList<>();
+    private static int allCreatedProductNum = 0 ;
 
     private String productId;
     private State productState;
@@ -29,6 +30,7 @@ public class Product {
 
     public Product(String name, String nameOfCompany, int price, boolean isAvailable,
                    Category category, String description) {
+        this.productId = generateIdentifier();
         this.name = name;
         this.nameOfCompany = nameOfCompany;
         this.price = price;
@@ -51,6 +53,10 @@ public class Product {
         this.category = category;
         this.description = description;
         this.comments = comments;
+    }
+
+    private String generateIdentifier(){
+        return "T34P" + String.format("%015d", allCreatedProductNum + 1);
     }
 
     public String getProductId() {

@@ -18,6 +18,7 @@ public class Supplier extends Account{
         this.nameOfCompany = nameOfCompany;
     }
 
+
     public String getNameOfCompany() {
         return nameOfCompany;
     }

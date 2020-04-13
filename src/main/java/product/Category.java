@@ -2,6 +2,10 @@ package product;
 
 import java.util.ArrayList;
 
+/**
+ * @author Aryan Ahadinia
+ */
+
 public class Category {
     public static Category superCategory = new Category("All Products", true, null);
 

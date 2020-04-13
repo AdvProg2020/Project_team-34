@@ -1,5 +1,10 @@
 package log;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 enum City {
     Tehran,
     Shiraz,

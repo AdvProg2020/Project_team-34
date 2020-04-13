@@ -6,7 +6,7 @@ import cart.Cart;
 public class controller {
 
     private boolean isFirstSupervisorCreated;
-    
+
     public boolean controlAddToCart(Account account, Cart cart) {
         return false;
     }

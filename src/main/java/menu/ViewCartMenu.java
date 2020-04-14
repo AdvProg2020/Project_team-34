@@ -17,15 +17,46 @@ public class ViewCartMenu extends Menu{
         Menu View = new Menu("View Product", this) {
             @Override
             public void show() {
-                super.show();
             }
 
             @Override
             public void execute() {
-                super.execute();
             }
         };
         menusIn.put("^view (\\w+)$", this);
         menuForShow.add("View Product");
+        Menu Increase = new Menu("Increase", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        menusIn.put("increase \\w+", this);
+        menuForShow.add("Increase");
+        Menu Decrease = new Menu("Decrease", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        menusIn.put("decrease \\w+", this);
+        menuForShow.add("Decrease");
+        Menu showTotalPrice = new Menu("Show Total Price", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        menusIn.put("show total price", this);
+        menuForShow.add("Show Total Price");
     }
 }

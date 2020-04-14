@@ -5,7 +5,6 @@ import log.SupplierLog;
 /**
  * @author rpirayadi
  * @since 0.0.1
- * This class represents a supplier which is also an account
  */
 public class Supplier extends Account{
 

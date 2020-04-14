@@ -7,6 +7,31 @@ public class CustomerProfileMenu extends ProfileMenu {
         menusIn.put("^view cart$", new ViewCartMenu(this));
         menuForShow.add("View Cart");
 
+        menusIn.put("^view orders$", new ViewOrderMenuForCustomer(this));
+        menuForShow.add("View Orders");
 
+        Menu ViewBalance = new Menu("View Balance", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        menusIn.put("^view balance$", ViewBalance);
+        menuForShow.add("View Balance");
+
+        Menu ViewDiscountCodes = new Menu("View Discount Codes", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        menusIn.put("view discount codes", ViewDiscountCodes);
+        menuForShow.add("View Discount Codes");
     }
 }

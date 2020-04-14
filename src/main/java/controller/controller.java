@@ -5,11 +5,15 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
+import discount.CodedDiscount;
+import discount.Sale;
+import feedback.Comment;
 import product.Category;
 import product.Product;
 import request.Request;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class controller {
@@ -239,6 +243,69 @@ public class controller {
     public String showAttribute() {
         return null;
     }
+
+    //soheil :
+
+    public ArrayList<CodedDiscount> getAllCodedDiscounts(){
+        return null;
+    }
+
+    public CodedDiscount getDiscountByCode(String code){
+        return null;
+    }
+
+    public void editDiscountByCode(Date newStartDate, Date newEndDate, int newPercent, int newMaxDiscount){
+
+    }
+
+    public void controlCreateCodedDiscount(Date startDate, Date endDate, int percent, int maxDiscountAmount){
+
+    }
+
+    public void removeDiscountCode(String code){
+
+    }
+
+    public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products){
+
+    }
+
+    public ArrayList<Sale> getAllSales(){
+        return null;
+    }
+
+    public Sale getSaleById(String id){
+        return null;
+    }
+
+    public void editSaleById(String id, Date newEndDate, Date newStartDate, int newPercent, ArrayList<Product> addingProduct, ArrayList<Product> removingProduct){
+
+    }
+
+    public void removeSaleById(String id){
+
+    }
+
+    public ArrayList<CodedDiscount> getCodedDiscountByCustomer(Customer customer){
+        return null;
+    }
+
+    public void addCommentToProduct(String title,String content,Product product){
+
+    }
+
+    public ArrayList<Comment> getCommentsOfAProduct(Product product){
+        return null;
+    }
+
+    public void rateProductById(String id, float score){
+
+    }
+
+    public float getAverageScoreByProduct(Product product){
+        return 0;
+    }
+
 
 
 }

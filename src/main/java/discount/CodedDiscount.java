@@ -24,6 +24,18 @@ public class CodedDiscount extends Discount{
         this.maxDiscountPercent = maxDiscountPercent;
     }
 
+    public String getDiscountCode() {
+        return discountCode;
+    }
+
+    public int getMaxDiscountPercent() {
+        return maxDiscountPercent;
+    }
+
+    public HashMap<Customer, Integer> getCustomers() {
+        return customers;
+    }
+
     public void addCustomer(Customer customer){
 
     }
@@ -42,6 +54,15 @@ public class CodedDiscount extends Discount{
 
     public void removeCodeFromList(CodedDiscount codedDiscount){
 
+    }
+
+    public CodedDiscount getCodedDiscountByCode(String code){
+        for (CodedDiscount codedDiscount : codedDiscounts) {
+            if(codedDiscount.getDiscountCode().equals(code)){
+                return codedDiscount;
+            }
+        }
+        return null;
     }
 
     public static void importAllData(){

@@ -1,4 +1,8 @@
-package menu;
+package menu.profile;
+
+import menu.Menu;
+import menu.ViewCartMenu;
+import menu.ViewOrderMenuForCustomer;
 
 /**
  * @author Aryan Ahadinia

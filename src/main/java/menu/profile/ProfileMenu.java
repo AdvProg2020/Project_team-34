@@ -1,4 +1,6 @@
-package menu;
+package menu.profile;
+
+import menu.Menu;
 
 /**
  * @author Aryan Ahadinia

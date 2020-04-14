@@ -15,7 +15,19 @@ public class ViewDiscountCodesMenu extends Menu {
             public void execute() {
             }
         };
-        menusIn.put("^view discount code \\w+$", ViewDiscountCode);
+        menusIn.put("^view discount code (\\w+)$", ViewDiscountCode);
         menuForShow.add("View Discount Code");
+
+        Menu EditDiscountCode = new Menu("Edit Discount Code", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        menusIn.put("^edit discount code (\\w+)$", EditDiscountCode);
+        menuForShow.add("Edit Discount Code");
     }
 }

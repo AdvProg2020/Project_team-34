@@ -5,21 +5,31 @@ import java.util.regex.Matcher;
 public class LoginMenu extends Menu {
     public LoginMenu(Menu parentMenu) {
         super("Login/Register Menu", parentMenu);
-        Runnable login = new Runnable() {
+        Menu login = new Menu("Login", this) {
             @Override
-            public void run() {
+            public void show() {
+                super.show();
+            }
 
+            @Override
+            public void execute() {
+                super.execute();
             }
         };
-        commandsIn.put("login \\w+", login);
-        commandForShow.add("Login");
-        Runnable register = new Runnable() {
+        menusIn.put("^login \\w+$", login);
+        menuForShow.add("Login");
+        Menu register = new Menu("Create Account", this) {
             @Override
-            public void run() {
+            public void show() {
+                super.show();
+            }
 
+            @Override
+            public void execute() {
+                super.execute();
             }
         };
-        commandsIn.put("create account (customer|supplier|supervisor) \\w+", register);
-        commandForShow.add("Create Account");
+        menusIn.put("^create account (customer|supplier|supervisor) \\w+$", register);
+        menuForShow.add("Create Account");
     }
 }

@@ -13,7 +13,7 @@ public class ViewCartMenu extends Menu{
             public void execute() {
             }
         };
-        menusIn.put("^show products$", this);
+        menusIn.put("^show products$", ShowProduct);
         menuForShow.add("Show Product");
 
         Menu View = new Menu("View Product", this) {
@@ -25,7 +25,7 @@ public class ViewCartMenu extends Menu{
             public void execute() {
             }
         };
-        menusIn.put("^view (\\w+)$", this);
+        menusIn.put("^view (\\w+)$", View);
         menuForShow.add("View Product");
 
         Menu Increase = new Menu("Increase", this) {
@@ -37,7 +37,7 @@ public class ViewCartMenu extends Menu{
             public void execute() {
             }
         };
-        menusIn.put("^increase \\w+$", this);
+        menusIn.put("^increase \\w+$", Increase);
         menuForShow.add("Increase");
 
         Menu Decrease = new Menu("Decrease", this) {
@@ -49,10 +49,10 @@ public class ViewCartMenu extends Menu{
             public void execute() {
             }
         };
-        menusIn.put("^decrease \\w+$", this);
+        menusIn.put("^decrease \\w+$", Decrease);
         menuForShow.add("Decrease");
 
-        Menu showTotalPrice = new Menu("Show Total Price", this) {
+        Menu ShowTotalPrice = new Menu("Show Total Price", this) {
             @Override
             public void show() {
             }
@@ -61,7 +61,7 @@ public class ViewCartMenu extends Menu{
             public void execute() {
             }
         };
-        menusIn.put("^show total price$", this);
+        menusIn.put("^show total price$", ShowTotalPrice);
         menuForShow.add("Show Total Price");
 
         menusIn.put("^purchase$", this);

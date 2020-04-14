@@ -29,5 +29,17 @@ public class ViewDiscountCodesMenu extends Menu {
         };
         menusIn.put("^edit discount code (\\w+)$", EditDiscountCode);
         menuForShow.add("Edit Discount Code");
+
+        Menu RemoveDiscountCode = new Menu("Remove Discount Code", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        menusIn.put("^remove discount code (\\w+)$", RemoveDiscountCode);
+        menuForShow.add("Remove Discount Code");
     }
 }

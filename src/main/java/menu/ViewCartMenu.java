@@ -64,7 +64,7 @@ public class ViewCartMenu extends Menu{
         menusIn.put("^show total price$", ShowTotalPrice);
         menuForShow.add("Show Total Price");
 
-        menusIn.put("^purchase$", this);
+        menusIn.put("^purchase$", new PurchaseMenu(this));
         menuForShow.add("Purchase");
     }
 }

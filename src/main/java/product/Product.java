@@ -10,7 +10,6 @@ import java.util.HashMap;
 /**
  * @author rpirayadi
  * @since 0.0.1
- * This class represents a product
  */
 public class Product {
     private static ArrayList<Product> allProduct = new ArrayList<>();

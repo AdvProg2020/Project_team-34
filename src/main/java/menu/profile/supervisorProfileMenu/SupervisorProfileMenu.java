@@ -28,6 +28,10 @@ public class SupervisorProfileMenu extends ProfileMenu {
         menusIn.put("^view discount codes$", new ViewDiscountCodesMenu(this));
         menuForShow.add("View Discount Codes");
 
+        menusIn.put("^manage requests$", new ManageRequestsMenu(this));
+        menuForShow.add("Manage Requests");
 
+        menusIn.put("manage categories^$", new ManageCategoriesMenu(this));
+        menuForShow.add("Manage Categories");
     }
 }

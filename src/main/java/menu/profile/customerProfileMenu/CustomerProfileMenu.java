@@ -1,8 +1,7 @@
-package menu.profile;
+package menu.profile.customerProfileMenu;
 
-import menu.Menu;
-import menu.ViewCartMenu;
-import menu.ViewOrderMenuForCustomer;
+import menu.menuAbstract.Menu;
+import menu.profile.ProfileMenu;
 
 /**
  * @author Aryan Ahadinia

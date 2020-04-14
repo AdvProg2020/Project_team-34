@@ -1,6 +1,13 @@
-package menu;
+package menu.profile.customerProfileMenu;
 
-public class ViewCartMenu extends Menu{
+import menu.menuAbstract.Menu;
+
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
+public class ViewCartMenu extends Menu {
     public ViewCartMenu(Menu parentMenu) {
         super("View Cart Menu", parentMenu);
 

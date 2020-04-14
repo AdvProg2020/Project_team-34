@@ -1,4 +1,6 @@
-package menu;
+package menu.loginMenu;
+
+import menu.menuAbstract.Menu;
 
 /**
  * @author Aryan Ahadinia
@@ -19,6 +21,7 @@ public class LoginMenu extends Menu {
         };
         menusIn.put("^login \\w+$", login);
         menuForShow.add("Login");
+
         Menu register = new Menu("Create Account", this) {
             @Override
             public void show() {

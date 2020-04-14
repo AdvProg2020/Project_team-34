@@ -1,4 +1,4 @@
-package menu;
+package menu.menuAbstract;
 
 import java.util.ArrayList;
 import java.util.HashMap;

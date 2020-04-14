@@ -1,6 +1,6 @@
 package menu.profile;
 
-import menu.Menu;
+import menu.menuAbstract.Menu;
 
 public class SupplierProfileMenu extends ProfileMenu {
     public SupplierProfileMenu(Menu parentMenu) {

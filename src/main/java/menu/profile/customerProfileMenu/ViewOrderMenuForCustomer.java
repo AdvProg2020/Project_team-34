@@ -1,4 +1,6 @@
-package menu;
+package menu.profile.customerProfileMenu;
+
+import menu.menuAbstract.Menu;
 
 public class ViewOrderMenuForCustomer extends Menu {
     public ViewOrderMenuForCustomer(Menu parentMenu) {

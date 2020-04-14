@@ -28,7 +28,5 @@ public class ViewOrderMenuForCustomer extends Menu {
         };
         menusIn.put("show order (\\w+)", Rate);
         menuForShow.add("Rate");
-
-
     }
 }

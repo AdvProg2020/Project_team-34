@@ -5,6 +5,7 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
+import menu.Menu;
 import product.Category;
 import product.Product;
 import request.Request;
@@ -13,6 +14,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Controller {
+    private static ArrayList<Long> accountsCode;
+    private static HashMap<Long, Account> accountsDecoding;
+    private static HashMap<Long, Cart> cartsDecoding;
+    private static HashMap<Long, Menu> menusDecoding;
 
     private boolean isFirstSupervisorCreated;
 

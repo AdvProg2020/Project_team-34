@@ -7,6 +7,12 @@ public class SupervisorProfileMenu extends ProfileMenu {
     public SupervisorProfileMenu( Menu parentMenu) {
         super("Supervisor Profile Menu", parentMenu);
 
-        menusIn.put("^$")
+        menusIn.put("manage users", new ManageUsersMenu(this));
+        menuForShow.add("Manage Users");
+
+        menusIn.put("", );
+        menuForShow.add();
+
+
     }
 }

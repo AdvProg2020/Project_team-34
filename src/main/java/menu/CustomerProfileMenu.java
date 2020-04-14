@@ -1,5 +1,10 @@
 package menu;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public class CustomerProfileMenu extends ProfileMenu {
     public CustomerProfileMenu(Menu parentMenu) {
         super("Customer Profile Menu", parentMenu);

@@ -24,17 +24,39 @@ public class Score {
         this.product = product;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public float getScore() {
+        return score;
+    }
+
     public boolean canCustomerRateThisProduct(Customer customer){
         return false;
     }
 
     public static float getAverageScoreForProduct(Product product){
-        return 1;
+        float total = 0;
+        int counter = 0;
+        for (Score score : scores) {
+            if(score.getProduct() == product){
+                total += score.getScore();
+                counter++;
+            }
+        }
+        return total/counter;
     }
 
     public static void importAllData(){
 
     }
+
+
 
     /**
      *

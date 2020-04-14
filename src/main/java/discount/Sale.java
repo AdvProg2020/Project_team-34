@@ -32,22 +32,43 @@ public class Sale extends Discount{
     }
 
     public void addProductToSale(Product product){
+        products.add(product);
+    }
 
+    public String getOffId() {
+        return offId;
+    }
+
+    public State getState() {
+        return state;
+    }
+
+    public void setOffId(String offId) {
+        this.offId = offId;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 
     public void removeProductFromSale(Product product){
-
+        products.remove(product);
     }
 
     public ArrayList<Product> getProducts() {
         return products;
     }
 
-    public ArrayList<Sale> getSales(){
-        return null;
+    public static ArrayList<Sale> getSales(){
+        return sales;
     }
 
     public Sale getSaleById(String id){
+        for (Sale sale : sales) {
+            if(sale.getOffId().equals(id)){
+                return sale;
+            }
+        }
         return null;
     }
 
@@ -56,6 +77,11 @@ public class Sale extends Discount{
     }
 
     public boolean isProductInSale(Product product){
+        for (Product product1 : products) {
+            if(product1 == product){
+                return true;
+            }
+        }
         return false;
     }
 

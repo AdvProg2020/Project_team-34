@@ -31,6 +31,7 @@ public abstract class Menu {
     }
 
     public void show() {
+        System.out.println(menuName + ":");
         for (String menu : menuForShow) {
             System.out.println(menu);
         }

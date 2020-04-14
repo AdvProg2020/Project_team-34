@@ -3,23 +3,32 @@ package menu;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Scanner;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * @author Aryan Ahadinia
  * @since 0.0.1
  */
 
-public class Menu {
+public abstract class Menu {
     public static Scanner scanner = new Scanner(System.in);
 
     private String menuName;
-    private String parentMenu;
-    private ArrayList<String> commandForShow;
-    private HashMap<String, Runnable> commandsIn;
-    private ArrayList<String> menuForShow;
-    private HashMap<String, Menu> menusIn;
+    private Menu parentMenu;
+    protected ArrayList<String> commandForShow;
+    protected HashMap<String, Runnable> commandsIn;
+    protected ArrayList<String> menuForShow;
+    protected HashMap<String, Menu> menusIn;
 
     private String userCode;
+
+    protected String command;
+
+    public Menu(String menuName, Menu parentMenu) {
+        this.menuName = menuName;
+        this.parentMenu = parentMenu;
+    }
 
     public void show() {
         for (String command : commandForShow) {
@@ -31,7 +40,7 @@ public class Menu {
     }
 
     public void execute() {
-        String command = scanner.nextLine();
+        command = scanner.nextLine();
         Runnable nextCommand = null;
         for (String commandRegex : commandsIn.keySet()) {
             if (command.matches(commandRegex)) {
@@ -52,5 +61,10 @@ public class Menu {
             nextMenu.show();
             nextMenu.execute();
         }
+    }
+
+    public static Matcher getMatcher(String command, String regex) {
+        Pattern pattern = Pattern.compile(regex);
+        return pattern.matcher(command);
     }
 }

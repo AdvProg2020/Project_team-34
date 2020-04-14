@@ -12,7 +12,7 @@ import request.Request;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class controller {
+public class Controller {
 
     private boolean isFirstSupervisorCreated;
 

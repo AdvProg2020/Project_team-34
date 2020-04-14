@@ -2,14 +2,21 @@ package menu.profile.supervisorProfileMenu;
 
 import menu.menuAbstract.Menu;
 
-/**
- * @author Aryan Ahadinia
- * @since 0.0.1
- */
+public class ManageRequestsMenu extends Menu {
+    public ManageRequestsMenu(Menu parentMenu) {
+        super("Manage Requests Menu", parentMenu);
 
-public class ManageRequestMenu extends Menu {
-    public ManageRequestMenu(Menu parentMenu) {
-        super("Manage Request Menu", parentMenu);
+        Menu Details = new Menu("Details", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        menusIn.put("^$details (\\w+)", Details);
+        menuForShow.add("Details");
 
         Menu AcceptRequest = new Menu("Accept Request", this) {
             @Override

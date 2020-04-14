@@ -14,10 +14,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Controller {
-    private static ArrayList<Long> accountsCode;
+    private static ArrayList<Long> clientCode;
     private static HashMap<Long, Account> accountsDecoding;
     private static HashMap<Long, Cart> cartsDecoding;
-    private static HashMap<Long, Menu> menusDecoding;
+    private static HashMap<Long, Menu> menuDecoding;
+
+    public static boolean hasCodeLogin(Long code) {
+        return accountsDecoding.get(code) != null;
+    }
 
     private boolean isFirstSupervisorCreated;
 

@@ -19,6 +19,8 @@ public abstract class ProfileMenu extends Menu {
             public void execute() {
             }
         };
+        //add
+
         Menu editPersonalInfo = new Menu("Edit", this) {
             @Override
             public void show() {
@@ -28,5 +30,6 @@ public abstract class ProfileMenu extends Menu {
             public void execute() {
             }
         };
+        //add
     }
 }

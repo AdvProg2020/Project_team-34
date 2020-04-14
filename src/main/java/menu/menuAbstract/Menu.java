@@ -68,7 +68,7 @@ public abstract class Menu {
         for (String menu : menuForShow) {
             System.out.println(menu);
         }
-        if (Controller.hasCodeLogin(userCode)) {
+        if (!Controller.hasCodeLogin(userCode)) {
             System.out.println("Login/Register");
         } else {
             System.out.println("Logout");

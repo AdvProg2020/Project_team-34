@@ -7,12 +7,22 @@ public class SupervisorProfileMenu extends ProfileMenu {
     public SupervisorProfileMenu( Menu parentMenu) {
         super("Supervisor Profile Menu", parentMenu);
 
-        menusIn.put("manage users", new ManageUsersMenu(this));
+        menusIn.put("^manage users$", new ManageUsersMenu(this));
         menuForShow.add("Manage Users");
 
-        menusIn.put("", );
-        menuForShow.add();
+        menusIn.put("^manage all products$", new ManageProductsMenu(this));
+        menuForShow.add("Manage Products");
 
+        Menu CreateDiscountCode = new Menu("Create Discount Code", this) {
+            @Override
+            public void show() {
+            }
 
+            @Override
+            public void execute() {
+            }
+        };
+        menusIn.put("^create discount code$", CreateDiscountCode);
+        menuForShow.add("Create Discount Code");
     }
 }

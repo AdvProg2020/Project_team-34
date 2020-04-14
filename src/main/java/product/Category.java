@@ -8,7 +8,7 @@ import java.util.HashMap;
  */
 
 public class Category {
-    public static Category superCategory = new Category("All Products", true, null);
+    public static final Category superCategory = new Category("All Products", true, null);
 
     private String name;
     private Category parentCategory;

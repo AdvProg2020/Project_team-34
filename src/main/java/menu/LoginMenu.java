@@ -1,6 +1,9 @@
 package menu;
 
-import java.util.regex.Matcher;
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
 
 public class LoginMenu extends Menu {
     public LoginMenu(Menu parentMenu) {
@@ -8,12 +11,10 @@ public class LoginMenu extends Menu {
         Menu login = new Menu("Login", this) {
             @Override
             public void show() {
-                super.show();
             }
 
             @Override
             public void execute() {
-                super.execute();
             }
         };
         menusIn.put("^login \\w+$", login);
@@ -21,12 +22,10 @@ public class LoginMenu extends Menu {
         Menu register = new Menu("Create Account", this) {
             @Override
             public void show() {
-                super.show();
             }
 
             @Override
             public void execute() {
-                super.execute();
             }
         };
         menusIn.put("^create account (customer|supplier|supervisor) \\w+$", register);

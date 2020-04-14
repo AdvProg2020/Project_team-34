@@ -2,6 +2,11 @@ package menu.profile.supervisorProfileMenu;
 
 import menu.menuAbstract.Menu;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public class ViewDiscountCodesMenu extends Menu {
     public ViewDiscountCodesMenu(Menu parentMenu) {
         super("View Discount Codes Menu", parentMenu);

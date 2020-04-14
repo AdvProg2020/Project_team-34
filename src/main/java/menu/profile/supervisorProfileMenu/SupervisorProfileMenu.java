@@ -24,5 +24,10 @@ public class SupervisorProfileMenu extends ProfileMenu {
         };
         menusIn.put("^create discount code$", CreateDiscountCode);
         menuForShow.add("Create Discount Code");
+
+        menusIn.put("^view discount codes$", new ViewDiscountCodesMenu(this));
+        menuForShow.add("View Discount Codes");
+
+
     }
 }

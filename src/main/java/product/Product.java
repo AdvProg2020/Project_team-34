@@ -10,11 +10,11 @@ import java.util.HashMap;
 /**
  * @author rpirayadi
  * @since 0.0.1
- * This class represents a product
  */
 public class Product {
     private static ArrayList<Product> allProduct = new ArrayList<>();
     private static int allCreatedProductNum = 0 ;
+    private int  numberOfViews ;
 
     private String productId;
     private State productState;
@@ -40,10 +40,11 @@ public class Product {
         this.description = description;
         comments = new ArrayList<>();
         this.productState = State.PREPARING_TO_BUILD;
+        numberOfViews = 0;
     }
 
     public Product(String name, String nameOfCompany, int price, ArrayList<Supplier> listOfSuppliers,
-                   boolean isAvailable, Category category, String description, ArrayList<Comment> comments) {
+                   boolean isAvailable, Category category, String description, ArrayList<Comment> comments, int numberOfViews) {
         this.productState = State.PREPARING_TO_BUILD;
         this.name = name;
         this.nameOfCompany = nameOfCompany;
@@ -76,6 +77,10 @@ public class Product {
     }
 
     public static Product getProductById(String productId){return null;}
+
+    public int getNumberOfViews() {
+        return numberOfViews;
+    }
 
     public void removeProduct(){
         allProduct.remove(this);

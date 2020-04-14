@@ -2,6 +2,11 @@ package menu.profile.supervisorProfileMenu;
 
 import menu.menuAbstract.Menu;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public class ManageRequestMenu extends Menu {
     public ManageRequestMenu(Menu parentMenu) {
         super("Manage Request Menu", parentMenu);

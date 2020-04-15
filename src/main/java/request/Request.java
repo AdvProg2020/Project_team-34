@@ -1,7 +1,10 @@
 package request;
 
 import java.util.ArrayList;
-
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ */
 public abstract class Request {
     private String requestId;
     private static ArrayList<ProductRequest> allRequest = new ArrayList<>();

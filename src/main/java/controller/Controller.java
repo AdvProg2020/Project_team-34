@@ -228,7 +228,7 @@ public class Controller {
         else {
             ArrayList<Supplier> newSuppliers = new ArrayList<>(product.getListOfSuppliers());
             newSuppliers.add((Supplier) account);
-            newProduct = new Product(name, nameOfCompany, price, newSuppliers, isAvailable, category, description, product.getComments());
+            newProduct = new Product(name, nameOfCompany, price, newSuppliers, isAvailable, category, description, product.getComments(),product.getNumberOfViews());
         }
     }
 

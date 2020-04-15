@@ -15,7 +15,6 @@ public class Product {
     private static ArrayList<Product> allProduct = new ArrayList<>();
     private static int allCreatedProductNum = 0 ;
     private int  numberOfViews ;
-
     private String productId;
     private State productState;
     private String name , nameOfCompany;

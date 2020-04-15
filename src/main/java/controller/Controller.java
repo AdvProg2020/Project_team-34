@@ -241,17 +241,42 @@ public class Controller {
         return Response.INVALID_PRODUCT_ID;
     }
 
-    public int viewBalance(Account account) {
+    public int controlViewBalance(Account account) {
         return (account).getCredit();
     }
 
-    public String digest() {
+    public String controlDigest() {
         return null;
     }
 
-    public String showAttribute() {
+    public String ControlShowAttribute() {
         return null;
     }
 
+    public String controlShowAvailableFilters(){
+        return null;
+    }
 
+    public void controlFilter(String filter){
+
+    }
+
+    public String controlCurrentFilters(){
+        return null;
+    }
+
+    public Response controlDisableFilter(String filter){
+        return Response.OK;
+    }
+    public void controlSort(String typeOfSort){
+
+    }
+
+    public String controlShowCurrentSort(){
+        return null;
+    }
+
+    public void controlDisableSort(){
+
+    }
 }

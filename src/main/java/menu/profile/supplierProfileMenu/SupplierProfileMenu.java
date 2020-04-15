@@ -3,6 +3,11 @@ package menu.profile.supplierProfileMenu;
 import menu.menuAbstract.Menu;
 import menu.profile.ProfileMenu;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public class SupplierProfileMenu extends ProfileMenu {
     public SupplierProfileMenu(Menu parentMenu) {
         super("Supplier Profile Menu", parentMenu);

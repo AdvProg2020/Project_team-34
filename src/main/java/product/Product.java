@@ -82,6 +82,22 @@ public class Product {
         return numberOfViews;
     }
 
+    public String getNameOfCompany() {
+        return nameOfCompany;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getRemainedNumber() {
+        return remainedNumber;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
     public void removeProduct(){
         allProduct.remove(this);
     }

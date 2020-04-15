@@ -21,4 +21,14 @@ public class ProductDateBase {
             System.out.println(e.getMessage());
         }
     }
+    private Connection connect() {
+        String url = "jdbc:sqlite:.\\src\\main\\java\\recourses";
+        Connection connection = null;
+        try {
+            connection = DriverManager.getConnection(url);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return connection;
+    }
 }

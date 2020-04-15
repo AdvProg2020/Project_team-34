@@ -68,5 +68,9 @@ public class ProductDateBase {
         return null;
     }
 
+    public ArrayList<Product> getAllFilteredProducts(){
+        return null;
+    }
+
 
 }

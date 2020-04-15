@@ -3,6 +3,10 @@ package request;
 
 import product.Product;
 
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ */
 public class ProductRequest extends Request {
     private Product oldProduct;
     private Product newProduct;

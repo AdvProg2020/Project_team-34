@@ -10,26 +10,8 @@ import menu.menuAbstract.Menu;
 public abstract class ProfileMenu extends Menu {
     public ProfileMenu(String menuName, Menu parentMenu) {
         super(menuName, parentMenu);
-        Menu viewPersonalInfo = new Menu("View Personal Info", this) {
-            @Override
-            public void show() {
-            }
 
-            @Override
-            public void execute() {
-            }
-        };
-        //add
-
-        Menu editPersonalInfo = new Menu("Edit", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-            }
-        };
-        //add
+        menusIn.put("^view personal info$", this);
+        menuForShow.add("View Personal Info");
     }
 }

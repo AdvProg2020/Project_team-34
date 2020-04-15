@@ -1,4 +1,5 @@
 package sortproduct;
 
-public class SortByNumberOfViews {
+public class SortByNumberOfViews{
+
 }

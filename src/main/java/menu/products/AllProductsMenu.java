@@ -40,18 +40,8 @@ public class AllProductsMenu extends Menu {
         menusIn.put("^show products$", showProducts);
         menuForShow.add("Show Product");
 
-        Menu showProduct = new Menu("Show Product By Id", this) {
-            @Override
-            public void show() {
-                super.show();
-            }
 
-            @Override
-            public void execute() {
-                super.execute();
-            }
-        };
-        menusIn.put("^show product ([^\\s]+)$", showProduct);
+        menusIn.put("^show product ([^\\s]+)$", new ProductMenu(this));
         menuForShow.add("Show Product By Id");
 
 

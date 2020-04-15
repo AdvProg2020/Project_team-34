@@ -1,5 +1,6 @@
 package database;
 
+import com.google.gson.Gson;
 import product.Product;
 
 import java.sql.*;
@@ -68,7 +69,7 @@ public class ProductDateBase {
         return null;
     }
 
-    public ArrayList<Product> getAllFilteredProducts(){
+    public ArrayList<Product> getAllFilteredProducts(Gson gson){
         return null;
     }
 

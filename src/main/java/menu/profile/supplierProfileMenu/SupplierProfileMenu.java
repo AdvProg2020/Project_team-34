@@ -74,7 +74,8 @@ public class SupplierProfileMenu extends ProfileMenu {
         menusIn.put("^show categories$", ShowCategories);
         menuForShow.add("Show Categories");
 
-        //menu view offs
+        menusIn.put("^view off menu$", new ViewOffsMenu(this));
+        menuForShow.add("View Offs");
 
         Menu ViewBalance = new Menu("View Balance", this) {
             @Override

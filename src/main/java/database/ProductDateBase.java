@@ -3,6 +3,7 @@ package database;
 import product.Product;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class ProductDateBase {
 
@@ -58,4 +59,14 @@ public class ProductDateBase {
             System.out.println(e.getMessage());
         }
     }
+
+    public void update(Product product){
+
+    }
+
+    public ArrayList<Product> getAllProducts(){
+        return null;
+    }
+
+
 }

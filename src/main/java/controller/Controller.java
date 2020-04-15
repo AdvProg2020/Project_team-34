@@ -24,7 +24,8 @@ public class Controller {
     private static HashMap<Long, Menu> menuDecoding;
 
     public static boolean hasCodeLogin(Long code) {
-        return accountsDecoding.get(code) != null;
+        return false;
+        //return accountsDecoding.get(code) != null;
     }
 
     private boolean isFirstSupervisorCreated;

@@ -29,15 +29,21 @@ public abstract class Menu {
     public Menu(String menuName, Menu parentMenu) {
         this.menuName = menuName;
         this.parentMenu = parentMenu;
+        inAllMenus = new HashMap<>();
+        inAllMenusForShow = new ArrayList<>();
+        menusIn = new HashMap<>();
+        menuForShow = new ArrayList<>();
         if (isFirstCall) {
             isFirstCall = false;
             Menu Help = new Menu("Help", this) {
                 @Override
                 public void show() {
+                    System.out.println(0);
                 }
 
                 @Override
                 public void execute() {
+                    System.out.println(0);
                 }
             };
             inAllMenus.put("^Help$", Help);
@@ -97,6 +103,9 @@ public abstract class Menu {
             nextMenu = new LoginMenu(this);
         } else if (command.matches("Logout")) {
             //controller's fuction call
+            nextMenu = this;
+        }
+        if (nextMenu == null) {
             nextMenu = this;
         }
         nextMenu.show();

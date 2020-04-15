@@ -1,9 +1,6 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 public class ProductDateBase {
     public static void createNewTable() {
@@ -30,5 +27,19 @@ public class ProductDateBase {
             System.out.println(e.getMessage());
         }
         return connection;
+    }
+
+    public void add(int id, String name) {
+        String sql = "INSERT into Students (id, name) VALUES (?, ?)";
+
+        try (Connection conn = this.connect();
+             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+            pstmt.setString(2, name);
+            pstmt.setInt(1,id);
+            pstmt.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 }

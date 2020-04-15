@@ -20,21 +20,21 @@ public class Product {
     private String name , nameOfCompany;
     private int price;
     private ArrayList<Supplier> listOfSuppliers;
-    private boolean isAvailable ;
+    private int remainedNumber;
     private Category category;
     private String description;
     private ArrayList<Comment> comments;
     private HashMap<String, String> specification; //method check
 
 
-    public Product(String name, String nameOfCompany, int price, boolean isAvailable,
+    public Product(String name, String nameOfCompany, int price, int remainedNumver,
                    Category category, String description) {
         this.productId = generateIdentifier();
         this.name = name;
         this.nameOfCompany = nameOfCompany;
         this.price = price;
         listOfSuppliers = new ArrayList<>();
-        this.isAvailable = isAvailable;
+        this.remainedNumber = remainedNumver;
         this.category = category;
         this.description = description;
         comments = new ArrayList<>();
@@ -43,16 +43,17 @@ public class Product {
     }
 
     public Product(String name, String nameOfCompany, int price, ArrayList<Supplier> listOfSuppliers,
-                   boolean isAvailable, Category category, String description, ArrayList<Comment> comments, int numberOfViews) {
+                   int remainedNumber, Category category, String description, ArrayList<Comment> comments, int numberOfViews) {
         this.productState = State.PREPARING_TO_BUILD;
         this.name = name;
         this.nameOfCompany = nameOfCompany;
         this.price = price;
         this.listOfSuppliers = listOfSuppliers;
-        this.isAvailable = isAvailable;
+        this.remainedNumber = remainedNumber;
         this.category = category;
         this.description = description;
         this.comments = comments;
+        this.numberOfViews= numberOfViews;
     }
 
     private String generateIdentifier(){
@@ -79,6 +80,22 @@ public class Product {
 
     public int getNumberOfViews() {
         return numberOfViews;
+    }
+
+    public String getNameOfCompany() {
+        return nameOfCompany;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public int getRemainedNumber() {
+        return remainedNumber;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
     public void removeProduct(){

@@ -16,8 +16,6 @@ import java.util.regex.Pattern;
 
 public abstract class Menu {
     public static Scanner scanner = new Scanner(System.in);
-    protected static  ArrayList<String> inAllMenusForShow = new ArrayList<>();
-    protected static HashMap<String, Menu> inAllMenus = new HashMap<>();
     protected ArrayList<String> menuForShow;
     protected HashMap<String, Menu> menusIn;
     protected Long userCode;
@@ -30,38 +28,34 @@ public abstract class Menu {
         this.parentMenu = parentMenu;
         menuForShow = new ArrayList<>();
         menusIn = new HashMap<>();
-    }
+        if (!(menuName.equals("Help") || menuName.equals("Sort") || menuName.equals("Back"))) {
+            Menu Help = new Menu("Help", this) {
+                @Override
+                public void show() {
+                }
 
-    public static void addInAllMenu(String forShow, String regex, Menu menu) {
-        inAllMenus.put(regex, menu);
-        inAllMenusForShow.add(forShow);
-    }
+                @Override
+                public void execute() {
+                }
+            };
+            menusIn.put("^help$", Help);
+            menuForShow.add("Help");
 
-    public void initial() {
-        Menu Help = new Menu("Help", this) {
-            @Override
-            public void show() {
-            }
+            Menu SortCommands = new Menu("Sort", this) {
+                @Override
+                public void show() {
+                }
 
-            @Override
-            public void execute() {
-            }
-        };
-        addInAllMenu("Help", "^help$", Help);
+                @Override
+                public void execute() {
+                }
+            };
+            menusIn.put("^Sort$", SortCommands);
+            menuForShow.add("Sort");
 
-        Menu SortCommands = new Menu("Sort", this) {
-            @Override
-            public void show() {
-            }
-
-            @Override
-            public void execute() {
-            }
-        };
-        inAllMenus.put("^Sort$", SortCommands);
-        inAllMenusForShow.add("Sort");
-        inAllMenus.put("^Back$", parentMenu);
-        inAllMenusForShow.add("Back");
+            menusIn.put("^Back$", parentMenu);
+            menuForShow.add("Back");
+        }
     }
 
     public static Matcher getMatcher(String command, String regex) {
@@ -79,9 +73,6 @@ public abstract class Menu {
         } else {
             System.out.println("Logout");
         }
-        for (String menu : inAllMenusForShow) {
-            System.out.println(menu);
-        }
     }
 
     public void execute() {
@@ -93,16 +84,13 @@ public abstract class Menu {
                 break;
             }
         }
-        for (String menuRegex : inAllMenus.keySet()) {
-            if (command.matches(menuRegex)) {
-                nextMenu = inAllMenus.get(menuRegex);
-                break;
-            }
-        }
         if (command.matches("Login/Register")) {
             nextMenu = new LoginMenu(this);
         } else if (command.matches("Logout")) {
             //controller's fuction call
+            nextMenu = this;
+        }
+        if (nextMenu == null) {
             nextMenu = this;
         }
         nextMenu.show();

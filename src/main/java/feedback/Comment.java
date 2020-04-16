@@ -33,6 +33,13 @@ public class Comment {
         this.customerBoughtThisProduct = customerBoughtThisProduct;
     }
 
+    public Comment(Customer customer, Product product, String title, String content) {
+        this.title = title;
+        this.customer = customer;
+        this.product = product;
+        this.content = content;
+    }
+
     public String getContent() {
         return content;
     }

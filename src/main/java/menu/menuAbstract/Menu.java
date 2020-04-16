@@ -18,10 +18,10 @@ public abstract class Menu {
     public static Scanner scanner = new Scanner(System.in);
     protected ArrayList<String> menuForShow;
     protected HashMap<String, Menu> menusIn;
-    protected Long userCode;
     protected String command;
     private String menuName;
     protected Menu parentMenu;
+    protected Controller controller;
 
     public Menu(String menuName, Menu parentMenu) {
         this.menuName = menuName;
@@ -68,7 +68,7 @@ public abstract class Menu {
         for (String menu : menuForShow) {
             System.out.println(menu);
         }
-        if (!Controller.hasCodeLogin(userCode)) {
+        if (!controller.hasSomeOneLoggedIn()) {
             System.out.println("Login/Register");
         } else {
             System.out.println("Logout");

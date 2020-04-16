@@ -94,6 +94,10 @@ public abstract class Account {
 
     public abstract String getType();
 
+    public static void importAll(){
+
+    }
+
     @Override
     public String toString() {
         return "Account{" +

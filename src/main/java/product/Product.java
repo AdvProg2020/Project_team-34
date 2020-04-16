@@ -132,4 +132,8 @@ public class Product {
         remainedNumber -= amount;
     }
 
+    public static void importAll(){
+        
+    }
+
 }

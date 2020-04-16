@@ -16,6 +16,7 @@ import request.Request;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Controller {
     private static ArrayList<Long> clientCode;
@@ -23,8 +24,13 @@ public class Controller {
     private static HashMap<Long, Cart> cartsDecoding;
     private static HashMap<Long, Menu> menuDecoding;
 
+    public static long getCode() {
+        return 0;
+    }
+
     public static boolean hasCodeLogin(Long code) {
-        return accountsDecoding.get(code) != null;
+        return false;
+        //return accountsDecoding.get(code) != null;
     }
 
     private boolean isFirstSupervisorCreated;

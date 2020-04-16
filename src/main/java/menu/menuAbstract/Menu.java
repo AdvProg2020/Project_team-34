@@ -16,9 +16,8 @@ import java.util.regex.Pattern;
 
 public abstract class Menu {
     public static Scanner scanner = new Scanner(System.in);
-    protected static  ArrayList<String> inAllMenusForShow;
-    protected static HashMap<String, Menu> inAllMenus;
-    private static boolean isFirstCall = true;
+    protected static  ArrayList<String> inAllMenusForShow = new ArrayList<>();
+    protected static HashMap<String, Menu> inAllMenus = new HashMap<>();
     protected ArrayList<String> menuForShow;
     protected HashMap<String, Menu> menusIn;
     protected Long userCode;
@@ -29,33 +28,40 @@ public abstract class Menu {
     public Menu(String menuName, Menu parentMenu) {
         this.menuName = menuName;
         this.parentMenu = parentMenu;
-        if (isFirstCall) {
-            isFirstCall = false;
-            Menu Help = new Menu("Help", this) {
-                @Override
-                public void show() {
-                }
+        menuForShow = new ArrayList<>();
+        menusIn = new HashMap<>();
+    }
 
-                @Override
-                public void execute() {
-                }
-            };
-            inAllMenus.put("^Help$", Help);
-            inAllMenusForShow.add("Help");
-            Menu SortCommands = new Menu("Sort", this) {
-                @Override
-                public void show() {
-                }
+    public static void addInAllMenu(String forShow, String regex, Menu menu) {
+        inAllMenus.put(regex, menu);
+        inAllMenusForShow.add(forShow);
+    }
 
-                @Override
-                public void execute() {
-                }
-            };
-            inAllMenus.put("^Sort$", SortCommands);
-            inAllMenusForShow.add("Sort");
-            inAllMenus.put("^Back$", parentMenu);
-            inAllMenusForShow.add("Back");
-        }
+    public void initial() {
+        Menu Help = new Menu("Help", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        addInAllMenu("Help", "^help$", Help);
+
+        Menu SortCommands = new Menu("Sort", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+            }
+        };
+        inAllMenus.put("^Sort$", SortCommands);
+        inAllMenusForShow.add("Sort");
+        inAllMenus.put("^Back$", parentMenu);
+        inAllMenusForShow.add("Back");
     }
 
     public static Matcher getMatcher(String command, String regex) {

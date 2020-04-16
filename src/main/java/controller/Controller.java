@@ -16,64 +16,63 @@ import request.Request;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Controller {
-    private static ArrayList<Long> clientCode;
-    private static HashMap<Long, Account> accountsDecoding;
-    private static HashMap<Long, Cart> cartsDecoding;
-    private static HashMap<Long, Menu> menuDecoding;
-
-    public static boolean hasCodeLogin(Long code) {
-        return accountsDecoding.get(code) != null;
-    }
-
+    private Account account;
+    private Cart cart;
+    private Menu menu;
     private boolean isFirstSupervisorCreated;
 
-    public boolean controlAddToCart(Account account, Cart cart) {
+    public boolean hasSomeOneLoggedIn(){
         return false;
     }
 
-    public Cart controlViewCart(Account account, Cart cart) {
+    public boolean controlAddToCart() {
+        return false;
+    }
+
+    public Cart controlViewCart() {
         return null;
     }
 
-    public boolean controlSubmitShippingInfo(Account account, Cart cart, String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) {
+    public boolean controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) {
         return false;
     }
 
-    public boolean controlRemoveShippingInfo(Account account, Cart cart) {
+    public boolean controlRemoveShippingInfo() {
         return false;
     }
 
-    public boolean controlSubmitDiscountCode(Account account, Cart cart) {
+    public boolean controlSubmitDiscountCode() {
         return false;
     }
 
-    public boolean controlRemoveDiscountCode(Account account, Cart cart) {
+    public boolean controlRemoveDiscountCode() {
         return false;
     }
 
-    public boolean controlFinalizeOrder(Account account, Cart cart) {
+    public boolean controlFinalizeOrder() {
         return false;
     }
 
-    public boolean controlAddCategory(Account account, String name, String parentCategoryName) {
+    public boolean controlAddCategory( String name, String parentCategoryName) {
         return false;
     }
 
-    public boolean controlAddSubcategoryToCategory(Account account, String name, String subcategoryName) {
+    public boolean controlAddSubcategoryToCategory( String name, String subcategoryName) {
         return false;
     }
 
-    public boolean controlRemoveSubcategoryFromCategory(Account account, String name, String subcategoryName) {
+    public boolean controlRemoveSubcategoryFromCategory( String name, String subcategoryName) {
         return false;
     }
 
-    public boolean controlAddProductToCategory(Account account, String categoryName, String productIdentifier) {
+    public boolean controlAddProductToCategory(String categoryName, String productIdentifier) {
         return false;
     }
 
-    public boolean controlRemoveProductFromCategory(Account account, String categoryName, String productIdentifier) {
+    public boolean controlRemoveProductFromCategory( String categoryName, String productIdentifier) {
         return false;
     }
 
@@ -126,11 +125,11 @@ public class Controller {
         return null;
     }
 
-    public String controlViewPersonalInfo(Account account) {
+    public String controlViewPersonalInfo() {
         return String.valueOf(account);
     }
 
-    public Response controlEditField(Account account, String field, String newValue) {
+    public Response controlEditField( String field, String newValue) {
         return null;
     }
 
@@ -155,7 +154,7 @@ public class Controller {
         return null;
     }
 
-    public Response controlCreateSupervisorBySupervisor(Account account, String username, String name, String familyName, String email, String phoneNumber
+    public Response controlCreateSupervisorBySupervisor( String username, String name, String familyName, String email, String phoneNumber
             , String password, int credit) {
         if (doesAccountExist(username))
             return Response.INVALID_USERNAME;
@@ -197,14 +196,14 @@ public class Controller {
 
     }
 
-    public String controlViewCompanyInfo(Account account) {
+    public String controlViewCompanyInfo() {
         if (account instanceof Supplier) {
             return ((Supplier) account).getNameOfCompany();
         }
         return null;
     }
 
-    public String controlGetListOfProductsForThisSupplier(Account account) {
+    public String controlGetListOfProductsForThisSupplier() {
         if (account instanceof Supplier) {
             //Product.getProductIdForSupplier((Supplier)loggedInAccount);
         }
@@ -219,7 +218,7 @@ public class Controller {
 
     }
 
-    public void controlAddProduct(Account account, String name, String nameOfCompany, int price, int remainedNumbers,
+    public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers,
                                   Category category, String description) {
         Product newProduct, product;
         product = Product.getProductByName(name);
@@ -250,6 +249,10 @@ public class Controller {
     }
 
     public String ControlShowAttribute() {
+        return null;
+    }
+
+    public String controlCompare(String firstProductId , String secondProductId){
         return null;
     }
 

@@ -23,6 +23,11 @@ public class Sale extends Discount{
         this.offId = generateOffId();
     }
 
+    public Sale(Date start, Date end) {
+        super(start, end, 0);
+        this.offId = generateOffId();
+    }
+
     private String generateOffId(){
         return null;
     }

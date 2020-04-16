@@ -5,7 +5,7 @@ import product.Product;
 
 public class ProductMenu extends Menu {
     private Product currentProduct;
-    public ProductMenu(Product currentProduct,Menu parentMenu) {
+    public ProductMenu(Menu parentMenu) {
         super("Product Menu", parentMenu);
         menusIn.put("^digest$", new DigestMenu(this));
         menuForShow.add("Digest Menu");

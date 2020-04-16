@@ -128,4 +128,8 @@ public class Product {
         return null;
     }
 
+    public void reduceRemainedNumber (int amount){
+        remainedNumber -= amount;
+    }
+
 }

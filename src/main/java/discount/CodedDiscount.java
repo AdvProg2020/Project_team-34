@@ -1,6 +1,8 @@
 package discount;
 
 import account.Customer;
+import com.google.gson.JsonObject;
+import com.sun.tools.javac.jvm.Code;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -15,13 +17,21 @@ public class CodedDiscount extends Discount{
     private static ArrayList<CodedDiscount> codedDiscounts;
     private String discountCode;
     private int maxDiscountPercent;
-    private HashMap<Customer, Integer> customers;
+    private HashMap<Customer, Integer> usedDiscountPerCustomer;
+    private ArrayList<Customer> customers;
 
 
-    public CodedDiscount(Date start, Date end, int percent, String discountCode, int maxDiscountPercent) {
+    public CodedDiscount(Date start, Date end, int percent, int maxDiscountPercent) {
         super(start, end, percent);
-        this.discountCode = discountCode;
         this.maxDiscountPercent = maxDiscountPercent;
+    }
+
+    public CodedDiscount(Date start, Date end, int percent) {
+        super(start, end, percent);
+    }
+
+    public static String codeGenerator(){
+        return null;
     }
 
     public String getDiscountCode() {
@@ -33,10 +43,15 @@ public class CodedDiscount extends Discount{
     }
 
     public HashMap<Customer, Integer> getCustomers() {
-        return customers;
+        return usedDiscountPerCustomer;
     }
 
+
     public void addCustomer(Customer customer){
+
+    }
+
+    public void removeCustomer(Customer customer){
 
     }
 
@@ -52,7 +67,7 @@ public class CodedDiscount extends Discount{
         return codedDiscounts;
     }
 
-    public void removeCodeFromList(CodedDiscount codedDiscount){
+    public static void removeCodeFromList(CodedDiscount codedDiscount){
 
     }
 

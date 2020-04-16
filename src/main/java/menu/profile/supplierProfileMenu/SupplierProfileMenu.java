@@ -36,7 +36,8 @@ public class SupplierProfileMenu extends ProfileMenu {
         menusIn.put("^view company information$", ViewSalesHistory);
         menuForShow.add("View Sales History");
 
-        //manage product
+        menusIn.put("^manage products$", new ManageProductsMenu(this));
+        menuForShow.add("Manage Products");
 
         Menu AddProduct = new Menu("Add Product", this) {
             @Override

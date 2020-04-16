@@ -1,9 +1,11 @@
 package menu.products;
 
 import menu.menuAbstract.Menu;
+import product.Product;
 
 public class ProductMenu extends Menu {
-    public ProductMenu(Menu parentMenu) {
+    private Product currentProduct;
+    public ProductMenu(Product currentProduct,Menu parentMenu) {
         super("Product Menu", parentMenu);
         menusIn.put("^digest$", new DigestMenu(this));
         menuForShow.add("Digest Menu");

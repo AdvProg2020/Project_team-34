@@ -285,15 +285,15 @@ public class Controller {
 
     //soheil :
 
-    public ArrayList<CodedDiscount> getAllCodedDiscounts(){
+    public ArrayList<CodedDiscount> controlGetAllCodedDiscounts(){
         return null;
     }
 
-    public CodedDiscount getDiscountByCode(String code){
+    public CodedDiscount controlGetDiscountByCode(String code){
         return null;
     }
 
-    public void editDiscountByCode(Date newStartDate, Date newEndDate, int newPercent, int newMaxDiscount){
+    public void controlEditDiscountByCode(String code, Date newStartDate, Date newEndDate, int newPercent, int newMaxDiscount){
 
     }
 
@@ -301,7 +301,7 @@ public class Controller {
 
     }
 
-    public void removeDiscountCode(String code){
+    public void controlRemoveDiscountCode(String code){
 
     }
 
@@ -309,39 +309,39 @@ public class Controller {
 
     }
 
-    public ArrayList<Sale> getAllSales(){
+    public ArrayList<Sale> controlGetAllSales(){
         return null;
     }
 
-    public Sale getSaleById(String id){
+    public Sale controlGetSaleById(String id){
         return null;
     }
 
-    public void editSaleById(String id, Date newEndDate, Date newStartDate, int newPercent, ArrayList<Product> addingProduct, ArrayList<Product> removingProduct){
+    public void controlEditSaleById(String id, Date newEndDate, Date newStartDate, int newPercent, ArrayList<Product> addingProduct, ArrayList<Product> removingProduct){
 
     }
 
-    public void removeSaleById(String id){
+    public void controlRemoveSaleById(String id){
 
     }
 
-    public ArrayList<CodedDiscount> getCodedDiscountByCustomer(Customer customer){
+    public ArrayList<CodedDiscount> controlGetCodedDiscountByCustomer(Customer customer){
         return null;
     }
 
-    public void addCommentToProduct(String title,String content,Product product){
+    public void controlAddCommentToProduct(String title,String content,Product product){
 
     }
 
-    public ArrayList<Comment> getCommentsOfAProduct(Product product){
+    public ArrayList<Comment> controlGetCommentsOfAProduct(Product product){
         return null;
     }
 
-    public void rateProductById(String id, float score){
+    public void controlRateProductById(String id, float score){
 
     }
 
-    public float getAverageScoreByProduct(Product product){
+    public float controlGetAverageScoreByProduct(Product product){
         return 0;
     }
 

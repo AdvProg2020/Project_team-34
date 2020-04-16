@@ -24,6 +24,11 @@ public class Score {
         this.product = product;
     }
 
+    public Score(float score, Customer customer) {
+        this.score = score;
+        this.customer = customer;
+    }
+
     public Customer getCustomer() {
         return customer;
     }

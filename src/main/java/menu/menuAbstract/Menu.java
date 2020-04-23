@@ -21,7 +21,7 @@ public abstract class Menu {
     protected String command;
     private String menuName;
     protected Menu parentMenu;
-    protected Controller controller;
+    protected static Controller controller = new Controller();
 
     public Menu(String menuName, Menu parentMenu) {
         this.menuName = menuName;

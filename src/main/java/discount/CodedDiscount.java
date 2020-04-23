@@ -47,19 +47,23 @@ public class CodedDiscount extends Discount{
 
 
     public void addCustomer(Customer customer){
-
+        customers.add(customer);
     }
 
     public void removeCustomer(Customer customer){
-
+        customers.remove(customer);
     }
 
-    public void addUsedCountForCustomer(){
-
+    public void addUsedCountForCustomer(Customer customer){
+        usedDiscountPerCustomer.put(customer, usedDiscountPerCustomer.get(customer)+1);
     }
 
     public boolean canCustomerUseCode(Customer customer){
-        return true;
+        if(usedDiscountPerCustomer.get(customer) == 1){
+            return false;
+        }   else    {
+            return true;
+        }
     }
 
     public static ArrayList<CodedDiscount> getCodedDiscounts() {
@@ -67,7 +71,7 @@ public class CodedDiscount extends Discount{
     }
 
     public static void removeCodeFromList(CodedDiscount codedDiscount){
-
+        codedDiscounts.remove(codedDiscount);
     }
 
     public CodedDiscount getCodedDiscountByCode(String code){

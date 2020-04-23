@@ -36,6 +36,9 @@ public abstract class Menu {
 
                 @Override
                 public void execute() {
+                    for (String s : parentMenu.menusIn.keySet()) {
+                        System.out.println(s);
+                    }
                 }
             };
             menusIn.put("^help$", Help);
@@ -87,13 +90,15 @@ public abstract class Menu {
         if (command.matches("Login/Register")) {
             nextMenu = new LoginMenu(this);
         } else if (command.matches("Logout")) {
-            //controller's fuction call
+            //controller's function call
             nextMenu = this;
         }
         if (nextMenu == null) {
             nextMenu = this;
         }
+        nextMenu.command = command;
         nextMenu.show();
+        System.out.println(this.command);
         nextMenu.execute();
     }
 }

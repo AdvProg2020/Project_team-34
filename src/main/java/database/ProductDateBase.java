@@ -2,6 +2,8 @@ package database;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+import com.google.gson.internal.$Gson$Preconditions;
+import com.google.gson.reflect.TypeToken;
 import product.Product;
 
 import java.sql.*;
@@ -20,6 +22,7 @@ public class ProductDateBase {
                 +  "name String, \n"
                 +  "nameOfCompany String, \n"
                 + "	price int, \n"
+                + " listOfSuppliersUsername String ,\n"
                 + "	remainedNumber int , \n"
                 + " categoryId String ,\n"
                 + "	description String, \n"
@@ -47,8 +50,8 @@ public class ProductDateBase {
 
     public void add(Product product) {
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, price,"+
-                "remainedNumber,categoryId, description,productCommentsId , specification)" +
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?)";
+                "listOfSuppliersUsername, remainedNumber,categoryId, description,productCommentsId , specification)" +
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?)";
 
         try (Connection conn = this.connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -59,11 +62,12 @@ public class ProductDateBase {
             statement.setString(4, product.getName());
             statement.setString(5, product.getNameOfCompany());
             statement.setInt(6, product.getPrice());
-            statement.setInt(7, product.getRemainedNumber());
-            statement.setString(8,product.getCategoryId());
-            statement.setString(9, product.getDescription());
-            statement.setString(10, String.valueOf(product.getComments()));
-            statement.setString(11,convertSpecificationToJson(product.getSpecification()));
+            statement.setString(7, convertObjectToJsonString(product.getListOfSuppliersUsername()));
+            statement.setInt(8, product.getRemainedNumber());
+            statement.setString(9,product.getCategoryId());
+            statement.setString(10, product.getDescription());
+            statement.setString(11, String.valueOf(product.getComments()));
+            statement.setString(12, convertObjectToJsonString(product.getSpecification()));
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -71,9 +75,9 @@ public class ProductDateBase {
         }
     }
 
-    private String convertSpecificationToJson  (HashMap<String, String> specification){
+    private String convertObjectToJsonString  (Object object){
         Gson gson = new Gson();
-        return gson.toJson(specification);
+        return gson.toJson(object);
     }
 
     public void update(Product product){
@@ -81,7 +85,31 @@ public class ProductDateBase {
     }
 
     public ArrayList<Product> getAllProducts(){
+        String sql = "SELECT numberOfViews,productId ,productState, name, nameOfCompany, price," +
+                "listOfSuppliersUsername, remainedNumber,categoryId, description,productCommentsId , specification  FROM Products";
+
+        try (Connection conn = this.connect();
+             Statement stmt  = conn.createStatement();
+             ResultSet resultSet    = stmt.executeQuery(sql)){
+            ArrayList<Product> products = new ArrayList<>();
+            while (resultSet.next()) {
+                Product product = new Product(resultSet.getString("name"),resultSet.getString("nameOfCompany"),
+                        resultSet.getInt("price"),convertJsonToArrayList(resultSet.getString("listOfSuppliersUsername")),
+                        resultSet.getInt("remainedNumber"),resultSet.getString("categoryId"),
+                        resultSet.getString("description"),convertJsonToArrayList(resultSet.getString("ProductCommentsId"))
+                ,resultSet.getInt("numberOfViews"));
+                products.add(product);
+            }
+            return products;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
         return null;
+    }
+
+    private ArrayList<String> convertJsonToArrayList(String string){
+        Gson gson = new Gson();
+        return (ArrayList<String>) gson.fromJson(string,new TypeToken<ArrayList<String>>() {}.getType());
     }
 
     public ArrayList<Product> getAllFilteredProducts(Gson gson){

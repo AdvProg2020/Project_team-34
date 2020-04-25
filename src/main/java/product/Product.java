@@ -19,11 +19,11 @@ public class Product {
     private State productState;
     private String name , nameOfCompany;
     private int price;
-    private ArrayList<Supplier> listOfSuppliers;
+    private ArrayList<String> listOfSuppliersUsername;
     private int remainedNumber;
     private String categoryId;
     private String description;
-    private ArrayList<Comment> comments;
+    private ArrayList<String> commentsId;
     private HashMap<String, String> specification; //method check
 
 
@@ -33,26 +33,26 @@ public class Product {
         this.name = name;
         this.nameOfCompany = nameOfCompany;
         this.price = price;
-        listOfSuppliers = new ArrayList<>();
+        listOfSuppliersUsername = new ArrayList<>();
         this.remainedNumber = remainedNumber;
         this.categoryId = categoryId;
         this.description = description;
-        comments = new ArrayList<>();
+        commentsId = new ArrayList<>();
         this.productState = State.PREPARING_TO_BUILD;
         numberOfViews = 0;
     }
 
-    public Product(String name, String nameOfCompany, int price, ArrayList<Supplier> listOfSuppliers,
-                   int remainedNumber, String categoryId, String description, ArrayList<Comment> comments, int numberOfViews) {
+    public Product(String name, String nameOfCompany, int price, ArrayList<String> listOfSuppliersUsername,
+                   int remainedNumber, String categoryId, String description, ArrayList<String> commentsId, int numberOfViews) {
         this.productState = State.PREPARING_TO_BUILD;
         this.name = name;
         this.nameOfCompany = nameOfCompany;
         this.price = price;
-        this.listOfSuppliers = listOfSuppliers;
+        this.listOfSuppliersUsername = listOfSuppliersUsername;
         this.remainedNumber = remainedNumber;
         this.categoryId = categoryId;
         this.description = description;
-        this.comments = comments;
+        this.commentsId = commentsId;
         this.numberOfViews= numberOfViews;
     }
 
@@ -68,12 +68,12 @@ public class Product {
         return name;
     }
 
-    public ArrayList<Comment> getComments() {
-        return comments;
+    public ArrayList<String> getComments() {
+        return commentsId;
     }
 
-    public ArrayList<Supplier> getListOfSuppliers() {
-        return listOfSuppliers;
+    public ArrayList<String> getListOfSuppliersUsername() {
+        return listOfSuppliersUsername;
     }
 
     public static Product getProductById(String productId){return null;}
@@ -120,7 +120,7 @@ public class Product {
     }
 
     public boolean doesSupplierSellThisProduct (Supplier supplier){
-        return listOfSuppliers.contains(supplier);
+        return listOfSuppliersUsername.contains(supplier.getUserName());
     }
 
     public static ArrayList<String> getProductIdForSupplier(Supplier supplier){

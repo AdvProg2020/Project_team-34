@@ -225,8 +225,8 @@ public class Controller {
         if (product == null)
             newProduct = new Product(name, nameOfCompany, price, remainedNumbers, categoryId, description);
         else {
-            ArrayList<Supplier> newSuppliers = new ArrayList<>(product.getListOfSuppliers());
-            newSuppliers.add((Supplier) account);
+            ArrayList<String > newSuppliers = new ArrayList<>(product.getListOfSuppliersUsername());
+            newSuppliers.add(account.getUserName());
             newProduct = new Product(name, nameOfCompany, price, newSuppliers, remainedNumbers, categoryId, description, product.getComments(),product.getNumberOfViews());
         }
     }

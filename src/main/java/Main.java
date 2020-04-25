@@ -3,6 +3,7 @@ import menu.mainMenu.MainMenu;
 import menu.menuAbstract.Menu;
 import product.Product;
 
+import java.util.ArrayList;
 import java.util.Scanner;
 
 public class Main {
@@ -12,6 +13,11 @@ public class Main {
         ProductDateBase productDateBase = new ProductDateBase();
         productDateBase.add(new Product("p", "com", 90, 5,
                 "hhh", "be described"));
+        System.out.println("hhhhhhhhh");
+        ArrayList<Product> products= productDateBase.getAllProducts();
+        for (Product product : products) {
+            System.out.println(product.getName());
+        }
         //run();
     }
 

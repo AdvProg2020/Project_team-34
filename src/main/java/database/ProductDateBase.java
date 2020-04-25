@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class ProductDateBase {
 
     public static void createNewTable() {
-        String url = "jdbc:sqlite:.\\src\\main\\java\\recourses";
+        String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
 
         String sql = "CREATE TABLE IF NOT EXISTS Products (\n"
                 + "	numberOfViews int,\n"
@@ -30,7 +30,7 @@ public class ProductDateBase {
     }
 
     private Connection connect() {
-        String url = "jdbc:sqlite:.\\src\\main\\java\\recourses";
+        String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(url);
@@ -41,8 +41,8 @@ public class ProductDateBase {
     }
 
     public void add(Product product) {
-        String sql = "INSERT into Students (numbeerOfViews,productId , name, nameOfCompany, price, remainedNumbers, description)" +
-                " VALUES (?, ? , ? , ? , ?, ? ,?)";
+        String sql = "INSERT into Students (numberOfViews,productId , name, nameOfCompany, price, remainedNumbers, description)\" +\n" +
+                "\" VALUES (?, ? , ? , ? , ?, ? ,?)";
 
         try (Connection conn = this.connect();
              PreparedStatement pstmt = conn.prepareStatement(sql)) {

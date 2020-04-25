@@ -21,21 +21,21 @@ public class Product {
     private int price;
     private ArrayList<Supplier> listOfSuppliers;
     private int remainedNumber;
-    private Category category;
+    private String categoryId;
     private String description;
     private ArrayList<Comment> comments;
     private HashMap<String, String> specification; //method check
 
 
-    public Product(String name, String nameOfCompany, int price, int remainedNumver,
-                   Category category, String description) {
+    public Product(String name, String nameOfCompany, int price, int remainedNumber,
+                   String categoryId, String description) {
         this.productId = generateIdentifier();
         this.name = name;
         this.nameOfCompany = nameOfCompany;
         this.price = price;
         listOfSuppliers = new ArrayList<>();
-        this.remainedNumber = remainedNumver;
-        this.category = category;
+        this.remainedNumber = remainedNumber;
+        this.categoryId = categoryId;
         this.description = description;
         comments = new ArrayList<>();
         this.productState = State.PREPARING_TO_BUILD;
@@ -43,14 +43,14 @@ public class Product {
     }
 
     public Product(String name, String nameOfCompany, int price, ArrayList<Supplier> listOfSuppliers,
-                   int remainedNumber, Category category, String description, ArrayList<Comment> comments, int numberOfViews) {
+                   int remainedNumber, String categoryId, String description, ArrayList<Comment> comments, int numberOfViews) {
         this.productState = State.PREPARING_TO_BUILD;
         this.name = name;
         this.nameOfCompany = nameOfCompany;
         this.price = price;
         this.listOfSuppliers = listOfSuppliers;
         this.remainedNumber = remainedNumber;
-        this.category = category;
+        this.categoryId = categoryId;
         this.description = description;
         this.comments = comments;
         this.numberOfViews= numberOfViews;
@@ -96,6 +96,18 @@ public class Product {
 
     public String getDescription() {
         return description;
+    }
+
+    public State getProductState() {
+        return productState;
+    }
+
+    public String getCategoryId() {
+        return categoryId;
+    }
+
+    public HashMap<String, String> getSpecification() {
+        return specification;
     }
 
     public void removeProduct(){

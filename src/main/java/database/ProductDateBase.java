@@ -1,10 +1,12 @@
 package database;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import product.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ProductDateBase {
 
@@ -14,13 +16,16 @@ public class ProductDateBase {
         String sql = "CREATE TABLE IF NOT EXISTS Products (\n"
                 + "	numberOfViews int,\n"
                 + "	productId String, \n"
+                + "	productState String, \n"
                 +  "name String, \n"
                 +  "nameOfCompany String, \n"
                 + "	price int, \n"
                 + "	remainedNumber int , \n"
-                + "	description String \n"
+                + " categoryId String ,\n"
+                + "	description String, \n"
+                + " productCommentsId String, \n"
+                + "	specification String \n"
                 + ");";
-
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
             stmt.execute(sql);
@@ -41,24 +46,34 @@ public class ProductDateBase {
     }
 
     public void add(Product product) {
-        String sql = "INSERT into Students (numberOfViews,productId , name, nameOfCompany, price, remainedNumbers, description)\" +\n" +
-                "\" VALUES (?, ? , ? , ? , ?, ? ,?)";
+        String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, price,"+
+                "remainedNumber,categoryId, description,productCommentsId , specification)" +
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?)";
 
         try (Connection conn = this.connect();
-             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+             PreparedStatement statement = conn.prepareStatement(sql)) {
 
-            pstmt.setInt(1,product.getNumberOfViews());
-            pstmt.setString(2, product.getProductId());
-            pstmt.setString(3, product.getName());
-            pstmt.setString(4, product.getNameOfCompany());
-            pstmt.setInt(5, product.getPrice());
-            pstmt.setInt(6, product.getRemainedNumber());
-            pstmt.setString(7, product.getDescription());
+            statement.setInt(1,product.getNumberOfViews());
+            statement.setString(2, product.getProductId());
+            statement.setString(3,String.valueOf(product.getProductState()));
+            statement.setString(4, product.getName());
+            statement.setString(5, product.getNameOfCompany());
+            statement.setInt(6, product.getPrice());
+            statement.setInt(7, product.getRemainedNumber());
+            statement.setString(8,product.getCategoryId());
+            statement.setString(9, product.getDescription());
+            statement.setString(10, String.valueOf(product.getComments()));
+            statement.setString(11,convertSpecificationToJson(product.getSpecification()));
 
-            pstmt.executeUpdate();
+            statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private String convertSpecificationToJson  (HashMap<String, String> specification){
+        Gson gson = new Gson();
+        return gson.toJson(specification);
     }
 
     public void update(Product product){

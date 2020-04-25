@@ -219,15 +219,15 @@ public class Controller {
     }
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers,
-                                  Category category, String description) {
+                                  String categoryId, String description) {
         Product newProduct, product;
         product = Product.getProductByName(name);
         if (product == null)
-            newProduct = new Product(name, nameOfCompany, price, remainedNumbers, category, description);
+            newProduct = new Product(name, nameOfCompany, price, remainedNumbers, categoryId, description);
         else {
             ArrayList<Supplier> newSuppliers = new ArrayList<>(product.getListOfSuppliers());
             newSuppliers.add((Supplier) account);
-            newProduct = new Product(name, nameOfCompany, price, newSuppliers, remainedNumbers, category, description, product.getComments(),product.getNumberOfViews());
+            newProduct = new Product(name, nameOfCompany, price, newSuppliers, remainedNumbers, categoryId, description, product.getComments(),product.getNumberOfViews());
         }
     }
 

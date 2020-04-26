@@ -78,7 +78,11 @@ public class ProductDateBase {
 
     private boolean doesProductAlreadyExists(Product product) {
         ArrayList<Product> list = getAllProducts();
-        return list.contains(product);
+        for (Product eachProduct : list) {
+            if(eachProduct.getProductId().equals(product.getProductId()))
+                return true;
+        }
+        return false;
     }
 
 
@@ -92,8 +96,7 @@ public class ProductDateBase {
     }
 
     public ArrayList<Product> getAllProducts() {
-        String sql = "SELECT numberOfViews,productId ,productState, name, nameOfCompany, price," +
-                "listOfSuppliersUsername, remainedNumber,categoryId, description,productCommentsId , specification  FROM Products";
+        String sql = "SELECT *  FROM Products";
 
         try (Connection conn = this.connect();
              Statement stmt = conn.createStatement();
@@ -104,7 +107,7 @@ public class ProductDateBase {
                         resultSet.getInt("price"), convertJsonToArrayList(resultSet.getString("listOfSuppliersUsername")),
                         resultSet.getInt("remainedNumber"), resultSet.getString("categoryId"),
                         resultSet.getString("description"), convertJsonToArrayList(resultSet.getString("ProductCommentsId"))
-                        , resultSet.getInt("numberOfViews"));
+                        , resultSet.getInt("numberOfViews"),resultSet.getString("productId"));
                 products.add(product);
             }
             return products;

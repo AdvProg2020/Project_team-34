@@ -44,7 +44,7 @@ public class Product {
     }
 
     public Product(String name, String nameOfCompany, int price, ArrayList<String> listOfSuppliersUsername,
-                   int remainedNumber, String categoryId, String description, ArrayList<String> commentsId, int numberOfViews) {
+                   int remainedNumber, String categoryId, String description, ArrayList<String> commentsId, int numberOfViews , String productId) {
         this.productState = State.PREPARING_TO_BUILD;
         this.name = name;
         this.nameOfCompany = nameOfCompany;
@@ -55,6 +55,7 @@ public class Product {
         this.description = description;
         this.commentsId = commentsId;
         this.numberOfViews= numberOfViews;
+        this.productId = productId;
     }
 
     private String generateIdentifier(){

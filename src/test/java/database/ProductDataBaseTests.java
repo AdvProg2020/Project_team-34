@@ -15,8 +15,11 @@ public class ProductDataBaseTests {
                 "0001", "be described");
         Product product2 = new Product("product2", "company2", 91, 6,
                 "0003", "description");
+        Product repeatedProduct = new Product("product3","company3",93,null,
+                4,"0004","description",null,4,product1.getProductId());
         productDateBase.add(product1);
         productDateBase.add(product2);
+        productDateBase.add(repeatedProduct);
 
         ArrayList<Product> actualProducts= productDateBase.getAllProducts();
         int [] actualPrice = new int[2];

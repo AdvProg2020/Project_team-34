@@ -21,24 +21,28 @@ public class ShippingInfo {
     private long postalCode;
     private long phoneNumber;
 
-    public ShippingInfo(String firstName, String lastName, City city, String address, long postalCode, long phoneNumber) {
+    public ShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws Exception {
+        try {
+            this.city = City.valueOf(city);
+        } catch (Exception e) {
+            throw new Exception(city + " isn't defined for System");
+        }
         this.firstName = firstName;
         this.lastName = lastName;
-        this.city = city;
         this.address = address;
         this.postalCode = postalCode;
         this.phoneNumber = phoneNumber;
     }
 
     public static boolean isPhoneNumberValid(long phoneNumber) {
-        return false;
+        return true;
     }
 
     public static boolean isPostalCodeValid(long postalCode) {
-        return false;
+        return true;
     }
 
     public static boolean isAddressValid(String Address) {
-        return false;
+        return true;
     }
 }

@@ -170,15 +170,26 @@ public class Cart {
     }
 
     public int getValueOfCartWithoutDiscounts() {
-        return 0;
+        int totalAmount = 0;
+        for (Product product : productsIn) {
+            totalAmount += product.getPrice(productsSupplier.get(product));
+        }
+        return totalAmount;
     }
 
     public int getAmountOfSale() {
-        return 0;
+        int saleAmount = 0;
+        for (Product product : productsIn) {
+            Sale productSale = productsSales.get(product);
+            if (productSale != null) {
+                saleAmount += productSale.discountAmountFor(product.getPrice(productsSupplier.get(product)));
+            }
+        }
+        return saleAmount;
     }
 
     public int getAmountOfCodedDiscount() {
-        return 0;
+        return codedDiscount.discountAmountFor(getValueOfCartWithoutDiscounts() - getAmountOfSale());
     }
 
     public int getBill() {

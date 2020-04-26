@@ -64,6 +64,14 @@ public class Comment {
         this.customerBoughtThisProduct = customerBoughtThisProduct;
     }
 
+    public static ArrayList<Comment> getComments(){
+        return comments;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
     public static void importAllData(){
 
     }

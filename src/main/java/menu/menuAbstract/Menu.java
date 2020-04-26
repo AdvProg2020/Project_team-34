@@ -56,8 +56,24 @@ public abstract class Menu {
             menusIn.put("^Sort$", SortCommands);
             menuForShow.add("Sort");
 
-            menusIn.put("^Back$", parentMenu);
-            menuForShow.add("Back");
+            if (this.parentMenu == null){
+                Menu exit = new Menu("Exit", this) {
+                    @Override
+                    public void show() {
+
+                    }
+
+                    @Override
+                    public void execute() {
+                        System.exit(0);
+                    }
+                };
+                menusIn.put("^Exit$", exit);
+                menuForShow.add("Exit");
+            }   else    {
+                menusIn.put("^Back$", parentMenu);
+                menuForShow.add("Back");
+            }
         }
     }
 
@@ -98,7 +114,6 @@ public abstract class Menu {
         }
         nextMenu.command = command;
         nextMenu.show();
-        System.out.println(this.command);
         nextMenu.execute();
     }
 }

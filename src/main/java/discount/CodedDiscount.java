@@ -41,8 +41,8 @@ public class CodedDiscount extends Discount{
         return maxDiscountPercent;
     }
 
-    public HashMap<Customer, Integer> getCustomers() {
-        return usedDiscountPerCustomer;
+    public ArrayList<Customer> getCustomers() {
+        return customers;
     }
 
 
@@ -83,8 +83,15 @@ public class CodedDiscount extends Discount{
         return null;
     }
 
+
+
     public static void importAllData(){
 
+    }
+
+
+    public void setMaxDiscountPercent(int maxDiscountPercent) {
+        this.maxDiscountPercent = maxDiscountPercent;
     }
 
     /**

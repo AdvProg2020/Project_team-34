@@ -5,6 +5,7 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
+import log.ShippingInfo;
 import menu.menuAbstract.Menu;
 import discount.CodedDiscount;
 import discount.Sale;
@@ -28,54 +29,126 @@ public class Controller {
         return false;
     }
 
-    public boolean controlAddToCart() {
-        return false;
+    public void controlAddToCart(String productId, String supplierUsername) throws Exception {
+        Product product = Product.getProductById(productId);
+        if (product == null) {
+            throw new Exception("Product not found.");
+        }
+        Supplier supplier = (Supplier) Supplier.getAccountByUsername(supplierUsername);
+        if (supplier == null) {
+            throw new Exception("Supplier not Found");
+        }
+        if (!product.doesSupplierSellThisProduct(supplier)) {
+            throw new Exception("This supplier doesn't provide this product.");
+        }
+        if (product.getRemainedNumber(supplier) == 0) {
+            throw new Exception("This supplier currently can't provide this product.");
+        }
+        cart.addProductToCart(product, supplier);
     }
 
     public Cart controlViewCart() {
-        return null;
+        return cart;
     }
 
-    public boolean controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) {
-        return false;
+    public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws Exception {
+        ShippingInfo shippingInfo = new ShippingInfo(firstName, lastName, city, address, postalCode, phoneNumber);
+        cart.submitShippingInfo(shippingInfo);
     }
 
-    public boolean controlRemoveShippingInfo() {
-        return false;
+    public void controlRemoveShippingInfo() throws Exception {
+        cart.removeShippingInfo();
     }
 
-    public boolean controlSubmitDiscountCode() {
-        return false;
+    public void controlApplyDiscountCode(String discountCode) throws Exception {
+        cart.applyCodedDiscount(discountCode);
     }
 
-    public boolean controlRemoveDiscountCode() {
-        return false;
+    public void controlRemoveDiscountCode() throws Exception {
+        cart.removeCodedDiscount();
+    }
+
+    public void decreaseProductCount(String productId) throws Exception {
+        Product product = Product.getProductById(productId);
+        if (product == null) {
+            throw new Exception("Product not found");
+        }
+        cart.decreaseProductCount(product);
+    }
+
+    public void increaseProductCount(String productId) throws Exception {
+        Product product = Product.getProductById(productId);
+        if (product == null) {
+            throw new Exception("Product not found");
+        }
+        cart.increaseProductCount(product);
     }
 
     public boolean controlFinalizeOrder() {
         return false;
     }
 
-    public boolean controlAddCategory( String name, String parentCategoryName) {
-        return false;
+    public void controlAddCategory(String name, String parentCategoryName, boolean isParent) throws Exception{
+        if (Category.getCategoryByName(name) != null) {
+            throw new Exception("duplicate name");
+        }
+        Category parent = Category.getCategoryByName(parentCategoryName);
+        if (parent == null) {
+            throw new Exception("parent not found");
+        }
+        new Category(name, isParent, parent);
     }
 
-    public boolean controlAddSubcategoryToCategory( String name, String subcategoryName) {
-        return false;
+    public void controlRemoveCategory(String name) throws Exception {
+        Category deletingCategory = Category.getCategoryByName(name);
+        if (deletingCategory == null) {
+            throw new Exception("category not found");
+        }
+        (deletingCategory.getParentCategory()).removeSubCategory(deletingCategory);
     }
 
-    public boolean controlRemoveSubcategoryFromCategory( String name, String subcategoryName) {
-        return false;
+    public void controlAddProductToCategory(String categoryName, String productIdentifier) throws Exception {
+        Category category = Category.getCategoryByName(categoryName);
+        Product product = Product.getProductById(productIdentifier);
+        if (category == null) {
+            throw new Exception("category not found");
+        }
+        if (product == null) {
+            throw new Exception("product not found");
+        }
+        category.addProduct(product);
     }
 
-    public boolean controlAddProductToCategory(String categoryName, String productIdentifier) {
-        return false;
+    public void controlRemoveProductFromCategory(String categoryName, String productIdentifier) throws Exception {
+        Category category = Category.getCategoryByName(categoryName);
+        Product product = Product.getProductById(productIdentifier);
+        if (category == null) {
+            throw new Exception("category not found");
+        }
+        if (product == null) {
+            throw new Exception("product not found");
+        }
+        category.removeProduct(product);
     }
 
-    public boolean controlRemoveProductFromCategory( String categoryName, String productIdentifier) {
-        return false;
+    public void controlEditCategoryName(String oldName, String newName) throws Exception {
+        Category category = Category.getCategoryByName(oldName);
+        if (category == null) {
+            throw new Exception("Category <" + oldName + "> not found.");
+        }
+        if (Category.getCategoryByName(newName) != null) {
+            throw new Exception(("There is already a category with name " + newName + "."));
+        }
+        category.setName(newName);
     }
 
+    public void controlAddFilterToCategory() throws Exception {
+
+    }
+
+    public void controlDeleteFilterFromCategory() throws Exception {
+
+    }
 
     private boolean doesAccountExist(String username) {
         if (Account.getAccountByUsername(username) == null)

@@ -131,9 +131,8 @@ public class CustomerLog {
         if (deliveryStatus == LogStatus.DELIVERED) {
             return false;
         }
-        deliveryStatus = deliveryStatus.nextStep();
+        setDeliveryStatus(deliveryStatus.nextStep());
         return true;
-        //file modification required
         //completed
     }
 

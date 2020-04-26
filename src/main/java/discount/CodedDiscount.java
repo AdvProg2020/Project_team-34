@@ -71,7 +71,8 @@ public class CodedDiscount extends Discount{
 
     }
 
-    public CodedDiscount getCodedDiscountByCode(String code){
+    public static CodedDiscount getCodedDiscountByCode(String code){
+        ///signed as static by AA
         for (CodedDiscount codedDiscount : codedDiscounts) {
             if(codedDiscount.getDiscountCode().equals(code)){
                 return codedDiscount;

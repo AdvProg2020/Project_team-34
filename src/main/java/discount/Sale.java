@@ -90,6 +90,17 @@ public class Sale extends Discount{
         return false;
     }
 
+    public static Sale getProductSale(Product product) {
+        //HAZARD!!!
+        //this method has written by Aryan Ahadinia for use in Cart.java
+        for (Sale sale : sales) {
+            if (sale.isProductInSale(product)) {
+                return sale;
+            }
+        }
+        return null;
+    }
+
     /**
      *
      * @return returns the String form of a JSON object for storing in the database.

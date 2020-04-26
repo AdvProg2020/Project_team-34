@@ -1,5 +1,6 @@
 package cart;
 
+import account.Customer;
 import account.Supplier;
 import discount.CodedDiscount;
 import discount.Sale;
@@ -15,6 +16,7 @@ import java.util.HashMap;
  */
 
 public class Cart {
+    private Customer owner;
     private ArrayList<Product> productsIn;
     private HashMap<Product, Integer> productsQuantity;
     private HashMap<Product, Supplier> productsSupplier;
@@ -23,13 +25,15 @@ public class Cart {
     private ShippingInfo shippingInfo;
 
     //Constructor
-    public Cart() {
+    public Cart(Customer owner) {
+        this.owner = owner;
         productsIn = new ArrayList<>();
         productsQuantity = new HashMap<>();
         productsSupplier = new HashMap<>();
         productsSales = new HashMap<>();
         codedDiscount = null;
         shippingInfo = null;
+        //file modification required if <owner != null>
     }
 
     //Getters:
@@ -58,26 +62,6 @@ public class Cart {
     }
 
     //Setters:
-    private void setProductsIn(ArrayList<Product> productsIn) {
-        this.productsIn = productsIn;
-        //file modification required
-    }
-
-    private void setProductsQuantity(HashMap<Product, Integer> productsQuantity) {
-        this.productsQuantity = productsQuantity;
-        //file modification required
-    }
-
-    private void setProductsSupplier(HashMap<Product, Supplier> productsSupplier) {
-        this.productsSupplier = productsSupplier;
-        //file modification required
-    }
-
-    private void setProductsSales(HashMap<Product, Sale> productsSales) {
-        this.productsSales = productsSales;
-        //file modification required
-    }
-
     private void setCodedDiscount(CodedDiscount codedDiscount) {
         this.codedDiscount = codedDiscount;
         //file modification required
@@ -96,60 +80,89 @@ public class Cart {
         productsSales = new HashMap<>();
         codedDiscount = null;
         shippingInfo = null;
+        //file modification required if <owner != null>
     }
 
-    public void addProductToCart(Product product, Supplier supplier) {
-        productsIn.add(product);
-        productsQuantity.put(product, 1);
-        productsSupplier.put(product, supplier);
-        //check
-        productsSales.put(product, null);
+    public void addProductToCart(Product product, Supplier supplier) throws Exception {
+        if (productsIn.contains(product)) {
+            changeQuantityOfProductInCart(product, productsQuantity.get(product) + 1);
+        } else {
+            if (product.getRemainedNumber(supplier) == 0) {
+                throw new Exception("This product with this supplier is currently out of stock.");
+            }
+            productsIn.add(product);
+            productsQuantity.put(product, 1);
+            productsSupplier.put(product, supplier);
+            productsSales.put(product, Sale.getProductSale(product));
+            //file modification required if <owner != null>
+        }
     }
 
-    public void removeProductFromCart(Product product) {
+    public void removeProductFromCart(Product product) throws Exception {
+        if (!productsIn.contains(product)) {
+            throw new Exception("Product is not in cart yet.");
+        }
         productsIn.remove(product);
         productsQuantity.remove(product);
         productsSupplier.remove(product);
         productsSales.remove(product);
+        //file modification required if <owner != null>
     }
 
-    public void changeQuantityOfProductInCart(Product product, int newQuantity) {
+    public void changeQuantityOfProductInCart(Product product, int newQuantity) throws Exception {
         if (newQuantity == 0) {
             removeProductFromCart(product);
         } else {
-            //check
-            if (true) {
-                productsQuantity.replace(product, newQuantity);
+            if (product.getRemainedNumber(productsSupplier.get(product)) < newQuantity) {
+                throw new Exception("This product is currently out of stock.");
             }
+            productsQuantity.replace(product, newQuantity);
         }
+        //file modification required if <owner != null>
     }
 
-    public void updateSales() {
+    public void increaseProductCount(Product product) throws Exception {
+        changeQuantityOfProductInCart(product, productsQuantity.get(product) + 1);
+    }
+
+    public void decreaseProductCount(Product product) throws Exception {
+        changeQuantityOfProductInCart(product, productsQuantity.get(product) + 1);
+    }
+
+    public void update() {
 
     }
 
-    public boolean applyCodedDiscount(String discountCode) {
-        return false;
-    }
-
-    public boolean removeCodedDiscount() {
-        return false;
-    }
-
-    public boolean submitShippingInfo(ShippingInfo shippingInfo) {
-        if (this.shippingInfo == null) {
-            this.shippingInfo = shippingInfo;
-            return true;
+    public void applyCodedDiscount(String discountCode) throws Exception {
+        if (owner == null) {
+            throw new Exception("You should login before apply discount code.");
         }
-        return false;
+        CodedDiscount discount = CodedDiscount.getCodedDiscountByCode(discountCode);
+        if (discount == null) {
+            throw new Exception("This Code is invalid.");
+        }
+        if (!discount.canCustomerUseCode(owner)) {
+            throw new Exception("You can't use this code.");
+        }
+        setCodedDiscount(discount);
     }
 
-    public boolean removeShippingInfo() {
-        if (this.shippingInfo != null) {
-            this.shippingInfo = null;
-            return true;
+    public void removeCodedDiscount() throws Exception {
+        if (codedDiscount == null) {
+            throw new Exception("Code hasn't applied yet.");
         }
-        return false;
+        setCodedDiscount(null);
+    }
+
+    public void submitShippingInfo(ShippingInfo shippingInfo) {
+        setShippingInfo(shippingInfo);
+    }
+
+    public void removeShippingInfo() throws Exception {
+        if (shippingInfo == null) {
+            throw new Exception("ShippingInfo hasn't submitted yet.");
+        }
+        setShippingInfo(null);
     }
 
     public boolean isShippingInfoSubmitted() {
@@ -157,15 +170,26 @@ public class Cart {
     }
 
     public int getValueOfCartWithoutDiscounts() {
-        return 0;
+        int totalAmount = 0;
+        for (Product product : productsIn) {
+            totalAmount += product.getPrice(productsSupplier.get(product));
+        }
+        return totalAmount;
     }
 
     public int getAmountOfSale() {
-        return 0;
+        int saleAmount = 0;
+        for (Product product : productsIn) {
+            Sale productSale = productsSales.get(product);
+            if (productSale != null) {
+                saleAmount += productSale.discountAmountFor(product.getPrice(productsSupplier.get(product)));
+            }
+        }
+        return saleAmount;
     }
 
     public int getAmountOfCodedDiscount() {
-        return 0;
+        return codedDiscount.discountAmountFor(getValueOfCartWithoutDiscounts() - getAmountOfSale());
     }
 
     public int getBill() {

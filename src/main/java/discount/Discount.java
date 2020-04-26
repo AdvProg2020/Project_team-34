@@ -44,6 +44,8 @@ public abstract class Discount {
         return end;
     }
 
-
-
+    public int discountAmountFor(int initialAmount) {
+        //Aryan
+        return (initialAmount * percent) / 100;
+    }
 }

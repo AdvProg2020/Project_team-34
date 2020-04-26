@@ -290,63 +290,104 @@ public class Controller {
     //soheil :
 
     public ArrayList<CodedDiscount> controlGetAllCodedDiscounts(){
-        return null;
+        return CodedDiscount.getCodedDiscounts();
     }
 
     public CodedDiscount controlGetDiscountByCode(String code){
+        for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
+            if(codedDiscount.getDiscountCode().equals(code)){
+                return codedDiscount;
+            }
+        }
         return null;
     }
 
-    public void controlEditDiscountByCode(String code, Date newStartDate, Date newEndDate, int newPercent, int newMaxDiscount){
-
+    public void controlEditDiscountByCode (String code, Date newStartDate, Date newEndDate, int newPercent, int newMaxDiscount) throws Exception{
+        if(controlGetDiscountByCode(code) == null){
+            throw new Exception("No CodedDiscount with this Code");
+        }
+        controlGetDiscountByCode(code).setStart(newStartDate);
+        controlGetDiscountByCode(code).setEnd(newEndDate);
+        controlGetDiscountByCode(code).setPercent(newPercent);
+        controlGetDiscountByCode(code).setMaxDiscountPercent(newMaxDiscount);
     }
 
-    public void controlCreateCodedDiscount(Date startDate, Date endDate, int percent, int maxDiscountAmount){
-
+    public void controlCreateCodedDiscount(Date startDate, Date endDate, int percent, int maxDiscountAmount) {
+        new CodedDiscount(startDate, endDate, percent, maxDiscountAmount);
     }
 
-    public void controlRemoveDiscountCode(String code){
-
+    public void controlRemoveDiscountCode(String code) throws Exception{
+        if(controlGetDiscountByCode(code) == null){
+            throw new Exception("No such code!");
+        }
+        CodedDiscount.removeCodeFromList(controlGetDiscountByCode(code));
     }
 
     public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products){
-
+        new SaleRequest(null, new Sale(startDate,endDate,percent),products,null);
     }
 
     public ArrayList<Sale> controlGetAllSales(){
-        return null;
+        return Sale.getSales();
     }
 
     public Sale controlGetSaleById(String id){
+        for (Sale sale : Sale.getSales()) {
+            if(sale.getOffId().equals(id)){
+                return sale;
+            }
+        }
         return null;
     }
 
-    public void controlEditSaleById(String id, Date newEndDate, Date newStartDate, int newPercent, ArrayList<Product> addingProduct, ArrayList<Product> removingProduct){
-
+    public void controlEditSaleById(String id, Date newEndDate, Date newStartDate, int newPercent, ArrayList<Product> addingProduct, ArrayList<Product> removingProduct) throws Exception{
+        if(controlGetSaleById(id) == null){
+            throw new Exception("No such sale with this code!");
+        }
+        new SaleRequest(controlGetSaleById(id),new Sale(newStartDate,newEndDate,newPercent,id),addingProduct,removingProduct);
     }
 
-    public void controlRemoveSaleById(String id){
-
+    public void controlRemoveSaleById(String id) throws Exception{
+        if(controlGetSaleById(id) == null){
+            throw new Exception("No such sale with id!");
+        }
+        Sale.getSales().remove(controlGetSaleById(id));
     }
 
     public ArrayList<CodedDiscount> controlGetCodedDiscountByCustomer(Customer customer){
-        return null;
+        ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
+        for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
+            if(codedDiscount.getCustomers().contains(customer)){
+                codedDiscounts.add(codedDiscount);
+            }
+        }
+        return codedDiscounts;
     }
 
-    public void controlAddCommentToProduct(String title,String content,Product product){
-
+    public void controlAddCommentToProduct(Customer customer,String title,String content,Product product){
+        //Need modification!
+        new Comment(customer, product,title, content, false);
     }
 
     public ArrayList<Comment> controlGetCommentsOfAProduct(Product product){
-        return null;
+        ArrayList<Comment> productComment = new ArrayList<>();
+        for (Comment comment : Comment.getComments()) {
+            if(comment.getProduct() == product){
+                productComment.add(comment);
+            }
+        }
+        return productComment;
     }
 
-    public void controlRateProductById(String id, float score){
-
+    public void controlRateProductById(String id, float score, Customer customer, Product product) throws Exception{
+        if(Product.getProductById(id) == null){
+            throw new Exception("No such product with id!");
+        }
+        new Score(score, customer, product);
     }
 
     public float controlGetAverageScoreByProduct(Product product){
-        return 0;
+        return  Score.getAverageScoreForProduct(product);
     }
 
 }

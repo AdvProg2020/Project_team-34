@@ -2,6 +2,9 @@ package menu.loginMenu;
 
 import menu.menuAbstract.Menu;
 
+import java.util.Scanner;
+import java.util.regex.Matcher;
+
 /**
  * @author Aryan Ahadinia
  * @since 0.0.1
@@ -17,6 +20,15 @@ public class LoginMenu extends Menu {
 
             @Override
             public void execute() {
+                String regex = "^login (\\w+)$";
+                Matcher usernameMatcher = getMatcher(command, regex);
+                if(usernameMatcher.find()) {
+                    System.out.println("Enter your password:");
+                    String passWord = scanner.nextLine();
+                    //check the password and username with controller
+                    parentMenu.show();
+                    parentMenu.execute();
+                }
             }
         };
         menusIn.put("^login \\w+$", login);
@@ -34,4 +46,5 @@ public class LoginMenu extends Menu {
         menusIn.put("^create account (customer|supplier|supervisor) \\w+$", register);
         menuForShow.add("Create Account");
     }
+
 }

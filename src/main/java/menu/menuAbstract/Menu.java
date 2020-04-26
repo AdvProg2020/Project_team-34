@@ -21,7 +21,7 @@ public abstract class Menu {
     protected String command;
     private String menuName;
     protected Menu parentMenu;
-    protected Controller controller;
+    protected static Controller controller = new Controller();
 
     public Menu(String menuName, Menu parentMenu) {
         this.menuName = menuName;
@@ -36,6 +36,9 @@ public abstract class Menu {
 
                 @Override
                 public void execute() {
+                    for (String s : parentMenu.menusIn.keySet()) {
+                        System.out.println(s);
+                    }
                 }
             };
             menusIn.put("^help$", Help);
@@ -53,8 +56,24 @@ public abstract class Menu {
             menusIn.put("^Sort$", SortCommands);
             menuForShow.add("Sort");
 
-            menusIn.put("^Back$", parentMenu);
-            menuForShow.add("Back");
+            if (this.parentMenu == null){
+                Menu exit = new Menu("Exit", this) {
+                    @Override
+                    public void show() {
+
+                    }
+
+                    @Override
+                    public void execute() {
+                        System.exit(0);
+                    }
+                };
+                menusIn.put("^Exit$", exit);
+                menuForShow.add("Exit");
+            }   else    {
+                menusIn.put("^Back$", parentMenu);
+                menuForShow.add("Back");
+            }
         }
     }
 
@@ -87,12 +106,13 @@ public abstract class Menu {
         if (command.matches("Login/Register")) {
             nextMenu = new LoginMenu(this);
         } else if (command.matches("Logout")) {
-            //controller's fuction call
+            //controller's function call
             nextMenu = this;
         }
         if (nextMenu == null) {
             nextMenu = this;
         }
+        nextMenu.command = command;
         nextMenu.show();
         nextMenu.execute();
     }

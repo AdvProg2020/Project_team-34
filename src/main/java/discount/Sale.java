@@ -23,16 +23,16 @@ public class Sale extends Discount{
         this.offId = generateOffId();
     }
 
-    public Sale(Date start, Date end) {
+    public Sale(Date start, Date end,int percent, String offId) {
         super(start, end, 0);
-        this.offId = generateOffId();
+        this.offId = offId;
     }
 
     private String generateOffId(){
         return null;
     }
 
-    public void addSale(Sale sale){
+    public static void addSale(Sale sale){
         sales.add(sale);
     }
 
@@ -75,6 +75,10 @@ public class Sale extends Discount{
             }
         }
         return null;
+    }
+
+    public static void removeSale(Sale sale){
+        sales.remove(sale);
     }
 
     public static void importAllData(){

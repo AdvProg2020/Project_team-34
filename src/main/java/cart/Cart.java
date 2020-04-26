@@ -87,8 +87,8 @@ public class Cart {
         if (productsIn.contains(product)) {
             changeQuantityOfProductInCart(product, productsQuantity.get(product) + 1);
         } else {
-            if (product.getRemainedNumber() == 0) {
-                throw new Exception("This product is currently out of stock.");
+            if (product.getRemainedNumber(supplier) == 0) {
+                throw new Exception("This product with this supplier is currently out of stock.");
             }
             productsIn.add(product);
             productsQuantity.put(product, 1);
@@ -113,7 +113,7 @@ public class Cart {
         if (newQuantity == 0) {
             removeProductFromCart(product);
         } else {
-            if (product.getRemainedNumber() < newQuantity) {
+            if (product.getRemainedNumber(productsSupplier.get(product)) < newQuantity) {
                 throw new Exception("This product is currently out of stock.");
             }
             productsQuantity.replace(product, newQuantity);

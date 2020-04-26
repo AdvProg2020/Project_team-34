@@ -47,7 +47,6 @@ public class ProductDateBase {
 
     public void add(Product product) {
         if (doesProductAlreadyExists(product)) {
-            System.out.println("problem");
            return;
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, price," +

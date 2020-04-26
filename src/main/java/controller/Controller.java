@@ -5,6 +5,7 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
+import log.ShippingInfo;
 import menu.menuAbstract.Menu;
 import discount.CodedDiscount;
 import discount.Sale;
@@ -28,28 +29,59 @@ public class Controller {
         return false;
     }
 
-    public boolean controlAddToCart() {
-        return false;
+    public void controlAddToCart(String productId, String supplierUsername) throws Exception {
+        Product product = Product.getProductById(productId);
+        if (product == null) {
+            throw new Exception("Product not found.");
+        }
+        Supplier supplier = (Supplier) Supplier.getAccountByUsername(supplierUsername);
+        if (supplier == null) {
+            throw new Exception("Supplier not Found");
+        }
+        if (!product.doesSupplierSellThisProduct(supplier)) {
+            throw new Exception("This supplier doesn't provide this product.");
+        }
+        if (product.getRemainedNumber(supplier) == 0) {
+            throw new Exception("This supplier currently can't provide this product.");
+        }
+        cart.addProductToCart(product, supplier);
     }
 
     public Cart controlViewCart() {
-        return null;
+        return cart;
     }
 
-    public boolean controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) {
-        return false;
+    public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws Exception {
+        ShippingInfo shippingInfo = new ShippingInfo(firstName, lastName, city, address, postalCode, phoneNumber);
+        cart.submitShippingInfo(shippingInfo);
     }
 
-    public boolean controlRemoveShippingInfo() {
-        return false;
+    public void controlRemoveShippingInfo() throws Exception {
+        cart.removeShippingInfo();
     }
 
-    public boolean controlSubmitDiscountCode() {
-        return false;
+    public void controlApplyDiscountCode(String discountCode) throws Exception {
+        cart.applyCodedDiscount(discountCode);
     }
 
-    public boolean controlRemoveDiscountCode() {
-        return false;
+    public void controlRemoveDiscountCode() throws Exception {
+        cart.removeCodedDiscount();
+    }
+
+    public void decreaseProductCount(String productId) throws Exception {
+        Product product = Product.getProductById(productId);
+        if (product == null) {
+            throw new Exception("Product not found");
+        }
+        cart.decreaseProductCount(product);
+    }
+
+    public void increaseProductCount(String productId) throws Exception {
+        Product product = Product.getProductById(productId);
+        if (product == null) {
+            throw new Exception("Product not found");
+        }
+        cart.increaseProductCount(product);
     }
 
     public boolean controlFinalizeOrder() {

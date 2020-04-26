@@ -132,6 +132,10 @@ public class Product {
         remainedNumber -= amount;
     }
 
+    public int getPrice(Supplier supplier) {
+        return 0;
+    }
+
     public static void importAll(){
         
     }

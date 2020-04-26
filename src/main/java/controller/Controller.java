@@ -99,6 +99,24 @@ public class Controller {
         category.removeProduct(product);
     }
 
+    public void controlEditCategoryName(String oldName, String newName) throws Exception {
+        Category category = Category.getCategoryByName(oldName);
+        if (category == null) {
+            throw new Exception("Category <" + oldName + "> not found.");
+        }
+        if (Category.getCategoryByName(newName) != null) {
+            throw new Exception(("There is already a category with name " + newName + "."));
+        }
+        category.setName(newName);
+    }
+
+    public void controlAddFilterToCategory() throws Exception {
+
+    }
+
+    public void controlDeleteFilterFromCategory() throws Exception {
+
+    }
 
     private boolean doesAccountExist(String username) {
         if (Account.getAccountByUsername(username) == null)

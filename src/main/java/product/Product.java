@@ -40,6 +40,7 @@ public class Product {
         commentsId = new ArrayList<>();
         this.productState = State.PREPARING_TO_BUILD;
         numberOfViews = 0;
+        allCreatedProductNum ++;
     }
 
     public Product(String name, String nameOfCompany, int price, ArrayList<String> listOfSuppliersUsername,

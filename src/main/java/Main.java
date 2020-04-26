@@ -9,15 +9,6 @@ import java.util.Scanner;
 public class Main {
     public static void main(String[] args) {
         System.out.println("Project_team-34");
-        ProductDateBase.createNewTable();
-        ProductDateBase productDateBase = new ProductDateBase();
-        productDateBase.add(new Product("p", "com", 90, 5,
-                "hhh", "be described"));
-        System.out.println("hhhhhhhhh");
-        ArrayList<Product> products= productDateBase.getAllProducts();
-        for (Product product : products) {
-            System.out.println(product.getName());
-        }
         //run();
     }
 

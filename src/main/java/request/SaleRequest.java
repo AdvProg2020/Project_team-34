@@ -44,7 +44,10 @@ public class SaleRequest extends Request{
     //methods
 
     public boolean isThisEditRequest(){
-        return false;
+        if(oldSale == null){
+            return false;
+        }
+        return true;
     }
 
     public static String generateRequestId() {
@@ -53,7 +56,19 @@ public class SaleRequest extends Request{
 
     @Override
     public void doRequest(boolean acceptedOrNot) {
-
+        if(acceptedOrNot){
+            if(isThisEditRequest()){
+                Sale.removeSale(oldSale);
+            }
+            for (Product addingProduct : addingProducts) {
+                newSale.addProductToSale(addingProduct);
+            }
+            for (Product removingProduct : removingProducts) {
+                newSale.removeProductFromSale(removingProduct);
+            }
+        } else {
+            Sale.removeSale(newSale);
+        }
     }
 
 

@@ -343,7 +343,7 @@ public class Controller {
         if(controlGetSaleById(id) == null){
             throw new Exception("No such sale with this code!");
         }
-        new SaleRequest(controlGetSaleById(id),new Sale(newStartDate,newEndDate,newPercent),addingProduct,removingProduct);
+        new SaleRequest(controlGetSaleById(id),new Sale(newStartDate,newEndDate,newPercent,id),addingProduct,removingProduct);
     }
 
     public void controlRemoveSaleById(String id) throws Exception{

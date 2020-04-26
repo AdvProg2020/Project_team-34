@@ -7,6 +7,7 @@ import account.Supplier;
 import cart.Cart;
 
 import feedback.Score;
+import log.ShippingInfo;
 import menu.menuAbstract.Menu;
 import discount.CodedDiscount;
 import discount.Sale;

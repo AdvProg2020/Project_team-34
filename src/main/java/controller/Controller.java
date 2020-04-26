@@ -56,24 +56,47 @@ public class Controller {
         return false;
     }
 
-    public boolean controlAddCategory( String name, String parentCategoryName) {
-        return false;
+    public void controlAddCategory(String name, String parentCategoryName, boolean isParent) throws Exception{
+        if (Category.getCategoryByName(name) != null) {
+            throw new Exception("duplicate name");
+        }
+        Category parent = Category.getCategoryByName(parentCategoryName);
+        if (parent == null) {
+            throw new Exception("parent not found");
+        }
+        new Category(name, isParent, parent);
     }
 
-    public boolean controlAddSubcategoryToCategory( String name, String subcategoryName) {
-        return false;
+    public void controlRemoveCategory(String name) throws Exception {
+        Category deletingCategory = Category.getCategoryByName(name);
+        if (deletingCategory == null) {
+            throw new Exception("category not found");
+        }
+        (deletingCategory.getParentCategory()).removeSubCategory(deletingCategory);
     }
 
-    public boolean controlRemoveSubcategoryFromCategory( String name, String subcategoryName) {
-        return false;
+    public void controlAddProductToCategory(String categoryName, String productIdentifier) throws Exception {
+        Category category = Category.getCategoryByName(categoryName);
+        Product product = Product.getProductById(productIdentifier);
+        if (category == null) {
+            throw new Exception("category not found");
+        }
+        if (product == null) {
+            throw new Exception("product not found");
+        }
+        category.addProduct(product);
     }
 
-    public boolean controlAddProductToCategory(String categoryName, String productIdentifier) {
-        return false;
-    }
-
-    public boolean controlRemoveProductFromCategory( String categoryName, String productIdentifier) {
-        return false;
+    public void controlRemoveProductFromCategory(String categoryName, String productIdentifier) throws Exception {
+        Category category = Category.getCategoryByName(categoryName);
+        Product product = Product.getProductById(productIdentifier);
+        if (category == null) {
+            throw new Exception("category not found");
+        }
+        if (product == null) {
+            throw new Exception("product not found");
+        }
+        category.removeProduct(product);
     }
 
 

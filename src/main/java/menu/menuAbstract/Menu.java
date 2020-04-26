@@ -39,6 +39,8 @@ public abstract class Menu {
                     for (String s : parentMenu.menusIn.keySet()) {
                         System.out.println(s);
                     }
+                    parentMenu.show();
+                    parentMenu.execute();
                 }
             };
             menusIn.put("^help$", Help);

@@ -18,44 +18,58 @@ public class Product {
     private String productId;
     private State productState;
     private String name , nameOfCompany;
-    private int price;
-    private ArrayList<String> listOfSuppliersUsername;
-    private int remainedNumber;
-    private String categoryId;
+    private HashMap<Supplier, Integer> priceForEachSupplier;
+    private ArrayList<Supplier> listOfSuppliers;
+    private HashMap<Supplier,Integer> remainedNumberForEachSupplier;
+    private Category category;
     private String description;
-    private ArrayList<String> commentsId;
+    private ArrayList<Comment> comments;
     private HashMap<String, String> specification; //method check
 
 
-    public Product(String name, String nameOfCompany, int price, int remainedNumber,
-                   String categoryId, String description) {
+    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber,
+                   Category category, String description) {
+        numberOfViews = 0;
+        this.productState = State.PREPARING_TO_BUILD;
         this.productId = generateIdentifier();
         this.name = name;
         this.nameOfCompany = nameOfCompany;
-        this.price = price;
-        listOfSuppliersUsername = new ArrayList<>();
-        this.remainedNumber = remainedNumber;
-        this.categoryId = categoryId;
+        this.priceForEachSupplier.put(supplier, price);
+        this.listOfSuppliers = new ArrayList<>();
+        listOfSuppliers.add(supplier);
+        remainedNumberForEachSupplier.put(supplier,remainedNumber);
+        this.category = category;
         this.description = description;
-        commentsId = new ArrayList<>();
-        this.productState = State.PREPARING_TO_BUILD;
-        numberOfViews = 0;
+        comments = new ArrayList<>();
+
+
+
         allCreatedProductNum ++;
     }
 
-    public Product(String name, String nameOfCompany, int price, ArrayList<String> listOfSuppliersUsername,
-                   int remainedNumber, String categoryId, String description, ArrayList<String> commentsId, int numberOfViews , String productId) {
-        this.productState = State.PREPARING_TO_BUILD;
+    public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
+                   HashMap<Supplier,Integer> remainedNumberForEachSupplier, Category category, String description, ArrayList<Comment> comments,
+                   int numberOfViews , String productId,String state) {
+        this.productState = convertStringToState(state);
+        this.productId = productId;
         this.name = name;
         this.nameOfCompany = nameOfCompany;
-        this.price = price;
-        this.listOfSuppliersUsername = listOfSuppliersUsername;
-        this.remainedNumber = remainedNumber;
-        this.categoryId = categoryId;
+        this.priceForEachSupplier = priceForEachSupplier;
+        this.listOfSuppliers = listOfSuppliers;
+        this.remainedNumberForEachSupplier = remainedNumberForEachSupplier;
+        this.category = category;
         this.description = description;
-        this.commentsId = commentsId;
+        this.comments = comments;
         this.numberOfViews= numberOfViews;
-        this.productId = productId;
+
+    }
+
+    private State convertStringToState(String state){
+        if(state.equals("PREPARING_TO_BUILD"))
+            return State.PREPARING_TO_BUILD;
+        if(state.equals("PREPARING_TO_EDIT"))
+            return State.PREPARING_TO_EDIT;
+        return State.CONFIRMED;
     }
 
     private String generateIdentifier(){
@@ -70,12 +84,12 @@ public class Product {
         return name;
     }
 
-    public ArrayList<String> getComments() {
-        return commentsId;
+    public ArrayList<Comment> getComments() {
+        return comments;
     }
 
-    public ArrayList<String> getListOfSuppliersUsername() {
-        return listOfSuppliersUsername;
+    public ArrayList<Supplier> getListOfSuppliers() {
+        return listOfSuppliers;
     }
 
     public static Product getProductById(String productId){return null;}
@@ -88,12 +102,12 @@ public class Product {
         return nameOfCompany;
     }
 
-    public int getPrice() {
-        return price;
+    public HashMap<Supplier, Integer> getPriceForEachSupplier() {
+        return priceForEachSupplier;
     }
 
-    public int getRemainedNumber() {
-        return remainedNumber;
+    public HashMap<Supplier, Integer> getRemainedNumberForEachSupplier() {
+        return remainedNumberForEachSupplier;
     }
 
     public String getDescription() {
@@ -104,8 +118,8 @@ public class Product {
         return productState;
     }
 
-    public String getCategoryId() {
-        return categoryId;
+    public Category getCategory() {
+        return category;
     }
 
     public HashMap<String, String> getSpecification() {
@@ -122,7 +136,7 @@ public class Product {
     }
 
     public boolean doesSupplierSellThisProduct (Supplier supplier){
-        return listOfSuppliersUsername.contains(supplier.getUserName());
+        return listOfSuppliers.contains(supplier);
     }
 
     public static ArrayList<String> getProductIdForSupplier(Supplier supplier){
@@ -142,8 +156,9 @@ public class Product {
         return null;
     }
 
-    public void reduceRemainedNumber (int amount){
-        remainedNumber -= amount;
+    public void reduceRemainedNumber (Supplier supplier, int amount){
+        int remainedNumber = remainedNumberForEachSupplier.get(supplier);
+        remainedNumberForEachSupplier.put(supplier, remainedNumber - amount);
     }
 
     public int getPrice(Supplier supplier) {
@@ -155,7 +170,7 @@ public class Product {
     }
 
     public static void importAll(){
-        
+
     }
 
 }

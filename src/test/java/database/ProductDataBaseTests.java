@@ -53,4 +53,18 @@ public class ProductDataBaseTests {
         }
         Assert.assertArrayEquals(new String [] {"product1","product2"} , actualName);
     }
+
+    @Test
+    public void testDelete(){
+        ProductDateBase productDateBase = new ProductDateBase();
+        productDateBase.delete("T34P000000000000002");
+
+        ArrayList<Product> actualProducts= productDateBase.getAllProducts();
+        String [] actualName= new String[1];
+        for (int i=0 ; i< 1; i++) {
+            actualName[i] = actualProducts.get(i).getName();
+        }
+        Assert.assertArrayEquals(new String [] {"product1"} , actualName);
+
+    }
 }

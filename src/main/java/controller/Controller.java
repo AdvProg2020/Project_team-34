@@ -223,16 +223,21 @@ public class Controller {
     }
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers,
-                                  String categoryId, String description) {
+                                  Category category, String description) {
         Product newProduct, product;
         product = Product.getProductByName(name);
         if (product == null)
-            newProduct = new Product(name, nameOfCompany, price, remainedNumbers, categoryId, description);
+            newProduct = new Product((Supplier)account, name, nameOfCompany, price, remainedNumbers, category, description);
         else {
-            ArrayList<String > newSuppliers = new ArrayList<>(product.getListOfSuppliersUsername());
-            newSuppliers.add(account.getUserName());
-            newProduct = new Product(name, nameOfCompany, price, newSuppliers, remainedNumbers, categoryId, description,
-                    product.getComments(),product.getNumberOfViews(),product.getProductId());
+            /*
+            ArrayList<Supplier > newSuppliers = new ArrayList<>(product.getListOfSuppliers());
+            newSuppliers.add((Supplier)account);
+            HashMap<Supplier,Integer> newPrice = new HashMap<>(product.getPriceForEachSupplier());
+            newPrice.put((Supplier)account,price);
+            HashMap<Supplier,Integer> newPrice = new HashMap<>(product.getPriceForEachSupplier());
+            newPrice.put((Supplier)account,price);
+            newProduct = new Product(name, nameOfCompany, newPrice, newSuppliers,newRemainedNumbers, category, description,
+                    product.getComments(),product.getNumberOfViews(),product.getProductId());*/
         }
     }
 

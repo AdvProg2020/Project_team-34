@@ -34,10 +34,12 @@ public class Product {
         this.productId = generateIdentifier();
         this.name = name;
         this.nameOfCompany = nameOfCompany;
+        this.priceForEachSupplier = new HashMap<>();
         this.priceForEachSupplier.put(supplier, price);
         this.listOfSuppliers = new ArrayList<>();
         listOfSuppliers.add(supplier);
-        remainedNumberForEachSupplier.put(supplier,remainedNumber);
+        this.remainedNumberForEachSupplier = new HashMap<>();
+        this.remainedNumberForEachSupplier.put(supplier,remainedNumber);
         this.category = category;
         this.description = description;
         comments = new ArrayList<>();

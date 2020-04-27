@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public abstract class Account {
     private String userName , name , familyName , email , phoneNumber , password;
     private int credit;
-    private static ArrayList<Account> allAccounts ;
+    private static ArrayList<Account> allAccounts = new ArrayList<>();
 
     public Account(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit) {
         this.userName = userName;

@@ -71,6 +71,8 @@ public class LoginMenu extends Menu {
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^create account (customer|supplier|supervisor) \\w+$", register);

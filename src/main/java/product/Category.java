@@ -1,5 +1,7 @@
 package product;
 
+import exceptionalMassage.ExceptionalMassage;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -24,7 +26,10 @@ public class Category {
         this.allCategoriesIn = new ArrayList<>();
     }
 
-    public Category(String name, boolean isParentCategory, Category parentCategory) throws Exception {
+    public Category(String name, boolean isParentCategory, Category parentCategory) throws ExceptionalMassage {
+        if (getCategoryByName(name) != null) {
+            throw new ExceptionalMassage("Category with name " + name + " has already created.");
+        }
         this.name = name;
         if (isParentCategory) {
             allCategoriesIn = new ArrayList<>();
@@ -81,23 +86,23 @@ public class Category {
     }
 
     //Modeling methods:
-    public void addProduct(Product product) throws Exception {
+    public void addProduct(Product product) throws ExceptionalMassage {
         if (allProductsIn == null) {
-            throw new Exception("Cannot Add Product to this category.");
+            throw new ExceptionalMassage("Cannot Add Product to this category.");
         }
         if (allProductsIn.contains(product)) {
-            throw new Exception("This product has already added to this category.");
+            throw new ExceptionalMassage("This product has already added to this category.");
         }
         allProductsIn.add(product);
         //file modification required
     }
 
-    public void removeProduct(Product product) throws Exception {
+    public void removeProduct(Product product) throws ExceptionalMassage {
         if (allProductsIn == null) {
-            throw new Exception("This is not a product category.");
+            throw new ExceptionalMassage("This is not a product category.");
         }
         if (!allProductsIn.contains(product)) {
-            throw new Exception("This product is not in this category.");
+            throw new ExceptionalMassage("This product is not in this category.");
         }
         allProductsIn.remove(product);
         //file modification required
@@ -111,23 +116,20 @@ public class Category {
         return allProductsIn == null;
     }
 
-    public void addSubCategory(Category subCategory) throws Exception {
+    public void addSubCategory(Category subCategory) throws ExceptionalMassage {
         if (allCategoriesIn == null) {
-            throw new Exception("Cannot add a subcategory to this category.");
+            throw new ExceptionalMassage("Cannot add a subcategory to this category.");
         }
         if (allCategoriesIn.contains(subCategory)) {
-            throw new Exception("This subcategory has already added.");
+            throw new ExceptionalMassage("This subcategory has already added.");
         }
         allCategoriesIn.add(subCategory);
         //file modifications required
     }
 
-    public void removeSubCategory(Category subCategory) throws Exception {
-        if (allCategoriesIn == null) {
-            throw new Exception("This is not a classifier category.");
-        }
+    public void removeSubCategory(Category subCategory) throws ExceptionalMassage {
         if (!allCategoriesIn.contains(subCategory)) {
-            throw new Exception("This subcategory is not in this category.");
+            throw new ExceptionalMassage("This subcategory is not in this category.");
         }
         allCategoriesIn.remove(subCategory);
         //file modification required

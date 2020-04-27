@@ -1,6 +1,15 @@
 package menu.profile.customerProfileMenu;
 
+import account.Supplier;
+import cart.Cart;
+import com.sun.tools.javac.tree.JCTree;
+import discount.Sale;
+import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
+import product.Product;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Aryan Ahadinia
@@ -11,13 +20,45 @@ public class ViewCartMenu extends Menu {
     public ViewCartMenu(Menu parentMenu) {
         super("View Cart Menu", parentMenu);
 
-        Menu ShowProduct = new Menu("Show Product", this) {
+        Menu ShowProduct = new Menu("Show Products In", this) {
             @Override
             public void show() {
+                System.out.println("Products In Cart");
             }
 
             @Override
             public void execute() {
+                Cart cart = null;
+                try {
+                    cart = controller.controlViewCart();
+                    if (cart.isEmpty()) {
+                        System.out.println("Cart is Empty!");
+                    } else {
+                        ArrayList<Product> productsIn = cart.getProductsIn();
+                        HashMap<Product, Integer> productsQuantity = cart.getProductsQuantity();
+                        HashMap<Product, Supplier> productsSupplier = cart.getProductsSupplier();
+                        HashMap<Product, Sale> productsSales = cart.getProductsSales();
+                        for (Product product : productsIn) {
+                            StringBuilder productLog = new StringBuilder();
+                            productLog.append(product.getName()).append(" ");
+                            productLog.append("Supplied by: ").append(productsSupplier.get(product).getName()).append(" ");
+                            productLog.append("Count: ").append(productsQuantity.get(product)).append(" ");
+                            productLog.append("Price: ").append(product.getPrice(productsSupplier.get(product)));
+                            if (productsSales.get(product) != null) {
+                                productLog.append(">>").append(product.getPrice(productsSupplier.get(product)) - productsSales.get(product).discountAmountFor(product.getPrice(productsSupplier.get(product))));
+                            }
+                            productLog.append(" ");
+                            System.out.println(productLog);
+                            int totalValueOfDiscount = cart.getAmountOfSale() + cart.getAmountOfCodedDiscount();
+                            System.out.println("Total Discount = " + totalValueOfDiscount + " = " + cart.getAmountOfSale() + " + " + cart.getAmountOfCodedDiscount());
+                            System.out.println("Total Bill = " + cart.getBill() + " = " + cart.getValueOfCartWithoutDiscounts() + " - " + totalValueOfDiscount);
+                        }
+                    }
+                } catch (ExceptionalMassage e) {
+                    System.out.println(e.getMessage());
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^show products$", ShowProduct);

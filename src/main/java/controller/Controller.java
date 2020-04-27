@@ -7,6 +7,7 @@ import account.Supplier;
 import cart.Cart;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Score;
+import log.ShippingInfo;
 import menu.menuAbstract.Menu;
 import discount.CodedDiscount;
 import discount.Sale;
@@ -34,50 +35,72 @@ public class Controller {
         return false;
     }
 
-    public Cart controlViewCart() {
-        return null;
+    public Cart controlViewCart() throws ExceptionalMassage {
+        if (!account.getType().equals("Customer")) {
+            throw new ExceptionalMassage("Cart is only for customer account.");
+        }
+        return cart;
     }
 
-    public boolean controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) {
-        return false;
+    public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws Exception {
+        cart.submitShippingInfo(new ShippingInfo(firstName, lastName, city, address, postalCode, phoneNumber));
     }
 
-    public boolean controlRemoveShippingInfo() {
-        return false;
+    public void controlRemoveShippingInfo() throws ExceptionalMassage {
+        cart.removeShippingInfo();
     }
 
-    public boolean controlSubmitDiscountCode() {
-        return false;
+    public void controlSubmitDiscountCode(String discountCode) throws Exception {
+        cart.applyCodedDiscount(discountCode);
     }
 
-    public boolean controlRemoveDiscountCode() {
-        return false;
+    public void controlRemoveDiscountCode() throws Exception {
+        cart.removeCodedDiscount();
     }
 
     public boolean controlFinalizeOrder() {
         return false;
     }
 
-    public boolean controlAddCategory( String name, String parentCategoryName) {
-        return false;
+    public void controlAddCategory(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
+        Category parentCategory = Category.getCategoryByName(parentCategoryName);
+        if (parentCategory == null) {
+            throw new ExceptionalMassage("Parent category not found.");
+        }
+        Category newCategory = new Category(name, isParentCategory, parentCategory);
     }
 
-    public boolean controlAddSubcategoryToCategory( String name, String subcategoryName) {
-        return false;
+    public void controlRemoveCategory(String name) throws ExceptionalMassage {
+        Category category = Category.getCategoryByName(name);
+        if (category == null) {
+            throw new ExceptionalMassage("Category not found.");
+        }
+        (category.getParentCategory()).removeSubCategory(category);
     }
 
-    public boolean controlRemoveSubcategoryFromCategory( String name, String subcategoryName) {
-        return false;
+    public void controlAddProductToCategory(String categoryName, String productIdentifier) throws ExceptionalMassage {
+        Category category = Category.getCategoryByName(categoryName);
+        Product product = Product.getProductById(productIdentifier);
+        if (category == null) {
+            throw new ExceptionalMassage("Category not found.");
+        }
+        if (product == null) {
+            throw new ExceptionalMassage("Product not found.");
+        }
+        category.addProduct(product);
     }
 
-    public boolean controlAddProductToCategory(String categoryName, String productIdentifier) {
-        return false;
+    public void controlRemoveProductFromCategory(String categoryName, String productIdentifier) throws ExceptionalMassage {
+        Category category = Category.getCategoryByName(categoryName);
+        Product product = Product.getProductById(productIdentifier);
+        if (category == null) {
+            throw new ExceptionalMassage("Category not found.");
+        }
+        if (product == null) {
+            throw new ExceptionalMassage("Product not found.");
+        }
+        category.removeProduct(product);
     }
-
-    public boolean controlRemoveProductFromCategory( String categoryName, String productIdentifier) {
-        return false;
-    }
-
 
     private boolean doesAccountExist(String username) {
         if (Account.getAccountByUsername(username) == null)
@@ -124,6 +147,7 @@ public class Controller {
     }
 
     public void controlLogin(String username, String password) throws ExceptionalMassage {
+        //variable cart must modified
     }
 
     public String controlViewPersonalInfo() {

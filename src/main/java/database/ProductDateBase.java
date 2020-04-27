@@ -57,7 +57,6 @@ public class ProductDateBase {
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, priceForEachSupplier," +
                 "listOfSuppliers, remainedNumberForEachSupplier,categoryName, description,productCommentsId , specification)" +
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?)";
-        System.out.println("hi");
         try (Connection conn = this.connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
 
@@ -156,6 +155,19 @@ public class ProductDateBase {
 
     public void update(Product product) {
 
+    }
+
+    public void delete(String productId) {
+        String sql = "DELETE FROM Products WHERE productId= ?";
+
+        try (Connection connect = this.connect();
+             PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, productId);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public ArrayList<Product> getAllProducts() {

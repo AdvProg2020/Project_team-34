@@ -5,9 +5,8 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
-import log.ShippingInfo;
+import exceptionalMassage.ExceptionalMassage;
 import feedback.Score;
-import log.ShippingInfo;
 import menu.menuAbstract.Menu;
 import discount.CodedDiscount;
 import discount.Sale;
@@ -20,7 +19,6 @@ import request.SaleRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Random;
 
 public class Controller {
     private Account account;
@@ -87,17 +85,17 @@ public class Controller {
         return true;
     }
 
-    public Response controlCreateAccount(String username, String type, String name, String familyName, String email, String phoneNumber
-            , String password, int credit, String nameOfCompany) {
+    public void controlCreateAccount(String username, String type, String name, String familyName, String email, String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
         if (doesAccountExist(username))
-            return Response.INVALID_USERNAME;
-        if (type.equals("Customer"))
+            throw new ExceptionalMassage("Duplicate username");
+        if (type.equals("customer"))
             controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
-        if (type.equals("Supplier"))
+        if (type.equals("supplier"))
             controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
-        if (type.equals("Supervisor") && !isFirstSupervisorCreated)
+        //check for name of company is not duplicate
+        if (type.equals("supervisor") && !isFirstSupervisorCreated)
             controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
-        return Response.OK;
+        //edited by aryan
     }
 
     private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber
@@ -125,8 +123,7 @@ public class Controller {
         return Response.OK;
     }
 
-    public Account controlLogin(String username, String password) {
-        return null;
+    public void controlLogin(String username, String password) throws ExceptionalMassage {
     }
 
     public String controlViewPersonalInfo() {

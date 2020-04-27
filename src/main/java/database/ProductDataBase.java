@@ -12,7 +12,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ProductDateBase {
+public class ProductDataBase {
 
     public static void createNewTable() {
         String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";

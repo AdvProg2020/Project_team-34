@@ -17,6 +17,9 @@ public class Supplier extends Account{
         this.nameOfCompany = nameOfCompany;
     }
 
+    public SupplierLog getSupplierLog() {
+        return supplierLog;
+    }
 
     public String getNameOfCompany() {
         return nameOfCompany;

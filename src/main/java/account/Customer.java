@@ -15,6 +15,14 @@ public class Customer extends Account {
         super(userName, name, familyName, email, phoneNumber, password, credit);
     }
 
+    public CustomerLog getCustomerLog() {
+        return customerLog;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
     @Override
     public String getType() {
         return "Customer";

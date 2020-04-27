@@ -210,4 +210,8 @@ public class Cart {
         return productsIn.contains(product);
         //completed
     }
+
+    public String getIdentifier(){
+        return null;
+    }
 }

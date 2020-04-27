@@ -19,7 +19,7 @@ public abstract class Menu {
     protected static Controller controller = new Controller();
     protected ArrayList<String> menuForShow;
     protected HashMap<String, Menu> menusIn;
-    protected String command;
+    public String command;
     protected Menu parentMenu;
     private String menuName;
 

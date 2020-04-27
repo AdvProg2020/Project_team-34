@@ -67,4 +67,30 @@ public class ProductDataBaseTests {
         Assert.assertArrayEquals(new String [] {"product1"} , actualName);
 
     }
+
+    @Test
+    public void testUpdate(){
+        ProductDateBase productDateBase = new ProductDateBase();
+
+        Category category = null;
+        try {
+            category = new Category("category1", true, null);
+        }
+        catch (Exception exception){
+            System.out.println(exception.getMessage());
+        }
+        Product productToBeUpdated = new Product(new Supplier("supplier1", "Rouzbeh", "Pirayadi","@","10"
+                ,"rouzbeh1",100,"team_34"),"productToBeUpdated", "company1", 100, 5,
+                category, "be described");
+
+        //productToBeUpdated.
+        productDateBase.update(productToBeUpdated);
+
+        ArrayList<Product> actualProducts= productDateBase.getAllProducts();
+        String [] actualName= new String[2];
+        for (int i=0 ; i< 2; i++) {
+            actualName[i] = actualProducts.get(i).getName();
+        }
+        Assert.assertArrayEquals(new String [] {"product1","productUpdatedSuccessfully"} , actualName);
+    }
 }

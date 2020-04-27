@@ -154,7 +154,8 @@ public class ProductDateBase {
     }
 
     public void update(Product product) {
-
+        delete(product.getProductId());
+        add(product);
     }
 
     public void delete(String productId) {

@@ -175,4 +175,35 @@ public class Product {
 
     }
 
+    public void setNumberOfViews(int numberOfViews) {
+        this.numberOfViews = numberOfViews;
+    }
+
+    public void setProductState(State productState) {
+        this.productState = productState;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setNameOfCompany(String nameOfCompany) {
+        this.nameOfCompany = nameOfCompany;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setComments(ArrayList<Comment> comments) {
+        this.comments = comments;
+    }
+
+    public void setSpecification(HashMap<String, String> specification) {
+        this.specification = specification;
+    }
 }

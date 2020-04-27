@@ -55,7 +55,7 @@ public class ProductDateBase {
            return;
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, priceForEachSupplier," +
-                "listOfSuppliers, remainedNumber,categoryId, description,productCommentsId , specification)" +
+                "listOfSuppliers, remainedNumber,categoryName, description,productCommentsId , specification)" +
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?)";
 
         try (Connection conn = this.connect();

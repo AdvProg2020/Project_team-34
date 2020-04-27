@@ -83,7 +83,7 @@ public class ProductDataBaseTests {
                 ,"rouzbeh1",100,"team_34"),"productToBeUpdated", "company1", 100, 5,
                 category, "be described");
 
-        //productToBeUpdated.
+        productToBeUpdated.setName("productUpdatedSuccessfully");
         productDateBase.update(productToBeUpdated);
 
         ArrayList<Product> actualProducts= productDateBase.getAllProducts();

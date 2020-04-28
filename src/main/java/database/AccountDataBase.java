@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Customer;
+import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
 import log.CustomerLog;
@@ -49,9 +50,9 @@ public class AccountDataBase {
     }
 
     public void add(Account account) {
-        /*if (doesProductAlreadyExists(product)) {
+        if (doesAccountAlreadyExists(account)){
             return;
-        }*/
+        }
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
                 "customerLogId, cartId, nameOfCompany, supplierLogId)"+
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?)";
@@ -90,6 +91,34 @@ public class AccountDataBase {
         }
     }
 
+    private boolean doesAccountAlreadyExists(Account account) {
+        ArrayList<Account> list = getAllAccounts();
+        for (Account eachAccount: list) {
+            if(eachAccount.getUserName().equals(account.getUserName()))
+                return true;
+        }
+        return false;
+    }
+
+    public void update(Account account) {
+        delete(account.getUserName());
+        add(account);
+    }
+
+    public void delete(String username) {
+        String sql = "DELETE FROM Accounts WHERE username= ?";
+
+        try (Connection connect = this.connect();
+             PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, username);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
     public ArrayList<Account> getAllAccounts() {
         String sql = "SELECT *  FROM Accounts";
 
@@ -118,6 +147,11 @@ public class AccountDataBase {
                 }
                 else if(nameOfCompany != null && supplierLogId != null){
                     Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,nameOfCompany, SupplierLog.getSupplierLogById(supplierLogId));
+                    accounts.add(supplier);
+                }
+                else{
+                    Supervisor supervisor = new Supervisor(username,name, familyName, email,phoneNumber,password,credit);
+                    accounts.add(supervisor);
                 }
 
             }

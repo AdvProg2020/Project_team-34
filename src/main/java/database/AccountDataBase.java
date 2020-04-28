@@ -3,9 +3,11 @@ package database;
 import account.Account;
 import account.Customer;
 import account.Supplier;
+import product.Category;
 import product.Product;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class AccountDataBase {
     public static void createNewTable() {
@@ -79,12 +81,43 @@ public class AccountDataBase {
                 statement.setString(10,null);
             }
 
-
-
             statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public ArrayList<Account> getAllAccounts() {
+        String sql = "SELECT *  FROM Accounts";
+
+        try (Connection connection = this.connect();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            ArrayList<Account> accounts = new ArrayList<>();
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                String name = resultSet.getString("name");
+                String familyName = resultSet.getString("familyName");
+                String email = resultSet.getString("email");
+                String phoneNumber  = resultSet.getString("phoneNumber");
+                String password = resultSet.getString("password");
+                int credit =resultSet.getInt("credit");
+                String customerLogId = resultSet.getString("customerLogId");
+                String cartId = resultSet.getString("cartId");
+                String nameOfCompany = resultSet.getString("nameOfCompany");
+                String supplierLogId = resultSet.getString("supplierLogId");
+
+
+                if(customerLogId!= null &&  cartId!= null){
+                    Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit);
+                }
+
+            }
+            return accounts;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }
 

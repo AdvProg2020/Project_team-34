@@ -174,8 +174,8 @@ public class ProductDataBase {
     public ArrayList<Product> getAllProducts() {
         String sql = "SELECT *  FROM Products";
 
-        try (Connection conn = this.connect();
-             Statement stmt = conn.createStatement();
+        try (Connection connection = this.connect();
+             Statement stmt = connection.createStatement();
              ResultSet resultSet = stmt.executeQuery(sql)) {
             ArrayList<Product> products = new ArrayList<>();
             while (resultSet.next()) {

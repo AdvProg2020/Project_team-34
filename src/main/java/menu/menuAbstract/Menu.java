@@ -19,6 +19,8 @@ public abstract class Menu {
     protected static Controller controller = new Controller();
     protected ArrayList<String> menuForShow;
     protected HashMap<String, Menu> menusIn;
+    protected ArrayList<String> menuForShowClone;
+    protected HashMap<String, Menu> menusInClone;
     public String command;
     protected Menu parentMenu;
     private String menuName;
@@ -26,6 +28,8 @@ public abstract class Menu {
     public Menu(String menuName, Menu parentMenu) {
         this.menuName = menuName;
         this.parentMenu = parentMenu;
+        menuForShowClone = new ArrayList<>();
+        menusInClone = new HashMap<>();
         menuForShow = new ArrayList<>();
         menusIn = new HashMap<>();
         if (!(menuName.equals("Help") || menuName.equals("Sort") || menuName.equals("Back"))) {
@@ -76,41 +80,6 @@ public abstract class Menu {
                 menusIn.put("^back$", parentMenu);
                 menuForShow.add("Back");
             }
-
-            if (!controller.hasSomeOneLoggedIn()) {
-                if (!(menuName.equals("Login/Register Menu") || menuName.equals("Login") || menuName.equals("Create Account"))) {
-                    menusIn.put("^login/register$", new LoginMenu(this));
-                    menuForShow.add("Login/Register");
-                }
-            } else {
-                if (!menuName.equals("Logout Command")) {
-                    Menu LogoutCommand = new Menu("Logout Command", this) {
-                        @Override
-                        public void show() {
-                        }
-
-                        @Override
-                        public void execute() {
-                        }
-                    };
-                    menusIn.put("^logout$", LogoutCommand);
-                    menuForShow.add("Logout");
-                }
-
-                if (!(menuName.equals("Logout Command") || menuName.equals("Profile Viewer Terminal"))) {
-                    Menu ProfileViewerTerminal = new Menu("Profile Viewer Terminal", this) {
-                        @Override
-                        public void show() {
-                        }
-
-                        @Override
-                        public void execute() {
-                        }
-                    };
-                    menusIn.put("^profile$", ProfileViewerTerminal);
-                    menuForShow.add("Profile");
-                }
-            }
         }
     }
 
@@ -120,8 +89,44 @@ public abstract class Menu {
     }
 
     public void show() {
+        menusInClone = new HashMap<>(menusIn);
+        menuForShowClone = new ArrayList<>(menuForShow);
+        if (!controller.hasSomeOneLoggedIn()) {
+            if (!(menuName.equals("Login/Register Menu") || menuName.equals("Login") || menuName.equals("Create Account"))) {
+                menusInClone.put("^login/register$", new LoginMenu(this));
+                menuForShowClone.add("Login/Register");
+            }
+        } else {
+            if (!menuName.equals("Logout Command")) {
+                Menu LogoutCommand = new Menu("Logout Command", this) {
+                    @Override
+                    public void show() {
+                    }
+
+                    @Override
+                    public void execute() {
+                    }
+                };
+                menusInClone.put("^logout$", LogoutCommand);
+                menuForShowClone.add("Logout");
+            }
+
+            if (!(menuName.equals("Logout Command") || menuName.equals("Profile Viewer Terminal"))) {
+                Menu ProfileViewerTerminal = new Menu("Profile Viewer Terminal", this) {
+                    @Override
+                    public void show() {
+                    }
+
+                    @Override
+                    public void execute() {
+                    }
+                };
+                menusInClone.put("^profile$", ProfileViewerTerminal);
+                menuForShowClone.add("Profile");
+            }
+        }
         System.out.println(menuName + ":");
-        for (String menu : menuForShow) {
+        for (String menu : menuForShowClone) {
             System.out.println(menu);
         }
     }
@@ -129,13 +134,12 @@ public abstract class Menu {
     public void execute() {
         command = scanner.nextLine();
         Menu nextMenu = this;
-        for (String menuRegex : menusIn.keySet()) {
+        for (String menuRegex : menusInClone.keySet()) {
             if (command.matches(menuRegex)) {
-                nextMenu = menusIn.get(menuRegex);
+                nextMenu = menusInClone.get(menuRegex);
                 break;
             }
         }
-        nextMenu.command = command;
         nextMenu.show();
         nextMenu.execute();
     }

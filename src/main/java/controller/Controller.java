@@ -31,6 +31,10 @@ public class Controller {
         return false;
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
     public boolean controlAddToCart() {
         return false;
     }

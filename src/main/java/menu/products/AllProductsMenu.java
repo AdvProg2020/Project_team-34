@@ -9,12 +9,12 @@ public class AllProductsMenu extends Menu {
         Menu viewCategories = new Menu("View Categories", this) {
             @Override
             public void show() {
-                super.show();
+                System.out.println("Categories: ");
             }
 
             @Override
             public void execute() {
-                super.execute();
+                //print all categories!
             }
         };
         menusIn.put("^view categories$", viewCategories);
@@ -29,12 +29,12 @@ public class AllProductsMenu extends Menu {
         Menu showProducts = new Menu("Show Products", this) {
             @Override
             public void show() {
-                super.show();
+                System.out.println("All products : ");
             }
 
             @Override
             public void execute() {
-                super.execute();
+                //
             }
         };
         menusIn.put("^show products$", showProducts);

@@ -1,6 +1,7 @@
 package menu.menuAbstract;
 
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import menu.loginMenu.LoginMenu;
 
 import java.util.ArrayList;
@@ -138,5 +139,6 @@ public abstract class Menu {
         nextMenu.command = command;
         nextMenu.show();
         nextMenu.execute();
+
     }
 }

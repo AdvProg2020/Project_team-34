@@ -10,10 +10,10 @@ public class MainMenu extends Menu {
         super("Main Menu", null);
 
         menusIn.put("^products$", new AllProductsMenu(this));
-        menuForShow.add("products");
+        menuForShow.add("Products");
 
         menusIn.put("^offs$", new SalesMenu(this));
-        menuForShow.add("offs");
+        menuForShow.add("Offs");
 
     }
 }

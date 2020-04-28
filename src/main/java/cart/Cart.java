@@ -4,6 +4,7 @@ import account.Customer;
 import account.Supplier;
 import discount.CodedDiscount;
 import discount.Sale;
+import exceptionalMassage.ExceptionalMassage;
 import log.ShippingInfo;
 import product.Product;
 
@@ -158,9 +159,9 @@ public class Cart {
         setShippingInfo(shippingInfo);
     }
 
-    public void removeShippingInfo() throws Exception {
+    public void removeShippingInfo() throws ExceptionalMassage {
         if (shippingInfo == null) {
-            throw new Exception("ShippingInfo hasn't submitted yet.");
+            throw new ExceptionalMassage("ShippingInfo hasn't submitted yet.");
         }
         setShippingInfo(null);
     }
@@ -213,5 +214,9 @@ public class Cart {
 
     public String getIdentifier(){
         return null;
+    }
+
+    public boolean isEmpty() {
+        return productsIn.size() == 0;
     }
 }

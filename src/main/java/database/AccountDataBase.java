@@ -3,6 +3,9 @@ package database;
 import account.Account;
 import account.Customer;
 import account.Supplier;
+import cart.Cart;
+import log.CustomerLog;
+import log.SupplierLog;
 import product.Category;
 import product.Product;
 
@@ -109,7 +112,12 @@ public class AccountDataBase {
 
 
                 if(customerLogId!= null &&  cartId!= null){
-                    Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit);
+                    Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit,
+                            CustomerLog.getCustomerLogById(customerLogId), Cart.getCartById(cartId));
+                    accounts.add(customer);
+                }
+                else if(nameOfCompany != null && supplierLogId != null){
+                    Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,nameOfCompany, SupplierLog.getSupplierLogById(supplierLogId));
                 }
 
             }

@@ -12,13 +12,13 @@ public class ProductMenu extends Menu {
         super("Product Menu", parentMenu);
 
 
-        menusIn.put("^digest$", new DigestMenu(this));
+        menusIn.put("^digest$", new DigestMenu(this,currentProduct));
         menuForShow.add("Digest Menu");
 
         Menu attributes = new Menu("Attributes", this) {
             @Override
             public void show() {
-                //show attributes!
+                System.out.println(controller.controlGetAttributesOfProduct(currentProduct));
             }
 
             @Override
@@ -34,12 +34,21 @@ public class ProductMenu extends Menu {
         Menu compare = new Menu("Compare" , this) {
             @Override
             public void show() {
-                super.show();
+                String regex = "^compare ([^\\s]+)";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    try {
+                        System.out.println(controller.controlCompare(currentProduct.getProductId(), matcher.group(1)));
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
             }
 
             @Override
             public void execute() {
-                super.execute();
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^compare ([^\\s]+)", compare);

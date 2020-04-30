@@ -289,7 +289,7 @@ public class Controller {
         return null;
     }
 
-    public String controlCompare(String firstProductId , String secondProductId){
+    public String controlCompare(String firstProductId , String secondProductId) throws ExceptionalMassage{
         return null;
     }
 
@@ -458,5 +458,33 @@ public class Controller {
         // I need a Digest info of a product ! refer to Doc!
         return null;
     }
+
+    public ArrayList<String> controlGetAllAvailableFilters(){
+        // method is clear from its name!
+        return null;
+    }
+
+    public ArrayList<String> controlGetAllAvailableSorts(){
+        // method is clear from its name !
+        return null;
+    }
+
+    public boolean isThisFilterAvailable(String filter){
+        // method is clear from its name !
+        return false;
+    }
+
+    public boolean isThisSortAvailable(String sort){
+        // method is clear from its name !
+        return false;
+    }
+
+    public String controlGetAttributesOfProduct(Product product){
+        //return the attributes of a product in a string form!! refer to doc!
+        return null;
+    }
+
+
+
 
 }

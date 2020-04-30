@@ -10,8 +10,9 @@ import java.util.regex.Matcher;
 public class DigestMenu extends Menu {
     private Product product;
     private Supplier seller;
-    public DigestMenu(Menu parentMenu) {
+    public DigestMenu(Menu parentMenu,Product product) {
         super("Digest Menu", parentMenu);
+        this.product = product;
 
         Menu addToCart = new Menu("Add To Cart", this) {
             @Override

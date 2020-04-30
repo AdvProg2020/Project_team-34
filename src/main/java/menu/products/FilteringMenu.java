@@ -7,14 +7,17 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class FilteringMenu extends Menu {
-    private ArrayList<String> currentFiltersList;
+    public static ArrayList<String> currentFiltersList;
     public FilteringMenu(Menu parentMenu) {
         super("Filtering Menu", parentMenu);
         currentFiltersList = new ArrayList<>();
         Menu showAvailableFilters = new Menu("Show Available Filters", this) {
             @Override
             public void show() {
-                //print all available filters!
+                System.out.println("Filters :");
+                for (String filter : controller.controlGetAllAvailableFilters()) {
+                    System.out.println(filter);
+                }
             }
 
             @Override
@@ -29,11 +32,21 @@ public class FilteringMenu extends Menu {
         Menu filter = new Menu("Filter", this) {
             @Override
             public void show() {
-                super.show();
+
             }
 
             @Override
             public void execute() {
+                String regex = "^filter (.+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    if(controller.isThisFilterAvailable(matcher.group(1))){
+                        System.out.println("Filter added!");
+                        currentFiltersList.add(matcher.group(1));
+                    } else {
+                        System.out.println("Filter not available!");
+                    }
+                }
                 parentMenu.show();
                 parentMenu.execute();
             }

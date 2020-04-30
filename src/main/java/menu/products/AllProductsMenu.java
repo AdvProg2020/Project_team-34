@@ -7,8 +7,6 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class AllProductsMenu extends Menu {
-    private static ArrayList<String> appliedFilters = new ArrayList<>();
-    private static ArrayList<String> appliedSorts = new ArrayList<>();
     public AllProductsMenu(Menu parentMenu) {
         super("All Products Menu", parentMenu);
         Menu viewCategories = new Menu("View Categories", this) {
@@ -41,7 +39,7 @@ public class AllProductsMenu extends Menu {
 
             @Override
             public void execute() {
-                for (String product : controller.controlGetAllProducts(appliedSorts, appliedFilters)) {
+                for (String product : controller.controlGetAllProducts(SortingMenu.currentSortsList,FilteringMenu.currentFiltersList)) {
                     //Need a quick introduction!
                     System.out.println(product);
                 }
@@ -58,4 +56,5 @@ public class AllProductsMenu extends Menu {
 
 
     }
+
 }

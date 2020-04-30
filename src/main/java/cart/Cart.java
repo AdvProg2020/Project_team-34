@@ -216,6 +216,10 @@ public class Cart {
         return null;
     }
 
+    public static Cart getCartById(String identifier){
+        return null;
+    }
+
     public boolean isEmpty() {
         return productsIn.size() == 0;
     }

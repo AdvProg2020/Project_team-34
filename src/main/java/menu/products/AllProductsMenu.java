@@ -1,11 +1,16 @@
 package menu.products;
 
 import menu.menuAbstract.Menu;
+import product.Category;
+
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 
 public class AllProductsMenu extends Menu {
+    private static ArrayList<String> appliedFilters = new ArrayList<>();
+    private static ArrayList<String> appliedSorts = new ArrayList<>();
     public AllProductsMenu(Menu parentMenu) {
         super("All Products Menu", parentMenu);
-
         Menu viewCategories = new Menu("View Categories", this) {
             @Override
             public void show() {
@@ -14,7 +19,9 @@ public class AllProductsMenu extends Menu {
 
             @Override
             public void execute() {
-                //print all categories!
+                System.out.println(controller.controlGetAllCategories());
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^view categories$", viewCategories);
@@ -34,7 +41,12 @@ public class AllProductsMenu extends Menu {
 
             @Override
             public void execute() {
-                //
+                for (String product : controller.controlGetAllProducts(appliedSorts, appliedFilters)) {
+                    //Need a quick introduction!
+                    System.out.println(product);
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^show products$", showProducts);

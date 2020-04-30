@@ -1,5 +1,6 @@
 package menu.products;
 
+import account.Account;
 import account.Supplier;
 import menu.menuAbstract.Menu;
 import product.Product;
@@ -24,7 +25,8 @@ public class DigestMenu extends Menu {
                     menusIn.get("Login/Register").show();
                     menusIn.get("Login/Register").execute();
                 } else {
-                    //controller.controlAddToCart();
+                    //need modification
+                    controller.controlAddToCart();
                 }
             }
         };
@@ -34,7 +36,10 @@ public class DigestMenu extends Menu {
         Menu selectSeller = new Menu("Select Seller", this) {
             @Override
             public void show() {
-                //get all sellers
+                System.out.println("Sellers :");
+                for (Supplier supplier : controller.controlGetAllSuppliersForAProduct(product)) {
+                    System.out.println(supplier.getUserName());
+                }
             }
 
             @Override
@@ -42,7 +47,12 @@ public class DigestMenu extends Menu {
                 String regex = "^select seller ([^\\s]+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    //check if this seller sells the product and change the seller of the product!
+                    if(controller.doesThisSupplierSellsThisProduct(product)){
+                        seller =  (Supplier)(Account.getAccountByUsername(matcher.group(1)));
+                        System.out.println("Seller selected!");
+                    }   else   {
+                        System.out.println("This seller is not available for this product!");
+                    }
                 }
                 parentMenu.show();
                 parentMenu.execute();
@@ -55,6 +65,6 @@ public class DigestMenu extends Menu {
     @Override
     public void show() {
         System.out.println("Product info : ");
-        //print infos!
+        System.out.println(controller.controlGetDigestInfosOfProduct(product));
     }
 }

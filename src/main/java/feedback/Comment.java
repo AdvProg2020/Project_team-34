@@ -10,9 +10,6 @@ import java.util.ArrayList;
  * @since 0.01
  */
 
-enum CommentState{
-    PENDING , CONFIRMED , DENIED_BY_MANAGER
-}
 
 
 public class Comment {
@@ -42,6 +39,10 @@ public class Comment {
 
     public String getContent() {
         return content;
+    }
+
+    public CommentState getState(){
+        return state;
     }
 
     public void setContent(String content) {

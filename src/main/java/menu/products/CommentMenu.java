@@ -14,7 +14,9 @@ public class CommentMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("Comments : ");
-                //print all comments!
+                for (Comment comment : controller.controlGetConfirmedComments()) {
+                    System.out.println(comment);
+                }
             }
 
             @Override

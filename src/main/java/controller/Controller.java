@@ -6,6 +6,7 @@ import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
 import exceptionalMassage.ExceptionalMassage;
+import feedback.CommentState;
 import feedback.Score;
 import log.ShippingInfo;
 import menu.menuAbstract.Menu;
@@ -17,6 +18,7 @@ import product.Product;
 import request.Request;
 import request.SaleRequest;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -419,6 +421,42 @@ public class Controller {
 
     public float controlGetAverageScoreByProduct(Product product){
         return  Score.getAverageScoreForProduct(product);
+    }
+
+    public ArrayList<Comment> controlGetConfirmedComments(){
+        ArrayList<Comment> confirmedComments = new ArrayList<>();
+        for (Comment comment : Comment.getComments()) {
+            if(comment.getState() == CommentState.CONFIRMED){
+                confirmedComments.add(comment);
+            }
+        }
+        return confirmedComments;
+    }
+
+    //Added methods Needed in menus!
+    public String controlGetAllCategories(){
+        //I need a printable string of all categories!
+        return null;
+    }
+
+    public ArrayList<String> controlGetAllProducts(ArrayList<String> sorts,ArrayList<String> filters){
+        //I need a Sorted and filtered list of products! and toString form of product need to have a quick introduction!
+        return null;
+    }
+
+    public ArrayList<Supplier> controlGetAllSuppliersForAProduct(Product product){
+        // method is clear from its name !
+        return null;
+    }
+
+    public boolean doesThisSupplierSellsThisProduct(Product product){
+        //method is clear from its name!
+        return false;
+    }
+
+    public String controlGetDigestInfosOfProduct(Product product){
+        // I need a Digest info of a product ! refer to Doc!
+        return null;
     }
 
 }

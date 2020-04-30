@@ -12,8 +12,8 @@ import java.util.HashMap;
 public class ProductDataBaseTests {
     @Test
     public void testAddAndSelectAll (){
-        ProductDataBase productDataBase = new ProductDataBase();
-        productDataBase.createNewTable();
+
+        ProductDataBase.createNewTable();
 
         Category category = null;
         try {
@@ -41,11 +41,11 @@ public class ProductDataBaseTests {
         Product repeatedProduct = new Product("repeated product", "team_34",price,listOfSupplier,
                 remainedNumber,category,"really good", null,100,product1.getProductId(), "PREPARING_TO_BUILD");
 
-        productDataBase.add(product1);
-        productDataBase.add(product2);
-        productDataBase.add(repeatedProduct);
+        ProductDataBase.add(product1);
+        ProductDataBase.add(product2);
+        ProductDataBase.add(repeatedProduct);
 
-        ArrayList<Product> actualProducts= productDataBase.getAllProducts();
+        ArrayList<Product> actualProducts= ProductDataBase.getAllProducts();
         String [] actualName= new String[2];
         for (int i=0 ; i< 2; i++) {
             actualName[i] = actualProducts.get(i).getName();
@@ -55,10 +55,10 @@ public class ProductDataBaseTests {
 
     @Test
     public void testDelete(){
-        ProductDataBase productDataBase = new ProductDataBase();
-        productDataBase.delete("T34P000000000000002");
 
-        ArrayList<Product> actualProducts= productDataBase.getAllProducts();
+        ProductDataBase.delete("T34P000000000000002");
+
+        ArrayList<Product> actualProducts= ProductDataBase.getAllProducts();
         String [] actualName= new String[1];
         for (int i=0 ; i< 1; i++) {
             actualName[i] = actualProducts.get(i).getName();
@@ -69,7 +69,6 @@ public class ProductDataBaseTests {
 
     @Test
     public void testUpdate(){
-        ProductDataBase productDataBase = new ProductDataBase();
 
         Category category = null;
         try {
@@ -83,9 +82,9 @@ public class ProductDataBaseTests {
                 category, "be described");
 
         productToBeUpdated.setName("productUpdatedSuccessfully");
-        productDataBase.update(productToBeUpdated);
+        ProductDataBase.update(productToBeUpdated);
 
-        ArrayList<Product> actualProducts= productDataBase.getAllProducts();
+        ArrayList<Product> actualProducts= ProductDataBase.getAllProducts();
         String [] actualName= new String[2];
         for (int i=0 ; i< 2; i++) {
             actualName[i] = actualProducts.get(i).getName();

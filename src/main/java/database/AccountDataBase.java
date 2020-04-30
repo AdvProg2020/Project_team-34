@@ -14,7 +14,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class AccountDataBase {
-    public  void createNewTable() {
+    public static void createNewTable() {
         String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
 
         String sql = "CREATE TABLE IF NOT EXISTS Accounts (\n"
@@ -26,7 +26,7 @@ public class AccountDataBase {
                 + "password String ,\n"
                 + "credit int ,\n"
                 + "cartId String ,\n"
-                + "nameOfCompany String ,\n"
+                + "nameOfCompany String \n"
                 + ");";
         try (Connection connection = DriverManager.getConnection(url);
              Statement statement = connection.createStatement()) {
@@ -36,7 +36,7 @@ public class AccountDataBase {
         }
     }
 
-    private Connection connect() {
+    private static Connection connect() {
         String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
         Connection connection = null;
         try {
@@ -47,15 +47,15 @@ public class AccountDataBase {
         return connection;
     }
 
-    public void add(Account account) {
+    public static void add(Account account) {
         if (doesAccountAlreadyExists(account)){
             return;
         }
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
                 " cartId, nameOfCompany)"+
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?)";
-        try (Connection conn = this.connect();
-             PreparedStatement statement = conn.prepareStatement(sql)) {
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? )";
+        try (Connection connection = connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, account.getUserName());
             statement.setString(2,account.getName());
@@ -84,8 +84,10 @@ public class AccountDataBase {
         }
     }
 
-    private boolean doesAccountAlreadyExists(Account account) {
+    private static boolean doesAccountAlreadyExists(Account account) {
         ArrayList<Account> list = getAllAccounts();
+        if(list == null)
+            return false;
         for (Account eachAccount: list) {
             if(eachAccount.getUserName().equals(account.getUserName()))
                 return true;
@@ -93,15 +95,15 @@ public class AccountDataBase {
         return false;
     }
 
-    public void update(Account account) {
+    public static void update(Account account) {
         delete(account.getUserName());
         add(account);
     }
 
-    public void delete(String username) {
+    public static void delete(String username) {
         String sql = "DELETE FROM Accounts WHERE username= ?";
 
-        try (Connection connect = this.connect();
+        try (Connection connect = connect();
              PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
 
             preparedStatement.setString(1, username);
@@ -112,10 +114,10 @@ public class AccountDataBase {
     }
 
 
-    public ArrayList<Account> getAllAccounts() {
+    public static ArrayList<Account> getAllAccounts() {
         String sql = "SELECT *  FROM Accounts";
 
-        try (Connection connection = this.connect();
+        try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             ArrayList<Account> accounts = new ArrayList<>();
@@ -127,10 +129,8 @@ public class AccountDataBase {
                 String phoneNumber  = resultSet.getString("phoneNumber");
                 String password = resultSet.getString("password");
                 int credit =resultSet.getInt("credit");
-                String customerLogId = resultSet.getString("customerLogId");
                 String cartId = resultSet.getString("cartId");
                 String nameOfCompany = resultSet.getString("nameOfCompany");
-                String supplierLogId = resultSet.getString("supplierLogId");
 
 
                 if(cartId!= null){

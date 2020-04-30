@@ -14,7 +14,7 @@ import java.sql.*;
 import java.util.ArrayList;
 
 public class AccountDataBase {
-    public static void createNewTable() {
+    public  void createNewTable() {
         String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
 
         String sql = "CREATE TABLE IF NOT EXISTS Accounts (\n"
@@ -25,10 +25,8 @@ public class AccountDataBase {
                 + "	phoneNumber String , \n"
                 + "password String ,\n"
                 + "credit int ,\n"
-                + "customerLogId String ,\n"
                 + "cartId String ,\n"
                 + "nameOfCompany String ,\n"
-                + "supplierLogId String ,\n"
                 + ");";
         try (Connection connection = DriverManager.getConnection(url);
              Statement statement = connection.createStatement()) {
@@ -54,35 +52,30 @@ public class AccountDataBase {
             return;
         }
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
-                "customerLogId, cartId, nameOfCompany, supplierLogId)"+
+                " cartId, nameOfCompany)"+
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?)";
         try (Connection conn = this.connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
 
             statement.setString(1, account.getUserName());
-            statement.setString(2, account.getFamilyName());
-            statement.setString(3, account.getEmail());
-            statement.setString(4, account.getPhoneNumber());
-            statement.setString(5, account.getPassword());
-            statement.setInt(6, account.getCredit());
+            statement.setString(2,account.getName());
+            statement.setString(3, account.getFamilyName());
+            statement.setString(4, account.getEmail());
+            statement.setString(5, account.getPhoneNumber());
+            statement.setString(6, account.getPassword());
+            statement.setInt(7, account.getCredit());
 
             if(account instanceof Customer){
-                statement.setString(7,((Customer)account).getCustomerLog().getIdentifier());
                 statement.setString(8,((Customer)account).getCart().getIdentifier());
                 statement.setString(9,null);
-                statement.setString(10,null);
             }
             else if(account instanceof Supplier){
-                statement.setString(7,null);
                 statement.setString(8,null);
                 statement.setString(9,((Supplier) account).getNameOfCompany());
-                statement.setString(10,((Supplier) account).getSupplierLog().getIdentifier());
             }
             else{
-                statement.setString(7,null);
                 statement.setString(8,null);
                 statement.setString(9,null);
-                statement.setString(10,null);
             }
 
             statement.executeUpdate();
@@ -140,13 +133,13 @@ public class AccountDataBase {
                 String supplierLogId = resultSet.getString("supplierLogId");
 
 
-                if(customerLogId!= null &&  cartId!= null){
+                if(cartId!= null){
                     Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit,
-                            CustomerLog.getCustomerLogById(customerLogId), Cart.getCartById(cartId));
+                             Cart.getCartById(cartId));
                     accounts.add(customer);
                 }
-                else if(nameOfCompany != null && supplierLogId != null){
-                    Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,nameOfCompany, SupplierLog.getSupplierLogById(supplierLogId));
+                else if(nameOfCompany != null){
+                    Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,nameOfCompany);
                     accounts.add(supplier);
                 }
                 else{

@@ -12,8 +12,8 @@ import java.util.HashMap;
 public class ProductDataBaseTests {
     @Test
     public void testAddAndSelectAll (){
-        ProductDataBase.createNewTable();
         ProductDataBase productDataBase = new ProductDataBase();
+        productDataBase.createNewTable();
 
         Category category = null;
         try {

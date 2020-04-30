@@ -14,7 +14,7 @@ import java.util.HashMap;
 
 public class ProductDataBase {
 
-    public static void createNewTable() {
+    public  void createNewTable() {
         String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
 
         String sql = "CREATE TABLE IF NOT EXISTS Products (\n"

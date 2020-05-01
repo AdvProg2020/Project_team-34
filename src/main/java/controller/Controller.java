@@ -186,6 +186,7 @@ public class Controller {
             } else {
                 if (((Customer) account).getCart().isCartClear()) {
                     ((Customer) account).setCart(cart);
+                    cart.setOwner((Customer) account);
                 } else {
                     cart = ((Customer) account).getCart();
                 }

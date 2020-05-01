@@ -30,7 +30,7 @@ public class Controller {
 
     public Controller() {
         account = null;
-        cart = null;
+        cart = new Cart(null);
         isFirstSupervisorCreated = false;
     }
 

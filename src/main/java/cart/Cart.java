@@ -19,7 +19,7 @@ import java.util.HashMap;
 public class Cart {
     private static long countOfCartCreated = 0;
 
-    private String identifier;
+    private final String identifier;
     private Customer owner;
     private ArrayList<ProductInCart> productsIn;
     private HashMap<ProductInCart, Integer> productInCount;

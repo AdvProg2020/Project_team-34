@@ -31,7 +31,7 @@ public class SupervisorProfileMenu extends ProfileMenu {
         menusIn.put("^manage requests$", new ManageRequestsMenu(this));
         menuForShow.add("Manage Requests");
 
-        menusIn.put("manage categories^$", new ManageCategoriesMenu(this));
+        menusIn.put("^manage categories$", new ManageCategoriesMenu(this));
         menuForShow.add("Manage Categories");
     }
 }

@@ -2,6 +2,9 @@ package menu.menuAbstract;
 
 import controller.Controller;
 import menu.loginMenu.LoginMenu;
+import menu.profile.customerProfileMenu.CustomerProfileMenu;
+import menu.profile.supervisorProfileMenu.SupervisorProfileMenu;
+import menu.profile.supplierProfileMenu.SupplierProfileMenu;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -41,7 +44,7 @@ public abstract class Menu {
                 @Override
                 public void execute() {
                     for (String s : parentMenu.menusIn.keySet()) {
-                        System.out.println(s);
+                        System.out.println("\t" + s);
                     }
                     parentMenu.show();
                     parentMenu.execute();
@@ -80,7 +83,6 @@ public abstract class Menu {
                 menusIn.put("^back$", parentMenu);
                 menuForShow.add("Back");
             }
-            controller = new Controller();
         }
     }
 
@@ -123,6 +125,17 @@ public abstract class Menu {
 
                     @Override
                     public void execute() {
+                        String type = controller.loggedInAccountType();
+                        Menu nextMenu = null;
+                        if (type.equals("Customer")) {
+                            nextMenu = new CustomerProfileMenu(parentMenu);
+                        } else if (type.equals("Supplier")) {
+                            nextMenu = new SupplierProfileMenu(parentMenu);
+                        } else if (type.equals("Supervisor")) {
+                            nextMenu = new SupervisorProfileMenu(parentMenu);
+                        }
+                        nextMenu.show();
+                        nextMenu.execute();
                     }
                 };
                 menusInClone.put("^profile$", ProfileViewerTerminal);

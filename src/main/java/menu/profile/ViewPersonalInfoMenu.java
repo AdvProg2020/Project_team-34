@@ -18,12 +18,4 @@ public class ViewPersonalInfoMenu extends Menu {
         menusIn.put("edit", EditPersonalInfo);
         menuForShow.add("Edit Personal Info");
     }
-
-    @Override
-    public void show() {
-    }
-
-    @Override
-    public void execute() {
-    }
 }

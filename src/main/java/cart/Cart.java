@@ -296,6 +296,10 @@ public class Cart {
     public boolean isProductInCart(Product product, Supplier supplier) {
         return getProductInCartObject(product, supplier) != null;
     }
+
+    public static Cart getCartById(String cartId) {
+        return null;
+    }
 }
 
 class ProductInCart {

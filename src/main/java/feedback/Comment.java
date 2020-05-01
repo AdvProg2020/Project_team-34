@@ -40,6 +40,18 @@ public class Comment {
         this.content = content;
     }
 
+    public Customer getCustomer() {
+        return customer;
+    }
+
+    public CommentState getState() {
+        return state;
+    }
+
+    public boolean isCustomerBoughtThisProduct() {
+        return customerBoughtThisProduct;
+    }
+
     public String getContent() {
         return content;
     }

@@ -44,6 +44,17 @@ public class ManageUsersMenu extends Menu {
 
             @Override
             public void execute() {
+                Matcher commandMatcher = getMatcher(parentMenu.command, "^delete user (\\w+)$");
+                commandMatcher.find();
+                String username = commandMatcher.group(1);
+                try {
+                    controller.controlDeleteUser(username);
+                    System.out.println("User deleted successfully.");
+                } catch (ExceptionalMassage e) {
+                    System.out.println(e.getMessage());
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^delete user \\w+$", DeleteUser);
@@ -52,10 +63,30 @@ public class ManageUsersMenu extends Menu {
         Menu CreateSupervisorProfile = new Menu("Create Supervisor Profile", this) {
             @Override
             public void show() {
+                System.out.println("Create Supervisor Profile:");
             }
 
             @Override
             public void execute() {
+                System.out.print("Enter username: ");
+                String username = scanner.nextLine();
+                System.out.print("Enter password: ");
+                String password = scanner.nextLine();
+                System.out.print("Enter name: ");
+                String name = scanner.nextLine();
+                System.out.print("Enter family name: ");
+                String familyName = scanner.nextLine();
+                System.out.print("Enter email: ");
+                String email = scanner.nextLine();
+                System.out.print("Enter phone number: ");
+                String phoneNumber = scanner.nextLine();
+                try {
+                    controller.controlCreateAccount(username, "supervisor", name, familyName, email, phoneNumber, password, 0, null);
+                } catch (ExceptionalMassage e) {
+                    System.out.println(e.getMessage());
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^create manager profile \\w+$", CreateSupervisorProfile);

@@ -223,12 +223,12 @@ public class Controller {
         return account.toString();
     }
 
-    public Response controlDeleteUser(String username) {
+    public void controlDeleteUser(String username) throws ExceptionalMassage {
         Account accountGotByUsername = Account.getAccountByUsername(username);
-        if (accountGotByUsername != null)
-            accountGotByUsername.removeAccount();
+        if (accountGotByUsername == null)
+            throw new ExceptionalMassage("Account not found.");
+        accountGotByUsername.removeAccount();
         //data base
-        return null;
     }
 
     public Response controlDeleteProduct(String productId) {

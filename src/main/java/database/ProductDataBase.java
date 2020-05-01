@@ -39,7 +39,7 @@ public class ProductDataBase {
         }
     }
 
-    private Connection connect() {
+    private static Connection connect() {
         String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
         Connection connection = null;
         try {
@@ -50,14 +50,14 @@ public class ProductDataBase {
         return connection;
     }
 
-    public void add(Product product) {
+    public static void add(Product product) {
         if (doesProductAlreadyExists(product)) {
            return;
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, priceForEachSupplier," +
                 "listOfSuppliers, remainedNumberForEachSupplier,categoryName, description,productCommentsId , specification)" +
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?)";
-        try (Connection conn = this.connect();
+        try (Connection conn = connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
 
             statement.setInt(1, product.getNumberOfViews());
@@ -79,7 +79,7 @@ public class ProductDataBase {
         }
     }
 
-    private HashMap<String,Integer> convertSupplierHashMapToStringHashMap(HashMap<Supplier,Integer> supplierHashMap){
+    private static HashMap<String,Integer> convertSupplierHashMapToStringHashMap(HashMap<Supplier,Integer> supplierHashMap){
         HashMap<String ,Integer> stringHashMap = new HashMap<>();
         for (Supplier supplier : supplierHashMap.keySet()) {
             stringHashMap.put(supplier.getUserName(),supplierHashMap.get(supplier));
@@ -87,7 +87,7 @@ public class ProductDataBase {
         return stringHashMap;
     }
 
-    private HashMap<Supplier,Integer> convertStringHashMapToSupplierHashMap(HashMap<String,Integer> stringHashMap){
+    private static HashMap<Supplier,Integer> convertStringHashMapToSupplierHashMap(HashMap<String,Integer> stringHashMap){
         HashMap<Supplier,Integer> supplierHashMap = new HashMap<>() ;
         for (String username : stringHashMap.keySet()) {
             supplierHashMap.put((Supplier)Account.getAccountByUsername(username),stringHashMap.get(username));
@@ -95,7 +95,7 @@ public class ProductDataBase {
         return supplierHashMap;
     }
 
-    private ArrayList<String> covertSupplierArrayListToStringArrayList(ArrayList<Supplier> supplierArrayList){
+    private static ArrayList<String> covertSupplierArrayListToStringArrayList(ArrayList<Supplier> supplierArrayList){
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (Supplier supplier : supplierArrayList) {
             stringArrayList.add(supplier.getUserName());
@@ -103,7 +103,7 @@ public class ProductDataBase {
         return stringArrayList;
     }
 
-    private ArrayList<Supplier> convertStringArrayListToSupplierArrayList(ArrayList<String > stringArrayList){
+    private static ArrayList<Supplier> convertStringArrayListToSupplierArrayList(ArrayList<String > stringArrayList){
         ArrayList<Supplier> supplierArrayList = new ArrayList<>();
         for (String username : stringArrayList) {
             supplierArrayList.add((Supplier)Account.getAccountByUsername(username));
@@ -111,7 +111,7 @@ public class ProductDataBase {
         return supplierArrayList;
     }
 
-    private ArrayList<String> covertCommentArrayListToStringArrayList(ArrayList<Comment> commentArrayList){
+    private static ArrayList<String> covertCommentArrayListToStringArrayList(ArrayList<Comment> commentArrayList){
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (Comment comment : commentArrayList) {
             //stringArrayList.add(comment.getId);
@@ -119,7 +119,7 @@ public class ProductDataBase {
         return stringArrayList;
     }
 
-    private ArrayList<Comment> convertStringArrayListToCommentArrayList(ArrayList<String> stringArrayList){
+    private static ArrayList<Comment> convertStringArrayListToCommentArrayList(ArrayList<String> stringArrayList){
         ArrayList<Comment> commentArrayList = new ArrayList<>();
         for (String id : stringArrayList) {
             //commentArrayList.add(Comment.getCommentById(id));
@@ -127,8 +127,10 @@ public class ProductDataBase {
         return commentArrayList;
     }
 
-    private boolean doesProductAlreadyExists(Product product) {
+    private static boolean doesProductAlreadyExists(Product product) {
         ArrayList<Product> list = getAllProducts();
+        if(list == null )
+            return false;
         for (Product eachProduct : list) {
             if(eachProduct.getProductId().equals(product.getProductId()))
                 return true;
@@ -137,31 +139,31 @@ public class ProductDataBase {
     }
 
 
-    private String convertObjectToJsonString(Object object) {
+    private static String convertObjectToJsonString(Object object) {
         Gson gson = new Gson();
         return gson.toJson(object);
     }
-    private ArrayList<String> convertJsonToArrayList(String string) {
+    private static ArrayList<String> convertJsonToArrayList(String string) {
         Gson gson = new Gson();
         return (ArrayList<String>) gson.fromJson(string, new TypeToken<ArrayList<String>>() {
         }.getType());
     }
 
-    private HashMap<String,Integer> convertJsonToHashMap(String string){
+    private static HashMap<String,Integer> convertJsonToHashMap(String string){
         Gson gson = new Gson();
         return (HashMap<String, Integer>) gson.fromJson(string, new TypeToken<HashMap<String,Integer>>() {
         }.getType());
     }
 
-    public void update(Product product) {
+    public static void update(Product product) {
         delete(product.getProductId());
         add(product);
     }
 
-    public void delete(String productId) {
+    public static void delete(String productId) {
         String sql = "DELETE FROM Products WHERE productId= ?";
 
-        try (Connection connect = this.connect();
+        try (Connection connect = connect();
              PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
 
             preparedStatement.setString(1, productId);
@@ -171,11 +173,11 @@ public class ProductDataBase {
         }
     }
 
-    public ArrayList<Product> getAllProducts() {
+    public static ArrayList<Product> getAllProducts() {
         String sql = "SELECT *  FROM Products";
 
-        try (Connection conn = this.connect();
-             Statement stmt = conn.createStatement();
+        try (Connection connection = connect();
+             Statement stmt = connection.createStatement();
              ResultSet resultSet = stmt.executeQuery(sql)) {
             ArrayList<Product> products = new ArrayList<>();
             while (resultSet.next()) {
@@ -197,7 +199,7 @@ public class ProductDataBase {
 
 
 
-    public ArrayList<Product> getAllFilteredProducts(Gson gson) {
+    public static ArrayList<Product> getAllFilteredProducts(Gson gson) {
         return null;
     }
 

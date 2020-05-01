@@ -195,6 +195,9 @@ public class CustomerLog {
         return customerBoughtProduct;
     }
 
+    public static CustomerLog getCustomerLogById(String identifier){
+        return null;
+    }
     public static void exportAll() {
 
     }
@@ -202,6 +205,7 @@ public class CustomerLog {
     public static void importAll() {
 
     }
+
 
     @Override
     public String toString() {

@@ -92,6 +92,10 @@ public class SupplierLog {
         //completed
     }
 
+    public static SupplierLog getSupplierLogById(String identifier){
+        return null;
+    }
+
     @Override
     public String toString() {
         return null;

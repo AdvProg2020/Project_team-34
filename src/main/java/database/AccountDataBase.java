@@ -2,10 +2,16 @@ package database;
 
 import account.Account;
 import account.Customer;
+import account.Supervisor;
 import account.Supplier;
+import cart.Cart;
+import log.CustomerLog;
+import log.SupplierLog;
+import product.Category;
 import product.Product;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class AccountDataBase {
     public static void createNewTable() {
@@ -19,10 +25,8 @@ public class AccountDataBase {
                 + "	phoneNumber String , \n"
                 + "password String ,\n"
                 + "credit int ,\n"
-                + "customerLogId String ,\n"
                 + "cartId String ,\n"
-                + "nameOfCompany String ,\n"
-                + "supplierLogId String ,\n"
+                + "nameOfCompany String \n"
                 + ");";
         try (Connection connection = DriverManager.getConnection(url);
              Statement statement = connection.createStatement()) {
@@ -32,7 +36,7 @@ public class AccountDataBase {
         }
     }
 
-    private Connection connect() {
+    private static Connection connect() {
         String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
         Connection connection = null;
         try {
@@ -43,48 +47,112 @@ public class AccountDataBase {
         return connection;
     }
 
-    public void add(Account account) {
-        /*if (doesProductAlreadyExists(product)) {
+    public static void add(Account account) {
+        if (doesAccountAlreadyExists(account)){
             return;
-        }*/
+        }
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
-                "customerLogId, cartId, nameOfCompany, supplierLogId)"+
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?)";
-        try (Connection conn = this.connect();
-             PreparedStatement statement = conn.prepareStatement(sql)) {
+                " cartId, nameOfCompany)"+
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? )";
+        try (Connection connection = connect();
+             PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, account.getUserName());
-            statement.setString(2, account.getFamilyName());
-            statement.setString(3, account.getEmail());
-            statement.setString(4, account.getPhoneNumber());
-            statement.setString(5, account.getPassword());
-            statement.setInt(6, account.getCredit());
+            statement.setString(2,account.getName());
+            statement.setString(3, account.getFamilyName());
+            statement.setString(4, account.getEmail());
+            statement.setString(5, account.getPhoneNumber());
+            statement.setString(6, account.getPassword());
+            statement.setInt(7, account.getCredit());
 
             if(account instanceof Customer){
-                statement.setString(7,((Customer)account).getCustomerLog().getIdentifier());
                 statement.setString(8,((Customer)account).getCart().getIdentifier());
                 statement.setString(9,null);
-                statement.setString(10,null);
             }
             else if(account instanceof Supplier){
-                statement.setString(7,null);
                 statement.setString(8,null);
                 statement.setString(9,((Supplier) account).getNameOfCompany());
-                statement.setString(10,((Supplier) account).getSupplierLog().getIdentifier());
             }
             else{
-                statement.setString(7,null);
                 statement.setString(8,null);
                 statement.setString(9,null);
-                statement.setString(10,null);
             }
-
-
 
             statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    private static boolean doesAccountAlreadyExists(Account account) {
+        ArrayList<Account> list = getAllAccounts();
+        if(list == null)
+            return false;
+        for (Account eachAccount: list) {
+            if(eachAccount.getUserName().equals(account.getUserName()))
+                return true;
+        }
+        return false;
+    }
+
+    public static void update(Account account) {
+        delete(account.getUserName());
+        add(account);
+    }
+
+    public static void delete(String username) {
+        String sql = "DELETE FROM Accounts WHERE username= ?";
+
+        try (Connection connect = connect();
+             PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, username);
+            preparedStatement.executeUpdate();
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+
+    public static ArrayList<Account> getAllAccounts() {
+        String sql = "SELECT *  FROM Accounts";
+
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            ArrayList<Account> accounts = new ArrayList<>();
+            while (resultSet.next()) {
+                String username = resultSet.getString("username");
+                String name = resultSet.getString("name");
+                String familyName = resultSet.getString("familyName");
+                String email = resultSet.getString("email");
+                String phoneNumber  = resultSet.getString("phoneNumber");
+                String password = resultSet.getString("password");
+                int credit =resultSet.getInt("credit");
+                String cartId = resultSet.getString("cartId");
+                String nameOfCompany = resultSet.getString("nameOfCompany");
+
+
+                if(cartId!= null){
+                    Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit,
+                             Cart.getCartById(cartId));
+                    accounts.add(customer);
+                }
+                else if(nameOfCompany != null){
+                    Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,nameOfCompany);
+                    accounts.add(supplier);
+                }
+                else{
+                    Supervisor supervisor = new Supervisor(username,name, familyName, email,phoneNumber,password,credit);
+                    accounts.add(supervisor);
+                }
+
+            }
+            return accounts;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
     }
 }
 

@@ -19,6 +19,7 @@ import request.Request;
 import request.SaleRequest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -143,12 +144,21 @@ public class Controller {
         category.setName(newName);
     }
 
-    public void controlAddSpecialFilterToCategory(String CategoryName, String filterKey, String filterValues) {
-
+    public void controlAddSpecialFilterToCategory(String categoryName, String filterKey, String filterValues) throws ExceptionalMassage {
+        Category category = Category.getCategoryByName(categoryName);
+        if (category == null)
+            throw new ExceptionalMassage("Category not found.");
+        String[] valuesSplit = filterValues.split(", ");
+        ArrayList<String> values = new ArrayList<>();
+        Collections.addAll(values, valuesSplit);
+        category.addSpecialFilter(filterKey, values);
     }
 
-    public void controlRemoveSpecialFilterFromCategory(String categoryName, String filterKey) {
-
+    public void controlRemoveSpecialFilterFromCategory(String categoryName, String filterKey) throws ExceptionalMassage {
+        Category category = Category.getCategoryByName(categoryName);
+        if (category == null)
+            throw new ExceptionalMassage("Category not found.");
+        category.removeSpecialFilter(filterKey);
     }
 
     private boolean doesAccountExist(String username) {

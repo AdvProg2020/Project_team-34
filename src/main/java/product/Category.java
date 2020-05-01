@@ -171,5 +171,17 @@ public class Category {
         return superCategory.getCategoryByNameIn(name);
     }
 
+    public void addSpecialFilter(String key, ArrayList<String> values) throws ExceptionalMassage {
+        if (specificationFilter.containsKey(key))
+            throw new ExceptionalMassage("This filter has already added.");
+        specificationFilter.put(key, values);
+        //file modification
+    }
 
+    public void removeSpecialFilter(String key) throws ExceptionalMassage {
+        if (!specificationFilter.containsKey(key))
+            throw new ExceptionalMassage("This filter is not in this category.");
+        specificationFilter.remove(key);
+        //file modification
+    }
 }

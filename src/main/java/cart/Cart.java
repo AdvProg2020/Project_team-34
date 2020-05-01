@@ -84,12 +84,12 @@ public class Cart {
         //file modification required if <owner != null>
     }
 
-    public void addProductToCart(Product product, Supplier supplier) throws Exception {
+    public void addProductToCart(Product product, Supplier supplier) throws ExceptionalMassage {
         if (productsIn.contains(product)) {
             changeQuantityOfProductInCart(product, productsQuantity.get(product) + 1);
         } else {
             if (product.getRemainedNumber(supplier) == 0) {
-                throw new Exception("This product with this supplier is currently out of stock.");
+                throw new ExceptionalMassage("This product with this supplier is currently out of stock.");
             }
             productsIn.add(product);
             productsQuantity.put(product, 1);
@@ -99,9 +99,9 @@ public class Cart {
         }
     }
 
-    public void removeProductFromCart(Product product) throws Exception {
+    public void removeProductFromCart(Product product) throws ExceptionalMassage {
         if (!productsIn.contains(product)) {
-            throw new Exception("Product is not in cart yet.");
+            throw new ExceptionalMassage("Product is not in cart yet.");
         }
         productsIn.remove(product);
         productsQuantity.remove(product);
@@ -110,12 +110,12 @@ public class Cart {
         //file modification required if <owner != null>
     }
 
-    public void changeQuantityOfProductInCart(Product product, int newQuantity) throws Exception {
+    public void changeQuantityOfProductInCart(Product product, int newQuantity) throws ExceptionalMassage {
         if (newQuantity == 0) {
             removeProductFromCart(product);
         } else {
             if (product.getRemainedNumber(productsSupplier.get(product)) < newQuantity) {
-                throw new Exception("This product is currently out of stock.");
+                throw new ExceptionalMassage("This product is currently out of stock.");
             }
             productsQuantity.replace(product, newQuantity);
         }

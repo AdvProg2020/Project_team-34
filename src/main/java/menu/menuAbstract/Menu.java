@@ -80,6 +80,7 @@ public abstract class Menu {
                 menusIn.put("^back$", parentMenu);
                 menuForShow.add("Back");
             }
+            controller = new Controller();
         }
     }
 
@@ -105,6 +106,9 @@ public abstract class Menu {
 
                     @Override
                     public void execute() {
+                        controller.controlLogout();
+                        parentMenu.show();
+                        parentMenu.execute();
                     }
                 };
                 menusInClone.put("^logout$", LogoutCommand);

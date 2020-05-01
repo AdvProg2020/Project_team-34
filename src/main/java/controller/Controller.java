@@ -8,6 +8,7 @@ import cart.Cart;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Score;
 import log.ShippingInfo;
+import log.SupplierLog;
 import menu.menuAbstract.Menu;
 import discount.CodedDiscount;
 import discount.Sale;
@@ -27,18 +28,37 @@ public class Controller {
     private Menu menu;
     private boolean isFirstSupervisorCreated;
 
-    public boolean hasSomeOneLoggedIn(){
-        return false;
+    public Controller() {
+        account = null;
+        cart = null;
+        isFirstSupervisorCreated = false;
     }
 
-    public boolean controlAddToCart() {
-        return false;
+    public boolean hasSomeOneLoggedIn(){
+        return account != null;
+    }
+
+    public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+        Product product = Product.getProductById(productId);
+        if (product == null)
+            throw new ExceptionalMassage("Product not found.");
+        Supplier supplier = Supplier.getSupplierByCompanyName(supplierNameOfCompany);
+        if (supplier == null)
+            throw new ExceptionalMassage("Supplier not found.");
+        cart.addProductToCart(product, supplier);
+    }
+
+    public void increaseProductQuantity(String product, String supplierNameOfCompany) {
+
+    }
+
+    public void decreaseProductQuantity(String product, String supplierNameOfCompany) {
+
     }
 
     public Cart controlViewCart() throws ExceptionalMassage {
-        if (!account.getType().equals("Customer")) {
+        if (!(account instanceof Customer))
             throw new ExceptionalMassage("Cart is only for customer account.");
-        }
         return cart;
     }
 
@@ -109,45 +129,55 @@ public class Controller {
     }
 
     public void controlCreateAccount(String username, String type, String name, String familyName, String email, String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
+        //modified by aryan
         if (doesAccountExist(username))
             throw new ExceptionalMassage("Duplicate username");
         if (type.equals("customer"))
             controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
         if (type.equals("supplier"))
             controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
-        //check for name of company is not duplicate
-        if (type.equals("supervisor") && !isFirstSupervisorCreated)
+        if (type.equals("supervisor"))
             controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
+        controlLogin(username, password);
         //edited by aryan
     }
 
-    private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber
-            , String password, int credit) {
+    private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber, String password, int credit) {
         new Customer(username, name, familyName, email, phoneNumber, password, credit);
     }
 
-    private void controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber
-            , String password, int credit, String nameOfCompany) {
+    private void controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
+        if (Supplier.getSupplierByCompanyName(nameOfCompany) != null) {
+            throw new ExceptionalMassage("Duplicate company name.");
+        }
         new Supplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
     }
 
-    private void controlCreateSupervisor(String username, String name, String familyName, String email, String phoneNumber
-            , String password, int credit) {
+    private void controlCreateSupervisor(String username, String name, String familyName, String email, String phoneNumber, String password, int credit) throws ExceptionalMassage {
+        if (isFirstSupervisorCreated) {
+            if (account == null)
+                throw new ExceptionalMassage("You must login as supervisor before create a supervisor account.");
+            if (!(account instanceof Supervisor))
+                throw new ExceptionalMassage("You must be a supervisor to create supervisor account.");
+        }
         new Supervisor(username, name, familyName, email, phoneNumber, password, credit);
-    }
-
-
-    public Response controlCanLogin(String username, String password) {
-        if (!doesAccountExist(username))
-            return Response.INVALID_USERNAME;
-        Account account = Account.getAccountByUsername(username);
-        if (!account.getPassword().equals(password))
-            return Response.INVALID_PASSWORD;
-        return Response.OK;
+        isFirstSupervisorCreated = true;
     }
 
     public void controlLogin(String username, String password) throws ExceptionalMassage {
-        //variable cart must modified
+        Account account = Account.getAccountByUsername(username);
+        if (account == null)
+            throw new ExceptionalMassage("Username doesn't exist.");
+        if (!account.getPassword().equals(password))
+            throw new ExceptionalMassage("Invalid password.");
+        this.account = account;
+        if (account instanceof Customer)
+            cart = ((Customer) account).getCart();
+    }
+
+    public void controlLogout() {
+        account = null;
+        cart = new Cart(null);
     }
 
     public String controlViewPersonalInfo() {
@@ -177,16 +207,6 @@ public class Controller {
             accountGotByUsername.removeAccount();
         //data base
         return null;
-    }
-
-    public Response controlCreateSupervisorBySupervisor( String username, String name, String familyName, String email, String phoneNumber
-            , String password, int credit) {
-        if (doesAccountExist(username))
-            return Response.INVALID_USERNAME;
-        if (!(account instanceof Supervisor))
-            return Response.ACCESS_DENIED;
-        controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
-        return Response.OK;
     }
 
     public Response controlDeleteProduct(String productId) {

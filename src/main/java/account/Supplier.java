@@ -1,5 +1,6 @@
 package account;
 
+import exceptionalMassage.ExceptionalMassage;
 import log.SupplierLog;
 
 /**
@@ -27,6 +28,10 @@ public class Supplier extends Account{
 
     public void setNameOfCompany(String nameOfCompany) {
         this.nameOfCompany = nameOfCompany;
+    }
+
+    public static Supplier getSupplierByCompanyName(String nameOfCompany) {
+        return null;
     }
 
     @Override

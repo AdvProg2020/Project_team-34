@@ -1,6 +1,8 @@
 package account;
 
 
+import exceptionalMassage.ExceptionalMassage;
+
 import java.util.ArrayList;
 
 /**
@@ -84,7 +86,14 @@ public abstract class Account {
         this.credit = credit;
     }
 
-    public static Account getAccountByUsername(String userName){
+    public static Account getAccountByUsername(String userName) {
+        if (allAccounts.size() != 0) {
+            for (Account account : allAccounts) {
+                if (account.getUserName().equals(userName)) {
+                    return account;
+                }
+            }
+        }
         return null;
     }
 

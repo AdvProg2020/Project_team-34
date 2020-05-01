@@ -98,6 +98,9 @@ public class Controller {
         if (parentCategory == null) {
             throw new ExceptionalMassage("Parent category not found.");
         }
+        if (Category.getCategoryByName(name) != null) {
+            throw new ExceptionalMassage("Category with this name has already initialized.");
+        }
         Category newCategory = new Category(name, isParentCategory, parentCategory);
     }
 
@@ -131,6 +134,21 @@ public class Controller {
             throw new ExceptionalMassage("Product not found.");
         }
         category.removeProduct(product);
+    }
+
+    public void controlChangeCategoryName(String oldName, String newName) throws ExceptionalMassage {
+        Category category = Category.getCategoryByName(oldName);
+        if (category == null)
+            throw new ExceptionalMassage("Category not found.");
+        category.setName(newName);
+    }
+
+    public void controlAddSpecialFilterToCategory(String CategoryName, String filterKey, String filterValues) {
+
+    }
+
+    public void controlRemoveSpecialFilterFromCategory(String categoryName, String filterKey) {
+
     }
 
     private boolean doesAccountExist(String username) {

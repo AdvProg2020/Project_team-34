@@ -30,6 +30,7 @@ public class Category {
         if (getCategoryByName(name) != null) {
             throw new ExceptionalMassage("Category with name " + name + " has already created.");
         }
+        this.parentCategory.addSubCategory(this);
         this.name = name;
         if (isParentCategory) {
             allCategoriesIn = new ArrayList<>();
@@ -43,7 +44,6 @@ public class Category {
             parentCategory = superCategory;
         }
         this.parentCategory = parentCategory;
-        this.parentCategory.addSubCategory(this);
         //file modifications required
     }
 
@@ -65,23 +65,11 @@ public class Category {
     }
 
     //Setters:
-    public void setName(String name) {
+    public void setName(String name) throws ExceptionalMassage {
+        if (getCategoryByName(name) != null) {
+            throw new ExceptionalMassage("Category with this name has already initialized.");
+        }
         this.name = name;
-        //file modification required
-    }
-
-    private void setParentCategory(Category parentCategory) {
-        this.parentCategory = parentCategory;
-        //file modification required
-    }
-
-    private void setAllProductsIn(ArrayList<Product> allProductsIn) {
-        this.allProductsIn = allProductsIn;
-        //file modification required
-    }
-
-    private void setAllCategoriesIn(ArrayList<Category> allCategoriesIn) {
-        this.allCategoriesIn = allCategoriesIn;
         //file modification required
     }
 
@@ -182,4 +170,6 @@ public class Category {
     public static Category getCategoryByName(String name) {
         return superCategory.getCategoryByNameIn(name);
     }
+
+
 }

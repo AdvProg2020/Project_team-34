@@ -30,6 +30,11 @@ public class Customer extends Account {
         return cart;
     }
 
+    public void setCart(Cart cart) {
+        this.cart = cart;
+        //file modification required
+    }
+
     @Override
     public String getType() {
         return "Customer";

@@ -174,7 +174,7 @@ public class Cart {
 
     public void decreaseProductCount(Product product, Supplier supplier) throws ExceptionalMassage {
         ProductInCart productInCart = getProductInCartObject(product, supplier);
-        changeQuantityOfProductInCart(product, supplier, productInCount.get(productInCart) + 1);
+        changeQuantityOfProductInCart(product, supplier, productInCount.get(productInCart) - 1);
     }
 
     public void update() {
@@ -195,9 +195,9 @@ public class Cart {
         setCodedDiscount(discount);
     }
 
-    public void removeCodedDiscount() throws Exception {
+    public void removeCodedDiscount() throws ExceptionalMassage {
         if (codedDiscount == null) {
-            throw new Exception("Code hasn't applied yet.");
+            throw new ExceptionalMassage("Code hasn't applied yet.");
         }
         setCodedDiscount(null);
     }

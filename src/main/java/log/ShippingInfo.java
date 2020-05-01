@@ -1,5 +1,7 @@
 package log;
 
+import exceptionalMassage.ExceptionalMassage;
+
 /**
  * @author Aryan Ahadinia
  * @since 0.0.1
@@ -21,11 +23,11 @@ public class ShippingInfo {
     private long postalCode;
     private long phoneNumber;
 
-    public ShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws Exception {
+    public ShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws ExceptionalMassage {
         try {
             this.city = City.valueOf(city);
         } catch (Exception e) {
-            throw new Exception(city + " isn't defined for System");
+            throw new ExceptionalMassage(city + " isn't defined for System");
         }
         this.firstName = firstName;
         this.lastName = lastName;

@@ -48,33 +48,44 @@ public class Controller {
         cart.addProductToCart(product, supplier);
     }
 
-    public void increaseProductQuantity(String product, String supplierNameOfCompany) {
-
+    public void increaseProductQuantity(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+        Product product = Product.getProductById(productId);
+        if (product == null)
+            throw new ExceptionalMassage("Product not found.");
+        Supplier supplier = Supplier.getSupplierByCompanyName(supplierNameOfCompany);
+        if (supplier == null)
+            throw new ExceptionalMassage("Supplier not found.");
+        cart.increaseProductCount(product, supplier);
     }
 
-    public void decreaseProductQuantity(String product, String supplierNameOfCompany) {
-
+    public void decreaseProductQuantity(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+        Product product = Product.getProductById(productId);
+        if (product == null)
+            throw new ExceptionalMassage("Product not found.");
+        Supplier supplier = Supplier.getSupplierByCompanyName(supplierNameOfCompany);
+        if (supplier == null)
+            throw new ExceptionalMassage("Supplier not found.");
+        cart.decreaseProductCount(product, supplier);
     }
 
-    public Cart controlViewCart() throws ExceptionalMassage {
-        if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Cart is only for customer account.");
+    public Cart controlViewCart() {
         return cart;
     }
 
-    public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws Exception {
+    public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws ExceptionalMassage {
         cart.submitShippingInfo(new ShippingInfo(firstName, lastName, city, address, postalCode, phoneNumber));
+        //Modification required
     }
 
     public void controlRemoveShippingInfo() throws ExceptionalMassage {
         cart.removeShippingInfo();
     }
 
-    public void controlSubmitDiscountCode(String discountCode) throws Exception {
+    public void controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
         cart.applyCodedDiscount(discountCode);
     }
 
-    public void controlRemoveDiscountCode() throws Exception {
+    public void controlRemoveDiscountCode() throws ExceptionalMassage {
         cart.removeCodedDiscount();
     }
 
@@ -170,7 +181,15 @@ public class Controller {
             throw new ExceptionalMassage("Invalid password.");
         this.account = account;
         if (account instanceof Customer)
-            cart = ((Customer) account).getCart();
+            if (cart.isCartClear()) {
+                cart = ((Customer) account).getCart();
+            } else {
+                if (((Customer) account).getCart().isCartClear()) {
+                    ((Customer) account).setCart(cart);
+                } else {
+                    cart = ((Customer) account).getCart();
+                }
+            }
     }
 
     public void controlLogout() {

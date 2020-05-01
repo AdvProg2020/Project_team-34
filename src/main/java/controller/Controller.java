@@ -78,19 +78,35 @@ public class Controller {
     }
 
     public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws ExceptionalMassage {
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Customer))
+            throw new ExceptionalMassage("Login as a customer.");
         cart.submitShippingInfo(new ShippingInfo(firstName, lastName, city, address, postalCode, phoneNumber));
         //Modification required
     }
 
     public void controlRemoveShippingInfo() throws ExceptionalMassage {
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Customer))
+            throw new ExceptionalMassage("Login as a customer.");
         cart.removeShippingInfo();
     }
 
     public void controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Customer))
+            throw new ExceptionalMassage("Login as a customer.");
         cart.applyCodedDiscount(discountCode);
     }
 
     public void controlRemoveDiscountCode() throws ExceptionalMassage {
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Customer))
+            throw new ExceptionalMassage("Login as a customer.");
         cart.removeCodedDiscount();
     }
 
@@ -99,6 +115,10 @@ public class Controller {
     }
 
     public void controlAddCategory(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Supervisor))
+            throw new ExceptionalMassage("Login as a supervisor.");
         Category parentCategory = Category.getCategoryByName(parentCategoryName);
         if (parentCategory == null) {
             throw new ExceptionalMassage("Parent category not found.");
@@ -110,6 +130,10 @@ public class Controller {
     }
 
     public void controlRemoveCategory(String name) throws ExceptionalMassage {
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Supervisor))
+            throw new ExceptionalMassage("Login as a supervisor.");
         Category category = Category.getCategoryByName(name);
         if (category == null) {
             throw new ExceptionalMassage("Category not found.");

@@ -51,8 +51,8 @@ public class Product {
 
     public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
                    HashMap<Supplier,Integer> remainedNumberForEachSupplier, Category category, String description, ArrayList<Comment> comments,
-                   int numberOfViews , String productId,String state) {
-        this.productState = convertStringToState(state);
+                   int numberOfViews , String productId,State state) {
+        this.productState = state;
         this.productId = productId;
         this.name = name;
         this.nameOfCompany = nameOfCompany;

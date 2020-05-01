@@ -3,6 +3,7 @@ package log;
 import account.Customer;
 import account.Supplier;
 import cart.Cart;
+import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 
 import java.util.ArrayList;
@@ -127,12 +128,10 @@ public class CustomerLog {
         //completed
     }
 
-    public boolean proceedToNextStep() {
-        if (deliveryStatus == LogStatus.DELIVERED) {
-            return false;
-        }
+    public void proceedToNextStep() throws ExceptionalMassage {
+        if (deliveryStatus == LogStatus.DELIVERED)
+            throw new ExceptionalMassage("This order has already delivered.");
         setDeliveryStatus(deliveryStatus.nextStep());
-        return true;
         //completed
     }
 
@@ -150,40 +149,45 @@ public class CustomerLog {
     }
 
     public void addSubLogForSuppliers() {
-        ArrayList<Supplier> allSupplierInThisLog = getAllSuppliers();
+        ArrayList<Supplier> allSupplierInThisLog = cart.getAllSupplier();
         for (Supplier supplier : allSupplierInThisLog) {
             addSubLogForSupplier(supplier);
         }
-        //completed
     }
 
     public void addSubLogForSupplier(Supplier supplier) {
         new SupplierLog(this, supplier);
-        //completed
     }
 
-    public ArrayList<Supplier> getAllSuppliers() {
-        return cart.getAllSupplier();
-        //completed
-    }
-
-    public int getSupplierEarnedMoney(Supplier supplier) {
-        return 0;
+    public int getTotalPurchaseFromSupplier(Supplier supplier) {
+        return cart.getSupplierPurchase(supplier);
     }
 
     public int getSupplierSaleAmount(Supplier supplier) {
-        return 0;
+        return cart.getSupplierSaleAmount(supplier);
     }
 
-    public boolean isProductInCart(Product product) {
-        return cart.isProductInCart(product);
+    public int getSupplierEarnedMoney(Supplier supplier) {
+        return cart.getSupplierEarnedMoney(supplier);
     }
 
     public static ArrayList<Customer> getCustomerBoughtProduct(Product product) {
         ArrayList<Customer> customerBoughtProduct = new ArrayList<>();
         if (allCustomerLogs.size() != 0) {
             for (CustomerLog customerLog : allCustomerLogs) {
-                if (customerLog.isProductInCart(product)) {
+                if ((customerLog.cart).isProductInCart(product)) {
+                    customerBoughtProduct.add(customerLog.getCustomer());
+                }
+            }
+        }
+        return customerBoughtProduct;
+    }
+
+    public static ArrayList<Customer> getCustomerBoughtProductFromSupplier(Product product, Supplier supplier) {
+        ArrayList<Customer> customerBoughtProduct = new ArrayList<>();
+        if (allCustomerLogs.size() != 0) {
+            for (CustomerLog customerLog : allCustomerLogs) {
+                if ((customerLog.cart).isProductInCart(product, supplier)) {
                     customerBoughtProduct.add(customerLog.getCustomer());
                 }
             }

@@ -1,6 +1,7 @@
 package log;
 
 import account.Supplier;
+import exceptionalMassage.ExceptionalMassage;
 
 import java.util.ArrayList;
 
@@ -10,14 +11,15 @@ import java.util.ArrayList;
  */
 
 public class SupplierLog {
-    private static ArrayList<SupplierLog> allSupplierLogs = new ArrayList<>();
+    private static final ArrayList<SupplierLog> allSupplierLogs = new ArrayList<>();
     private static int allSupplierLogCreatedCount = 0;
 
-    private String identifier;
-    private int earnedMoney;
-    private int discountAmount;
-    private CustomerLog customerLog;
-    private Supplier supplier;
+    private final String identifier;
+    private final int earnedMoney;
+    private final int discountAmount;
+    private final int totalPurchase;
+    private final CustomerLog customerLog;
+    private final Supplier supplier;
 
     //Constructor:
     public SupplierLog(CustomerLog customerLog, Supplier supplier) {
@@ -25,6 +27,7 @@ public class SupplierLog {
         this.supplier = supplier;
         this.earnedMoney = customerLog.getSupplierEarnedMoney(supplier);
         this.discountAmount = customerLog.getSupplierSaleAmount(supplier);
+        this.totalPurchase = customerLog.getTotalPurchaseFromSupplier(supplier);
         this.identifier = generateIdentifier();
         allSupplierLogs.add(this);
         allSupplierLogCreatedCount++;
@@ -45,6 +48,10 @@ public class SupplierLog {
         return discountAmount;
     }
 
+    public int getTotalPurchase() {
+        return totalPurchase;
+    }
+
     public CustomerLog getCustomerLog() {
         return customerLog;
     }
@@ -61,40 +68,14 @@ public class SupplierLog {
         return allSupplierLogCreatedCount;
     }
 
-    //Setters:
-    private void setIdentifier(String identifier) {
-        this.identifier = identifier;
-        //file modification required
-    }
-
-    private void setEarnedMoney(int earnedMoney) {
-        this.earnedMoney = earnedMoney;
-        //file modification required
-    }
-
-    private void setDiscountAmount(int discountAmount) {
-        this.discountAmount = discountAmount;
-        //file modification required
-    }
-
-    private void setCustomerLog(CustomerLog customerLog) {
-        this.customerLog = customerLog;
-        //file modification required
-    }
-
-    private void setSupplier(Supplier supplier) {
-        this.supplier = supplier;
-        //file modification required
-    }
-
     //Modeling methods:
     private static String generateIdentifier() {
         return "T34SL" + String.format("%015d", allSupplierLogCreatedCount + 1);
         //completed
     }
 
-    public boolean proceedToNextStep() {
-        return customerLog.proceedToNextStep();
+    public void proceedToNextStep() throws ExceptionalMassage {
+        customerLog.proceedToNextStep();
         //completed
     }
 

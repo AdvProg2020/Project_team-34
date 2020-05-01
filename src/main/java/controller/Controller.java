@@ -123,9 +123,7 @@ public class Controller {
     }
 
     private boolean doesAccountExist(String username) {
-        if (Account.getAccountByUsername(username) == null)
-            return false;
-        return true;
+        return Account.getAccountByUsername(username) != null;
     }
 
     public void controlCreateAccount(String username, String type, String name, String familyName, String email, String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
@@ -238,7 +236,6 @@ public class Controller {
             return Response.OK;
         }
         return Response.INVALID_REQUEST_ID;
-
     }
 
     public String controlViewCompanyInfo() {

@@ -1,5 +1,6 @@
 package discount;
 
+import account.Supplier;
 import product.Product;
 import state.State;
 
@@ -94,9 +95,10 @@ public class Sale extends Discount{
         return false;
     }
 
-    public static Sale getProductSale(Product product) {
+    public static Sale getProductSale(Product product, Supplier supplier) {
         //HAZARD!!!
         //this method has written by Aryan Ahadinia for use in Cart.java
+        //not usable
         for (Sale sale : sales) {
             if (sale.isProductInSale(product)) {
                 return sale;

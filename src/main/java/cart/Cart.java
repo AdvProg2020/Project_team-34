@@ -17,41 +17,48 @@ import java.util.HashMap;
  */
 
 public class Cart {
+    private static long countOfCartCreated = 0;
+
+    private String identifier;
     private Customer owner;
-    private ArrayList<Product> productsIn;
-    private HashMap<Product, Integer> productsQuantity;
-    private HashMap<Product, Supplier> productsSupplier;
-    private HashMap<Product, Sale> productsSales;
+    private ArrayList<ProductInCart> productsIn;
+    private HashMap<ProductInCart, Integer> productInCount;
+    private HashMap<ProductInCart, Sale> productInSale;
     private CodedDiscount codedDiscount;
     private ShippingInfo shippingInfo;
 
     //Constructor
     public Cart(Customer owner) {
+        this.identifier = generateIdentifier();
+        countOfCartCreated++;
         this.owner = owner;
-        productsIn = new ArrayList<>();
-        productsQuantity = new HashMap<>();
-        productsSupplier = new HashMap<>();
-        productsSales = new HashMap<>();
-        codedDiscount = null;
-        shippingInfo = null;
+        this.productsIn = new ArrayList<>();
+        this.productInCount = new HashMap<>();
+        this.productInSale = new HashMap<>();
+        this.codedDiscount = null;
+        this.shippingInfo = null;
         //file modification required if <owner != null>
     }
 
     //Getters:
-    public ArrayList<Product> getProductsIn() {
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public Customer getOwner() {
+        return owner;
+    }
+
+    public ArrayList<ProductInCart> getProductsIn() {
         return productsIn;
     }
 
-    public HashMap<Product, Integer> getProductsQuantity() {
-        return productsQuantity;
+    public HashMap<ProductInCart, Integer> getProductInCount() {
+        return productInCount;
     }
 
-    public HashMap<Product, Supplier> getProductsSupplier() {
-        return productsSupplier;
-    }
-
-    public HashMap<Product, Sale> getProductsSales() {
-        return productsSales;
+    public HashMap<ProductInCart, Sale> getProductInSale() {
+        return productInSale;
     }
 
     public CodedDiscount getCodedDiscount() {
@@ -63,87 +70,127 @@ public class Cart {
     }
 
     //Setters:
+    public void setOwner(Customer owner) {
+        this.owner = owner;
+        //file modification required
+    }
+
     private void setCodedDiscount(CodedDiscount codedDiscount) {
         this.codedDiscount = codedDiscount;
-        //file modification required
+        //file modification required <owner != null>
     }
 
     private void setShippingInfo(ShippingInfo shippingInfo) {
         this.shippingInfo = shippingInfo;
-        //file modification required
+        //file modification required <owner != null>
+    }
+
+    public void setProductsIn(ArrayList<ProductInCart> productsIn) {
+        this.productsIn = productsIn;
+        //file modification required <owner != null>
+    }
+
+    public void setProductInCount(HashMap<ProductInCart, Integer> productInCount) {
+        this.productInCount = productInCount;
+        //file modification required <owner != null>
+    }
+
+    public void setProductInSale(HashMap<ProductInCart, Sale> productInSale) {
+        this.productInSale = productInSale;
+        //file modification required <owner != null>
     }
 
     //Modeling methods:
+    public String generateIdentifier() {
+        return "T34CA" + String.format("%015d", countOfCartCreated + 1);
+    }
+
     public void clearCart() {
-        productsIn = new ArrayList<>();
-        productsQuantity = new HashMap<>();
-        productsSupplier = new HashMap<>();
-        productsSales = new HashMap<>();
-        codedDiscount = null;
-        shippingInfo = null;
-        //file modification required if <owner != null>
+        setCodedDiscount(null);
+        setShippingInfo(null);
+        setProductsIn(new ArrayList<>());
+        setProductInCount(new HashMap<>());
+        setProductInSale(new HashMap<>());
+    }
+
+    public boolean isCartClear() {
+        return productsIn.size() == 0;
+    }
+
+    public ProductInCart getProductInCartObject(Product product, Supplier supplier) {
+        if (productsIn.size() != 0) {
+            for (ProductInCart productInCart : productsIn) {
+                if (productInCart.getProduct() == product && productInCart.getSupplier() == supplier)
+                    return productInCart;
+            }
+        }
+        return null;
     }
 
     public void addProductToCart(Product product, Supplier supplier) throws ExceptionalMassage {
-        if (productsIn.contains(product)) {
-            changeQuantityOfProductInCart(product, productsQuantity.get(product) + 1);
+        if (getProductInCartObject(product, supplier) != null) {
+            increaseProductCount(product, supplier);
         } else {
             if (product.getRemainedNumber(supplier) == 0) {
                 throw new ExceptionalMassage("This product with this supplier is currently out of stock.");
             }
-            productsIn.add(product);
-            productsQuantity.put(product, 1);
-            productsSupplier.put(product, supplier);
-            productsSales.put(product, Sale.getProductSale(product));
+            ProductInCart productInCart = new ProductInCart(product, supplier);
+            productsIn.add(productInCart);
+            productInCount.put(productInCart, 1);
+            productInSale.put(productInCart, Sale.getProductSale(product, supplier));
             //file modification required if <owner != null>
         }
     }
 
-    public void removeProductFromCart(Product product) throws ExceptionalMassage {
-        if (!productsIn.contains(product)) {
+    public void removeProductFromCart(Product product, Supplier supplier) throws ExceptionalMassage {
+        if (getProductInCartObject(product, supplier) == null)
             throw new ExceptionalMassage("Product is not in cart yet.");
-        }
-        productsIn.remove(product);
-        productsQuantity.remove(product);
-        productsSupplier.remove(product);
-        productsSales.remove(product);
+        ProductInCart productInCart = getProductInCartObject(product, supplier);
+        productsIn.remove(productInCart);
+        productInCount.remove(productInCart);
+        productInSale.remove(productInCart);
         //file modification required if <owner != null>
     }
 
-    public void changeQuantityOfProductInCart(Product product, int newQuantity) throws ExceptionalMassage {
+    public void changeQuantityOfProductInCart(Product product, Supplier supplier, int newQuantity) throws ExceptionalMassage {
+        if (getProductInCartObject(product, supplier) == null)
+            throw new ExceptionalMassage("Product not in cart.");
         if (newQuantity == 0) {
-            removeProductFromCart(product);
+            removeProductFromCart(product, supplier);
         } else {
-            if (product.getRemainedNumber(productsSupplier.get(product)) < newQuantity) {
-                throw new ExceptionalMassage("This product is currently out of stock.");
+            ProductInCart productInCart = getProductInCartObject(product, supplier);
+            if (product.getRemainedNumber(productInCart.getSupplier()) < newQuantity) {
+                throw new ExceptionalMassage("This product is not available in this amount.");
             }
-            productsQuantity.replace(product, newQuantity);
+            productInCount.replace(productInCart, newQuantity);
         }
         //file modification required if <owner != null>
     }
 
-    public void increaseProductCount(Product product) throws Exception {
-        changeQuantityOfProductInCart(product, productsQuantity.get(product) + 1);
+    public void increaseProductCount(Product product, Supplier supplier) throws ExceptionalMassage {
+        ProductInCart productInCart = getProductInCartObject(product, supplier);
+        changeQuantityOfProductInCart(product, supplier, productInCount.get(productInCart) + 1);
     }
 
-    public void decreaseProductCount(Product product) throws Exception {
-        changeQuantityOfProductInCart(product, productsQuantity.get(product) + 1);
+    public void decreaseProductCount(Product product, Supplier supplier) throws ExceptionalMassage {
+        ProductInCart productInCart = getProductInCartObject(product, supplier);
+        changeQuantityOfProductInCart(product, supplier, productInCount.get(productInCart) + 1);
     }
 
     public void update() {
 
     }
 
-    public void applyCodedDiscount(String discountCode) throws Exception {
+    public void applyCodedDiscount(String discountCode) throws ExceptionalMassage {
         if (owner == null) {
-            throw new Exception("You should login before apply discount code.");
+            throw new ExceptionalMassage("You should login before apply discount code.");
         }
         CodedDiscount discount = CodedDiscount.getCodedDiscountByCode(discountCode);
         if (discount == null) {
-            throw new Exception("This Code is invalid.");
+            throw new ExceptionalMassage("This Code is invalid.");
         }
         if (!discount.canCustomerUseCode(owner)) {
-            throw new Exception("You can't use this code.");
+            throw new ExceptionalMassage("You can't use this code.");
         }
         setCodedDiscount(discount);
     }
@@ -172,18 +219,19 @@ public class Cart {
 
     public int getValueOfCartWithoutDiscounts() {
         int totalAmount = 0;
-        for (Product product : productsIn) {
-            totalAmount += product.getPrice(productsSupplier.get(product));
+        for (ProductInCart productInCart : productsIn) {
+            totalAmount += (productInCart.getProduct()).getPrice(productInCart.getSupplier());
         }
         return totalAmount;
     }
 
     public int getAmountOfSale() {
+        //cart must be updated before
         int saleAmount = 0;
-        for (Product product : productsIn) {
-            Sale productSale = productsSales.get(product);
+        for (ProductInCart productInCart : productsIn) {
+            Sale productSale = productInSale.get(productInCart);
             if (productSale != null) {
-                saleAmount += productSale.discountAmountFor(product.getPrice(productsSupplier.get(product)));
+                saleAmount += productSale.discountAmountFor((productInCart.getProduct()).getPrice(productInCart.getSupplier()));
             }
         }
         return saleAmount;
@@ -197,26 +245,86 @@ public class Cart {
         return getValueOfCartWithoutDiscounts() - (getAmountOfSale() + getAmountOfCodedDiscount());
     }
 
+    public int getSupplierPurchase(Supplier supplier) {
+        int totalPurchase = 0;
+        if (productsIn.size() != 0) {
+            for (ProductInCart productInCart : productsIn) {
+                if (productInCart.getSupplier() == supplier) {
+                    totalPurchase += (productInCart.getProduct()).getPrice(supplier);
+                }
+            }
+        }
+        return totalPurchase;
+    }
+
+    public int getSupplierSaleAmount(Supplier supplier) {
+        int totalSale = 0;
+        if (productsIn.size() != 0) {
+            for (ProductInCart productInCart : productsIn) {
+                if (productInCart.getSupplier() == supplier) {
+                    totalSale += (productInSale.get(productInCart)).discountAmountFor((productInCart.getProduct()).getPrice(supplier));
+                }
+            }
+        }
+        return totalSale;
+    }
+
+    public int getSupplierEarnedMoney(Supplier supplier) {
+        return getSupplierPurchase(supplier) - getSupplierSaleAmount(supplier);
+    }
+
     public ArrayList<Supplier> getAllSupplier() {
         ArrayList<Supplier> allSuppliers = new ArrayList<>();
-        for (Product product : productsIn) {
-            if (!allSuppliers.contains(productsSupplier.get(product))) {
-                allSuppliers.add(productsSupplier.get(product));
+        for (ProductInCart productInCart : productsIn) {
+            if (!allSuppliers.contains(productInCart.getSupplier())) {
+                allSuppliers.add(productInCart.getSupplier());
             }
         }
         return allSuppliers;
     }
 
     public boolean isProductInCart(Product product) {
-        return productsIn.contains(product);
-        //completed
+        if (productsIn.size() != 0) {
+            for (ProductInCart productInCart : productsIn) {
+                if (productInCart.getProduct() == product)
+                    return true;
+            }
+        }
+        return false;
     }
 
-    public String getIdentifier(){
-        return null;
+    public boolean isProductInCart(Product product, Supplier supplier) {
+        return getProductInCartObject(product, supplier) != null;
+    }
+}
+
+class ProductInCart {
+    private static long numberOfObjectCreated;
+
+    private final String identifier;
+    private final Product product;
+    private final Supplier supplier;
+
+    public ProductInCart(Product product, Supplier supplier) {
+        this.identifier = generateIdentifier();
+        this.product = product;
+        this.supplier = supplier;
+        numberOfObjectCreated++;
     }
 
-    public boolean isEmpty() {
-        return productsIn.size() == 0;
+    public String getIdentifier() {
+        return identifier;
+    }
+
+    public Product getProduct() {
+        return product;
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public String generateIdentifier() {
+        return "T34PC" + String.format("%015d", numberOfObjectCreated + 1);
     }
 }

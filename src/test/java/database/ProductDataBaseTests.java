@@ -5,6 +5,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import product.Category;
 import product.Product;
+import state.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class ProductDataBaseTests {
         listOfSupplier.add(supplier);
 
         Product repeatedProduct = new Product("repeated product", "team_34",price,listOfSupplier,
-                remainedNumber,category,"really good", null,100,product1.getProductId(), "PREPARING_TO_BUILD");
+                remainedNumber,category,"really good", null,100,product1.getProductId(), State.valueOf("PREPARING_TO_BUILD"));
 
         ProductDataBase.add(product1);
         ProductDataBase.add(product2);

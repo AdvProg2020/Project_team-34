@@ -28,12 +28,14 @@ public class Comment {
         this.commentId = commentId;
     }
 
-    public Comment(Customer customer, Product product, String title, String content) {
+    public Comment(Customer customer, Product product, String title, String content,boolean customerBoughtThisProduct) {
         this.title = title;
         this.customer = customer;
         this.product = product;
         this.content = content;
         this.commentId = generateIdentifier();
+        this.customerBoughtThisProduct = customerBoughtThisProduct;
+        this.state = CommentState.CONFIRMED;
 
         allCommentsNum ++;
     }
@@ -87,7 +89,7 @@ public class Comment {
     }
 
     private String generateIdentifier(){
-        return "T34P" + String.format("%015d", allCommentsNum + 1);
+        return "T34C" + String.format("%015d", allCommentsNum + 1);
     }
 
     public static void importAllData(){

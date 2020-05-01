@@ -46,17 +46,18 @@ public class CommentDataBase {
         if (doesCommentAlreadyExists(comment)) {
             return;
         }
-        String sql = "INSERT into Comments (commentId , customerUsername, productId, title, content, commentState,customerBoughtThisProduct " +
+        String sql = "INSERT into Comments (commentId , customerUsername, productId, title, content, commentState,customerBoughtThisProduct) " +
                 "VALUES (?,?, ? , ? , ? , ?,?)";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1, comment.getCustomer().getUserName());
-            statement.setString(2, comment.getProduct().getProductId());
-            statement.setString(3, comment.getTitle());
-            statement.setString(4, comment.getContent());
-            statement.setString(5, String.valueOf(comment.getState()));
-            statement.setBoolean(6, comment.didCustomerBoughtThisProduct());
+            statement.setString(1, comment.getCommentId());
+            statement.setString(2, comment.getCustomer().getUserName());
+            statement.setString(3, comment.getProduct().getProductId());
+            statement.setString(4, comment.getTitle());
+            statement.setString(5, comment.getContent());
+            statement.setString(6, String.valueOf(comment.getState()));
+            statement.setBoolean(7, comment.didCustomerBoughtThisProduct());
 
 
             statement.executeUpdate();
@@ -104,10 +105,11 @@ public class CommentDataBase {
             ArrayList<Comment> comments = new ArrayList<>();
             while (resultSet.next()) {
                 String commentId = resultSet.getString("commentId");
-                Customer customer = (Customer) (Account.getAccountByUsername(resultSet.getString("customerId")));
+                Customer customer = (Customer) (Account.getAccountByUsername(resultSet.getString("customerUsername")));
                 Product product = Product.getProductById(resultSet.getString("productId"));
                 String title = resultSet.getString("title");
                 String content = resultSet.getString("content");
+
                 CommentState commentState = CommentState.valueOf(resultSet.getString("commentState"));
                 boolean customerBoughtThisProduct = resultSet.getBoolean("customerBoughtThisProduct");
                 comments.add(new Comment(customer, product, title, content, commentState, customerBoughtThisProduct, commentId));

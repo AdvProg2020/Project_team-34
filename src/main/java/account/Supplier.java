@@ -35,4 +35,18 @@ public class Supplier extends Account{
     public String getType() {
         return "Supplier";
     }
+
+    @Override
+    public String toString() {
+        return "Supplier{" +
+                "userName='" + userName + '\'' +
+                ", name='" + name + '\'' +
+                ", familyName='" + familyName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", password='" + password + '\'' +
+                ", credit=" + credit +
+                ", nameOfCompany='" + nameOfCompany + '\'' +
+                '}';
+    }
 }

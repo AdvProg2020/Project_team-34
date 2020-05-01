@@ -17,4 +17,16 @@ public class Supervisor extends Account {
     public String getType() {
         return "Supervisor";
     }
+
+    public String toString() {
+        return "Supervisor{" +
+                "userName='" + userName + '\'' +
+                ", name='" + name + '\'' +
+                ", familyName='" + familyName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", password='" + password + '\'' +
+                ", credit=" + credit +
+                '}';
+    }
 }

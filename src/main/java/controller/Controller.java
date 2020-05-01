@@ -180,7 +180,7 @@ public class Controller {
         if (!account.getPassword().equals(password))
             throw new ExceptionalMassage("Invalid password.");
         this.account = account;
-        if (account instanceof Customer)
+        if (account instanceof Customer) {
             if (cart.isCartClear()) {
                 cart = ((Customer) account).getCart();
             } else {
@@ -190,6 +190,7 @@ public class Controller {
                     cart = ((Customer) account).getCart();
                 }
             }
+        }
     }
 
     public void controlLogout() {
@@ -214,8 +215,11 @@ public class Controller {
         return result.toString();
     }
 
-    public String controlViewUserInfo(String username) {
-        return String.valueOf(Account.getAccountByUsername(username));
+    public String controlViewUserInfo(String username) throws ExceptionalMassage {
+        Account account = Account.getAccountByUsername(username);
+        if (account == null)
+            throw new ExceptionalMassage("Account not found.");
+        return account.toString();
     }
 
     public Response controlDeleteUser(String username) {

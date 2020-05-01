@@ -10,8 +10,8 @@ import java.util.ArrayList;
  * @since 0.0.1
  */
 public abstract class Account {
-    private String userName , name , familyName , email , phoneNumber , password;
-    private int credit;
+    protected String userName , name , familyName , email , phoneNumber , password;
+    protected int credit;
     private static ArrayList<Account> allAccounts = new ArrayList<>();
 
     public Account(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit) {
@@ -106,19 +106,4 @@ public abstract class Account {
     public static void importAll(){
 
     }
-
-    @Override
-    public String toString() {
-        return "Account{" +
-                "userName:'" + userName + '\'' +
-                ", name:'" + name + '\'' +
-                ", familyName:'" + familyName + '\'' +
-                ", email:'" + email + '\'' +
-                ", phoneNumber:'" + phoneNumber + '\'' +
-                ", password:'" + password + '\'' +
-                ", credit:" + credit +
-                ", Type:" + getType()+ '\'' +
-                '}';
-    }
-
 }

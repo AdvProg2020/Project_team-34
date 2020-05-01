@@ -39,4 +39,17 @@ public class Customer extends Account {
     public String getType() {
         return "Customer";
     }
+
+    @Override
+    public String toString() {
+        return "Customer{" +
+                "userName='" + userName + '\'' +
+                ", name='" + name + '\'' +
+                ", familyName='" + familyName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", password='" + password + '\'' +
+                ", credit=" + credit +
+                '}';
+    }
 }

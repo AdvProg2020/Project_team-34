@@ -7,6 +7,7 @@ import com.google.gson.reflect.TypeToken;
 import feedback.Comment;
 import product.Category;
 import product.Product;
+import state.State;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -187,7 +188,7 @@ public class ProductDataBase {
                         convertStringHashMapToSupplierHashMap(convertJsonToHashMap(resultSet.getString("remainedNumberForEachSupplier"))),
                         Category.getCategoryByName(resultSet.getString("categoryName")),resultSet.getString("description"),
                         convertStringArrayListToCommentArrayList(convertJsonToArrayList(resultSet.getString("ProductCommentsId")))
-                        , resultSet.getInt("numberOfViews"),resultSet.getString("productId"),resultSet.getString("productState"));
+                        , resultSet.getInt("numberOfViews"),resultSet.getString("productId"), State.valueOf(resultSet.getString("productState")));
                 products.add(product);
             }
             return products;

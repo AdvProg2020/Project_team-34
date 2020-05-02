@@ -21,14 +21,13 @@ public class Product {
     private HashMap<Supplier, Integer> priceForEachSupplier;
     private ArrayList<Supplier> listOfSuppliers;
     private HashMap<Supplier,Integer> remainedNumberForEachSupplier;
-    private Category category;
+    //private Category category;
     private String description;
-    private ArrayList<Comment> comments;
+    //private ArrayList<Comment> comments;
     private HashMap<String, String> specification; //method check
 
 
-    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber,
-                   Category category, String description) {
+    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description) {
         numberOfViews = 0;
         this.productState = State.PREPARING_TO_BUILD;
         this.productId = generateIdentifier();
@@ -40,9 +39,9 @@ public class Product {
         listOfSuppliers.add(supplier);
         this.remainedNumberForEachSupplier = new HashMap<>();
         this.remainedNumberForEachSupplier.put(supplier,remainedNumber);
-        this.category = category;
+        //this.category = category;
         this.description = description;
-        comments = new ArrayList<>();
+        //comments = new ArrayList<>();
 
 
 
@@ -50,7 +49,7 @@ public class Product {
     }
 
     public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
-                   HashMap<Supplier,Integer> remainedNumberForEachSupplier, Category category, String description, ArrayList<Comment> comments,
+                   HashMap<Supplier,Integer> remainedNumberForEachSupplier, String description,
                    int numberOfViews , String productId,State state) {
         this.productState = state;
         this.productId = productId;
@@ -59,9 +58,9 @@ public class Product {
         this.priceForEachSupplier = priceForEachSupplier;
         this.listOfSuppliers = listOfSuppliers;
         this.remainedNumberForEachSupplier = remainedNumberForEachSupplier;
-        this.category = category;
+        //this.category = category;
         this.description = description;
-        this.comments = comments;
+        //this.comments = comments;
         this.numberOfViews= numberOfViews;
 
     }
@@ -86,9 +85,11 @@ public class Product {
         return name;
     }
 
+    /*
     public ArrayList<Comment> getComments() {
         return comments;
     }
+     */
 
     public ArrayList<Supplier> getListOfSuppliers() {
         return listOfSuppliers;
@@ -120,9 +121,11 @@ public class Product {
         return productState;
     }
 
+    /*
     public Category getCategory() {
         return category;
     }
+     */
 
     public HashMap<String, String> getSpecification() {
         return specification;
@@ -191,17 +194,21 @@ public class Product {
         this.nameOfCompany = nameOfCompany;
     }
 
+    /*
     public void setCategory(Category category) {
         this.category = category;
     }
+     */
 
     public void setDescription(String description) {
         this.description = description;
     }
 
+    /*
     public void setComments(ArrayList<Comment> comments) {
         this.comments = comments;
     }
+     */
 
     public void setSpecification(HashMap<String, String> specification) {
         this.specification = specification;

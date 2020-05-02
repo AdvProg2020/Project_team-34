@@ -9,29 +9,24 @@ import log.CustomerLog;
  * @since 0.0.1
  */
 public class Customer extends Account {
-    private CustomerLog customerLog;
-    private Cart cart;
+    private String cartIdentifier;
 
     public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit) {
         super(userName, name, familyName, email, phoneNumber, password, credit);
-        this.cart = new Cart(this);
+        this.cartIdentifier = new Cart(this).getIdentifier();
     }
 
-    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit,  Cart cart) {
+    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit,  String cartIdentidier) {
         super(userName, name, familyName, email, phoneNumber, password, credit);
-        this.cart = cart;
-    }
-
-    public CustomerLog getCustomerLog() {
-        return customerLog;
+        this.cartIdentifier = cartIdentidier;
     }
 
     public Cart getCart() {
-        return cart;
+        return Cart.getCartById(cartIdentifier);
     }
 
     public void setCart(Cart cart) {
-        this.cart = cart;
+        this.cartIdentifier = cart.getIdentifier();
         //file modification required
     }
 

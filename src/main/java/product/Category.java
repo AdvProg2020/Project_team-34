@@ -15,7 +15,7 @@ public class Category {
     private String name;
     private Category parentCategory;
     private ArrayList<Product> allProductsIn;
-    private ArrayList<Category> allCategoriesIn;
+    private ArrayList<String> allCategoriesInName;
     private HashMap<String, ArrayList<String>> specificationFilter;
 
     //Constructors:
@@ -23,7 +23,7 @@ public class Category {
         this.name = "All Products";
         this.parentCategory = null;
         this.allProductsIn = null;
-        this.allCategoriesIn = new ArrayList<>();
+        this.allCategoriesInName = new ArrayList<>();
     }
 
     public Category(String name, boolean isParentCategory, Category parentCategory) throws ExceptionalMassage {

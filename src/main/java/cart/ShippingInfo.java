@@ -1,34 +1,26 @@
-package log;
+package cart;
 
-import exceptionalMassage.ExceptionalMassage;
+import java.util.ArrayList;
 
 /**
  * @author Aryan Ahadinia
  * @since 0.0.1
  */
 
-enum City {
-    Tehran,
-    Shiraz,
-    Tabriz,
-    Mashhad,
-    Isfahan
-}
-
 public class ShippingInfo {
+    private static ArrayList<ShippingInfo> allShippingInfo = new ArrayList<>();
+    private static int totalShippingInfoCreated = 0;
+
+    private String Identifier;
     private String firstName;
     private String lastName;
-    private City city;
+    private String city;
     private String address;
     private long postalCode;
     private long phoneNumber;
 
-    public ShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws ExceptionalMassage {
-        try {
-            this.city = City.valueOf(city);
-        } catch (Exception e) {
-            throw new ExceptionalMassage(city + " isn't defined for System");
-        }
+    public ShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) {
+        this.city = city;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;

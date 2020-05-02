@@ -5,7 +5,6 @@ import account.Supplier;
 import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
-import log.ShippingInfo;
 import product.Product;
 
 import java.util.ArrayList;

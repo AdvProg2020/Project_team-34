@@ -92,6 +92,11 @@ public class Comment {
         return "T34C" + String.format("%015d", allCommentsNum + 1);
     }
 
+    public ArrayList<Comment> getCommentsForProduct(Product product) {
+        //Added By Aryan
+        return null;
+    }
+
     public static void importAllData(){
 
     }

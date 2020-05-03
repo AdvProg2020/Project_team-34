@@ -7,6 +7,7 @@ import java.sql.SQLOutput;
 import java.util.ArrayList;
 
 public class AllProductsMenu extends Menu {
+    private Category category;
     public AllProductsMenu(Menu parentMenu) {
         super("All Products Menu", parentMenu);
         Menu viewCategories = new Menu("View Categories", this) {
@@ -24,6 +25,19 @@ public class AllProductsMenu extends Menu {
         };
         menusIn.put("^view categories$", viewCategories);
         menuForShow.add("View Categories");
+
+        Menu selectCategory = new Menu("Select Category", this) {
+            @Override
+            public void show() {
+
+            }
+
+            @Override
+            public void execute() {
+
+            }
+        };
+
 
         menusIn.put("^filtering$", new FilteringMenu(this));
         menuForShow.add("Filtering");

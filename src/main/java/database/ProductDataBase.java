@@ -13,51 +13,33 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import static database.DataBase.connect;
+
 public class ProductDataBase {
 
     public static void createNewTable() {
-        String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
+        HashMap<String, String> content = new HashMap<>();
+        content.put("numberOfViews", "int");
+        content.put("productId" , "String");
+        content.put("productState", "String");
+        content.put("name", "String");
+        content.put("priceForEachSupplier" , "String");
+        content.put("listOfSuppliers", "String");
+        content.put("remainedNumberForEachSupplier", "String");
+        content.put("description", "String");
+        content.put("specification", "String");
 
-        String sql = "CREATE TABLE IF NOT EXISTS Products (\n"
-                + "	numberOfViews int,\n"
-                + "	productId String, \n"
-                + "	productState String, \n"
-                + "name String, \n"
-                + "nameOfCompany String, \n"
-                + "	priceForEachSupplier String , \n"
-                + " listOfSuppliers String ,\n"
-                + "	remainedNumberForEachSupplier String , \n"
-                + " categoryName String ,\n"
-                + "	description String, \n"
-                + " productCommentsId String, \n"
-                + "	specification String \n"
-                + ");";
-        try (Connection conn = DriverManager.getConnection(url);
-             Statement stmt = conn.createStatement()) {
-            stmt.execute(sql);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        DataBase.createNewTable("Products", content);
     }
 
-    private static Connection connect() {
-        String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return connection;
-    }
 
     public static void add(Product product) {
         if (doesProductAlreadyExists(product)) {
            return;
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, priceForEachSupplier," +
-                "listOfSuppliers, remainedNumberForEachSupplier,categoryName, description,productCommentsId , specification)" +
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?)";
+                "listOfSuppliers, remainedNumberForEachSupplier description , specification)" +
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?)";
         try (Connection conn = connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
 
@@ -69,10 +51,8 @@ public class ProductDataBase {
             statement.setString(6, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getPriceForEachSupplier())));
             statement.setString(7, convertObjectToJsonString(covertSupplierArrayListToStringArrayList(product.getListOfSuppliers())));
             statement.setString(8, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getRemainedNumberForEachSupplier())));
-            statement.setString(9, product.getCategory().getName());
-            statement.setString(10, product.getDescription());
-            statement.setString(11, String.valueOf(product.getComments()));
-            statement.setString(12, convertObjectToJsonString(product.getSpecification()));
+            statement.setString(9, product.getDescription());
+            statement.setString(10, convertObjectToJsonString(product.getSpecification()));
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -91,7 +71,7 @@ public class ProductDataBase {
     private static HashMap<Supplier,Integer> convertStringHashMapToSupplierHashMap(HashMap<String,Integer> stringHashMap){
         HashMap<Supplier,Integer> supplierHashMap = new HashMap<>() ;
         for (String username : stringHashMap.keySet()) {
-            supplierHashMap.put((Supplier)Account.getAccountByUsername(username),stringHashMap.get(username));
+            supplierHashMap.put((Supplier) Account.getAccountByUsername(username),stringHashMap.get(username));
         }
         return supplierHashMap;
     }
@@ -107,7 +87,7 @@ public class ProductDataBase {
     private static ArrayList<Supplier> convertStringArrayListToSupplierArrayList(ArrayList<String > stringArrayList){
         ArrayList<Supplier> supplierArrayList = new ArrayList<>();
         for (String username : stringArrayList) {
-            supplierArrayList.add((Supplier)Account.getAccountByUsername(username));
+            supplierArrayList.add((Supplier) Account.getAccountByUsername(username));
         }
         return supplierArrayList;
     }
@@ -182,13 +162,18 @@ public class ProductDataBase {
              ResultSet resultSet = stmt.executeQuery(sql)) {
             ArrayList<Product> products = new ArrayList<>();
             while (resultSet.next()) {
-                Product product = new Product(resultSet.getString("name"), resultSet.getString("nameOfCompany"),
-                        convertStringHashMapToSupplierHashMap(convertJsonToHashMap(resultSet.getString("priceForEachSupplier"))),
-                        convertStringArrayListToSupplierArrayList(convertJsonToArrayList(resultSet.getString("listOfSuppliers"))),
-                        convertStringHashMapToSupplierHashMap(convertJsonToHashMap(resultSet.getString("remainedNumberForEachSupplier"))),
-                        Category.getCategoryByName(resultSet.getString("categoryName")),resultSet.getString("description"),
-                        convertStringArrayListToCommentArrayList(convertJsonToArrayList(resultSet.getString("ProductCommentsId")))
-                        , resultSet.getInt("numberOfViews"),resultSet.getString("productId"), State.valueOf(resultSet.getString("productState")));
+
+                String name = resultSet.getString("name");
+                String nameOfCompany = resultSet.getString("nameOfCompany");
+                HashMap<Supplier,Integer> priceForEachSupplier = convertStringHashMapToSupplierHashMap(convertJsonToHashMap(resultSet.getString("priceForEachSupplier")));
+                ArrayList<Supplier> listOfSuppliers = convertStringArrayListToSupplierArrayList(convertJsonToArrayList(resultSet.getString("listOfSuppliers")));
+                HashMap<Supplier,Integer> remainedNumberForEachSupplier = convertStringHashMapToSupplierHashMap(convertJsonToHashMap(resultSet.getString("remainedNumberForEachSupplier")));
+                String description = resultSet.getString("description");
+                int numberOfViews = resultSet.getInt("numberOfViews");
+                String productId = resultSet.getString("productId");
+                State state = State.valueOf(resultSet.getString("productState"));
+                Product product = new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,
+                        remainedNumberForEachSupplier,description,numberOfViews,productId,state);
                 products.add(product);
             }
             return products;

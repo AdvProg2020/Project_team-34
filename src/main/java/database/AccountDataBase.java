@@ -5,47 +5,29 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
-import log.CustomerLog;
-import log.SupplierLog;
-import product.Category;
-import product.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+
 
 public class AccountDataBase {
+
     public static void createNewTable() {
-        String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
+        HashMap<String, String> content = new HashMap<>();
+        content.put("username", "String");
+        content.put("name" , "String");
+        content.put("familyName", "String");
+        content.put("email", "String");
+        content.put("phoneNumber" , "String");
+        content.put("password", "String");
+        content.put("credit", "int");
+        content.put("cartId", "String");
+        content.put("nameOfCompany", "String");
 
-        String sql = "CREATE TABLE IF NOT EXISTS Accounts (\n"
-                + "	username String,\n"
-                + "	name String, \n"
-                + "	familyName String, \n"
-                + "email String, \n"
-                + "	phoneNumber String , \n"
-                + "password String ,\n"
-                + "credit int ,\n"
-                + "cartId String ,\n"
-                + "nameOfCompany String \n"
-                + ");";
-        try (Connection connection = DriverManager.getConnection(url);
-             Statement statement = connection.createStatement()) {
-            statement.execute(sql);
-        } catch (SQLException exception) {
-            System.out.println(exception.getMessage());
-        }
+        DataBase.createNewTable("Accounts", content);
     }
 
-    private static Connection connect() {
-        String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return connection;
-    }
 
     public static void add(Account account) {
         if (doesAccountAlreadyExists(account)){
@@ -54,7 +36,7 @@ public class AccountDataBase {
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
                 " cartId, nameOfCompany)"+
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? )";
-        try (Connection connection = connect();
+        try (Connection connection = DataBase.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1, account.getUserName());
@@ -103,7 +85,7 @@ public class AccountDataBase {
     public static void delete(String username) {
         String sql = "DELETE FROM Accounts WHERE username= ?";
 
-        try (Connection connect = connect();
+        try (Connection connect = DataBase.connect();
              PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
 
             preparedStatement.setString(1, username);
@@ -117,7 +99,7 @@ public class AccountDataBase {
     public static ArrayList<Account> getAllAccounts() {
         String sql = "SELECT *  FROM Accounts";
 
-        try (Connection connection = connect();
+        try (Connection connection = DataBase.connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             ArrayList<Account> accounts = new ArrayList<>();
@@ -135,7 +117,7 @@ public class AccountDataBase {
 
                 if(cartId!= null){
                     Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit,
-                             Cart.getCartById(cartId));
+                             cartId);
                     accounts.add(customer);
                 }
                 else if(nameOfCompany != null){

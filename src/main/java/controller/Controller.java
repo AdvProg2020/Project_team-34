@@ -345,8 +345,9 @@ public class Controller {
         controlGetDiscountByCode(code).setMaxDiscountPercent(newMaxDiscount);
     }
 
-    public void controlCreateCodedDiscount(Date startDate, Date endDate, int percent, int maxDiscountAmount) {
+    public void controlCreateCodedDiscount(Date startDate, Date endDate, int percent, int maxDiscountAmount) throws ExceptionalMassage {
         new CodedDiscount(startDate, endDate, percent, maxDiscountAmount);
+
     }
 
     public void controlRemoveDiscountCode(String code) throws Exception{

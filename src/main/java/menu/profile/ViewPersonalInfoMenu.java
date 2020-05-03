@@ -13,6 +13,7 @@ public class ViewPersonalInfoMenu extends Menu {
 
             @Override
             public void execute() {
+
             }
         };
         menusIn.put("edit", EditPersonalInfo);

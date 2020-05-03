@@ -268,7 +268,7 @@ public class Controller {
         }
     }
 
-    public Response controlRemoveProductById(String productId) {
+    public Response controlRemoveProductById(String productId) throws ExceptionalMassage{
         Product product = Product.getProductById(productId);
         if (product != null) {
             product.removeProduct();

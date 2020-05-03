@@ -485,6 +485,10 @@ public class Controller {
         return null;
     }
 
+    public void controlEditCategory(String categoryName, String newName) throws ExceptionalMassage {
+
+    }
+
 
 
 

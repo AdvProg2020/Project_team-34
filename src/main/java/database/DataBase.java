@@ -8,7 +8,7 @@ import java.util.HashMap;
 
 public class DataBase {
 
-    private  static String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
+    private  final static String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
 
     public static Connection connect() {
         Connection connection = null;

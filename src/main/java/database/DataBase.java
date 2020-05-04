@@ -1,9 +1,6 @@
 package database;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.HashMap;
 
 public class DataBase {
@@ -33,6 +30,20 @@ public class DataBase {
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
             stmt.execute(String.valueOf(sql));
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+    }
+
+    public static void delete(String nameOfTable, String nameOfColumn , String identifier) {
+        StringBuilder sql = new StringBuilder("DELETE FROM ");
+        sql.append(nameOfTable).append(" WHERE ").append(nameOfColumn).append("=?");
+
+        try (Connection connect = connect();
+             PreparedStatement preparedStatement = connect.prepareStatement(String.valueOf(sql))) {
+
+            preparedStatement.setString(1, identifier);
+            preparedStatement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

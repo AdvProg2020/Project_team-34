@@ -142,16 +142,7 @@ public class ProductDataBase {
     }
 
     public static void delete(String productId) {
-        String sql = "DELETE FROM Products WHERE productId= ?";
-
-        try (Connection connect = connect();
-             PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, productId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+            DataBase.delete("Products", "productId",productId);
     }
 
     public static ArrayList<Product> getAllProducts() {

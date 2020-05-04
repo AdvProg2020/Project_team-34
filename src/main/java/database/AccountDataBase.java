@@ -5,7 +5,9 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
+import com.sun.org.apache.bcel.internal.generic.DADD;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -83,16 +85,7 @@ public class AccountDataBase {
     }
 
     public static void delete(String username) {
-        String sql = "DELETE FROM Accounts WHERE username= ?";
-
-        try (Connection connect = DataBase.connect();
-             PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, username);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        DataBase.delete("Accounts", "username",username);
     }
 
 

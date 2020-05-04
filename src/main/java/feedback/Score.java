@@ -13,6 +13,8 @@ import java.util.ArrayList;
 
 public class Score {
     private static ArrayList<Score> scores;
+    private static int allCreatedScoreNum = 0 ;
+    private String identifier ;
     private Customer customer;
     private Product product;
     private float score;
@@ -22,6 +24,15 @@ public class Score {
         this.score = score;
         this.customer = customer;
         this.product = product;
+        this.identifier = generateIdentifier();
+        allCreatedScoreNum ++ ;
+    }
+
+    public Score(String identifier, Customer customer, Product product, float score) {
+        this.identifier = identifier;
+        this.customer = customer;
+        this.product = product;
+        this.score = score;
     }
 
     public Score(float score, Customer customer) {
@@ -41,6 +52,10 @@ public class Score {
         return score;
     }
 
+    public String getIdentifier() {
+        return identifier;
+    }
+
     public boolean canCustomerRateThisProduct(Customer customer){
         return false;
     }
@@ -55,6 +70,10 @@ public class Score {
             }
         }
         return total/counter;
+    }
+
+    private String generateIdentifier(){
+        return "T34P" + String.format("%015d", allCreatedScoreNum + 1);
     }
 
     public static void importAllData(){

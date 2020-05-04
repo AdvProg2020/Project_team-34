@@ -8,39 +8,27 @@ import product.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.HashMap;
+
+import static database.DataBase.connect;
 
 public class CommentDataBase {
 
     public static void createNewTable() {
-        String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
 
-        String sql = "CREATE TABLE IF NOT EXISTS Comments (\n"
-                + " commentId String,\n"
-                + "	customerUsername String,\n"
-                + "	productId String, \n"
-                + "title String, \n"
-                + "content String, \n"
-                + "	commentState String , \n"
-                + "customerBoughtThisProduct boolean \n"
-                + ");";
-        try (Connection connection = DriverManager.getConnection(url);
-             Statement statement = connection.createStatement()) {
-            statement.execute(sql);
-        } catch (SQLException exception) {
-            System.out.println(exception.getMessage());
-        }
+        HashMap<String, String> content = new HashMap<>();
+        content.put("commentId", "String");
+        content.put("name" , "String");
+        content.put("customerUsername", "String");
+        content.put("productId", "String");
+        content.put("title" , "String");
+        content.put("content", "String");
+        content.put("commentState", "String");
+        content.put("customerBoughtThisProduct", "boolean");
+
+        DataBase.createNewTable("Comments", content);
     }
 
-    private static Connection connect() {
-        String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
-        Connection connection = null;
-        try {
-            connection = DriverManager.getConnection(url);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
-        return connection;
-    }
 
     public static void add(Comment comment) {
         if (doesCommentAlreadyExists(comment)) {
@@ -83,16 +71,7 @@ public class CommentDataBase {
     }
 
     public static void delete(String commentId) {
-        String sql = "DELETE FROM Comments WHERE commentId= ?";
-
-        try (Connection connect = connect();
-             PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, commentId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        DataBase.delete("Comments", "commentId", commentId);
     }
 
 

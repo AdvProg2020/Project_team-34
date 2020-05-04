@@ -57,16 +57,7 @@ public class ProductInCartDataBase {
     }
 
     public static void delete(String productInCartId) {
-        String sql = "DELETE FROM ProductInCarts WHERE productInCartId= ?";
-
-        try (Connection connect = connect();
-             PreparedStatement preparedStatement = connect.prepareStatement(sql)) {
-
-            preparedStatement.setString(1, productInCartId);
-            preparedStatement.executeUpdate();
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+        DataBase.delete("ProductInCarts", "productInCartId", productInCartId);
     }
 
 

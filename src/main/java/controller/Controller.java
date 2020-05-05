@@ -602,10 +602,4 @@ public class Controller {
     public void controlEditCategory(String categoryName, String newName) throws ExceptionalMassage {
 
     }
-
-    public void checkGit() {
-        System.out.println("Hi Git");
-    }
-
-
 }

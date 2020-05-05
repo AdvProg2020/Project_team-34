@@ -603,7 +603,9 @@ public class Controller {
 
     }
 
-
+    public void checkGit() {
+        System.out.println("Hi Git");
+    }
 
 
 }

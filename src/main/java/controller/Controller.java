@@ -25,13 +25,14 @@ import java.util.HashMap;
 public class Controller {
     private Account account;
     private Cart cart;
-    private Menu menu;
     private boolean isFirstSupervisorCreated;
+    private HashMap<String, ArrayList<String>> filter;
 
     public Controller() {
         account = null;
         cart = new Cart(null);
         isFirstSupervisorCreated = false;
+        filter = new HashMap<>();
     }
 
     public boolean hasSomeOneLoggedIn(){
@@ -252,13 +253,26 @@ public class Controller {
     public void controlLogout() {
         account = null;
         cart = new Cart(null);
+        filter = new HashMap<>();
+    }
+
+    public void addFilter(String key, String value) {
+
+    }
+
+    public void removeFilter(String key, String value) {
+
+    }
+
+    public ArrayList<Product> applyFilter() {
+        return null;
     }
 
     public String controlViewPersonalInfo() {
         return String.valueOf(account);
     }
 
-    public Response controlEditField( String field, String newValue) {
+    public Response controlEditField(String field, String newValue) {
         return null;
     }
 

@@ -109,8 +109,9 @@ public abstract class Menu {
                     @Override
                     public void execute() {
                         controller.controlLogout();
-                        parentMenu.show();
-                        parentMenu.execute();
+                        Menu newLoginMenu = new LoginMenu(null);
+                        newLoginMenu.show();
+                        newLoginMenu.execute();
                     }
                 };
                 menusInClone.put("^logout$", LogoutCommand);

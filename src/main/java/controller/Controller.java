@@ -6,6 +6,7 @@ import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
 import exceptionalMassage.ExceptionalMassage;
+import feedback.CommentState;
 import feedback.Score;
 import cart.ShippingInfo;
 import menu.menuAbstract.Menu;
@@ -17,6 +18,7 @@ import product.Product;
 import request.Request;
 import request.SaleRequest;
 
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -41,6 +43,10 @@ public class Controller {
 
     public String loggedInAccountType() {
         return account.getType();
+    }
+
+    public Account getAccount() {
+        return account;
     }
 
     public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
@@ -73,7 +79,10 @@ public class Controller {
         cart.decreaseProductCount(product, supplier);
     }
 
-    public Cart controlViewCart() {
+    public Cart controlViewCart() throws ExceptionalMassage {
+        if (!account.getType().equals("Customer")) {
+            throw new ExceptionalMassage("Cart is only for customer account.");
+        }
         return cart;
     }
 
@@ -201,6 +210,7 @@ public class Controller {
             controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
         if (type.equals("supplier"))
             controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
+        //check name of company is not duplicate
         if (type.equals("supervisor"))
             controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
         controlLogin(username, password);
@@ -228,6 +238,7 @@ public class Controller {
         new Supervisor(username, name, familyName, email, phoneNumber, password, credit);
         isFirstSupervisorCreated = true;
     }
+
 
     public void controlLogin(String username, String password) throws ExceptionalMassage {
         Account account = Account.getAccountByUsername(username);
@@ -372,7 +383,7 @@ public class Controller {
         }
     }
 
-    public Response controlRemoveProductById(String productId) {
+    public Response controlRemoveProductById(String productId) throws ExceptionalMassage{
         Product product = Product.getProductById(productId);
         if (product != null) {
             product.removeProduct();
@@ -393,7 +404,7 @@ public class Controller {
         return null;
     }
 
-    public String controlCompare(String firstProductId , String secondProductId){
+    public String controlCompare(String firstProductId , String secondProductId) throws ExceptionalMassage{
         return null;
     }
 
@@ -449,7 +460,7 @@ public class Controller {
         controlGetDiscountByCode(code).setMaxDiscountPercent(newMaxDiscount);
     }
 
-    public void controlCreateCodedDiscount(Date startDate, Date endDate, int percent, int maxDiscountAmount) {
+    public void controlCreateCodedDiscount(Date startDate, Date endDate, int percent, int maxDiscountAmount) throws ExceptionalMassage {
         new CodedDiscount(startDate, endDate, percent, maxDiscountAmount);
     }
 
@@ -526,5 +537,73 @@ public class Controller {
     public float controlGetAverageScoreByProduct(Product product){
         return  Score.getAverageScoreForProduct(product);
     }
+
+    public ArrayList<Comment> controlGetConfirmedComments(){
+        ArrayList<Comment> confirmedComments = new ArrayList<>();
+        for (Comment comment : Comment.getComments()) {
+            if(comment.getState() == CommentState.CONFIRMED){
+                confirmedComments.add(comment);
+            }
+        }
+        return confirmedComments;
+    }
+
+    //Added methods Needed in menus!
+    public String controlGetAllCategories(){
+        //I need a printable string of all categories!
+        return null;
+    }
+
+    public ArrayList<String> controlGetAllProducts(ArrayList<String> sorts,ArrayList<String> filters){
+        //I need a Sorted and filtered list of products! and toString form of product need to have a quick introduction!
+        return null;
+    }
+
+    public ArrayList<Supplier> controlGetAllSuppliersForAProduct(Product product){
+        // method is clear from its name !
+        return null;
+    }
+
+    public boolean doesThisSupplierSellsThisProduct(Product product){
+        //method is clear from its name!
+        return false;
+    }
+
+    public String controlGetDigestInfosOfProduct(Product product){
+        // I need a Digest info of a product ! refer to Doc!
+        return null;
+    }
+
+    public ArrayList<String> controlGetAllAvailableFilters(){
+        // method is clear from its name!
+        return null;
+    }
+
+    public ArrayList<String> controlGetAllAvailableSorts(){
+        // method is clear from its name !
+        return null;
+    }
+
+    public boolean isThisFilterAvailable(String filter){
+        // method is clear from its name !
+        return false;
+    }
+
+    public boolean isThisSortAvailable(String sort){
+        // method is clear from its name !
+        return false;
+    }
+
+    public String controlGetAttributesOfProduct(Product product){
+        //return the attributes of a product in a string form!! refer to doc!
+        return null;
+    }
+
+    public void controlEditCategory(String categoryName, String newName) throws ExceptionalMassage {
+
+    }
+
+
+
 
 }

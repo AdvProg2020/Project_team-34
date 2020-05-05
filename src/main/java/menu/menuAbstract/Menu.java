@@ -1,6 +1,7 @@
 package menu.menuAbstract;
 
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import menu.loginMenu.LoginMenu;
 import menu.profile.customerProfileMenu.CustomerProfileMenu;
 import menu.profile.supervisorProfileMenu.SupervisorProfileMenu;
@@ -143,10 +144,6 @@ public abstract class Menu {
                 menuForShowClone.add("Profile");
             }
         }
-        System.out.println(menuName + ":");
-        for (String menu : menuForShowClone) {
-            System.out.println(menu);
-        }
     }
 
     public void execute() {
@@ -158,6 +155,8 @@ public abstract class Menu {
                 break;
             }
         }
+        nextMenu.command = command;
+        //check aryan
         nextMenu.show();
         nextMenu.execute();
     }

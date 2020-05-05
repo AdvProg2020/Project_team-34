@@ -1,6 +1,8 @@
 package menu.products;
 
+import discount.Sale;
 import menu.menuAbstract.Menu;
+import product.Product;
 
 public class SalesMenu extends Menu {
     public SalesMenu(Menu parentMenu) {
@@ -15,12 +17,18 @@ public class SalesMenu extends Menu {
         Menu showProducts = new Menu("Show Products", this) {
             @Override
             public void show() {
-                super.show();
+
             }
 
             @Override
             public void execute() {
-                super.execute();
+                //Need Modification!
+                for (String product : controller.controlGetAllProducts(SortingMenu.currentSortsList,FilteringMenu.currentFiltersList)) {
+                    //Need a quick introduction!
+                    System.out.println(product);
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^show products$", showProducts);
@@ -29,5 +37,17 @@ public class SalesMenu extends Menu {
 
         menusIn.put("^show product ([^\\s]+)$", new ProductMenu(this));
         menuForShow.add("Show Product By Id");
+    }
+
+    @Override
+    public void show() {
+        for (Sale sale : controller.controlGetAllSales()) {
+            System.out.println("Sale id : " + sale.getOffId());
+            for (Product product : sale.getProducts()) {
+                System.out.println(product);
+                //Need modification!
+            }
+        }
+        super.show();
     }
 }

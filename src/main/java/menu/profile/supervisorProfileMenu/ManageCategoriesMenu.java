@@ -9,82 +9,95 @@ import java.util.regex.Matcher;
 public class ManageCategoriesMenu extends Menu {
     public ManageCategoriesMenu(Menu parentMenu) {
         super("Manage Categories Menu", parentMenu);
-
-        Menu AddCategoryCommand = new Menu("Add Category Command", this) {
+        Menu  editCategory = new Menu("Edit Category", this) {
             @Override
             public void show() {
             }
 
             @Override
             public void execute() {
-                Matcher commandMatcher = getMatcher(parentMenu.command, "^add (\\w+)$");
-                commandMatcher.find();
-                String name = commandMatcher.group(1);
-                System.out.println("Enter parent category name: ");
-                String parentCategoryName = scanner.nextLine();
-                System.out.println("Is this category a category classifier (y/n): ");
-                String isParentInput = scanner.nextLine();
-                if (isParentInput.equals("y") || isParentInput.equals("n")) {
-                    boolean isParent;
-                    isParent = isParentInput.equals("y");
+                String regex = "^edit (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    String newName;
+                    System.out.println("Enter the new Name: ");
+                    newName  = scanner.nextLine();
                     try {
-                        controller.controlAddCategory(name, isParent, parentCategoryName);
-                    } catch (ExceptionalMassage e) {
-                        System.out.println(e.getMessage());
+                        controller.controlEditCategory(matcher.group(1), newName);
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
+                parentMenu.show();
+                parentMenu.execute();
+            }
+        };
+        menusIn.put("^edit \\w+$", editCategory);
+        menuForShow.add("Edit");
+
+        Menu RemoveProduct = new Menu("Add category", this) {
+            @Override
+            public void show() {
+            }
+
+            @Override
+            public void execute() {
+                String newCategoryName;
+                String parentName;
+                System.out.println("Enter the name:");
+                newCategoryName = scanner.nextLine();
+                System.out.println("Enter the upper level category(if you dont want enter 0)");
+                parentName = scanner.nextLine();
+                if(parentName == "0"){
+                    try{
+                        controller.controlAddCategory(newCategoryName, true,null);
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                        parentMenu.show();
+                        parentMenu.execute();
                     }
                 } else {
-                    System.out.println("Invalid input.");
+                    try{
+                        controller.controlAddCategory(newCategoryName, false,parentName);
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                        parentMenu.show();
+                        parentMenu.execute();
+                    }
                 }
                 parentMenu.show();
                 parentMenu.execute();
             }
         };
-        menusIn.put("^add (\\w+)$", AddCategoryCommand);
+        menusIn.put("^add \\w+$", RemoveProduct);
         menuForShow.add("Add Category");
 
-        Menu RemoveCategoryCommand = new Menu("Remove Category Command", this) {
+        Menu RemoveCategory = new Menu("Remove Category", this) {
             @Override
             public void show() {
             }
-
             @Override
             public void execute() {
-                Matcher commandMatcher = getMatcher(parentMenu.command, "^add (\\w+)$");
-                commandMatcher.find();
-                String name = commandMatcher.group(1);
+                String name;
+                System.out.println("Enter the name:");
+                name = scanner.nextLine();
                 try {
                     controller.controlRemoveCategory(name);
-                } catch (ExceptionalMassage e) {
-                    System.out.println(e.getMessage());
+                } catch (ExceptionalMassage ex){
+                    System.out.println(ex.getMessage());
                 }
                 parentMenu.show();
                 parentMenu.execute();
             }
         };
-        menusIn.put("^remove (\\w+)$", RemoveCategoryCommand);
-        menuForShow.add("Remove Category");
+        menusIn.put("^remove \\w+$", RemoveProduct);
+        menuForShow.add("Remove");
 
-        Menu EditCategoryCommand = new Menu("Edit Category Command", this) {
-            @Override
-            public void show() {
-            }
+    }
 
-            @Override
-            public void execute() {
-                Matcher commandMatcher = getMatcher(parentMenu.command, "^add (\\w+)$");
-                commandMatcher.find();
-                String name = commandMatcher.group(1);
-                Category category = Category.getCategoryByName(name);
-                if (category == null) {
-                    System.out.println("Category not found.");
-                } else {
-                    EditCategoryMenu editCategoryMenu = new EditCategoryMenu("Edit Category", parentMenu, category);
-                    editCategoryMenu.show();
-                    editCategoryMenu.execute();
-                }
-            }
-        };
-        menusIn.put("^edit (\\w+)$", EditCategoryCommand);
-        menuForShow.add("Edit Category");
+    @Override
+    public void show() {
+        System.out.println(controller.controlGetAllCategories());
+        super.show();
     }
 }

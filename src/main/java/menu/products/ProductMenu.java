@@ -1,24 +1,31 @@
 package menu.products;
 
+import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 import product.Product;
+
+import java.util.regex.Matcher;
 
 public class ProductMenu extends Menu {
     private Product currentProduct;
     public ProductMenu(Menu parentMenu) {
         super("Product Menu", parentMenu);
-        menusIn.put("^digest$", new DigestMenu(this));
+
+
+        menusIn.put("^digest$", new DigestMenu(this,currentProduct));
         menuForShow.add("Digest Menu");
 
         Menu attributes = new Menu("Attributes", this) {
             @Override
             public void show() {
-                super.show();
+                System.out.println(controller.controlGetAttributesOfProduct(currentProduct));
             }
 
             @Override
             public void execute() {
-                super.execute();
+
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^attributes$", attributes);
@@ -27,21 +34,47 @@ public class ProductMenu extends Menu {
         Menu compare = new Menu("Compare" , this) {
             @Override
             public void show() {
-                super.show();
+                String regex = "^compare ([^\\s]+)";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    try {
+                        System.out.println(controller.controlCompare(currentProduct.getProductId(), matcher.group(1)));
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
             }
 
             @Override
             public void execute() {
-                super.execute();
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^compare ([^\\s]+)", compare);
         menuForShow.add("Compare [productID]");
 
-        menusIn.put("^Comments$", new CommentMenu(this));
+        menusIn.put("^Comments$", new CommentMenu(this, currentProduct));
         menuForShow.add("Comments");
 
 
 
+
+
+    }
+
+    @Override
+    public void execute(){
+        String regex = "^show product ([^\\s]+)$";
+        Matcher matcher = getMatcher(command, regex);
+        if(matcher.find()){
+            if(Product.getProductById(matcher.group(1)) == null){
+                System.out.println("No such product");
+                parentMenu.show();
+                parentMenu.execute();
+            }
+            currentProduct = Product.getProductById(matcher.group(1));
+        }
+        super.execute();
     }
 }

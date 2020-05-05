@@ -5,6 +5,12 @@ import product.Product;
 
 import java.util.ArrayList;
 
+/**
+ * @author soheil
+ * @since 0.01
+ */
+
+
 
 public class Comment {
     private static ArrayList<Comment> comments;

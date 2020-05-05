@@ -1,5 +1,6 @@
 package menu.profile.supervisorProfileMenu;
 
+import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 
 public class ManageProductsMenu extends Menu {
@@ -13,6 +14,16 @@ public class ManageProductsMenu extends Menu {
 
             @Override
             public void execute() {
+                String id;
+                System.out.println("Enter the product ID");
+                id = scanner.nextLine();
+                try {
+                    controller.controlRemoveProductById(id);
+                } catch (ExceptionalMassage ex){
+                    System.out.println(ex.getMessage());
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^remove \\w+$", RemoveProduct);

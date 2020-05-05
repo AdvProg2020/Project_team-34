@@ -1,24 +1,43 @@
 package menu.products;
 
 import menu.menuAbstract.Menu;
+import product.Category;
+
+import java.sql.SQLOutput;
+import java.util.ArrayList;
 
 public class AllProductsMenu extends Menu {
+    private Category category;
     public AllProductsMenu(Menu parentMenu) {
         super("All Products Menu", parentMenu);
-
         Menu viewCategories = new Menu("View Categories", this) {
             @Override
             public void show() {
-                super.show();
+                System.out.println("Categories: ");
             }
 
             @Override
             public void execute() {
-                super.execute();
+                System.out.println(controller.controlGetAllCategories());
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^view categories$", viewCategories);
         menuForShow.add("View Categories");
+
+        Menu selectCategory = new Menu("Select Category", this) {
+            @Override
+            public void show() {
+
+            }
+
+            @Override
+            public void execute() {
+
+            }
+        };
+
 
         menusIn.put("^filtering$", new FilteringMenu(this));
         menuForShow.add("Filtering");
@@ -29,12 +48,17 @@ public class AllProductsMenu extends Menu {
         Menu showProducts = new Menu("Show Products", this) {
             @Override
             public void show() {
-                super.show();
+                System.out.println("All products : ");
             }
 
             @Override
             public void execute() {
-                super.execute();
+                for (String product : controller.controlGetAllProducts(SortingMenu.currentSortsList,FilteringMenu.currentFiltersList)) {
+                    //Need a quick introduction!
+                    System.out.println(product);
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^show products$", showProducts);
@@ -46,4 +70,5 @@ public class AllProductsMenu extends Menu {
 
 
     }
+
 }

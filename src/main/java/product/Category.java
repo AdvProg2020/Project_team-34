@@ -3,10 +3,10 @@ package product;
 import exceptionalMassage.ExceptionalMassage;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * @author Aryan Ahadinia
+ * @since 0.0.1
  */
 
 public class Category {
@@ -17,8 +17,6 @@ public class Category {
     private final String parentCategoryName;
     private final ArrayList<String> allCategoriesInName;
     private final ArrayList<Product> allProductsIn;
-
-    private HashMap<String, ArrayList<String>> specificationFilter;
 
     //Constructors:
     private Category() {
@@ -43,11 +41,11 @@ public class Category {
             this.allProductsIn = new ArrayList<>();
             this.allCategoriesInName = null;
         }
-        specificationFilter = new HashMap<>();
+        allCategories.add(this);
         //file modifications required
     }
 
-    public static void makeInstance(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
+    public static Category getInstance(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
         if (getCategoryByName(name) != null)
             throw new ExceptionalMassage("Category with name " + name + " has already created.");
         Category parentCategory = getCategoryByName(parentCategoryName);
@@ -55,7 +53,9 @@ public class Category {
             throw new ExceptionalMassage("Parent category not found.");
         if (!parentCategory.isCategoryClassifier())
             throw new ExceptionalMassage("Category " + parentCategoryName + " is a product classifier.");
-        parentCategory.addSubCategory(name, isParentCategory);
+        Category addingCategory = new Category(name, isParentCategory, parentCategoryName);
+        parentCategory.addSubCategory(addingCategory);
+        return addingCategory;
     }
 
     //Getters:
@@ -117,10 +117,17 @@ public class Category {
         //file modification required
     }
 
+    public void addSubCategory(Category addingCategory) throws ExceptionalMassage {
+        if (!this.isCategoryClassifier())
+            throw new ExceptionalMassage("Cannot add a subcategory to this category. <Category.addSubCategory>");
+        this.allCategoriesInName.add(addingCategory.getName());
+        //file modifications required
+    }
+
     public void addSubCategory(String addingCategoryName, boolean isParentCategory) throws ExceptionalMassage {
         if (!this.isCategoryClassifier())
             throw new ExceptionalMassage("Cannot add a subcategory to this category. <Category.addSubCategory>");
-        Category.makeInstance(addingCategoryName, isParentCategory, this.getName());
+        Category.getInstance(addingCategoryName, isParentCategory, this.getName());
         //file modifications required
     }
 
@@ -141,7 +148,7 @@ public class Category {
             previousReference.add(superCategory);
             return previousReference;
         }
-        previousReference = getCategoryByName(this.parentCategoryName).getReference();
+        previousReference = this.getParentCategory().getReference();
         previousReference.add(this);
         return previousReference;
         //completed
@@ -150,10 +157,10 @@ public class Category {
     public ArrayList<Product> getAllProductInAllSubCategories() {
         ArrayList<Product> allProductsInAll = new ArrayList<>();
         if (!this.isCategoryClassifier()) {
-            allProductsInAll.addAll(allProductsIn);
+            allProductsInAll.addAll(this.allProductsIn);
         } else {
-            for (String categoryName : allCategoriesInName) {
-                allProductsInAll.addAll(Category.getCategoryByName(categoryName).getAllProductInAllSubCategories());
+            for (Category category : this.getAllCategoriesIn()) {
+                allProductsInAll.addAll(category.getAllProductInAllSubCategories());
             }
         }
         return allProductsInAll;

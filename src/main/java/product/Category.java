@@ -11,27 +11,6 @@ import java.util.HashMap;
  */
 
 public class Category {
-    private static Comparator<Product> AverageScoreSort = new Comparator<Product>() {
-        @Override
-        public int compare(Product product, Product t1) {
-            return 0;
-        }
-    };
-
-    private static Comparator<Product> NumberOfViewsSort = new Comparator<Product>() {
-        @Override
-        public int compare(Product product, Product t1) {
-            return 0;
-        }
-    };
-
-    private static Comparator<Product> TimeSort = new Comparator<Product>() {
-        @Override
-        public int compare(Product product, Product t1) {
-            return 0;
-        }
-    };
-
     public static ArrayList<Category> allCategories = new ArrayList<>();
     public static final Category superCategory = new Category();
 

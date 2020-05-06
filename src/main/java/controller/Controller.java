@@ -19,10 +19,7 @@ import request.Request;
 import request.SaleRequest;
 
 import javax.swing.*;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 
 public class Controller {
     private Account account;
@@ -423,8 +420,32 @@ public class Controller {
     public Response controlDisableFilter(String filter){
         return Response.OK;
     }
-    public void controlSort(String typeOfSort){
 
+    public void controlSort(String typeOfSort){
+        Comparator<Product> SortByAverageScore = new Comparator<Product>() {
+            @Override
+            public int compare(Product firstProduct, Product secondProduct) {
+                return (int)((Score.getAverageScoreForProduct(firstProduct) - Score.getAverageScoreForProduct(secondProduct)) * 100);
+            }
+        };
+
+        Comparator<Product> SortByTime = new Comparator<Product>() {
+            @Override
+            public int compare(Product firstProduct, Product secondProduct) {
+                return convertProductIdToInt(firstProduct.getProductId())- convertProductIdToInt(secondProduct.getProductId());
+            }
+
+            private int convertProductIdToInt(String productId){
+                return Integer.parseInt(productId.substring(4));
+            }
+        };
+
+        Comparator<Product> SortByNumberOfViews = new Comparator<Product>() {
+            @Override
+            public int compare(Product firstProduct, Product secondProduct) {
+                return firstProduct.getNumberOfViews() - secondProduct.getNumberOfViews();
+            }
+        };
     }
 
     public String controlShowCurrentSort(){

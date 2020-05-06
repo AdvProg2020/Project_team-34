@@ -26,6 +26,7 @@ public class Controller {
     private Cart cart;
     private boolean isFirstSupervisorCreated;
     private HashMap<String, ArrayList<String>> filter;
+    private String sortType;
 
     public Controller() {
         account = null;

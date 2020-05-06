@@ -3,7 +3,6 @@ package product;
 import exceptionalMassage.ExceptionalMassage;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 
 /**
@@ -11,16 +10,15 @@ import java.util.HashMap;
  */
 
 public class Category {
-    public static ArrayList<Category> allCategories = new ArrayList<>();
+    public static final ArrayList<Category> allCategories = new ArrayList<>();
     public static final Category superCategory = new Category();
 
     private String name;
-    private String parentCategoryName;
-    private ArrayList<Product> allProductsIn;
-    private ArrayList<String> allCategoriesInName;
-    private HashMap<String, ArrayList<String>> specificationFilter;
-    private Comparator<Product> sortType;
+    private final String parentCategoryName;
+    private final ArrayList<String> allCategoriesInName;
+    private final ArrayList<Product> allProductsIn;
 
+    private HashMap<String, ArrayList<String>> specificationFilter;
 
     //Constructors:
     private Category() {
@@ -28,34 +26,36 @@ public class Category {
         this.parentCategoryName = null;
         this.allProductsIn = null;
         this.allCategoriesInName = new ArrayList<>();
+        allCategories.add(this);
         //DataBase Banned
     }
 
-    private Category(String name, boolean isParentCategory, Category parentCategory) {
+    private Category(String name, boolean isParentCategory, String parentCategoryName) {
         this.name = name;
-        if (parentCategory == null) {
-            parentCategory = superCategory;
+        if (parentCategoryName == null) {
+            parentCategoryName = superCategory.getName();
         }
-        this.parentCategoryName = parentCategory.getName();
+        this.parentCategoryName = parentCategoryName;
         if (isParentCategory) {
-            allCategoriesInName = new ArrayList<>();
-            allProductsIn = null;
+            this.allCategoriesInName = new ArrayList<>();
+            this.allProductsIn = null;
         } else {
-            allProductsIn = new ArrayList<>();
-            allCategoriesInName = null;
+            this.allProductsIn = new ArrayList<>();
+            this.allCategoriesInName = null;
         }
         specificationFilter = new HashMap<>();
         //file modifications required
     }
 
-    public static Category getInstance(String name, boolean isParentCategory, Category parentCategory) throws ExceptionalMassage {
+    public static void makeInstance(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
         if (getCategoryByName(name) != null)
             throw new ExceptionalMassage("Category with name " + name + " has already created.");
-        if (!parentCategory.canBeParentCategory())
-            throw new ExceptionalMassage("Category " + parentCategory.getName() + " is a product classifier.");
-        Category category = new Category(name, isParentCategory, parentCategory);
-        parentCategory.addSubCategory(category);
-        return category;
+        Category parentCategory = getCategoryByName(parentCategoryName);
+        if (parentCategory == null)
+            throw new ExceptionalMassage("Parent category not found.");
+        if (!parentCategory.isCategoryClassifier())
+            throw new ExceptionalMassage("Category " + parentCategoryName + " is a product classifier.");
+        parentCategory.addSubCategory(name, isParentCategory);
     }
 
     //Getters:
@@ -82,62 +82,55 @@ public class Category {
     //Setters:
     public void setName(String name) throws ExceptionalMassage {
         if (getCategoryByName(name) != null) {
-            throw new ExceptionalMassage("Category with this name has already initialized.");
+            throw new ExceptionalMassage("Category with this name has already initialized. <Category.setName>");
         }
         this.name = name;
         //file modification required
     }
 
     //Modeling methods:
+    public boolean isCategoryClassifier() {
+        return this.allProductsIn == null;
+    }
+
+    public boolean isProductIn(Product product) {
+        return this.allProductsIn.contains(product);
+    }
+
     public void addProduct(Product product) throws ExceptionalMassage {
-        if (allProductsIn == null)
-            throw new ExceptionalMassage("Cannot Add Product to this category.");
-        if (allProductsIn.contains(product))
-            throw new ExceptionalMassage("This product has already added to this category.");
-        allProductsIn.add(product);
+        if (this.isCategoryClassifier())
+            throw new ExceptionalMassage("Cannot Add Product to this category. <Category.addProduct>");
+        if (this.isProductIn(product))
+            throw new ExceptionalMassage("This product has already added to this category. <Category.addProduct>");
+        if (Category.getProductCategory(product) != null)
+            throw new ExceptionalMassage("This product has already added to another category. <Category.addProduct>");
+        this.allProductsIn.add(product);
         //file modification required
     }
 
     public void removeProduct(Product product) throws ExceptionalMassage {
-        if (allProductsIn == null)
-            throw new ExceptionalMassage("This is not a product category.");
-        if (!allProductsIn.contains(product))
-            throw new ExceptionalMassage("This product is not in this category.");
-        allProductsIn.remove(product);
+        if (this.isCategoryClassifier())
+            throw new ExceptionalMassage("This is not a product category. <Category.removeProduct>");
+        if (!this.isProductIn(product))
+            throw new ExceptionalMassage("This product is not in this category. <Category.removeProduct>");
+        this.allProductsIn.remove(product);
         //file modification required
     }
 
-    public boolean isProductIn(Product product) {
-        return allProductsIn.contains(product);
-    }
-
-    public boolean canBeParentCategory() {
-        return allProductsIn == null;
-    }
-
-    public void addSubCategory(Category subCategory) throws ExceptionalMassage {
-        if (allCategoriesInName == null)
-            throw new ExceptionalMassage("Cannot add a subcategory to this category.");
-        if (allCategoriesInName.contains(subCategory.getName()))
-            throw new ExceptionalMassage("This subcategory has already added.");
-        allCategoriesInName.add(subCategory.getName());
+    public void addSubCategory(String addingCategoryName, boolean isParentCategory) throws ExceptionalMassage {
+        if (!this.isCategoryClassifier())
+            throw new ExceptionalMassage("Cannot add a subcategory to this category. <Category.addSubCategory>");
+        Category.makeInstance(addingCategoryName, isParentCategory, this.getName());
         //file modifications required
     }
 
-    public void removeSubCategory(Category subCategory) throws ExceptionalMassage {
-        if (allCategoriesInName == null)
-            throw new ExceptionalMassage("This category is a product classifier.");
-        if (!allCategoriesInName.contains(subCategory.getName()))
-            throw new ExceptionalMassage("This subcategory is not in this category.");
-        if (subCategory.allProductsIn != null) {
-            if (subCategory.allProductsIn.size() != 0)
-                throw new ExceptionalMassage("You must remove all products in before.");
-        }
-        if (subCategory.allCategoriesInName != null) {
-            if (subCategory.allCategoriesInName.size() != 0)
-                throw new ExceptionalMassage("You must remove all categories in before.");
-        }
-        allCategoriesInName.remove(subCategory.getName());
+    public void removeSubCategory(String removingCategoryName) throws ExceptionalMassage {
+        if (!this.isCategoryClassifier())
+            throw new ExceptionalMassage("This category is a product classifier. <Category.removeSubCategory>");
+        if (!this.allCategoriesInName.contains(removingCategoryName))
+            throw new ExceptionalMassage("This subcategory is not in this category. <Category.removeSubCategory>");
+        //check if category is empty if required
+        this.allCategoriesInName.remove(removingCategoryName);
         //file modification required
     }
 
@@ -148,7 +141,7 @@ public class Category {
             previousReference.add(superCategory);
             return previousReference;
         }
-        previousReference = parentCategory.getReference();
+        previousReference = getCategoryByName(this.parentCategoryName).getReference();
         previousReference.add(this);
         return previousReference;
         //completed
@@ -156,11 +149,11 @@ public class Category {
 
     public ArrayList<Product> getAllProductInAllSubCategories() {
         ArrayList<Product> allProductsInAll = new ArrayList<>();
-        if (allCategoriesIn == null) {
+        if (!this.isCategoryClassifier()) {
             allProductsInAll.addAll(allProductsIn);
         } else {
-            for (Category category : allCategoriesIn) {
-                allProductsInAll.addAll(category.getAllProductInAllSubCategories());
+            for (String categoryName : allCategoriesInName) {
+                allProductsInAll.addAll(Category.getCategoryByName(categoryName).getAllProductInAllSubCategories());
             }
         }
         return allProductsInAll;
@@ -170,36 +163,25 @@ public class Category {
         return getAllProductInAllSubCategories().contains(product);
     }
 
-    public Category getCategoryByNameIn(String name) {
-        for (Category category : allCategoriesIn) {
-            if (category.getName().equals(name)) {
-                return category;
-            }
-        }
-        for (Category category : allCategoriesIn) {
-            Category temp = category.getCategoryByNameIn(name);
-            if (temp != null) {
-                return temp;
+    public static Category getCategoryByName(String searchingName) {
+        if (allCategories.size() != 0) {
+            for (Category category : allCategories) {
+                if (category.getName().equals(searchingName)) {
+                    return category;
+                }
             }
         }
         return null;
     }
 
-    public static Category getCategoryByName(String name) {
-        return superCategory.getCategoryByNameIn(name);
-    }
-
-    public void addSpecialFilter(String key, ArrayList<String> values) throws ExceptionalMassage {
-        if (specificationFilter.containsKey(key))
-            throw new ExceptionalMassage("This filter has already added.");
-        specificationFilter.put(key, values);
-        //file modification
-    }
-
-    public void removeSpecialFilter(String key) throws ExceptionalMassage {
-        if (!specificationFilter.containsKey(key))
-            throw new ExceptionalMassage("This filter is not in this category.");
-        specificationFilter.remove(key);
-        //file modification
+    public static Category getProductCategory(Product product) {
+        if (allCategories.size() != 0) {
+            for (Category category : allCategories) {
+                if (category.isProductIn(product)) {
+                    return category;
+                }
+            }
+        }
+        return null;
     }
 }

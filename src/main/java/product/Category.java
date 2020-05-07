@@ -2,7 +2,9 @@ package product;
 
 import exceptionalMassage.ExceptionalMassage;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Set;
 
 /**
@@ -18,6 +20,8 @@ public class Category {
     private final String parentCategoryName;
     private final ArrayList<String> allCategoriesInName;
     private final ArrayList<Product> allProductsIn;
+    private HashMap<String, ArrayList<String>> filters;
+
 
     //Constructors:
     private Category() {
@@ -25,6 +29,7 @@ public class Category {
         this.parentCategoryName = null;
         this.allProductsIn = null;
         this.allCategoriesInName = new ArrayList<>();
+        this.filters = null;
         allCategories.add(this);
         //DataBase Banned
     }
@@ -38,8 +43,10 @@ public class Category {
         if (isParentCategory) {
             this.allCategoriesInName = new ArrayList<>();
             this.allProductsIn = null;
+            this.filters = null;
         } else {
             this.allProductsIn = new ArrayList<>();
+            this.filters = new HashMap<>();
             this.allCategoriesInName = null;
         }
         allCategories.add(this);
@@ -78,6 +85,10 @@ public class Category {
             allCategoriesIn.add(getCategoryByName(name));
         }
         return allCategoriesIn;
+    }
+
+    public HashMap<String, ArrayList<String>> getFilters() {
+        return filters;
     }
 
     //Setters:
@@ -199,5 +210,30 @@ public class Category {
             }
         }
         return null;
+    }
+
+    public void addFilter(String filterKey, String filterValue) throws ExceptionalMassage {
+        if (this.isCategoryClassifier())
+            throw new ExceptionalMassage("A category classifier category doesn't support filters. <Category.addFilter>");
+        if (this.filters.containsKey(filterKey)) {
+            ArrayList<String> filterKeyValues = this.filters.get(filterKey);
+            if (filterKeyValues.contains(filterValue))
+                throw new ExceptionalMassage("This filter has already added. <Category.addFilter>");
+            filterKeyValues.add(filterValue);
+        } else {
+            ArrayList<String> filterKeyValue = new ArrayList<>();
+            filterKeyValue.add(filterValue);
+            filters.put(filterKey, filterKeyValue);
+        }
+    }
+
+    public void removeFilter(String filterKey, String filterValue) throws ExceptionalMassage {
+        if (this.isCategoryClassifier())
+            throw new ExceptionalMassage("A category classifier category doesn't support filters. <Category.removeFilter>");
+        if (!this.filters.containsKey(filterKey))
+            throw new ExceptionalMassage("Filter with key " + filterKey + " not found. <Category.removeFilter>");
+        if (!this.filters.get(filterKey).contains(filterValue))
+            throw new ExceptionalMassage("\"" + filterValue + "\" " + "not found in " + "\"" + filterKey + "\". " + "<Category.removeFilter>");
+        filters.get(filterKey).remove(filterValue);
     }
 }

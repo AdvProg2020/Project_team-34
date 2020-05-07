@@ -13,7 +13,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static database.DataBase.connect;
+import static database.DataBase.*;
 
 public class ProductDataBase {
 
@@ -119,22 +119,6 @@ public class ProductDataBase {
         return false;
     }
 
-
-    private static String convertObjectToJsonString(Object object) {
-        Gson gson = new Gson();
-        return gson.toJson(object);
-    }
-    private static ArrayList<String> convertJsonToArrayList(String string) {
-        Gson gson = new Gson();
-        return (ArrayList<String>) gson.fromJson(string, new TypeToken<ArrayList<String>>() {
-        }.getType());
-    }
-
-    private static HashMap<String,Integer> convertJsonToHashMap(String string){
-        Gson gson = new Gson();
-        return (HashMap<String, Integer>) gson.fromJson(string, new TypeToken<HashMap<String,Integer>>() {
-        }.getType());
-    }
 
     public static void update(Product product) {
         delete(product.getProductId());

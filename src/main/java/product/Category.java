@@ -2,10 +2,8 @@ package product;
 
 import exceptionalMassage.ExceptionalMassage;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Set;
 
 /**
  * @author Aryan Ahadinia
@@ -20,7 +18,7 @@ public class Category {
     private final String parentCategoryName;
     private final ArrayList<String> allCategoriesInName;
     private final ArrayList<Product> allProductsIn;
-    private HashMap<String, ArrayList<String>> filters;
+    private final HashMap<String, ArrayList<String>> filters;
 
 
     //Constructors:

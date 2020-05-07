@@ -25,7 +25,6 @@ public class Category {
         this.parentCategoryName = null;
         this.allProductsIn = null;
         this.allCategoriesInName = new ArrayList<>();
-        filters = null;
         allCategories.add(this);
         //DataBase Banned
     }

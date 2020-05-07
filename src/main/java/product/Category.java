@@ -3,6 +3,7 @@ package product;
 import exceptionalMassage.ExceptionalMassage;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 /**
  * @author Aryan Ahadinia
@@ -24,6 +25,7 @@ public class Category {
         this.parentCategoryName = null;
         this.allProductsIn = null;
         this.allCategoriesInName = new ArrayList<>();
+        filters = null;
         allCategories.add(this);
         //DataBase Banned
     }
@@ -137,8 +139,16 @@ public class Category {
         if (!this.allCategoriesInName.contains(removingCategoryName))
             throw new ExceptionalMassage("This subcategory is not in this category. <Category.removeSubCategory>");
         //check if category is empty if required
+        Category.allCategories.remove(getCategoryByName(removingCategoryName));
         this.allCategoriesInName.remove(removingCategoryName);
         //file modification required
+    }
+
+    public static void removeCategory(String removingCategoryName) throws ExceptionalMassage {
+        Category removingCategory = Category.getCategoryByName(removingCategoryName);
+        if (removingCategory == null)
+            throw new ExceptionalMassage("Category not found. <Category.removingCategory>");
+        (removingCategory.getParentCategory()).removeSubCategory(removingCategoryName);
     }
 
     public ArrayList<Category> getReference() {

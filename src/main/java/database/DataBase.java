@@ -1,6 +1,10 @@
 package database;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class DataBase {
@@ -48,4 +52,21 @@ public class DataBase {
             System.out.println(e.getMessage());
         }
     }
+
+    public static String convertObjectToJsonString(Object object) {
+        Gson gson = new Gson();
+        return gson.toJson(object);
+    }
+    public static ArrayList<String> convertJsonToArrayList(String string) {
+        Gson gson = new Gson();
+        return (ArrayList<String>) gson.fromJson(string, new TypeToken<ArrayList<String>>() {
+        }.getType());
+    }
+
+    public static HashMap<String,Integer> convertJsonToHashMap(String string){
+        Gson gson = new Gson();
+        return (HashMap<String, Integer>) gson.fromJson(string, new TypeToken<HashMap<String,Integer>>() {
+        }.getType());
+    }
+
 }

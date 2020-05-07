@@ -57,6 +57,12 @@ public class DataBase {
         Gson gson = new Gson();
         return gson.toJson(object);
     }
+
+    public static HashMap<String, ArrayList<String>> convertJsonToSpecialHashMap(String string ){
+        Gson gson = new Gson();
+        return (HashMap<String, ArrayList<String>>) gson.fromJson(string, new TypeToken<ArrayList<String>>() {
+        }.getType());
+    }
     public static ArrayList<String> convertJsonToArrayList(String string) {
         Gson gson = new Gson();
         return (ArrayList<String>) gson.fromJson(string, new TypeToken<ArrayList<String>>() {

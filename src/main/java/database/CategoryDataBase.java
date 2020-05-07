@@ -1,7 +1,5 @@
 package database;
 
-import feedback.Comment;
-import feedback.CommentState;
 import product.Category;
 import product.Product;
 
@@ -9,8 +7,7 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static database.DataBase.connect;
-import static database.DataBase.convertObjectToJsonString;
+import static database.DataBase.*;
 
 public class CategoryDataBase {
 
@@ -20,26 +17,25 @@ public class CategoryDataBase {
         content.put("parentCategoryName" , "String");
         content.put("listOfAllProductsId", "String");
         content.put("listOfCategoriesInName", "String");
-        content.put("specification", "String");
+        content.put("filters", "String");
 
         DataBase.createNewTable("Categories", content);
     }
 
-    /*
     public static void add(Category category) {
-        if (doesScoreAlreadyExists(category)) {
+        if (doesCategoryAlreadyExists(category)) {
             return;
         }
-        String sql = "INSERT into scores (name , parentCategoryName, listOfAllProductsId, listOfCategoriesInName, specification) " +
+        String sql = "INSERT into scores (name , parentCategoryName, listOfAllProductsId, listOfCategoriesInName, filters) " +
                 "VALUES (?,?, ? )";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1,category.getName());
-            statement.setString(2,category.getParentCategory().getName();
+            statement.setString(2,category.getParentCategory().getName());
             statement.setString(3,convertObjectToJsonString(convertProductArrayListToStringArrayList( category.getAllProductsIn())));
-            statement.setString(4,convertObjectToJsonString(category.getAllCategoriesInName()));
-            statement.setString(5,convertObjectToJsonString(category.getSpecificationFilter()));
+            statement.setString(4,convertObjectToJsonString(convertCategoryArrayListToStringArrayList(category.getAllCategoriesIn())));
+            statement.setString(5,convertObjectToJsonString(category.getFilters()));
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -66,6 +62,14 @@ public class CategoryDataBase {
         return stringArrayList;
     }
 
+    private static ArrayList<String> convertCategoryArrayListToStringArrayList(ArrayList<Category> categoryArrayList){
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        for (Category eachCategory : categoryArrayList) {
+            stringArrayList.add(eachCategory.getName());
+        }
+        return stringArrayList;
+    }
+
     private static ArrayList<Product> convertStringArrayListToProductArrayList(ArrayList<String> stringArrayList){
         ArrayList<Product> productArrayList = new ArrayList<>();
         for (String eachId : stringArrayList) {
@@ -73,6 +77,7 @@ public class CategoryDataBase {
         }
         return productArrayList;
     }
+    
 
     public static void update(Category category) {
         delete(category.getName());
@@ -89,19 +94,17 @@ public class CategoryDataBase {
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<Comment> comments = new ArrayList<>();
+            ArrayList<Category> categories = new ArrayList<>();
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 String parentCategoryName = resultSet.getString("parentCategoryName");
-                ArrayList<Product> allProductsIn= resultSet.getString("listOfAllProductsId")
-                String title = resultSet.getString("title");
-                String content = resultSet.getString("content");
+                ArrayList<Product> allProductsIn= convertStringArrayListToProductArrayList(convertJsonToArrayList(resultSet.getString("listOfAllProductsId")));
+                ArrayList<String> allCategoriesInName = convertJsonToArrayList(resultSet.getString("listOfCategoriesInName"));
+                HashMap<String,ArrayList<String>> filters = convertJsonToSpecialHashMap(resultSet.getString("filters"));
 
-                CommentState commentState = CommentState.valueOf(resultSet.getString("commentState"));
-                boolean customerBoughtThisProduct = resultSet.getBoolean("customerBoughtThisProduct");
-                comments.add(new Comment(customer, product, title, content, commentState, customerBoughtThisProduct, commentId));
+                new Category(name,parentCategoryName,allCategoriesInName,allProductsIn,filters);
             }
-            return comments;
+            return categories;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -109,24 +112,6 @@ public class CategoryDataBase {
 
 
     }
-
-     */
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 }

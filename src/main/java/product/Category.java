@@ -64,6 +64,15 @@ public class Category {
         return addingCategory;
     }
 
+    public Category(String name, String parentCategoryName, ArrayList<String> allCategoriesInName,
+                    ArrayList<Product> allProductsIn, HashMap<String, ArrayList<String>> filters) {
+        this.name = name;
+        this.parentCategoryName = parentCategoryName;
+        this.allCategoriesInName = allCategoriesInName;
+        this.allProductsIn = allProductsIn;
+        this.filters = filters;
+    }
+
     //Getters:
     public String getName() {
         return name;

@@ -16,10 +16,10 @@ public class ShippingInfo {
     private String lastName;
     private String city;
     private String address;
-    private long postalCode;
-    private long phoneNumber;
+    private String  postalCode;
+    private String phoneNumber;
 
-    public ShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) {
+    public ShippingInfo(String firstName, String lastName, String city, String address, String postalCode, String phoneNumber) {
         this.city = city;
         this.firstName = firstName;
         this.lastName = lastName;

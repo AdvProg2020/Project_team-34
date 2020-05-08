@@ -2,6 +2,7 @@ package menu.products;
 
 import account.Account;
 import account.Supplier;
+import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 import product.Product;
 
@@ -27,7 +28,11 @@ public class DigestMenu extends Menu {
                     menusIn.get("Login/Register").execute();
                 } else {
                     //need modification
-                    controller.controlAddToCart();
+                    try {
+                        controller.controlAddToCart(product.getProductId(), seller.getName());
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
                 }
             }
         };

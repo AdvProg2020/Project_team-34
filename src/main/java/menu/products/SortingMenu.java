@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class SortingMenu extends Menu {
-    public static ArrayList<String> currentSortsList = new ArrayList<>();
     public SortingMenu(Menu parentMenu) {
         super("Sorting Menu", parentMenu);
         Menu showAvailableSorts = new Menu("Show All Sorts", this) {
@@ -38,11 +37,11 @@ public class SortingMenu extends Menu {
                 String regex = "^sort (.+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    if(controller.isThisSortAvailable(matcher.group(1))){
-                        System.out.println("sort added!");
-                        currentSortsList.add(matcher.group(1));
-                    }   else    {
-                        System.out.println("Sort not available!");
+                    try {
+                        controller.controlSort(matcher.group(1));
+                    }
+                    catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
                     }
                 }
                 parentMenu.show();
@@ -55,9 +54,7 @@ public class SortingMenu extends Menu {
         Menu currentSort = new Menu("Current Sort", this) {
             @Override
             public void show() {
-                for (String s : currentSortsList) {
-                    System.out.println(s);
-                }
+                System.out.println(controller.currentSort());
             }
 
             @Override
@@ -76,20 +73,13 @@ public class SortingMenu extends Menu {
 
             @Override
             public void execute() {
-                String regex = "^disable sort (.+)$";
-                Matcher matcher = getMatcher(command, regex);
-                if(matcher.find()){
-                    try {
-                        currentSortsList.remove(matcher.group(1));
-                        System.out.println("sort removed!");
-                    } catch (Exception ex){
-                        System.out.println(ex.getMessage());
-                    }
-                }
+                controller.controlDisableSort();
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
-        menusIn.put("^disable sort (.+)$" , disableSort);
-        menuForShow.add("Disable Sort [appliedSort]");
+        menusIn.put("^disable sort$" , disableSort);
+        menuForShow.add("Disable Sort");
 
 
 

@@ -1,5 +1,6 @@
 package menu.products;
 
+import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 
 import java.sql.SQLOutput;
@@ -7,10 +8,8 @@ import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class FilteringMenu extends Menu {
-    public static ArrayList<String> currentFiltersList;
     public FilteringMenu(Menu parentMenu) {
         super("Filtering Menu", parentMenu);
-        currentFiltersList = new ArrayList<>();
         Menu showAvailableFilters = new Menu("Show Available Filters", this) {
             @Override
             public void show() {
@@ -37,14 +36,16 @@ public class FilteringMenu extends Menu {
 
             @Override
             public void execute() {
+                System.out.println("Pls select the filter type :");
+                String type = scanner.nextLine();
                 String regex = "^filter (.+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    if(controller.isThisFilterAvailable(matcher.group(1))){
-                        System.out.println("Filter added!");
-                        currentFiltersList.add(matcher.group(1));
-                    } else {
-                        System.out.println("Filter not available!");
+                    try {
+                        controller.addFilter(matcher.group(1), type);
+                    }
+                    catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
                     }
                 }
                 parentMenu.show();
@@ -57,8 +58,8 @@ public class FilteringMenu extends Menu {
         Menu currentFilters = new Menu("Current Filters", this) {
             @Override
             public void show() {
-                for (String filter : currentFiltersList) {
-                    System.out.println(filter);
+                for (String currentFilter : controller.currentFilters()) {
+                    System.out.println(currentFilter);
                 }
             }
 
@@ -79,12 +80,14 @@ public class FilteringMenu extends Menu {
 
             @Override
             public void execute() {
+                System.out.println("Select the filter type:");
+                String type = scanner.nextLine();
                 String regex = "^disable filter (.+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{
-                        currentFiltersList.remove(matcher.group(1));
-                    } catch (Exception ex){
+                        controller.removeFilter(matcher.group(1), type);
+                    } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
                 }

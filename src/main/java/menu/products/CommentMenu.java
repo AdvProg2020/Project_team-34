@@ -13,10 +13,7 @@ public class CommentMenu extends Menu {
         Menu addComment = new Menu("Comment Menu", this) {
             @Override
             public void show() {
-                System.out.println("Comments : ");
-                for (Comment comment : controller.controlGetConfirmedComments()) {
-                    System.out.println(comment);
-                }
+
             }
 
             @Override
@@ -27,7 +24,7 @@ public class CommentMenu extends Menu {
                 title = scanner.nextLine();
                 System.out.println("Enter the content");
                 content = scanner.nextLine();
-                new Comment((Customer)controller.getAccount(), product,title,content);
+                controller.controlAddCommentToProduct(title,content,product);
                 System.out.println("comment added successfully!");
                 parentMenu.show();
                 parentMenu.execute();
@@ -36,5 +33,14 @@ public class CommentMenu extends Menu {
         menusIn.put("^Add comment$", addComment);
         menuForShow.add("Add comment");
 
+    }
+
+    @Override
+    public void show() {
+        System.out.println("Comments : ");
+        for (Comment comment : controller.controlGetConfirmedComments()) {
+            System.out.println(comment);
+        }
+        super.show();
     }
 }

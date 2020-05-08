@@ -249,11 +249,11 @@ public class Controller {
         filter = new HashMap<>();
     }
 
-    public void addFilter(String key, String value) {
+    public void addFilter(String key, String value) throws ExceptionalMassage{
 
     }
 
-    public void removeFilter(String key, String value) {
+    public void removeFilter(String key, String value) throws ExceptionalMassage{
 
     }
 
@@ -406,7 +406,7 @@ public class Controller {
         return Response.OK;
     }
 
-    public void controlSort(String typeOfSort){
+    public void controlSort(String typeOfSort) throws ExceptionalMassage{
         Comparator<Product> SortByAverageScore = new Comparator<Product>() {
             @Override
             public int compare(Product firstProduct, Product secondProduct) {
@@ -532,9 +532,9 @@ public class Controller {
         return codedDiscounts;
     }
 
-    public void controlAddCommentToProduct(Customer customer,String title,String content,Product product){
+    public void controlAddCommentToProduct(String title,String content,Product product){
         //Need modification!
-        new Comment(customer, product,title, content, false);
+        new Comment((Customer) account, product,title, content, false);
     }
 
     public ArrayList<Comment> controlGetCommentsOfAProduct(Product product){
@@ -574,8 +574,8 @@ public class Controller {
         return null;
     }
 
-    public ArrayList<String> controlGetAllProducts(ArrayList<String> sorts,ArrayList<String> filters){
-        //I need a Sorted and filtered list of products! and toString form of product need to have a quick introduction!
+    public ArrayList<String> controlGetAllProducts(){
+        //apply filters and sorts!
         return null;
     }
 
@@ -621,5 +621,17 @@ public class Controller {
 
     public void controlEditCategory(String categoryName, String newName) throws ExceptionalMassage {
 
+    }
+
+    public ArrayList<String> currentFilters(){
+        ArrayList<String> filters = new ArrayList<>();
+        for (String s : filter.keySet()) {
+            filters.add(s);
+        }
+        return filters;
+    }
+
+    public String currentSort(){
+        return sortType;
     }
 }

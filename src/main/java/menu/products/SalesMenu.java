@@ -23,7 +23,7 @@ public class SalesMenu extends Menu {
             @Override
             public void execute() {
                 //Need Modification!
-                for (String product : controller.controlGetAllProducts(SortingMenu.currentSortsList,FilteringMenu.currentFiltersList)) {
+                for (String product : controller.controlGetAllProducts()) {
                     //Need a quick introduction!
                     System.out.println(product);
                 }

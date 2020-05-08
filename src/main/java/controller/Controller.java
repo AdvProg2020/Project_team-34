@@ -447,7 +447,7 @@ public class Controller {
         return CodedDiscount.getCodedDiscounts();
     }
 
-    public CodedDiscount controlGetDiscountByCode(String code){
+    public CodedDiscount controlGetDiscountByCode(String code) {
         for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
             if(codedDiscount.getDiscountCode().equals(code)){
                 return codedDiscount;
@@ -456,9 +456,9 @@ public class Controller {
         return null;
     }
 
-    public void controlEditDiscountByCode (String code, Date newStartDate, Date newEndDate, int newPercent, int newMaxDiscount) throws Exception{
+    public void controlEditDiscountByCode (String code, Date newStartDate, Date newEndDate, int newPercent, int newMaxDiscount) throws ExceptionalMassage{
         if(controlGetDiscountByCode(code) == null){
-            throw new Exception("No CodedDiscount with this Code");
+            throw new ExceptionalMassage("No CodedDiscount with this Code");
         }
         controlGetDiscountByCode(code).setStart(newStartDate);
         controlGetDiscountByCode(code).setEnd(newEndDate);
@@ -470,15 +470,19 @@ public class Controller {
         new CodedDiscount(startDate, endDate, percent, maxDiscountAmount);
     }
 
-    public void controlRemoveDiscountCode(String code) throws Exception{
+    public void controlRemoveDiscountCode(String code) throws ExceptionalMassage{
         if(controlGetDiscountByCode(code) == null){
-            throw new Exception("No such code!");
+            throw new ExceptionalMassage("No such code!");
         }
         CodedDiscount.removeCodeFromList(controlGetDiscountByCode(code));
     }
 
     public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products){
-        new SaleRequest(null, new Sale(startDate,endDate,percent),products,null);
+        Sale newSale = new Sale(startDate,endDate,percent);
+        for (Product product : products) {
+            newSale.addProductToSale(product);
+        }
+        new SaleRequest(null, newSale);
     }
 
     public ArrayList<Sale> controlGetAllSales(){
@@ -494,16 +498,26 @@ public class Controller {
         return null;
     }
 
-    public void controlEditSaleById(String id, Date newEndDate, Date newStartDate, int newPercent, ArrayList<Product> addingProduct, ArrayList<Product> removingProduct) throws Exception{
+    public void controlEditSaleById(String id, Date newEndDate, Date newStartDate, int newPercent, ArrayList<Product> addingProduct, ArrayList<Product> removingProduct) throws ExceptionalMassage{
         if(controlGetSaleById(id) == null){
-            throw new Exception("No such sale with this code!");
+            throw new ExceptionalMassage("No such sale with this code!");
         }
-        new SaleRequest(controlGetSaleById(id),new Sale(newStartDate,newEndDate,newPercent,id),addingProduct,removingProduct);
+        Sale newSale = new Sale(newStartDate,newEndDate,newPercent,id);
+        for (Product product : controlGetSaleById(id).getProducts()) {
+            newSale.addProductToSale(product);
+        }
+        for (Product product : addingProduct) {
+            newSale.addProductToSale(product);
+        }
+        for (Product product : removingProduct) {
+            newSale.removeProductFromSale(product);
+        }
+        new SaleRequest(controlGetSaleById(id),newSale);
     }
 
-    public void controlRemoveSaleById(String id) throws Exception{
+    public void controlRemoveSaleById(String id) throws ExceptionalMassage{
         if(controlGetSaleById(id) == null){
-            throw new Exception("No such sale with id!");
+            throw new ExceptionalMassage("No such sale with id!");
         }
         Sale.getSales().remove(controlGetSaleById(id));
     }
@@ -533,9 +547,9 @@ public class Controller {
         return productComment;
     }
 
-    public void controlRateProductById(String id, float score, Customer customer, Product product) throws Exception{
+    public void controlRateProductById(String id, float score, Customer customer, Product product) throws ExceptionalMassage{
         if(Product.getProductById(id) == null){
-            throw new Exception("No such product with id!");
+            throw new ExceptionalMassage("No such product with id!");
         }
         new Score(score, customer, product);
     }

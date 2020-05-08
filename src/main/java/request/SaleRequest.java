@@ -2,6 +2,7 @@ package request;
 
 import discount.Sale;
 import product.Product;
+import state.State;
 
 import java.util.ArrayList;
 
@@ -13,16 +14,11 @@ import java.util.ArrayList;
 public class SaleRequest extends Request{
     private Sale oldSale;
     private Sale newSale;
-    private ArrayList<Product> addingProducts;
-    private ArrayList<Product> removingProducts;
 
-    public SaleRequest(Sale oldSale, Sale newSale,
-                       ArrayList<Product> addingProducts, ArrayList<Product> removingProducts) {
+    public SaleRequest(Sale oldSale, Sale newSale) {
         super(null);
         this.oldSale = oldSale;
         this.newSale = newSale;
-        this.addingProducts = addingProducts;
-        this.removingProducts = removingProducts;
     }
     //Getters:
 
@@ -34,14 +30,7 @@ public class SaleRequest extends Request{
         return newSale;
     }
 
-    public ArrayList<Product> getAddingProducts() {
-        return addingProducts;
-    }
 
-    public ArrayList<Product> getRemovingProducts() {
-        return removingProducts;
-    }
-    //methods
 
     public boolean isThisEditRequest(){
         if(oldSale == null){
@@ -59,12 +48,7 @@ public class SaleRequest extends Request{
         if(acceptedOrNot){
             if(isThisEditRequest()){
                 Sale.removeSale(oldSale);
-            }
-            for (Product addingProduct : addingProducts) {
-                newSale.addProductToSale(addingProduct);
-            }
-            for (Product removingProduct : removingProducts) {
-                newSale.removeProductFromSale(removingProduct);
+                newSale.setState(State.CONFIRMED);
             }
         } else {
             Sale.removeSale(newSale);
@@ -82,8 +66,6 @@ public class SaleRequest extends Request{
         return "SaleRequest{" +
                 ", oldSale=" + oldSale +
                 ", newSale=" + newSale +
-                ", addingProducts=" + addingProducts +
-                ", removingProducts=" + removingProducts +
                 '}';
     }
 }

@@ -13,20 +13,23 @@ import java.util.Date;
  */
 
 public class Sale extends Discount{
-    private static ArrayList<Sale> sales;
+    private static ArrayList<Sale> sales = new ArrayList<>();
     private String offId;
     private ArrayList<Product> products;
-
     private State state;
 
     public Sale(Date start, Date end, int percent) {
         super(start, end, percent);
+        state = State.PREPARING_TO_BUILD;
         this.offId = generateOffId();
+        addSale(this);
     }
 
     public Sale(Date start, Date end,int percent, String offId) {
-        super(start, end, 0);
+        super(start, end, percent);
+        state = State.PREPARING_TO_EDIT;
         this.offId = offId;
+        addSale(this);
     }
 
     private String generateOffId(){

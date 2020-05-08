@@ -14,9 +14,11 @@ import java.util.ArrayList;
 public class SaleRequest extends Request{
     private Sale oldSale;
     private Sale newSale;
+    public static int allCreatedSaleRequestNum = 0;
 
     public SaleRequest(Sale oldSale, Sale newSale) {
-        super(null);
+        super(SaleRequest.generateRequestId());
+        allCreatedSaleRequestNum++;
         this.oldSale = oldSale;
         this.newSale = newSale;
     }
@@ -40,7 +42,7 @@ public class SaleRequest extends Request{
     }
 
     public static String generateRequestId() {
-        return null;
+        return "T34SR" + String.format("%015d",allCreatedSaleRequestNum  + 1);
     }
 
     @Override

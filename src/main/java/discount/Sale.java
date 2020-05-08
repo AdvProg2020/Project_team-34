@@ -14,6 +14,7 @@ import java.util.Date;
 
 public class Sale extends Discount{
     private static ArrayList<Sale> sales = new ArrayList<>();
+    private static int allCreatedSalesNum = 0;
     private String offId;
     private ArrayList<Product> products;
     private State state;
@@ -22,6 +23,7 @@ public class Sale extends Discount{
         super(start, end, percent);
         state = State.PREPARING_TO_BUILD;
         this.offId = generateOffId();
+        allCreatedSalesNum++;
         addSale(this);
     }
 
@@ -33,7 +35,7 @@ public class Sale extends Discount{
     }
 
     private String generateOffId(){
-        return null;
+        return "T34S" + String.format("%015d",allCreatedSalesNum  + 1);
     }
 
     public static void addSale(Sale sale){

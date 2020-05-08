@@ -99,8 +99,13 @@ public class Comment {
     }
 
     public ArrayList<Comment> getCommentsForProduct(Product product) {
-        //Added By Aryan
-        return null;
+        ArrayList<Comment> returningComments = new ArrayList<>();
+        for (Comment comment : comments) {
+            if(comment.getProduct() == product){
+                returningComments.add(comment);
+            }
+        }
+        return returningComments;
     }
 
     public static void importAllData(){

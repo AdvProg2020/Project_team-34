@@ -4,9 +4,11 @@ import account.Customer;
 import com.google.gson.JsonObject;
 
 
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Random;
 
 /**
  * @author soheil
@@ -14,6 +16,7 @@ import java.util.HashMap;
  */
 
 public class CodedDiscount extends Discount{
+    private static final String LETTERS_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static ArrayList<CodedDiscount> codedDiscounts;
     private String discountCode;
     private int maxDiscountPercent;
@@ -23,6 +26,7 @@ public class CodedDiscount extends Discount{
 
     public CodedDiscount(Date start, Date end, int percent, int maxDiscountPercent) {
         super(start, end, percent);
+        this.discountCode = codeGenerator();
         this.maxDiscountPercent = maxDiscountPercent;
     }
 
@@ -35,7 +39,13 @@ public class CodedDiscount extends Discount{
     }
 
     public String getDiscountCode() {
-        return discountCode;
+        Random rand = new Random();
+        int upperBound = LETTERS_SET.length()-1;
+        String code = "";
+        for(int i = 0;i < 8;i++){
+            code += LETTERS_SET.charAt(rand.nextInt(upperBound));
+        }
+        return code;
     }
 
     public int getMaxDiscountPercent() {

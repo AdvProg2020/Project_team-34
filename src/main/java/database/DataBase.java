@@ -2,6 +2,8 @@ package database;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import product.Category;
+import product.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -73,6 +75,30 @@ public class DataBase {
         Gson gson = new Gson();
         return (HashMap<String, Integer>) gson.fromJson(string, new TypeToken<HashMap<String,Integer>>() {
         }.getType());
+    }
+
+    public static ArrayList<String> convertProductArrayListToStringArrayList(ArrayList<Product> productArrayList){
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        for (Product eachProduct : productArrayList) {
+            stringArrayList.add(eachProduct.getProductId());
+        }
+        return stringArrayList;
+    }
+
+    public static ArrayList<String> convertCategoryArrayListToStringArrayList(ArrayList<Category> categoryArrayList){
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        for (Category eachCategory : categoryArrayList) {
+            stringArrayList.add(eachCategory.getName());
+        }
+        return stringArrayList;
+    }
+
+    public static ArrayList<Product> convertStringArrayListToProductArrayList(ArrayList<String> stringArrayList){
+        ArrayList<Product> productArrayList = new ArrayList<>();
+        for (String eachId : stringArrayList) {
+            productArrayList.add(Product.getProductById(eachId));
+        }
+        return productArrayList;
     }
 
 }

@@ -1,5 +1,7 @@
 package cart;
 
+import database.ShippingInfoDataBase;
+
 import java.util.ArrayList;
 
 /**
@@ -29,6 +31,7 @@ public class ShippingInfo {
         this.phoneNumber = phoneNumber;
         allShippingInfo.add(this);
         totalShippingInfoCreated++;
+        ShippingInfoDataBase.add(this);
     }
 
     public ShippingInfo(String identifier, String firstName, String lastName, String city, String address, String postalCode, String phoneNumber) {
@@ -74,7 +77,7 @@ public class ShippingInfo {
 
     //Modeling methods
     public static String generateIdentifier() {
-        return "T34CL" + String.format("%015d", totalShippingInfoCreated + 1);
+        return "T34SI" + String.format("%015d", totalShippingInfoCreated + 1);
     }
 
     public static ShippingInfo getShippingInfoByIdentifier(String identifier) {

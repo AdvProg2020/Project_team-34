@@ -18,7 +18,7 @@ public class ShippingInfo {
     private final String lastName;
     private final String city;
     private final String address;
-    private final String  postalCode;
+    private final String postalCode;
     private final String phoneNumber;
 
     public ShippingInfo(String firstName, String lastName, String city, String address, String postalCode, String phoneNumber) {
@@ -34,7 +34,8 @@ public class ShippingInfo {
         ShippingInfoDataBase.add(this);
     }
 
-    public ShippingInfo(String identifier, String firstName, String lastName, String city, String address, String postalCode, String phoneNumber) {
+    public ShippingInfo(String identifier, String firstName, String lastName, String city, String address,
+                        String postalCode, String phoneNumber) {
         this.identifier = identifier;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -44,6 +45,26 @@ public class ShippingInfo {
         this.phoneNumber = phoneNumber;
         allShippingInfo.add(this);
         totalShippingInfoCreated++;
+    }
+
+    //Modeling methods
+    public static String generateIdentifier() {
+        return "T34SI" + String.format("%015d", totalShippingInfoCreated + 1);
+    }
+
+    public static ShippingInfo getShippingInfoByIdentifier(String identifier) {
+        for (ShippingInfo shippingInfo : allShippingInfo) {
+            if (shippingInfo.getIdentifier().equals(identifier))
+                return shippingInfo;
+        }
+        return null;
+        //check
+    }
+
+    //Test methods:
+    public static void clear() {
+        allShippingInfo.clear();
+        totalShippingInfoCreated = 0;
     }
 
     //Getters:
@@ -73,20 +94,5 @@ public class ShippingInfo {
 
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    //Modeling methods
-    public static String generateIdentifier() {
-        return "T34SI" + String.format("%015d", totalShippingInfoCreated + 1);
-    }
-
-    public static ShippingInfo getShippingInfoByIdentifier(String identifier) {
-        if (allShippingInfo.size() != 0) {
-            for (ShippingInfo shippingInfo : allShippingInfo) {
-                if (shippingInfo.getIdentifier().equals(identifier))
-                    return shippingInfo;
-            }
-        }
-        return null;
     }
 }

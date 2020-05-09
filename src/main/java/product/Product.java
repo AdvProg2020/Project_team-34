@@ -171,7 +171,8 @@ public class Product {
     }
 
     public int getRemainedNumber(Supplier supplier) {
-        return 0;
+        return remainedNumberForEachSupplier.get(supplier);
+        //aryan
     }
 
     public static void importAll(){

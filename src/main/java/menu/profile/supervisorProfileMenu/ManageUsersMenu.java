@@ -13,7 +13,7 @@ public class ManageUsersMenu extends Menu {
         Menu ViewCommand = new Menu("View", this) {
             @Override
             public void show() {
-                Matcher commandMatcher = getMatcher(parentMenu.command, "^view (\\w+)$");
+                Matcher commandMatcher = getMatcher(command, "^view (\\w+)$");
                 if (commandMatcher.find()) {
                     System.out.println("View user " + commandMatcher.group(1));
                 }
@@ -21,7 +21,7 @@ public class ManageUsersMenu extends Menu {
 
             @Override
             public void execute() {
-                Matcher commandMatcher = getMatcher(parentMenu.command, "^view (\\w+)$");
+                Matcher commandMatcher = getMatcher(command, "^view (\\w+)$");
                 if (commandMatcher.find()) {
                     try {
                         String info = controller.controlViewUserInfo(commandMatcher.group(1));
@@ -44,7 +44,7 @@ public class ManageUsersMenu extends Menu {
 
             @Override
             public void execute() {
-                Matcher commandMatcher = getMatcher(parentMenu.command, "^delete user (\\w+)$");
+                Matcher commandMatcher = getMatcher(command, "^delete user (\\w+)$");
                 commandMatcher.find();
                 String username = commandMatcher.group(1);
                 try {

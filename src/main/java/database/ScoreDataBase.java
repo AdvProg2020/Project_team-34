@@ -29,7 +29,7 @@ public class ScoreDataBase {
         if (doesScoreAlreadyExists(score)) {
             return;
         }
-        String sql = "INSERT into scores (scoreId, customerUsername, productId,score) " +
+        String sql = "INSERT into Scores (scoreId, customerUsername, productId,score) " +
                 "VALUES (?,?, ? )";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {

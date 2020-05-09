@@ -25,9 +25,10 @@ public class Product {
     private String description;
     //private ArrayList<Comment> comments;
     private HashMap<String, String> specification; //method check
+    private String rootProductId ;
 
 
-    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description) {
+    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,String rootProductId) {
         numberOfViews = 0;
         this.productState = State.PREPARING_TO_BUILD;
         this.productId = generateIdentifier();
@@ -42,15 +43,13 @@ public class Product {
         //this.category = category;
         this.description = description;
         //comments = new ArrayList<>();
-
-
-
+        this.rootProductId = rootProductId;
         allCreatedProductNum ++;
     }
 
     public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
                    HashMap<Supplier,Integer> remainedNumberForEachSupplier, String description,
-                   int numberOfViews , String productId,State state) {
+                   int numberOfViews , String productId,State state,String rootProductId) {
         this.productState = state;
         this.productId = productId;
         this.name = name;
@@ -62,16 +61,10 @@ public class Product {
         this.description = description;
         //this.comments = comments;
         this.numberOfViews= numberOfViews;
+        this.rootProductId = rootProductId;
 
     }
 
-    private State convertStringToState(String state){
-        if(state.equals("PREPARING_TO_BUILD"))
-            return State.PREPARING_TO_BUILD;
-        if(state.equals("PREPARING_TO_EDIT"))
-            return State.PREPARING_TO_EDIT;
-        return State.CONFIRMED;
-    }
 
     private String generateIdentifier(){
         return "T34P" + String.format("%015d", allCreatedProductNum + 1);
@@ -126,6 +119,10 @@ public class Product {
         return category;
     }
      */
+
+    public String getRootProductId() {
+        return rootProductId;
+    }
 
     public HashMap<String, String> getSpecification() {
         return specification;

@@ -634,4 +634,15 @@ public class Controller {
     public String currentSort(){
         return sortType;
     }
+
+    public ArrayList<String> controlGetAllProductsInSales(){
+        ArrayList<Product> salesProducts = new ArrayList<>();
+        for (Sale activeSale : Sale.getActiveSales()) {
+            for (Product product : activeSale.getProducts()) {
+                salesProducts.add(product);
+            }
+        }
+        //hamun getAllProducts!
+        return null;
+    }
 }

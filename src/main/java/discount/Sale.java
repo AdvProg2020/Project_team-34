@@ -4,6 +4,8 @@ import account.Supplier;
 import product.Product;
 import state.State;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -98,6 +100,25 @@ public class Sale extends Discount{
             }
         }
         return false;
+    }
+
+    public static ArrayList<Sale> getActiveSales(){
+        ArrayList<Sale> activeSales = new ArrayList<>();
+        for (Sale sale : sales) {
+            if(sale.isSaleActive()){
+                activeSales.add(sale);
+            }
+        }
+        return activeSales;
+    }
+
+    public boolean isSaleActive(){
+        Date date = new Date(System.currentTimeMillis());
+        if(this.getState() == State.CONFIRMED && (this.start.after(date) && this.end.before(date))){
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public static Sale getProductSale(Product product, Supplier supplier) {

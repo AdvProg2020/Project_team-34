@@ -3,7 +3,10 @@ package cart;
 import account.Supplier;
 import product.Product;
 
+import java.util.ArrayList;
+
 public class ProductInCart {
+    private static final ArrayList<ProductInCart> allProductInCart = new ArrayList<>();
     private static long numberOfObjectCreated;
 
     private final String identifier;
@@ -14,6 +17,7 @@ public class ProductInCart {
         this.identifier = generateIdentifier();
         this.product = product;
         this.supplier = supplier;
+        allProductInCart.add(this);
         numberOfObjectCreated++;
     }
 
@@ -21,8 +25,11 @@ public class ProductInCart {
         this.identifier = identifier;
         this.product = product;
         this.supplier = supplier;
+        allProductInCart.add(this);
+        numberOfObjectCreated++;
     }
 
+    //Getters:
     public String getIdentifier() {
         return identifier;
     }
@@ -35,7 +42,23 @@ public class ProductInCart {
         return supplier;
     }
 
+    //Modeling methods:
     public String generateIdentifier() {
         return "T34PC" + String.format("%015d", numberOfObjectCreated + 1);
+    }
+
+    public static ProductInCart getProductInCartByIdentifier(String identifier) {
+        for (ProductInCart productInCart : allProductInCart) {
+            if (productInCart.getIdentifier().equals(identifier))
+                return productInCart;
+        }
+        return null;
+        //check
+    }
+
+    //Test methods:
+    public static void clear() {
+        numberOfObjectCreated = 0;
+        allProductInCart.clear();
     }
 }

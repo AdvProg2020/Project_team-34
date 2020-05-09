@@ -1,5 +1,6 @@
 package product;
 
+import database.CategoryDataBase;
 import exceptionalMassage.ExceptionalMassage;
 
 import java.util.ArrayList;
@@ -48,7 +49,7 @@ public class Category {
             this.allCategoriesInName = null;
         }
         allCategories.add(this);
-        //file modifications required
+        CategoryDataBase.add(this);
     }
 
     public static Category getInstance(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
@@ -60,7 +61,7 @@ public class Category {
         if (!parentCategory.isCategoryClassifier())
             throw new ExceptionalMassage("Category " + parentCategoryName + " is a product classifier.");
         Category addingCategory = new Category(name, isParentCategory, parentCategoryName);
-        parentCategory.addSubCategory(addingCategory);
+        parentCategory.addToSubCategoryList(addingCategory);
         return addingCategory;
     }
 
@@ -124,7 +125,7 @@ public class Category {
         if (Category.getProductCategory(product) != null)
             throw new ExceptionalMassage("This product has already added to another category. <Category.addProduct>");
         this.allProductsIn.add(product);
-        //file modification required
+        CategoryDataBase.update(this);
     }
 
     public void removeProduct(Product product) throws ExceptionalMassage {
@@ -133,21 +134,19 @@ public class Category {
         if (!this.isProductIn(product))
             throw new ExceptionalMassage("This product is not in this category. <Category.removeProduct>");
         this.allProductsIn.remove(product);
-        //file modification required
+        CategoryDataBase.update(this);
     }
 
-    public void addSubCategory(Category addingCategory) throws ExceptionalMassage {
+    public void addToSubCategoryList(Category addingCategory) throws ExceptionalMassage {
         if (!this.isCategoryClassifier())
             throw new ExceptionalMassage("Cannot add a subcategory to this category. <Category.addSubCategory>");
         this.allCategoriesInName.add(addingCategory.getName());
-        //file modifications required
     }
 
     public void addSubCategory(String addingCategoryName, boolean isParentCategory) throws ExceptionalMassage {
         if (!this.isCategoryClassifier())
             throw new ExceptionalMassage("Cannot add a subcategory to this category. <Category.addSubCategory>");
         Category.getInstance(addingCategoryName, isParentCategory, this.getName());
-        //file modifications required
     }
 
     public void removeSubCategory(String removingCategoryName) throws ExceptionalMassage {
@@ -158,7 +157,7 @@ public class Category {
         //check if category is empty if required
         Category.allCategories.remove(getCategoryByName(removingCategoryName));
         this.allCategoriesInName.remove(removingCategoryName);
-        //file modification required
+        CategoryDataBase.update(this);
     }
 
     public static void removeCategory(String removingCategoryName) throws ExceptionalMassage {
@@ -178,7 +177,6 @@ public class Category {
         previousReference = this.getParentCategory().getReference();
         previousReference.add(this);
         return previousReference;
-        //completed
     }
 
     public ArrayList<Product> getAllProductInAllSubCategories() {
@@ -232,6 +230,7 @@ public class Category {
             filterKeyValue.add(filterValue);
             filters.put(filterKey, filterKeyValue);
         }
+        CategoryDataBase.update(this);
     }
 
     public void removeFilter(String filterKey, String filterValue) throws ExceptionalMassage {
@@ -242,5 +241,6 @@ public class Category {
         if (!this.filters.get(filterKey).contains(filterValue))
             throw new ExceptionalMassage("\"" + filterValue + "\" " + "not found in " + "\"" + filterKey + "\". " + "<Category.removeFilter>");
         filters.get(filterKey).remove(filterValue);
+        CategoryDataBase.update(this);
     }
 }

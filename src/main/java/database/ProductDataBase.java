@@ -28,6 +28,7 @@ public class ProductDataBase {
         content.put("remainedNumberForEachSupplier", "String");
         content.put("description", "String");
         content.put("specification", "String");
+        content.put("rootProductId" , "String");
 
         DataBase.createNewTable("Products", content);
     }
@@ -38,7 +39,7 @@ public class ProductDataBase {
            return;
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, priceForEachSupplier," +
-                "listOfSuppliers, remainedNumberForEachSupplier description , specification)" +
+                "listOfSuppliers, remainedNumberForEachSupplier description , specification, rootProductId)" +
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?)";
         try (Connection conn = connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
@@ -53,6 +54,7 @@ public class ProductDataBase {
             statement.setString(8, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getRemainedNumberForEachSupplier())));
             statement.setString(9, product.getDescription());
             statement.setString(10, convertObjectToJsonString(product.getSpecification()));
+            statement.setString(11, product.getRootProductId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -147,8 +149,9 @@ public class ProductDataBase {
                 int numberOfViews = resultSet.getInt("numberOfViews");
                 String productId = resultSet.getString("productId");
                 State state = State.valueOf(resultSet.getString("productState"));
+                String rootProductId = resultSet.getString("rootProductId");
                 Product product = new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,
-                        remainedNumberForEachSupplier,description,numberOfViews,productId,state);
+                        remainedNumberForEachSupplier,description,numberOfViews,productId,state, rootProductId);
                 products.add(product);
             }
             return products;

@@ -79,7 +79,7 @@ public class Controller {
         return cart;
     }
 
-    public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address, long postalCode, long phoneNumber) throws ExceptionalMassage {
+    public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address, String postalCode,  String phoneNumber) throws ExceptionalMassage {
         if (account == null)
             throw new ExceptionalMassage("Login First.");
         if (!(account instanceof Customer))
@@ -347,11 +347,11 @@ public class Controller {
     }
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers,
-                                  Category category, String description) {
+                                   String description) {
         Product newProduct, product;
         product = Product.getProductByName(name);
         if (product == null)
-            newProduct = new Product((Supplier)account, name, nameOfCompany, price, remainedNumbers, category, description);
+            newProduct = new Product((Supplier)account, name, nameOfCompany, price, remainedNumbers,description,null);
         else {
             /*
             ArrayList<Supplier > newSuppliers = new ArrayList<>(product.getListOfSuppliers());

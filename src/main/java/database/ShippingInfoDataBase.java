@@ -27,7 +27,7 @@ public class ShippingInfoDataBase {
         if (doesShippingInfoAlreadyExists(shippingInfo)) {
             return;
         }
-        String sql = "INSERT into scores (identifier, firstName, lastName , city , address , postalCode, phoneNumber) " +
+        String sql = "INSERT into ShippingInfos (identifier, firstName, lastName , city , address , postalCode, phoneNumber) " +
                 "VALUES (?,?, ? ,?,?, ?, ?)";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {

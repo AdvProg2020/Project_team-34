@@ -36,6 +36,13 @@ public class Sale extends Discount{
         addSale(this);
     }
 
+    public Sale(Date start, Date end, int percent, String offId, ArrayList<Product> products, State state) {
+        super(start, end, percent);
+        this.offId = offId;
+        this.products = products;
+        this.state = state;
+    }
+
     private String generateOffId(){
         return "T34S" + String.format("%015d",allCreatedSalesNum  + 1);
     }

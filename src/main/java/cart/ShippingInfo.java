@@ -47,26 +47,6 @@ public class ShippingInfo {
         totalShippingInfoCreated++;
     }
 
-    //Modeling methods
-    public static String generateIdentifier() {
-        return "T34SI" + String.format("%015d", totalShippingInfoCreated + 1);
-    }
-
-    public static ShippingInfo getShippingInfoByIdentifier(String identifier) {
-        for (ShippingInfo shippingInfo : allShippingInfo) {
-            if (shippingInfo.getIdentifier().equals(identifier))
-                return shippingInfo;
-        }
-        return null;
-        //check
-    }
-
-    //Test methods:
-    public static void clear() {
-        allShippingInfo.clear();
-        totalShippingInfoCreated = 0;
-    }
-
     //Getters:
     public String getIdentifier() {
         return identifier;
@@ -94,5 +74,22 @@ public class ShippingInfo {
 
     public String getPhoneNumber() {
         return phoneNumber;
+    }
+
+    public static int getTotalShippingInfoCreated() {
+        return totalShippingInfoCreated;
+    }
+
+    //Modeling methods
+    public static String generateIdentifier() {
+        return "T34SI" + String.format("%015d", totalShippingInfoCreated + 1);
+    }
+
+    public static ShippingInfo getShippingInfoByIdentifier(String identifier) {
+        for (ShippingInfo shippingInfo : allShippingInfo) {
+            if (shippingInfo.getIdentifier().equals(identifier))
+                return shippingInfo;
+        }
+        return null;
     }
 }

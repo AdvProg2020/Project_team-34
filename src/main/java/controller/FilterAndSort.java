@@ -76,17 +76,31 @@ public class FilterAndSort {
     }
 
     public void setPriceLowerBound(Integer priceLowerBound) throws ExceptionalMassage {
-        //null for no filter
-        if (priceLowerBound != null && !availabilityFilter)
-            throw new ExceptionalMassage("You must apply availability filter.");
-        this.priceLowerBound = priceLowerBound;
+        //null and 0 for no filter
+        if (priceLowerBound == null)
+            this.priceLowerBound = null;
+        else {
+            if (!priceLowerBound.equals(0) && !availabilityFilter)
+                throw new ExceptionalMassage("You must apply availability filter.");
+            if (priceLowerBound.equals(0))
+                this.priceLowerBound = null;
+            else
+                this.priceLowerBound = priceUpperBound;
+        }
     }
 
     public void setPriceUpperBound(Integer priceUpperBound) throws ExceptionalMassage {
-        //null for no filter
-        if (priceUpperBound != null && !availabilityFilter)
-            throw new ExceptionalMassage("You must apply availability filter.");
-        this.priceUpperBound = priceUpperBound;
+        //null and 0 for no filter
+        if (priceUpperBound == null)
+            this.priceUpperBound = null;
+        else {
+            if (!priceUpperBound.equals(0) && !availabilityFilter)
+                throw new ExceptionalMassage("You must apply availability filter.");
+            if (priceUpperBound.equals(0))
+                this.priceUpperBound = null;
+            else
+                this.priceUpperBound = priceUpperBound;
+        }
     }
 
     public void setSortType(SortType sortType) {

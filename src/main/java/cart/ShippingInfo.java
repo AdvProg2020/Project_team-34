@@ -77,4 +77,13 @@ public class ShippingInfo {
     public String getPhoneNumber() {
         return phoneNumber;
     }
+
+    // Added by rpirayadi
+    public static ShippingInfo getShippingInfoById (String identifier){
+        for (ShippingInfo shippingInfo : allShippingInfo) {
+            if(shippingInfo.getIdentifier().equals(identifier))
+                return shippingInfo;
+        }
+        return null;
+    }
 }

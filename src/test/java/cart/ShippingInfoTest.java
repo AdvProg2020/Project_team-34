@@ -1,39 +1,43 @@
 package cart;
 
 import database.ShippingInfoDataBase;
-import org.junit.AfterClass;
-import org.junit.Assert;
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.*;
 
 import java.util.ArrayList;
 
 public class ShippingInfoTest {
-    private static final ArrayList<ShippingInfo> testInstances = new ArrayList<>();
-    private static ShippingInfo dataBaseConstructorInstance;
+    private static final int shippingInfoCreatedCountBefore = ShippingInfo.getTotalShippingInfoCreated();
+    private static final ArrayList<ShippingInfo> testInstances = createTestInstances();
+    private static final ShippingInfo dataBaseConstructorInstance = new ShippingInfo("identifierC",
+            "firstNameC", "lastNameC", "cityC", "addressC", "postalCodeC",
+            "phoneNumberC");
+    private static final int shippingInfoCreatedCountAfter = ShippingInfo.getTotalShippingInfoCreated();
 
-    @BeforeClass
-    public static void beforeClass() throws Exception {
-        //table created but error raise
+    private static ArrayList<ShippingInfo> createTestInstances() {
+        //check
         ShippingInfoDataBase.createNewTable();
-        for (int i = 1; i < 101; i++) {
+        ArrayList<ShippingInfo> testInstances = new ArrayList<>();
+        for (int i = 1; i <= 100; i++)
             testInstances.add(new ShippingInfo("firstName " + i, "lastName " + i, "city " + i,
                     "address " + i, "postalCode " + i, "phoneNumber " + i));
-        }
-        dataBaseConstructorInstance = new ShippingInfo("identifierC", "firstNameC",
-                "lastNameC", "cityC", "addressC", "postalCodeC", "phoneNumberC");
+        return testInstances;
     }
 
     @Test
-    public void testIdentifier1() {
-        ShippingInfo shippingInfo = ShippingInfo.getShippingInfoByIdentifier("T34SI000000000000010");
-        assert shippingInfo != null;
-        Assert.assertEquals("firstName 10", shippingInfo.getFirstName());
+    public void testTotalShippingInfoCreated() {
+        Assert.assertEquals(101, shippingInfoCreatedCountAfter-shippingInfoCreatedCountBefore);
     }
 
     @Test
-    public void testIdentifier2() {
-        ShippingInfo shippingInfo = ShippingInfo.getShippingInfoByIdentifier("T34SI000000000000101");
+    public void testGenerateIdentifier() {
+        Assert.assertEquals("T34SI" + String.format("%015d", shippingInfoCreatedCountAfter + 1),
+                ShippingInfo.generateIdentifier());
+    }
+
+    @Test
+    public void testIdentifier() {
+        ShippingInfo shippingInfo = ShippingInfo.getShippingInfoByIdentifier(
+                "T34SI" + String.format("%015d", shippingInfoCreatedCountAfter + 1));
         Assert.assertNull(shippingInfo);
     }
 
@@ -100,11 +104,5 @@ public class ShippingInfoTest {
     @Test
     public void testDataBaseConstructorPostalCode() {
         Assert.assertEquals("postalCodeC", dataBaseConstructorInstance.getPostalCode());
-    }
-
-    @AfterClass
-    public static void afterClass() throws Exception {
-        ShippingInfo.clear();
-        //database clear
     }
 }

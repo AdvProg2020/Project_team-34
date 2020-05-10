@@ -63,7 +63,7 @@ public class CartDataBase {
     private static ArrayList<ProductInCart> convertStringArrayListToProductInCartArrayList(ArrayList<String> stringArrayList){
         ArrayList<ProductInCart> productInCartArrayList = new ArrayList<>();
         for (String eachId : stringArrayList) {
-            productInCartArrayList.add(ProductInCart.getProductInCartById(eachId));
+            productInCartArrayList.add(ProductInCart.getProductInCartByIdentifier(eachId));
         }
         return productInCartArrayList;
     }
@@ -79,7 +79,7 @@ public class CartDataBase {
     private static HashMap<ProductInCart, Integer> convertStringIntegerHashMapToProductInCartIntegerHashMap (HashMap<String,Integer> stringIntegerHashMap){
         HashMap<ProductInCart, Integer> productInCartIntegerHashMap = new HashMap<>();
         for (String eachIdentifier : stringIntegerHashMap.keySet()) {
-            productInCartIntegerHashMap.put(ProductInCart.getProductInCartById(eachIdentifier),stringIntegerHashMap.get(eachIdentifier));
+            productInCartIntegerHashMap.put(ProductInCart.getProductInCartByIdentifier(eachIdentifier),stringIntegerHashMap.get(eachIdentifier));
         }
         return productInCartIntegerHashMap;
     }
@@ -95,7 +95,7 @@ public class CartDataBase {
     private static HashMap<ProductInCart, Sale> convertStringHashMapToProductInCartSaleHashMap (HashMap<String, String> stringHashMap){
         HashMap<ProductInCart, Sale> productInCartSaleHashMap = new HashMap<>();
         for (String eachIdentifier : stringHashMap.keySet()) {
-            productInCartSaleHashMap.put(ProductInCart.getProductInCartById(eachIdentifier),Sale.getSaleById(stringHashMap.get(eachIdentifier)));
+            productInCartSaleHashMap.put(ProductInCart.getProductInCartByIdentifier(eachIdentifier),Sale.getSaleById(stringHashMap.get(eachIdentifier)));
         }
         return productInCartSaleHashMap;
     }
@@ -134,7 +134,7 @@ public class CartDataBase {
                 HashMap<ProductInCart, Integer> productInCount = convertStringIntegerHashMapToProductInCartIntegerHashMap(convertJsonToHashMap(resultSet.getString("countForEachProductIn")));
                 HashMap<ProductInCart, Sale> productInSale = convertStringHashMapToProductInCartSaleHashMap(convertJsonToStringStringHashMap(resultSet.getString("saleForEachProductIn")));
                 CodedDiscount codedDiscount = CodedDiscount.getCodedDiscountByCode(resultSet.getString("discountCode"));
-                ShippingInfo shippingInfo = ShippingInfo.getShippingInfoById(resultSet.getString("shippingInfoId"));
+                ShippingInfo shippingInfo = ShippingInfo.getShippingInfoByIdentifier(resultSet.getString("shippingInfoId"));
 
                 carts.add(new Cart(cartId,owner,productInCarts,productInCount,productInSale,codedDiscount,shippingInfo));
             }

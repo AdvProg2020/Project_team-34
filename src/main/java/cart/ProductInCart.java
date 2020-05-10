@@ -55,10 +55,4 @@ public class ProductInCart {
         return null;
         //check
     }
-
-    //Test methods:
-    public static void clear() {
-        numberOfObjectCreated = 0;
-        allProductInCart.clear();
-    }
 }

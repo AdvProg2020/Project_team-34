@@ -6,8 +6,10 @@ import product.Product;
 import java.util.ArrayList;
 
 public class ProductInCart {
-    private static final ArrayList<ProductInCart> allProductInCart = new ArrayList<>();
-    private static long numberOfObjectCreated;
+
+
+    private static ArrayList<ProductInCart> allProductInCarts = new ArrayList<>();
+    private static long numberOfObjectCreated =0;
 
     private final String identifier;
     private final Product product;
@@ -19,6 +21,7 @@ public class ProductInCart {
         this.supplier = supplier;
         allProductInCart.add(this);
         numberOfObjectCreated++;
+        allProductInCarts.add(this);
     }
 
     public ProductInCart(String identifier, Product product, Supplier supplier) {

@@ -39,7 +39,7 @@ public class FilterAndSort {
         this.brandFilter.clear();
     }
 
-    public boolean isAvailabilityFilter() {
+    public boolean getAvailabilityFilter() {
         return availabilityFilter;
     }
 

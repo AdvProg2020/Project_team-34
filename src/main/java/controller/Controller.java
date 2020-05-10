@@ -23,11 +23,13 @@ public class Controller {
     private Account account;
     private Cart cart;
     private boolean isFirstSupervisorCreated;
+    private FilterAndSort filterAndSort;
 
     public Controller() {
         account = null;
         cart = new Cart(null);
         isFirstSupervisorCreated = false;
+        filterAndSort = new FilterAndSort();
     }
 
     public boolean hasSomeOneLoggedIn(){

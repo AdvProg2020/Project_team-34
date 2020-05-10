@@ -366,16 +366,15 @@ public class Controller {
         }
     }
 
-    public Response controlRemoveProductById(String productId) throws ExceptionalMassage{
+    public void  controlRemoveProductById(String productId) throws ExceptionalMassage{
         Product product = Product.getProductById(productId);
         if (product != null) {
             product.removeProduct();
-            return Response.OK;
+
         }
-        return Response.INVALID_PRODUCT_ID;
     }
 
-    public int controlViewBalance(Account account) {
+    public int controlViewBalance() {
         return (account).getCredit();
     }
 
@@ -635,6 +634,10 @@ public class Controller {
             filters.add(s);
         }
         return filters;
+    }
+
+    public String showSalesHistory(){
+        return null;
     }
 
 

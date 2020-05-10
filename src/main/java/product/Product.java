@@ -167,7 +167,7 @@ public class Product {
     }
 
     public int getPrice(Supplier supplier) {
-        return 0;
+        return priceForEachSupplier.get(supplier);
     }
 
     public int getRemainedNumber(Supplier supplier) {

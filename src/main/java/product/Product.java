@@ -211,4 +211,16 @@ public class Product {
     public void setSpecification(HashMap<String, String> specification) {
         this.specification = specification;
     }
+
+    public boolean isProductAvailableNow() {
+        return false;
+    }
+
+    public boolean isProductProvidedInPriceLowerThan(int upperBound) {
+        return false;
+    }
+
+    public boolean isProductProvidedInPriceUpperThan(int lowerBound) {
+        return false;
+    }
 }

@@ -464,11 +464,16 @@ public class Controller {
         controlGetDiscountByCode(code).setStart(newStartDate);
         controlGetDiscountByCode(code).setEnd(newEndDate);
         controlGetDiscountByCode(code).setPercent(newPercent);
-        controlGetDiscountByCode(code).setMaxDiscountPercent(newMaxDiscount);
+        controlGetDiscountByCode(code).setMaxDiscountAmount(newMaxDiscount);
     }
 
-    public void controlCreateCodedDiscount(Date startDate, Date endDate, int percent, int maxDiscountAmount) throws ExceptionalMassage {
-        new CodedDiscount(startDate, endDate, percent, maxDiscountAmount);
+    public void controlCreateCodedDiscount(String code,Date startDate, Date endDate, int percent, int maxDiscountAmount) throws ExceptionalMassage {
+        for (CodedDiscount codedDiscount : controlGetAllCodedDiscounts()) {
+            if(codedDiscount.getDiscountCode().equals(code)){
+                throw new ExceptionalMassage("Code already exists!");
+            }
+        }
+        new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount);
     }
 
     public void controlRemoveDiscountCode(String code) throws ExceptionalMassage{
@@ -590,7 +595,7 @@ public class Controller {
         return false;
     }
 
-    public String controlGetDigestInfosOfProduct(Product product){
+    public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage{
         // I need a Digest info of a product ! refer to Doc!
         return null;
     }
@@ -632,7 +637,12 @@ public class Controller {
         return filters;
     }
 
+
     public String currentSort(){
         return sortType;
+    }
+
+    public ArrayList<String> controlViewBuyersOfProduct(String productId) throws ExceptionalMassage{
+        return null;
     }
 }

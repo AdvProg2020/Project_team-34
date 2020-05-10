@@ -90,7 +90,7 @@ public class ManageCategoriesMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("^remove \\w+$", RemoveProduct);
+        menusIn.put("^remove \\w+$", RemoveCategory);
         menuForShow.add("Remove");
 
     }

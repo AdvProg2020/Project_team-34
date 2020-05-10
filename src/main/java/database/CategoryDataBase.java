@@ -54,29 +54,7 @@ public class CategoryDataBase {
         return false;
     }
 
-    private static ArrayList<String> convertProductArrayListToStringArrayList(ArrayList<Product> productArrayList){
-        ArrayList<String> stringArrayList = new ArrayList<>();
-        for (Product eachProduct : productArrayList) {
-            stringArrayList.add(eachProduct.getProductId());
-        }
-        return stringArrayList;
-    }
 
-    private static ArrayList<String> convertCategoryArrayListToStringArrayList(ArrayList<Category> categoryArrayList){
-        ArrayList<String> stringArrayList = new ArrayList<>();
-        for (Category eachCategory : categoryArrayList) {
-            stringArrayList.add(eachCategory.getName());
-        }
-        return stringArrayList;
-    }
-
-    private static ArrayList<Product> convertStringArrayListToProductArrayList(ArrayList<String> stringArrayList){
-        ArrayList<Product> productArrayList = new ArrayList<>();
-        for (String eachId : stringArrayList) {
-            productArrayList.add(Product.getProductById(eachId));
-        }
-        return productArrayList;
-    }
     
 
     public static void update(Category category) {

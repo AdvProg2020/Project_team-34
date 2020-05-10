@@ -22,8 +22,7 @@ public class SalesMenu extends Menu {
 
             @Override
             public void execute() {
-                //Need Modification!
-                for (String product : controller.controlGetAllProducts()) {
+                for (String product : controller.controlGetAllProductsInSales()) {
                     //Need a quick introduction!
                     System.out.println(product);
                 }
@@ -41,7 +40,7 @@ public class SalesMenu extends Menu {
 
     @Override
     public void show() {
-        for (Sale sale : controller.controlGetAllSales()) {
+        for (Sale sale : Sale.getActiveSales()) {
             System.out.println("Sale id : " + sale.getOffId());
             for (Product product : sale.getProducts()) {
                 System.out.println(product);

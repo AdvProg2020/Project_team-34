@@ -10,8 +10,8 @@ import java.util.Date;
 
 
 public abstract class Discount {
-    private Date start;
-    private Date end;
+    protected Date start;
+    protected Date end;
     protected int percent;
 
     public Discount(Date start, Date end, int percent) {

@@ -164,11 +164,12 @@ public class Product {
     }
 
     public int getPrice(Supplier supplier) {
-        return 0;
+        return priceForEachSupplier.get(supplier);
     }
 
     public int getRemainedNumber(Supplier supplier) {
-        return 0;
+        return remainedNumberForEachSupplier.get(supplier);
+        //aryan
     }
 
     public static void importAll(){
@@ -209,5 +210,17 @@ public class Product {
 
     public void setSpecification(HashMap<String, String> specification) {
         this.specification = specification;
+    }
+
+    public boolean isProductAvailableNow() {
+        return false;
+    }
+
+    public boolean isProductProvidedInPriceLowerThan(int upperBound) {
+        return false;
+    }
+
+    public boolean isProductProvidedInPriceUpperThan(int lowerBound) {
+        return false;
     }
 }

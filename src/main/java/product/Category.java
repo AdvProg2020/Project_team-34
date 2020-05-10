@@ -1,9 +1,12 @@
 package product;
 
+import database.CategoryDataBase;
 import exceptionalMassage.ExceptionalMassage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * @author Aryan Ahadinia
@@ -18,7 +21,7 @@ public class Category {
     private final String parentCategoryName;
     private final ArrayList<String> allCategoriesInName;
     private final ArrayList<Product> allProductsIn;
-    private final HashMap<String, ArrayList<String>> filters;
+    private final HashMap<String, ArrayList<String>> specialFields;
 
 
     //Constructors:
@@ -27,7 +30,7 @@ public class Category {
         this.parentCategoryName = null;
         this.allProductsIn = null;
         this.allCategoriesInName = new ArrayList<>();
-        this.filters = null;
+        this.specialFields = null;
         allCategories.add(this);
         //DataBase Banned
     }
@@ -41,14 +44,14 @@ public class Category {
         if (isParentCategory) {
             this.allCategoriesInName = new ArrayList<>();
             this.allProductsIn = null;
-            this.filters = null;
+            this.specialFields = null;
         } else {
             this.allProductsIn = new ArrayList<>();
-            this.filters = new HashMap<>();
+            this.specialFields = new HashMap<>();
             this.allCategoriesInName = null;
         }
         allCategories.add(this);
-        //file modifications required
+        CategoryDataBase.add(this);
     }
 
     public static Category getInstance(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
@@ -60,7 +63,7 @@ public class Category {
         if (!parentCategory.isCategoryClassifier())
             throw new ExceptionalMassage("Category " + parentCategoryName + " is a product classifier.");
         Category addingCategory = new Category(name, isParentCategory, parentCategoryName);
-        parentCategory.addSubCategory(addingCategory);
+        parentCategory.addToSubCategoryList(addingCategory);
         return addingCategory;
     }
 
@@ -70,7 +73,7 @@ public class Category {
         this.parentCategoryName = parentCategoryName;
         this.allCategoriesInName = allCategoriesInName;
         this.allProductsIn = allProductsIn;
-        this.filters = filters;
+        this.specialFields = filters;
     }
 
     //Getters:
@@ -94,8 +97,8 @@ public class Category {
         return allCategoriesIn;
     }
 
-    public HashMap<String, ArrayList<String>> getFilters() {
-        return filters;
+    public HashMap<String, ArrayList<String>> getSpecialFields() {
+        return specialFields;
     }
 
     //Setters:
@@ -124,7 +127,8 @@ public class Category {
         if (Category.getProductCategory(product) != null)
             throw new ExceptionalMassage("This product has already added to another category. <Category.addProduct>");
         this.allProductsIn.add(product);
-        //file modification required
+        CategoryDataBase.update(this);
+        //modify product specifications
     }
 
     public void removeProduct(Product product) throws ExceptionalMassage {
@@ -133,21 +137,19 @@ public class Category {
         if (!this.isProductIn(product))
             throw new ExceptionalMassage("This product is not in this category. <Category.removeProduct>");
         this.allProductsIn.remove(product);
-        //file modification required
+        CategoryDataBase.update(this);
     }
 
-    public void addSubCategory(Category addingCategory) throws ExceptionalMassage {
+    public void addToSubCategoryList(Category addingCategory) throws ExceptionalMassage {
         if (!this.isCategoryClassifier())
             throw new ExceptionalMassage("Cannot add a subcategory to this category. <Category.addSubCategory>");
         this.allCategoriesInName.add(addingCategory.getName());
-        //file modifications required
     }
 
     public void addSubCategory(String addingCategoryName, boolean isParentCategory) throws ExceptionalMassage {
         if (!this.isCategoryClassifier())
             throw new ExceptionalMassage("Cannot add a subcategory to this category. <Category.addSubCategory>");
         Category.getInstance(addingCategoryName, isParentCategory, this.getName());
-        //file modifications required
     }
 
     public void removeSubCategory(String removingCategoryName) throws ExceptionalMassage {
@@ -158,7 +160,7 @@ public class Category {
         //check if category is empty if required
         Category.allCategories.remove(getCategoryByName(removingCategoryName));
         this.allCategoriesInName.remove(removingCategoryName);
-        //file modification required
+        CategoryDataBase.update(this);
     }
 
     public static void removeCategory(String removingCategoryName) throws ExceptionalMassage {
@@ -178,7 +180,6 @@ public class Category {
         previousReference = this.getParentCategory().getReference();
         previousReference.add(this);
         return previousReference;
-        //completed
     }
 
     public ArrayList<Product> getAllProductInAllSubCategories() {
@@ -219,28 +220,58 @@ public class Category {
         return null;
     }
 
-    public void addFilter(String filterKey, String filterValue) throws ExceptionalMassage {
+    public void addField(String filterKey, String filterValue) throws ExceptionalMassage {
         if (this.isCategoryClassifier())
             throw new ExceptionalMassage("A category classifier category doesn't support filters. <Category.addFilter>");
-        if (this.filters.containsKey(filterKey)) {
-            ArrayList<String> filterKeyValues = this.filters.get(filterKey);
+        if (this.specialFields.containsKey(filterKey)) {
+            ArrayList<String> filterKeyValues = this.specialFields.get(filterKey);
             if (filterKeyValues.contains(filterValue))
                 throw new ExceptionalMassage("This filter has already added. <Category.addFilter>");
             filterKeyValues.add(filterValue);
         } else {
             ArrayList<String> filterKeyValue = new ArrayList<>();
             filterKeyValue.add(filterValue);
-            filters.put(filterKey, filterKeyValue);
+            specialFields.put(filterKey, filterKeyValue);
         }
+        CategoryDataBase.update(this);
+        //modify product specifications
     }
 
-    public void removeFilter(String filterKey, String filterValue) throws ExceptionalMassage {
+    public void removeField(String filterKey, String filterValue) throws ExceptionalMassage {
         if (this.isCategoryClassifier())
             throw new ExceptionalMassage("A category classifier category doesn't support filters. <Category.removeFilter>");
-        if (!this.filters.containsKey(filterKey))
+        if (!this.specialFields.containsKey(filterKey))
             throw new ExceptionalMassage("Filter with key " + filterKey + " not found. <Category.removeFilter>");
-        if (!this.filters.get(filterKey).contains(filterValue))
+        if (!this.specialFields.get(filterKey).contains(filterValue))
             throw new ExceptionalMassage("\"" + filterValue + "\" " + "not found in " + "\"" + filterKey + "\". " + "<Category.removeFilter>");
-        filters.get(filterKey).remove(filterValue);
+        specialFields.get(filterKey).remove(filterValue);
+        CategoryDataBase.update(this);
+        //modify product specifications
+    }
+
+    public HashMap<String, ArrayList<String>> getAvailableSpecialFilters() {
+        if (!isCategoryClassifier()) {
+            return specialFields;
+        } else {
+            Set<String> keys = new HashSet<>();
+            for (String categoryName : allCategoriesInName) {
+                Category category = getCategoryByName(categoryName);
+                Set<String> categoryFilterKeys = category.getAvailableSpecialFilters().keySet();
+                keys.retainAll(categoryFilterKeys);
+            }
+            HashMap<String, ArrayList<String>> availableFilters = new HashMap<>();
+            for (String key : keys) {
+                Set<String> valuesSet = new HashSet<>();
+                for (String categoryName : allCategoriesInName) {
+                    Category category = getCategoryByName(categoryName);
+                    ArrayList<String> categoryValues = category.getAvailableSpecialFilters().get(key);
+                    valuesSet.addAll(categoryValues);
+                }
+                ArrayList<String> valuesArrayList = new ArrayList<>(valuesSet);
+                availableFilters.put(key, valuesArrayList);
+            }
+            return availableFilters;
+        }
+        //check
     }
 }

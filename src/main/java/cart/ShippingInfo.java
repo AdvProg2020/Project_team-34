@@ -1,5 +1,7 @@
 package cart;
 
+import database.ShippingInfoDataBase;
+
 import java.util.ArrayList;
 
 /**
@@ -8,27 +10,32 @@ import java.util.ArrayList;
  */
 
 public class ShippingInfo {
-    private static ArrayList<ShippingInfo> allShippingInfo = new ArrayList<>();
+    private static final ArrayList<ShippingInfo> allShippingInfo = new ArrayList<>();
     private static int totalShippingInfoCreated = 0;
 
-    private String identifier;
-    private String firstName;
-    private String lastName;
-    private String city;
-    private String address;
-    private String  postalCode;
-    private String phoneNumber;
+    private final String identifier;
+    private final String firstName;
+    private final String lastName;
+    private final String city;
+    private final String address;
+    private final String postalCode;
+    private final String phoneNumber;
 
     public ShippingInfo(String firstName, String lastName, String city, String address, String postalCode, String phoneNumber) {
+        this.identifier = generateIdentifier();
         this.city = city;
         this.firstName = firstName;
         this.lastName = lastName;
         this.address = address;
         this.postalCode = postalCode;
         this.phoneNumber = phoneNumber;
+        allShippingInfo.add(this);
+        totalShippingInfoCreated++;
+        ShippingInfoDataBase.add(this);
     }
 
-    public ShippingInfo(String identifier, String firstName, String lastName, String city, String address, String postalCode, String phoneNumber) {
+    public ShippingInfo(String identifier, String firstName, String lastName, String city, String address,
+                        String postalCode, String phoneNumber) {
         this.identifier = identifier;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -36,20 +43,11 @@ public class ShippingInfo {
         this.address = address;
         this.postalCode = postalCode;
         this.phoneNumber = phoneNumber;
+        allShippingInfo.add(this);
+        totalShippingInfoCreated++;
     }
 
-    public static boolean isPhoneNumberValid(long phoneNumber) {
-        return true;
-    }
-
-    public static boolean isPostalCodeValid(long postalCode) {
-        return true;
-    }
-
-    public static boolean isAddressValid(String Address) {
-        return true;
-    }
-
+    //Getters:
     public String getIdentifier() {
         return identifier;
     }
@@ -78,10 +76,18 @@ public class ShippingInfo {
         return phoneNumber;
     }
 
-    // Added by rpirayadi
-    public static ShippingInfo getShippingInfoById (String identifier){
+    public static int getTotalShippingInfoCreated() {
+        return totalShippingInfoCreated;
+    }
+
+    //Modeling methods
+    public static String generateIdentifier() {
+        return "T34SI" + String.format("%015d", totalShippingInfoCreated + 1);
+    }
+
+    public static ShippingInfo getShippingInfoByIdentifier(String identifier) {
         for (ShippingInfo shippingInfo : allShippingInfo) {
-            if(shippingInfo.getIdentifier().equals(identifier))
+            if (shippingInfo.getIdentifier().equals(identifier))
                 return shippingInfo;
         }
         return null;

@@ -1,5 +1,6 @@
 package menu.profile.customerProfileMenu;
 
+import discount.CodedDiscount;
 import menu.menuAbstract.Menu;
 import menu.profile.ProfileMenu;
 
@@ -25,6 +26,9 @@ public class CustomerProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
+                System.out.println(controller.controlViewBalance());
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^view balance$", ViewBalance);
@@ -37,7 +41,13 @@ public class CustomerProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
+                for (CodedDiscount codedDiscount : controller.controlGetCodedDiscountByCustomer()) {
+                    System.out.println(codedDiscount.getDiscountCode());
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
+
         };
         menusIn.put("view discount codes", ViewDiscountCodes);
         menuForShow.add("View Discount Codes");

@@ -1,7 +1,10 @@
 package menu.profile.supplierProfileMenu;
 
+import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 import menu.profile.ProfileMenu;
+
+import java.util.regex.Matcher;
 
 /**
  * @author Aryan Ahadinia
@@ -15,10 +18,13 @@ public class SupplierProfileMenu extends ProfileMenu {
         Menu ViewCompanyInformation = new Menu("View Company Information", this) {
             @Override
             public void show() {
+                System.out.println(controller.controlViewCompanyInfo());
             }
 
             @Override
             public void execute() {
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^view company information$", ViewCompanyInformation);
@@ -27,13 +33,16 @@ public class SupplierProfileMenu extends ProfileMenu {
         Menu ViewSalesHistory = new Menu("View Sales History", this) {
             @Override
             public void show() {
+                System.out.println(controller.showSalesHistory());
             }
 
             @Override
             public void execute() {
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
-        menusIn.put("^view company information$", ViewSalesHistory);
+        menusIn.put("^view sales history", ViewSalesHistory);
         menuForShow.add("View Sales History");
 
         menusIn.put("^manage products$", new ManageProductsMenu(this));
@@ -46,6 +55,9 @@ public class SupplierProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
+                //need modification!
+                System.out.println();
+                //controller.controlAddProduct();
             }
         };
         menusIn.put("^add product$", AddProduct);
@@ -58,6 +70,17 @@ public class SupplierProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
+                String regex = "^remove product (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    try{
+                        controller.controlRemoveProductById(matcher.group(1));
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^remove product (\\w+)$", RemoveProduct);
@@ -66,10 +89,13 @@ public class SupplierProfileMenu extends ProfileMenu {
         Menu ShowCategories = new Menu("ShowCategories", this) {
             @Override
             public void show() {
+                System.out.println(controller.controlGetAllCategories());
             }
 
             @Override
             public void execute() {
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^show categories$", ShowCategories);
@@ -85,6 +111,9 @@ public class SupplierProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
+                System.out.println(controller.controlViewBalance());
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^view balance$", ViewBalance);

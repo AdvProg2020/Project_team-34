@@ -250,7 +250,7 @@ public class Controller {
     public void controlLogout() {
         account = null;
         cart = new Cart(null);
-        filter = new HashMap<>();
+        //filter = new HashMap<>();
     }
 
     public void addFilter(String key, String value) throws ExceptionalMassage {
@@ -369,16 +369,15 @@ public class Controller {
         }
     }
 
-    public Response controlRemoveProductById(String productId) throws ExceptionalMassage{
+    public void  controlRemoveProductById(String productId) throws ExceptionalMassage{
         Product product = Product.getProductById(productId);
         if (product != null) {
             product.removeProduct();
-            return Response.OK;
+
         }
-        return Response.INVALID_PRODUCT_ID;
     }
 
-    public int controlViewBalance(Account account) {
+    public int controlViewBalance() {
         return (account).getCredit();
     }
 
@@ -444,11 +443,16 @@ public class Controller {
         controlGetDiscountByCode(code).setStart(newStartDate);
         controlGetDiscountByCode(code).setEnd(newEndDate);
         controlGetDiscountByCode(code).setPercent(newPercent);
-        controlGetDiscountByCode(code).setMaxDiscountPercent(newMaxDiscount);
+        controlGetDiscountByCode(code).setMaxDiscountAmount(newMaxDiscount);
     }
 
-    public void controlCreateCodedDiscount(Date startDate, Date endDate, int percent, int maxDiscountAmount) throws ExceptionalMassage {
-        new CodedDiscount(startDate, endDate, percent, maxDiscountAmount);
+    public void controlCreateCodedDiscount(String code,Date startDate, Date endDate, int percent, int maxDiscountAmount) throws ExceptionalMassage {
+        for (CodedDiscount codedDiscount : controlGetAllCodedDiscounts()) {
+            if(codedDiscount.getDiscountCode().equals(code)){
+                throw new ExceptionalMassage("Code already exists!");
+            }
+        }
+        new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount);
     }
 
     public void controlRemoveDiscountCode(String code) throws ExceptionalMassage{
@@ -503,10 +507,10 @@ public class Controller {
         Sale.getSales().remove(controlGetSaleById(id));
     }
 
-    public ArrayList<CodedDiscount> controlGetCodedDiscountByCustomer(Customer customer){
+    public ArrayList<CodedDiscount> controlGetCodedDiscountByCustomer(){
         ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
         for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
-            if(codedDiscount.getCustomers().contains(customer)){
+            if(codedDiscount.getCustomers().contains((Customer)account)){
                 codedDiscounts.add(codedDiscount);
             }
         }
@@ -570,7 +574,7 @@ public class Controller {
         return false;
     }
 
-    public String controlGetDigestInfosOfProduct(Product product){
+    public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage{
         // I need a Digest info of a product ! refer to Doc!
         return null;
     }
@@ -605,14 +609,20 @@ public class Controller {
     }
 
     public ArrayList<String> currentFilters(){
-        ArrayList<String> filters = new ArrayList<>();
-        for (String s : filter.keySet()) {
-            filters.add(s);
-        }
-        return filters;
+        return null;
     }
 
-    public String currentSort(){
-        return sortType;
+    public String showSalesHistory(){
+        return null;
     }
+
+
+    public String currentSort(){
+        return null;
+    }
+
+    public ArrayList<String> controlViewBuyersOfProduct(String productId) throws ExceptionalMassage{
+        return null;
+    }
+
 }

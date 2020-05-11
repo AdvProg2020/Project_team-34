@@ -1,6 +1,11 @@
 package menu.profile.supplierProfileMenu;
 
+import com.sun.tools.javac.tree.JCTree;
+import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
+import product.Product;
+
+import java.util.regex.Matcher;
 
 public class ManageProductsMenu extends Menu {
     public ManageProductsMenu(Menu parentMenu) {
@@ -13,6 +18,18 @@ public class ManageProductsMenu extends Menu {
 
             @Override
             public void execute() {
+                String regex = "^view (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()) {
+                    try {
+                        System.out.println(controller.controlGetDigestInfosOfProduct(Product.getProductById(matcher.group(1))));
+                    }
+                    catch (ExceptionalMassage ex) {
+                        System.out.println(ex.getMessage());
+                    }
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^view (\\w+)$", View);
@@ -25,6 +42,17 @@ public class ManageProductsMenu extends Menu {
 
             @Override
             public void execute() {
+                String regex = "^view buyers (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                   try {
+                       controller.controlViewBuyersOfProduct(matcher.group(1));
+                   } catch (ExceptionalMassage ex){
+                       System.out.println(ex.getMessage());
+                   }
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^view buyers (\\w+)$", ViewBuyers);
@@ -37,9 +65,17 @@ public class ManageProductsMenu extends Menu {
 
             @Override
             public void execute() {
+                //need modification!
+                //controller.controlEditProductById();
             }
         };
         menusIn.put("^edit (\\w+)$", Edit);
         menuForShow.add("Edit");
+    }
+
+    @Override
+    public void show() {
+        System.out.println(controller.controlGetListOfProductsForThisSupplier());
+        super.show();
     }
 }

@@ -44,12 +44,14 @@ public class SupervisorProfileMenu extends ProfileMenu {
                     parentMenu.show();
                     parentMenu.execute();
                 }
-                System.out.println("Enter the discount amount :");
+                System.out.println("Enter the discount percent :");
                 int percent = scanner.nextInt();
                 System.out.println("Enter the maximum discount amount :");
                 int maxAmount = scanner.nextInt();
+                System.out.println("Enter the discount code :");
+                String code = scanner.nextLine();
                 try {
-                    controller.controlCreateCodedDiscount(startDate,endDate,percent,maxAmount);
+                    controller.controlCreateCodedDiscount(code,startDate,endDate,percent,maxAmount);
                 } catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }

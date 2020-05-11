@@ -1,8 +1,6 @@
 package discount;
 
 import account.Customer;
-import com.google.gson.JsonObject;
-
 
 
 import java.util.ArrayList;
@@ -19,15 +17,16 @@ public class CodedDiscount extends Discount{
     private static final String LETTERS_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private static ArrayList<CodedDiscount> codedDiscounts;
     private String discountCode;
-    private int maxDiscountPercent;
+    private int maxDiscountAmount;
     private HashMap<Customer, Integer> usedDiscountPerCustomer;
     private ArrayList<Customer> customers;
 
 
-    public CodedDiscount(Date start, Date end, int percent, int maxDiscountPercent) {
+    public CodedDiscount(String code, Date start, Date end, int percent, int maxDiscountPercent) {
+
         super(start, end, percent);
-        this.discountCode = codeGenerator();
-        this.maxDiscountPercent = maxDiscountPercent;
+        this.discountCode = code;
+        this.maxDiscountAmount = maxDiscountPercent;
     }
 
     public CodedDiscount(Date start, Date end, int percent) {
@@ -48,8 +47,8 @@ public class CodedDiscount extends Discount{
         return code;
     }
 
-    public int getMaxDiscountPercent() {
-        return maxDiscountPercent;
+    public int getMaxDiscountAmount() {
+        return maxDiscountAmount;
     }
 
     public ArrayList<Customer> getCustomers() {
@@ -102,8 +101,8 @@ public class CodedDiscount extends Discount{
     }
 
 
-    public void setMaxDiscountPercent(int maxDiscountPercent) {
-        this.maxDiscountPercent = maxDiscountPercent;
+    public void setMaxDiscountAmount(int maxDiscountAmount) {
+        this.maxDiscountAmount = maxDiscountAmount;
     }
 
     /**
@@ -114,7 +113,7 @@ public class CodedDiscount extends Discount{
     public String toString() {
         return "CodedDiscount{" +
                 "discountCode='" + discountCode + '\'' +
-                ", maxDiscountPercent=" + maxDiscountPercent +
+                ", maxDiscountPercent=" + maxDiscountAmount +
                 ", customers=" + customers +
                 ", percent=" + percent +
                 '}';

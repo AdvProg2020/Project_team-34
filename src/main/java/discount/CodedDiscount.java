@@ -33,6 +33,16 @@ public class CodedDiscount extends Discount{
         super(start, end, percent);
     }
 
+    // Added by rpirayadi
+    public CodedDiscount(Date start, Date end, int percent, String discountCode, int maxDiscountAmount, HashMap<Customer,
+            Integer> usedDiscountPerCustomer, ArrayList<Customer> customers) {
+        super(start, end, percent);
+        this.discountCode = discountCode;
+        this.maxDiscountAmount = maxDiscountAmount;
+        this.usedDiscountPerCustomer = usedDiscountPerCustomer;
+        this.customers = customers;
+    }
+
     public static String codeGenerator(){
         return null;
     }
@@ -55,6 +65,9 @@ public class CodedDiscount extends Discount{
         return customers;
     }
 
+    public HashMap<Customer, Integer> getUsedDiscountPerCustomer() {
+        return usedDiscountPerCustomer;
+    }
 
     public void addCustomer(Customer customer){
         customers.add(customer);

@@ -35,7 +35,7 @@ public class CategoryDataBase {
             statement.setString(2,category.getParentCategory().getName());
             statement.setString(3,convertObjectToJsonString(convertProductArrayListToStringArrayList( category.getAllProductsIn())));
             statement.setString(4,convertObjectToJsonString(convertCategoryArrayListToStringArrayList(category.getAllCategoriesIn())));
-            statement.setString(5,convertObjectToJsonString(category.getFilters()));
+            statement.setString(5,convertObjectToJsonString(category.getSpecialFields()));
 
             statement.executeUpdate();
         } catch (SQLException e) {

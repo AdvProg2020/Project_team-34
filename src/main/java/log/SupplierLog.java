@@ -33,9 +33,6 @@ public class SupplierLog {
         //file modification required
     }
 
-    //Added by rpirayadi
-
-
     public SupplierLog(String identifier, int earnedMoney, int discountAmount, int totalPurchase, CustomerLog customerLog, Supplier supplier) {
         this.identifier = identifier;
         this.earnedMoney = earnedMoney;

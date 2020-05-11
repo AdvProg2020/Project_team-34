@@ -169,7 +169,4 @@ public class CustomerLog {
         }
         return null;
     }
-
-    public static void importAll() {
-    }
 }

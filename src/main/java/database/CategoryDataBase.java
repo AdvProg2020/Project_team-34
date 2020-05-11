@@ -17,7 +17,7 @@ public class CategoryDataBase {
         content.put("parentCategoryName" , "String");
         content.put("listOfAllProductsId", "String");
         content.put("listOfCategoriesInName", "String");
-        content.put("filters", "String");
+        content.put("specialFields", "String");
 
         DataBase.createNewTable("Categories", content);
     }
@@ -26,8 +26,8 @@ public class CategoryDataBase {
         if (doesCategoryAlreadyExists(category)) {
             return;
         }
-        String sql = "INSERT into scores (name , parentCategoryName, listOfAllProductsId, listOfCategoriesInName, filters) " +
-                "VALUES (?,?, ? )";
+        String sql = "INSERT into scores (name , parentCategoryName, listOfAllProductsId, listOfCategoriesInName, specialFields) " +
+                "VALUES (?,?, ? ,?,?)";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -78,7 +78,7 @@ public class CategoryDataBase {
                 String parentCategoryName = resultSet.getString("parentCategoryName");
                 ArrayList<Product> allProductsIn= convertStringArrayListToProductArrayList(convertJsonToArrayList(resultSet.getString("listOfAllProductsId")));
                 ArrayList<String> allCategoriesInName = convertJsonToArrayList(resultSet.getString("listOfCategoriesInName"));
-                HashMap<String,ArrayList<String>> filters = convertJsonToSpecialHashMap(resultSet.getString("filters"));
+                HashMap<String,ArrayList<String>> filters = convertJsonToSpecialHashMap(resultSet.getString("specialFields"));
 
                 new Category(name,parentCategoryName,allCategoriesInName,allProductsIn,filters);
             }

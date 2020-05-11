@@ -62,7 +62,7 @@ public class ProductInCartDataBase {
 
 
     public static ArrayList<ProductInCart> getAllProductInCarts() {
-        String sql = "SELECT *  FROM Comments";
+        String sql = "SELECT *  FROM ProductInCarts";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();

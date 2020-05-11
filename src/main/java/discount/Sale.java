@@ -83,7 +83,7 @@ public class Sale extends Discount{
         return sales;
     }
 
-    public Sale getSaleById(String id){
+    public static Sale getSaleById(String id){
         for (Sale sale : sales) {
             if(sale.getOffId().equals(id)){
                 return sale;

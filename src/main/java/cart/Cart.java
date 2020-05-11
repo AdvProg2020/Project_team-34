@@ -41,6 +41,20 @@ public class Cart {
         //file modification required if <owner != null>
     }
 
+    // Added by rpirayadi
+
+
+    public Cart(String identifier, Customer owner, ArrayList<ProductInCart> productsIn, HashMap<ProductInCart, Integer> productInCount,
+                HashMap<ProductInCart, Sale> productInSale, CodedDiscount codedDiscount, ShippingInfo shippingInfo) {
+        this.identifier = identifier;
+        this.owner = owner;
+        this.productsIn = productsIn;
+        this.productInCount = productInCount;
+        this.productInSale = productInSale;
+        this.codedDiscount = codedDiscount;
+        this.shippingInfo = shippingInfo;
+    }
+
     //Getters:
     public String getIdentifier() {
         return identifier;

@@ -41,9 +41,6 @@ public class Cart {
         //file modification required if <owner != null>
     }
 
-    // Added by rpirayadi
-
-
     public Cart(String identifier, Customer owner, ArrayList<ProductInCart> productsIn, HashMap<ProductInCart, Integer> productInCount,
                 HashMap<ProductInCart, Sale> productInSale, CodedDiscount codedDiscount, ShippingInfo shippingInfo) {
         this.identifier = identifier;
@@ -53,6 +50,8 @@ public class Cart {
         this.productInSale = productInSale;
         this.codedDiscount = codedDiscount;
         this.shippingInfo = shippingInfo;
+        allCarts.add(this);
+        countOfCartCreated++;
     }
 
     //Getters:
@@ -232,7 +231,8 @@ public class Cart {
         for (ProductInCart productInCart : productsIn) {
             Sale productSale = productInSale.get(productInCart);
             if (productSale != null) {
-                saleAmount += productSale.discountAmountFor((productInCart.getProduct()).getPrice(productInCart.getSupplier()));
+                saleAmount += productSale.discountAmountFor((productInCart.getProduct()).getPrice(productInCart.getSupplier())) *
+                        productInCount.get(productInCart);
             }
         }
         return saleAmount;
@@ -260,11 +260,11 @@ public class Cart {
     public int getSupplierSaleAmount(Supplier supplier) {
         //check
         int totalSale = 0;
-        if (productsIn.size() != 0) {
-            for (ProductInCart productInCart : productsIn) {
-                if (productInCart.getSupplier() == supplier) {
-                    Sale sale = productInSale.get(productInCart);
-                    totalSale += sale.discountAmountFor((productInCart.getProduct()).getPrice(supplier));
+        for (ProductInCart productInCart : productsIn) {
+            if (productInCart.getSupplier() == supplier) {
+                Sale sale = productInSale.get(productInCart);
+                if (sale != null) {
+                    totalSale += (sale.discountAmountFor((productInCart.getProduct()).getPrice(supplier))) * productInCount.get(productInCart);
                 }
             }
         }

@@ -1,7 +1,6 @@
 package log;
 
 import account.Supplier;
-import exceptionalMassage.ExceptionalMassage;
 
 import java.util.ArrayList;
 
@@ -32,7 +31,6 @@ public class SupplierLog {
         allSupplierLogs.add(this);
         allSupplierLogCreatedCount++;
         //file modification required
-        //completed
     }
 
     //Getters:
@@ -74,12 +72,7 @@ public class SupplierLog {
         //completed
     }
 
-    public void proceedToNextStep() throws ExceptionalMassage {
-        customerLog.proceedToNextStep();
-        //completed
-    }
-
-    public ArrayList<SupplierLog> getSupplierSupplierLog(Supplier supplier) {
+    public static ArrayList<SupplierLog> getSupplierSupplierLog(Supplier supplier) {
         ArrayList<SupplierLog> supplierLogs = new ArrayList<>();
         if (allSupplierLogs.size() != 0) {
             for (SupplierLog supplierLog : allSupplierLogs) {
@@ -89,15 +82,13 @@ public class SupplierLog {
             }
         }
         return supplierLogs;
-        //completed
     }
 
     public static SupplierLog getSupplierLogById(String identifier){
-        return null;
-    }
-
-    @Override
-    public String toString() {
+        for (SupplierLog supplierLog : allSupplierLogs) {
+            if (supplierLog.getIdentifier().equals(identifier))
+                return supplierLog;;
+        }
         return null;
     }
 }

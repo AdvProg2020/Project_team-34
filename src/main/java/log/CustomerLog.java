@@ -40,7 +40,6 @@ public class CustomerLog {
         allCustomerLogCreatedCount++;
         addSubLogForSuppliers();
         //file modification required
-        //completed
     }
 
     public CustomerLog(String identifier, Date date, LogStatus deliveryStatus, Cart cart) {
@@ -53,6 +52,7 @@ public class CustomerLog {
         this.cart = cart;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
+        addSubLogForSuppliers();
     }
 
     //Getters:
@@ -115,7 +115,6 @@ public class CustomerLog {
             }
         }
         return customerLogs;
-        //completed
     }
 
     public void addSubLogForSuppliers() {

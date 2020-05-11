@@ -50,7 +50,7 @@ public class ProductDataBase {
             statement.setString(4, product.getName());
             statement.setString(5, product.getNameOfCompany());
             statement.setString(6, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getPriceForEachSupplier())));
-            statement.setString(7, convertObjectToJsonString(covertSupplierArrayListToStringArrayList(product.getListOfSuppliers())));
+            statement.setString(7, convertObjectToJsonString(convertSupplierArrayListToStringArrayList(product.getListOfSuppliers())));
             statement.setString(8, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getRemainedNumberForEachSupplier())));
             statement.setString(9, product.getDescription());
             statement.setString(10, convertObjectToJsonString(product.getSpecification()));
@@ -78,7 +78,7 @@ public class ProductDataBase {
         return supplierHashMap;
     }
 
-    private static ArrayList<String> covertSupplierArrayListToStringArrayList(ArrayList<Supplier> supplierArrayList){
+    private static ArrayList<String> convertSupplierArrayListToStringArrayList(ArrayList<Supplier> supplierArrayList){
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (Supplier supplier : supplierArrayList) {
             stringArrayList.add(supplier.getUserName());

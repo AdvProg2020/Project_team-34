@@ -19,11 +19,11 @@ public class CartTest {
     private static final Supplier supplier2 = new Supplier("sup2", "fs2", "ls2",
             "2@sup.com", "09222222222", "2222", 222, "c2");
     private static final Product product1 = new Product(supplier1, "p1", "b1", 100,
-            10, "A good product1");
+            10, "A good product1", null);
     private static final Product product2 = new Product(supplier2, "p2", "b2", 200,
-            20, "A good Product2");
+            20, "A good Product2", null);
     private static final Product product3 = new Product(supplier2, "p3", "b3", 1000,
-            0, "A good Product3");
+            0, "A good Product3", null);
     private static final ShippingInfo shippingInfo = new ShippingInfo("aryan", "ahadinia",
             "tehran", "d5", "1477996171", "09306926009");
 

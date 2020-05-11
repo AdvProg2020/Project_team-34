@@ -14,8 +14,7 @@ public class ShippingInfoTest {
     private static final int shippingInfoCreatedCountAfter = ShippingInfo.getTotalShippingInfoCreated();
 
     private static ArrayList<ShippingInfo> createTestInstances() {
-        //check
-        ShippingInfoDataBase.createNewTable();
+        ShippingInfoDataBase.createNewTable(); //check for error
         ArrayList<ShippingInfo> testInstances = new ArrayList<>();
         for (int i = 1; i <= 100; i++)
             testInstances.add(new ShippingInfo("firstName " + i, "lastName " + i, "city " + i,

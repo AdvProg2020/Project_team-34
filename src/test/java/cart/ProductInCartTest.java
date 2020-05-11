@@ -1,6 +1,7 @@
 package cart;
 
 import account.Supplier;
+import database.ProductInCartDataBase;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -20,6 +21,7 @@ public class ProductInCartTest {
     private static final ArrayList<ProductInCart> testInstances = createTestInstances();
 
     public static ArrayList<ProductInCart> createTestInstances() {
+        ProductInCartDataBase.createNewTable();
         ArrayList<ProductInCart> instances = new ArrayList<>();
         for (int i = 1; i < 10; i++) {
             instances.add(new ProductInCart(product1, supplier1));

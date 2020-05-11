@@ -71,6 +71,11 @@ public class DigestMenu extends Menu {
     @Override
     public void show() {
         System.out.println("Product info : ");
-        System.out.println(controller.controlGetDigestInfosOfProduct(product));
+        try {
+            System.out.println(controller.controlGetDigestInfosOfProduct(product));
+        } catch (ExceptionalMassage ex){
+            System.out.println(ex.getMessage());
+        }
+        super.show();
     }
 }

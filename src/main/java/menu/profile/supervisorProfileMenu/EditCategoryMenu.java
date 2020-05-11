@@ -43,11 +43,11 @@ public class EditCategoryMenu extends Menu {
                 String filterKey = scanner.nextLine();
                 System.out.print("Enter filter values separated by \",\" in a line: ");
                 String filterValues = scanner.nextLine();
-                try {
-                    controller.controlAddSpecialFilterToCategory(category.getName(), filterKey, filterValues);
-                } catch (ExceptionalMassage e) {
-                    System.out.println(e.getMessage());
-                }
+                //try {
+                    //controller.controlAddSpecialFilterToCategory(category.getName(), filterKey, filterValues);
+                //} catch (ExceptionalMassage e) {
+                   // System.out.println(e.getMessage());
+                //}
             }
         };
         menusIn.put("add special filter", AddSpecialFilter);
@@ -63,11 +63,11 @@ public class EditCategoryMenu extends Menu {
             public void execute() {
                 System.out.print("Enter filter key: ");
                 String filterKey = scanner.nextLine();
-                try {
-                    controller.controlRemoveSpecialFilterFromCategory(category.getName(), filterKey);
-                } catch (ExceptionalMassage e) {
-                    System.out.println(e.getMessage());
-                }
+                //try {
+                    //controller.controlRemoveSpecialFilterFromCategory(category.getName(), filterKey);
+                //} catch (ExceptionalMassage e) {
+                    //System.out.println(e.getMessage());
+                //}
             }
         };
         menusIn.put("remove special filter", AddSpecialFilter);

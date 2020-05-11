@@ -23,7 +23,7 @@ public class ManageCategoriesMenu extends Menu {
                     System.out.println("Enter the new Name: ");
                     newName  = scanner.nextLine();
                     try {
-                        controller.controlEditCategory(matcher.group(1), newName);
+                        controller.controlChangeCategoryName(matcher.group(1), newName);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }

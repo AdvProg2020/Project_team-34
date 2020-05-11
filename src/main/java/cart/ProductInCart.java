@@ -1,13 +1,14 @@
 package cart;
 
 import account.Supplier;
+import database.ProductInCartDataBase;
 import product.Product;
 
 import java.util.ArrayList;
 
 public class ProductInCart {
     private static final ArrayList<ProductInCart> allProductInCarts = new ArrayList<>();
-    private static long numberOfObjectCreated =0;
+    private static long numberOfObjectCreated = 0;
 
     private final String identifier;
     private final Product product;
@@ -19,7 +20,7 @@ public class ProductInCart {
         this.supplier = supplier;
         allProductInCarts.add(this);
         numberOfObjectCreated++;
-        allProductInCarts.add(this);
+        ProductInCartDataBase.add(this);
     }
 
     public ProductInCart(String identifier, Product product, Supplier supplier) {
@@ -43,8 +44,12 @@ public class ProductInCart {
         return supplier;
     }
 
+    public static long getNumberOfObjectCreated() {
+        return numberOfObjectCreated;
+    }
+
     //Modeling methods:
-    public String generateIdentifier() {
+    public static String generateIdentifier() {
         return "T34PC" + String.format("%015d", numberOfObjectCreated + 1);
     }
 
@@ -54,6 +59,5 @@ public class ProductInCart {
                 return productInCart;
         }
         return null;
-        //check
     }
 }

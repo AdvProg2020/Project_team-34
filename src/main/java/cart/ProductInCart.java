@@ -19,7 +19,7 @@ public class ProductInCart {
         this.identifier = generateIdentifier();
         this.product = product;
         this.supplier = supplier;
-        allProductInCart.add(this);
+        allProductInCarts.add(this);
         numberOfObjectCreated++;
         allProductInCarts.add(this);
     }
@@ -28,7 +28,7 @@ public class ProductInCart {
         this.identifier = identifier;
         this.product = product;
         this.supplier = supplier;
-        allProductInCart.add(this);
+        allProductInCarts.add(this);
         numberOfObjectCreated++;
     }
 
@@ -51,7 +51,7 @@ public class ProductInCart {
     }
 
     public static ProductInCart getProductInCartByIdentifier(String identifier) {
-        for (ProductInCart productInCart : allProductInCart) {
+        for (ProductInCart productInCart : allProductInCarts) {
             if (productInCart.getIdentifier().equals(identifier))
                 return productInCart;
         }

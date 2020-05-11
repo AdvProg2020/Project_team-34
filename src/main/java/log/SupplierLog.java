@@ -35,6 +35,18 @@ public class SupplierLog {
         //completed
     }
 
+    //Added by rpirayadi
+
+
+    public SupplierLog(String identifier, int earnedMoney, int discountAmount, int totalPurchase, CustomerLog customerLog, Supplier supplier) {
+        this.identifier = identifier;
+        this.earnedMoney = earnedMoney;
+        this.discountAmount = discountAmount;
+        this.totalPurchase = totalPurchase;
+        this.customerLog = customerLog;
+        this.supplier = supplier;
+    }
+
     //Getters:
     public String getIdentifier() {
         return identifier;

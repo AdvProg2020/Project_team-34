@@ -125,13 +125,12 @@ public class ProductDataBase {
             DataBase.delete("Products", "productId",productId);
     }
 
-    public static ArrayList<Product> getAllProducts() {
+    public static void importAllProducts() {
         String sql = "SELECT *  FROM Products";
 
         try (Connection connection = connect();
              Statement stmt = connection.createStatement();
              ResultSet resultSet = stmt.executeQuery(sql)) {
-            ArrayList<Product> products = new ArrayList<>();
             while (resultSet.next()) {
 
                 String name = resultSet.getString("name");
@@ -144,15 +143,12 @@ public class ProductDataBase {
                 String productId = resultSet.getString("productId");
                 State state = State.valueOf(resultSet.getString("productState"));
                 String rootProductId = resultSet.getString("rootProductId");
-                Product product = new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,
+                new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,
                         remainedNumberForEachSupplier,description,numberOfViews,productId,state, rootProductId);
-                products.add(product);
             }
-            return products;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 
 

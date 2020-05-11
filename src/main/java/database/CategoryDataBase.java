@@ -60,13 +60,12 @@ public class CategoryDataBase {
         DataBase.delete("Categories", "name", categoryName);
     }
 
-    public static ArrayList<Category> getAllCategories() {
+    public static void importAllCategories() {
         String sql = "SELECT *  FROM Categories";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<Category> categories = new ArrayList<>();
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 String parentCategoryName = resultSet.getString("parentCategoryName");
@@ -76,12 +75,9 @@ public class CategoryDataBase {
 
                 new Category(name,parentCategoryName,allCategoriesInName,allProductsIn,filters);
             }
-            return categories;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
-
 
     }
 

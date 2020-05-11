@@ -81,13 +81,12 @@ public class AccountDataBase {
     }
 
 
-    public static ArrayList<Account> getAllAccounts() {
+    public static void importAllAccounts() {
         String sql = "SELECT *  FROM Accounts";
 
         try (Connection connection = DataBase.connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<Account> accounts = new ArrayList<>();
             while (resultSet.next()) {
                 String username = resultSet.getString("username");
                 String name = resultSet.getString("name");
@@ -103,23 +102,18 @@ public class AccountDataBase {
                 if(cartId!= null){
                     Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit,
                              cartId);
-                    accounts.add(customer);
                 }
                 else if(nameOfCompany != null){
                     Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,nameOfCompany);
-                    accounts.add(supplier);
                 }
                 else{
                     Supervisor supervisor = new Supervisor(username,name, familyName, email,phoneNumber,password,credit);
-                    accounts.add(supervisor);
                 }
 
             }
-            return accounts;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }
 

@@ -5,7 +5,6 @@ import cart.Cart;
 import cart.ShippingInfo;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static database.DataBase.connect;
@@ -60,13 +59,12 @@ public class ShippingInfoDataBase {
         DataBase.delete("ShippingInfos", "identifier",identifier);
     }
 
-    public static ArrayList<ShippingInfo> getAllScores() {
+    public static void importAllScores() {
         String sql = "SELECT *  FROM ShippingInfos";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<ShippingInfo> shippingInfos = new ArrayList<>();
             while (resultSet.next()) {
                 String identifier = resultSet.getString("identifier");
                 String firstName = resultSet.getString("firstName");
@@ -77,13 +75,10 @@ public class ShippingInfoDataBase {
                 String phoneNumber = resultSet.getString("phoneNumber");
 
 
-
-                shippingInfos.add(new ShippingInfo(identifier,firstName,lastName,city,address, postalCode,phoneNumber));
+                new ShippingInfo(identifier,firstName,lastName,city,address, postalCode,phoneNumber);
             }
-            return shippingInfos;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }

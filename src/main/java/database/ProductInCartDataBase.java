@@ -55,25 +55,22 @@ public class ProductInCartDataBase {
     }
 
 
-    public static ArrayList<ProductInCart> getAllProductInCarts() {
+    public static void importAllProductInCarts() {
         String sql = "SELECT *  FROM ProductInCarts";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<ProductInCart> productInCarts = new ArrayList<>();
             while (resultSet.next()) {
                 String productInCartId = resultSet.getString("productInCartId");
                 Product product = Product.getProductById(resultSet.getString("productId"));
                 Supplier supplier = (Supplier) Account.getAccountByUsername(resultSet.getString("supplierId"));
 
-                productInCarts.add(new ProductInCart(productInCartId,product,supplier));
+                new ProductInCart(productInCartId,product,supplier);
             }
-            return productInCarts;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }
 

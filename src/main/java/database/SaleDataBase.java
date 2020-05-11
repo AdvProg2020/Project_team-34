@@ -59,13 +59,12 @@ public class SaleDataBase {
         DataBase.delete("Sales" , "offId",offId);
     }
 
-    public static ArrayList<Sale> getAllSales() {
+    public static void importAllSales() {
         String sql = "SELECT *  FROM Sales";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<Sale> sales = new ArrayList<>();
             while (resultSet.next()) {
                 Date start = new Date(resultSet.getLong("start"));
                 Date end =  new Date(resultSet.getLong("end"));
@@ -75,13 +74,11 @@ public class SaleDataBase {
                 State state = State.valueOf(resultSet.getString("state"));
 
 
-                sales.add(new Sale(start,end,percent,offId,products, state));
+                new Sale(start,end,percent,offId,products, state);
 
             }
-            return sales;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }

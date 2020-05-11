@@ -58,7 +58,7 @@ public class CustomerLogDataBase {
         DataBase.delete("CustomerLogs", "identifier",customerLogId);
     }
 
-    public static ArrayList <CustomerLog> getAllCustomerLogs() {
+    public static void importAllCustomerLogs() {
         String sql = "SELECT *  FROM CustomerLogs";
 
         try (Connection connection = connect();
@@ -74,11 +74,9 @@ public class CustomerLogDataBase {
                 customerLogs.add(new CustomerLog(customerLogId,date,deliveryStatus,cart));
 
             }
-            return customerLogs;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 
 

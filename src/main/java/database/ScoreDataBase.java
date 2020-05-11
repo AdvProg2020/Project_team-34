@@ -60,25 +60,22 @@ public class ScoreDataBase {
     }
 
 
-    public static ArrayList<Score> getAllScores() {
+    public static void importAllScores() {
         String sql = "SELECT *  FROM Scores";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<Score> scores = new ArrayList<>();
             while (resultSet.next()) {
                 String scoreId = resultSet.getString("scoreId");
                 Customer customer = (Customer) (Account.getAccountByUsername(resultSet.getString("customerUsername")));
                 Product product = Product.getProductById(resultSet.getString("productId"));
                 Float score = resultSet.getFloat("score");
 
-                scores.add(new Score(scoreId,customer,product,score));
+                new Score(scoreId,customer,product,score);
             }
-            return scores;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }

@@ -95,13 +95,12 @@ public class CodedDiscountDataBase {
         DataBase.delete("CodedDiscounts" , "discountCode",discountCode);
     }
 
-    public static ArrayList<CodedDiscount> getAllCodedDiscounts() {
+    public static void  importAllCodedDiscounts() {
         String sql = "SELECT *  FROM CodedDiscounts";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
             while (resultSet.next()) {
                 Date start = new Date(resultSet.getLong("start"));
                 Date end =  new Date(resultSet.getLong("end"));
@@ -114,13 +113,11 @@ public class CodedDiscountDataBase {
 
 
 
-                codedDiscounts.add(new CodedDiscount(start,end,percent,discountCode,maxDiscountAmount,usedDiscountPerCustomer,listOfCustomers));
+                new CodedDiscount(start,end,percent,discountCode,maxDiscountAmount,usedDiscountPerCustomer,listOfCustomers);
 
             }
-            return codedDiscounts;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }

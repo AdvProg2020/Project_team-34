@@ -145,6 +145,7 @@ public class Controller {
         if (product == null)
             throw new ExceptionalMassage("Product not found.");
         category.addProduct(product);
+        //check
     }
 
     public void controlRemoveProductFromCategory(String categoryName, String productIdentifier)
@@ -161,6 +162,7 @@ public class Controller {
         if (product == null)
             throw new ExceptionalMassage("Product not found.");
         category.removeProduct(product);
+        //check
     }
 
     public void controlChangeCategoryName(String oldName, String newName) throws ExceptionalMassage {
@@ -184,7 +186,95 @@ public class Controller {
 
     }
 
-    public void setAvailabilityFilter(boolean availabityFilter)
+    //Filter and sort:
+    public boolean controlFilterGetAvailabilityFilter() {
+        return filterAndSort.getAvailabilityFilter();
+    }
+
+    public SortType controlFilterGetSortType() {
+        return filterAndSort.getSortType();
+    }
+
+    public ArrayList<String> controlFilterGetNameFilter() {
+        return filterAndSort.getNameFilter();
+    }
+
+    public ArrayList<String> controlFilterGetBrandFilter() {
+        return filterAndSort.getBrandFilter();
+    }
+
+    public Integer controlFilterGetPriceLowerBound() {
+        return filterAndSort.getPriceLowerBound();
+    }
+
+    public Integer controlFilterGetPriceUpperBound() {
+        return filterAndSort.getPriceUpperBound();
+    }
+
+    public Category controlFilterGetCategory() {
+        return filterAndSort.getCategory();
+    }
+
+    public HashMap<String, ArrayList<String>> controlFilterGetSpecialFilter() {
+        return filterAndSort.getSpecialFilter();
+    }
+
+    public void controlFilterSetAvailabilityFilter(boolean availabilityFilter) {
+        filterAndSort.setAvailabilityFilter(availabilityFilter);
+    }
+
+    public void controlFilterSetPriceLowerBound(int priceLowerBound) throws ExceptionalMassage {
+        filterAndSort.setPriceLowerBound(priceLowerBound);
+    }
+
+    public void controlFilterSetPriceUpperBound(int priceUpperBound) throws ExceptionalMassage {
+        filterAndSort.setPriceUpperBound(priceUpperBound);
+    }
+
+    public void controlFilterSetCategoryFilter(String categoryName) throws ExceptionalMassage {
+        if (categoryName == null) {
+            filterAndSort.setCategory(null);
+        } else {
+            Category category = Category.getCategoryByName(categoryName);
+            if (category == null)
+                throw new ExceptionalMassage("Category not found");
+            filterAndSort.setCategory(category);
+        }
+        //explain
+    }
+
+    public void controlFilterSetSortType(SortType sortType) {
+        filterAndSort.setSortType(sortType);
+    }
+
+    public void controlFilterAddSpecialFilter(String key, String value) throws ExceptionalMassage {
+        filterAndSort.addSpecialFilter(key, value);
+    }
+
+    public void controlFilterRemoveSpecialFilter(String key, String value) throws ExceptionalMassage {
+        filterAndSort.removeSpecialFilter(key, value);
+    }
+
+    public void controlFilterAddNameFilter(String name) throws ExceptionalMassage {
+        filterAndSort.addNameFilter(name);
+    }
+
+    public void controlFilterRemoveNameFilter(String name) throws ExceptionalMassage {
+        filterAndSort.removeNameFilter(name);
+    }
+
+    public void controlFilterAddBrandFilter(String brand) throws ExceptionalMassage {
+        filterAndSort.addBrandFilter(brand);
+    }
+
+    public void controlFilterRemoveBrandFilter(String brand) throws ExceptionalMassage {
+        filterAndSort.removeBrandFilter(brand);
+    }
+
+    public ArrayList<Product> controlFilterGetFilteredAndSortedProducts() {
+        return filterAndSort.getProducts();
+    }
+    //Filter and sort End
 
     private boolean doesAccountExist(String username) {
         return Account.getAccountByUsername(username) != null;
@@ -194,13 +284,16 @@ public class Controller {
                                      String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
         if (this.doesAccountExist(username))
             throw new ExceptionalMassage("Duplicate username");
-        if (type.equals("customer"))
+        if (type.equals("customer")) {
             controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
-        if (type.equals("supplier"))
+            controlLogin(username, password);
+        }
+        if (type.equals("supplier")) {
             controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
+            controlLogin(username, password);
+        }
         if (type.equals("supervisor"))
             controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
-        controlLogin(username, password);
     }
 
     private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
@@ -229,6 +322,8 @@ public class Controller {
     }
 
     public void controlLogin(String username, String password) throws ExceptionalMassage {
+        if (hasSomeOneLoggedIn())
+            throw new ExceptionalMassage("Logout first.");
         Account account = Account.getAccountByUsername(username);
         if (account == null)
             throw new ExceptionalMassage("Username doesn't exist.");

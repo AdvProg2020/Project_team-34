@@ -6,9 +6,7 @@ import product.Product;
 import java.util.ArrayList;
 
 public class ProductInCart {
-
-
-    private static ArrayList<ProductInCart> allProductInCarts = new ArrayList<>();
+    private static final ArrayList<ProductInCart> allProductInCarts = new ArrayList<>();
     private static long numberOfObjectCreated =0;
 
     private final String identifier;

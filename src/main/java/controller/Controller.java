@@ -184,6 +184,8 @@ public class Controller {
 
     }
 
+    public void setAvailabilityFilter(boolean availabityFilter)
+
     private boolean doesAccountExist(String username) {
         return Account.getAccountByUsername(username) != null;
     }

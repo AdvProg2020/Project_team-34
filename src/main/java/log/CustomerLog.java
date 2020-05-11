@@ -15,21 +15,21 @@ import java.util.Date;
  */
 
 public class CustomerLog {
-    private static ArrayList<CustomerLog> allCustomerLogs = new ArrayList<>();
+    private static final ArrayList<CustomerLog> allCustomerLogs = new ArrayList<>();
     private static int allCustomerLogCreatedCount = 0;
 
-    private String identifier;
-    private Date date;
-    private int paidAmount;
-    private int codedDiscountAmount;
-    private Customer customer;
+    private final String identifier;
+    private final Date date;
+    private final int paidAmount;
+    private final int codedDiscountAmount;
+    private final Customer customer;
     private LogStatus deliveryStatus;
-    private Cart cart;
+    private final Cart cart;
     //Suppliers Name Saved In a variable: <cart: cart.Cart>
 
     //Constructors:
-    public CustomerLog(Customer customer, Cart cart) {
-        this.customer = customer;
+    public CustomerLog(Cart cart) {
+        this.customer = cart.getOwner();
         this.cart = cart;
         this.identifier = generateIdentifier();
         this.date = new Date(System.currentTimeMillis());
@@ -43,14 +43,16 @@ public class CustomerLog {
         //completed
     }
 
-    public CustomerLog(String identifier, Date date, int paidAmount, int codedDiscountAmount, Customer customer, LogStatus deliveryStatus, Cart cart) {
+    public CustomerLog(String identifier, Date date, LogStatus deliveryStatus, Cart cart) {
         this.identifier = identifier;
         this.date = date;
-        this.paidAmount = paidAmount;
-        this.codedDiscountAmount = codedDiscountAmount;
-        this.customer = customer;
+        this.paidAmount = cart.getBill();
+        this.codedDiscountAmount = cart.getAmountOfCodedDiscount();
+        this.customer = cart.getOwner();
         this.deliveryStatus = deliveryStatus;
         this.cart = cart;
+        allCustomerLogs.add(this);
+        allCustomerLogCreatedCount++;
     }
 
     //Getters:
@@ -82,57 +84,25 @@ public class CustomerLog {
         return cart;
     }
 
-    public ArrayList<CustomerLog> getAllLCustomerLogs() {
-        return allCustomerLogs;
+    public static int getAllCustomerLogCreatedCount() {
+        return allCustomerLogCreatedCount;
     }
 
     //Setters:
-    private void setIdentifier(String identifier) {
-        this.identifier = identifier;
-        //file modification required
-    }
-
-    private void setDate(Date date) {
-        this.date = date;
-        //file modification required
-    }
-
-    private void setPaidAmount(int paidAmount) {
-        this.paidAmount = paidAmount;
-        //file modification required
-    }
-
-    public void setCodedDiscountAmount(int codedDiscountAmount) {
-        this.codedDiscountAmount = codedDiscountAmount;
-        //file modification required
-    }
-
-    private void setCustomer(Customer customer) {
-        this.customer = customer;
-        //file modification required
-    }
-
     public void setDeliveryStatus(LogStatus deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
-        //file modification required
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
         //file modification required
     }
 
     //Modeling Methods:
     private static String generateIdentifier() {
         return "T34CL" + String.format("%015d", allCustomerLogCreatedCount + 1);
-        //completed
     }
 
     public void proceedToNextStep() throws ExceptionalMassage {
         if (deliveryStatus == LogStatus.DELIVERED)
             throw new ExceptionalMassage("This order has already delivered.");
         setDeliveryStatus(deliveryStatus.nextStep());
-        //completed
     }
 
     public static ArrayList<CustomerLog> getCustomerCustomerLogs(Customer customer) {
@@ -173,11 +143,10 @@ public class CustomerLog {
 
     public static ArrayList<Customer> getCustomerBoughtProduct(Product product) {
         ArrayList<Customer> customerBoughtProduct = new ArrayList<>();
-        if (allCustomerLogs.size() != 0) {
-            for (CustomerLog customerLog : allCustomerLogs) {
-                if ((customerLog.cart).isProductInCart(product)) {
+        for (CustomerLog customerLog : allCustomerLogs) {
+            if ((customerLog.cart).isProductInCart(product)) {
+                if (!customerBoughtProduct.contains(customerLog.getCustomer()))
                     customerBoughtProduct.add(customerLog.getCustomer());
-                }
             }
         }
         return customerBoughtProduct;
@@ -185,30 +154,23 @@ public class CustomerLog {
 
     public static ArrayList<Customer> getCustomerBoughtProductFromSupplier(Product product, Supplier supplier) {
         ArrayList<Customer> customerBoughtProduct = new ArrayList<>();
-        if (allCustomerLogs.size() != 0) {
-            for (CustomerLog customerLog : allCustomerLogs) {
-                if ((customerLog.cart).isProductInCart(product, supplier)) {
+        for (CustomerLog customerLog : allCustomerLogs) {
+            if ((customerLog.cart).isProductInCart(product, supplier)) {
+                if (!customerBoughtProduct.contains(customerLog.getCustomer()))
                     customerBoughtProduct.add(customerLog.getCustomer());
-                }
             }
         }
         return customerBoughtProduct;
     }
 
     public static CustomerLog getCustomerLogById(String identifier){
+        for (CustomerLog customerLog : allCustomerLogs) {
+            if (customerLog.getIdentifier().equals(identifier))
+                return customerLog;
+        }
         return null;
-    }
-    public static void exportAll() {
-
     }
 
     public static void importAll() {
-
-    }
-
-
-    @Override
-    public String toString() {
-        return null;
     }
 }

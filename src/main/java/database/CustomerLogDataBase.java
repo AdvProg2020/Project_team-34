@@ -86,7 +86,7 @@ public class CustomerLogDataBase {
                 LogStatus deliveryStatus = LogStatus.valueOf(resultSet.getString("deliveryStatus"));
                 Cart cart = Cart.getCartById(resultSet.getString("cartId"));
 
-                customerLogs.add(new CustomerLog(customerLogId,date,paidAmount,codedDiscountAmount,customer,deliveryStatus,cart));
+                customerLogs.add(new CustomerLog(customerLogId, date, deliveryStatus, cart));
 
             }
             return customerLogs;

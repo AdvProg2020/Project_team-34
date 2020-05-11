@@ -7,14 +7,14 @@ import state.State;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-
+import java.util.Date;
 import static database.DataBase.*;
 
 public class SaleDataBase {
     public static void createNewTable() {
         HashMap<String, String> content = new HashMap<>();
-        content.put("start" ,"Date");
-        content.put("end" , "Date");
+        content.put("start" ,"long");
+        content.put("end" , "long");
         content.put("percent","int");
         content.put("offId" , "String");
         content.put("listOfProductIds" , "String");
@@ -32,8 +32,8 @@ public class SaleDataBase {
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
-            statement.setString(1,String.valueOf(sale.getStart()));
-            statement.setString(2,String.valueOf(sale.getEnd()));
+            statement.setLong(1,sale.getStart().getTime());
+            statement.setLong(2,sale.getEnd().getTime());
             statement.setInt(3, sale.getPercent());
             statement.setString(4, sale.getOffId());
             statement.setString(5, convertObjectToJsonString(convertProductArrayListToStringArrayList(sale.getProducts())));
@@ -73,8 +73,8 @@ public class SaleDataBase {
              ResultSet resultSet = statement.executeQuery(sql)) {
             ArrayList<Sale> sales = new ArrayList<>();
             while (resultSet.next()) {
-                Date start = Date.valueOf(resultSet.getString("start"));
-                Date end = Date.valueOf(resultSet.getString("end"));
+                Date start = new Date(resultSet.getLong("start"));
+                Date end =  new Date(resultSet.getLong("end"));
                 int percent = resultSet.getInt("percent");
                 String offId = resultSet.getString("OffId");
                 ArrayList<Product> products = convertStringArrayListToProductArrayList(convertJsonToArrayList(resultSet.getString("listOfProductIds")));

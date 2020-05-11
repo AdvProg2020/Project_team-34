@@ -16,19 +16,12 @@ public class ProductDataBaseTests {
 
         ProductDataBase.createNewTable();
 
-        Category category = null;
-        try {
-             category = new Category("category1", true, null);
-        }
-        catch (Exception exception){
-            System.out.println(exception.getMessage());
-        }
         Product product1 = new Product(new Supplier("supplier1", "Aryan", "Ahadinia","@","1"
         ,"aryan1",0,"team_34"),"product1", "company1", 90, 5,
-               category, "be described");
+                "be described",null);
         Product product2 = new Product(new Supplier("supplier2", "Soheil", "Mahdizadeh","@","2"
                 ,"soheil1",0,"team_34"),"product2", "company2", 91, 6,
-                category, "description");
+                "description",null);
 
         Supplier supplier =  new Supplier("supplier3", "Rouzbeh", "Pirayadi","@","3"
                 ,"rouzbeh1",100000000,"team_34");
@@ -39,8 +32,8 @@ public class ProductDataBaseTests {
         ArrayList<Supplier> listOfSupplier = new ArrayList<>();
         listOfSupplier.add(supplier);
 
-        Product repeatedProduct = new Product("repeated product", "team_34",price,listOfSupplier,
-                remainedNumber,category,"really good", null,100,product1.getProductId(), State.valueOf("PREPARING_TO_BUILD"));
+        Product repeatedProduct = new Product("repeated product", "team_34",product1.getPriceForEachSupplier(),product1.getListOfSuppliers(),product1.getRemainedNumberForEachSupplier(),"description",
+                6,product1.getProductId(),State.valueOf("PREPARING_TO_BUILD"),null);
 
         ProductDataBase.add(product1);
         ProductDataBase.add(product2);
@@ -71,16 +64,9 @@ public class ProductDataBaseTests {
     @Test
     public void testUpdate(){
 
-        Category category = null;
-        try {
-            category = new Category("category1", true, null);
-        }
-        catch (Exception exception){
-            System.out.println(exception.getMessage());
-        }
         Product productToBeUpdated = new Product(new Supplier("supplier1", "Rouzbeh", "Pirayadi","@","10"
                 ,"rouzbeh1",100,"team_34"),"productToBeUpdated", "company1", 100, 5,
-                category, "be described");
+                 "be described",null);
 
         productToBeUpdated.setName("productUpdatedSuccessfully");
         ProductDataBase.update(productToBeUpdated);

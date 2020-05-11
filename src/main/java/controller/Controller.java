@@ -250,7 +250,7 @@ public class Controller {
     public void controlLogout() {
         account = null;
         cart = new Cart(null);
-        filter = new HashMap<>();
+        //filter = new HashMap<>();
     }
 
     public void addFilter(String key, String value) throws ExceptionalMassage {
@@ -507,10 +507,10 @@ public class Controller {
         Sale.getSales().remove(controlGetSaleById(id));
     }
 
-    public ArrayList<CodedDiscount> controlGetCodedDiscountByCustomer(Customer customer){
+    public ArrayList<CodedDiscount> controlGetCodedDiscountByCustomer(){
         ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
         for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
-            if(codedDiscount.getCustomers().contains(customer)){
+            if(codedDiscount.getCustomers().contains((Customer)account)){
                 codedDiscounts.add(codedDiscount);
             }
         }
@@ -609,11 +609,7 @@ public class Controller {
     }
 
     public ArrayList<String> currentFilters(){
-        ArrayList<String> filters = new ArrayList<>();
-        for (String s : filter.keySet()) {
-            filters.add(s);
-        }
-        return filters;
+        return null;
     }
 
     public String showSalesHistory(){
@@ -622,10 +618,11 @@ public class Controller {
 
 
     public String currentSort(){
-        return sortType;
+        return null;
     }
 
     public ArrayList<String> controlViewBuyersOfProduct(String productId) throws ExceptionalMassage{
         return null;
     }
+
 }

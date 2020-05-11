@@ -18,6 +18,7 @@ public class ViewOffsMenu extends Menu {
 
             @Override
             public void execute() {
+
             }
         };
         menusIn.put("^view (\\w+)$", View);
@@ -42,6 +43,7 @@ public class ViewOffsMenu extends Menu {
 
             @Override
             public void execute() {
+                //controller.controlCreateSale();
             }
         };
         menusIn.put("^add off$", AddOff);

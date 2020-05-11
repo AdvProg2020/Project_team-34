@@ -30,7 +30,7 @@ public class ViewCartMenu extends Menu {
 
             @Override
             public void execute() {
-                System.out.println(controller.getCart().getProductsIn());
+                //System.out.println(controller.getCart().getProductsIn());
             }
         };
         menusIn.put("^show products$", ShowProduct);

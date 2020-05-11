@@ -33,7 +33,7 @@ public class SupplierProfileMenu extends ProfileMenu {
         Menu ViewSalesHistory = new Menu("View Sales History", this) {
             @Override
             public void show() {
-                System.out.println(controller.showSalesHistory());
+                //System.out.println(controller.showSalesHistory());
             }
 
             @Override

@@ -54,7 +54,7 @@ public class SortingMenu extends Menu {
         Menu currentSort = new Menu("Current Sort", this) {
             @Override
             public void show() {
-                System.out.println(controller.currentSort());
+                System.out.println(controller.controlShowCurrentSort());
             }
 
             @Override

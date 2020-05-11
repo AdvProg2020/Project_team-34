@@ -1,6 +1,5 @@
 package menu.profile.supplierProfileMenu;
 
-import com.sun.tools.javac.tree.JCTree;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 import product.Product;

@@ -22,10 +22,10 @@ public class SalesMenu extends Menu {
 
             @Override
             public void execute() {
-                for (String product : controller.controlGetAllProductsInSales()) {
+                //for (String product : controller.controlGetAllProductsInSales()) {
                     //Need a quick introduction!
-                    System.out.println(product);
-                }
+                    //System.out.println(product);
+                //}
                 parentMenu.show();
                 parentMenu.execute();
             }

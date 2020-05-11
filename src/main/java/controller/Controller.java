@@ -532,11 +532,11 @@ public class Controller {
         return productComment;
     }
 
-    public void controlRateProductById(String id, float score, Customer customer, Product product) throws ExceptionalMassage{
+    public void controlRateProductById(String id, float score) throws ExceptionalMassage{
         if(Product.getProductById(id) == null){
             throw new ExceptionalMassage("No such product with id!");
         }
-        new Score(score, customer, product);
+        new Score(score, (Customer)(account), Product.getProductById(id));
     }
 
     public float controlGetAverageScoreByProduct(Product product){
@@ -623,6 +623,10 @@ public class Controller {
 
     public ArrayList<String> controlViewBuyersOfProduct(String productId) throws ExceptionalMassage{
         return null;
+    }
+
+    public Cart getCart(){
+        return cart;
     }
 
 }

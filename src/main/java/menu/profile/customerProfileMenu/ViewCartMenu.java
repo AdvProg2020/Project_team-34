@@ -6,10 +6,12 @@ import cart.Cart;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
+import menu.products.ProductMenu;
 import product.Product;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 
 /**
  * @author Aryan Ahadinia
@@ -28,6 +30,7 @@ public class ViewCartMenu extends Menu {
 
             @Override
             public void execute() {
+                System.out.println(controller.getCart().getProductsIn());
             }
         };
         menusIn.put("^show products$", ShowProduct);
@@ -40,6 +43,15 @@ public class ViewCartMenu extends Menu {
 
             @Override
             public void execute() {
+                String regex = "^view (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    Menu nextMenu = new ProductMenu(this);
+                    nextMenu.show();
+                    nextMenu.execute();
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^view (\\w+)$", View);
@@ -52,9 +64,21 @@ public class ViewCartMenu extends Menu {
 
             @Override
             public void execute() {
+                String regex = "^increase (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    Product product = Product.getProductById(matcher.group(1));
+                    try {
+                        controller.increaseProductQuantity(matcher.group(1),product.getNameOfCompany());
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
-        menusIn.put("^increase \\w+$", Increase);
+        menusIn.put("^increase (\\w+)$", Increase);
         menuForShow.add("Increase");
 
         Menu Decrease = new Menu("Decrease", this) {
@@ -64,9 +88,21 @@ public class ViewCartMenu extends Menu {
 
             @Override
             public void execute() {
+                String regex = "^decrease (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    Product product = Product.getProductById(matcher.group(1));
+                    try {
+                        controller.decreaseProductQuantity(matcher.group(1),product.getNameOfCompany());
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
-        menusIn.put("^decrease \\w+$", Decrease);
+        menusIn.put("^decrease (\\w+)$", Decrease);
         menuForShow.add("Decrease");
 
         Menu ShowTotalPrice = new Menu("Show Total Price", this) {
@@ -76,6 +112,7 @@ public class ViewCartMenu extends Menu {
 
             @Override
             public void execute() {
+                //controller.getCart().pri
             }
         };
         menusIn.put("^show total price$", ShowTotalPrice);
@@ -83,5 +120,11 @@ public class ViewCartMenu extends Menu {
 
         menusIn.put("^purchase$", new PurchaseMenu(this));
         menuForShow.add("Purchase");
+    }
+
+    @Override
+    public void show() {
+        System.out.println(controller.controlViewCart());
+        super.show();
     }
 }

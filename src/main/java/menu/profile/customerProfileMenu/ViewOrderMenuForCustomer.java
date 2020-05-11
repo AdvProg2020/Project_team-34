@@ -1,6 +1,9 @@
 package menu.profile.customerProfileMenu;
 
+import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
+
+import java.util.regex.Matcher;
 
 public class ViewOrderMenuForCustomer extends Menu {
     public ViewOrderMenuForCustomer(Menu parentMenu) {
@@ -14,7 +17,7 @@ public class ViewOrderMenuForCustomer extends Menu {
 
             @Override
             public void execute() {
-                controller.
+                //controller.
             }
         };
         menusIn.put("show order (\\w+)", ShowOrderForCustomer);
@@ -27,6 +30,20 @@ public class ViewOrderMenuForCustomer extends Menu {
 
             @Override
             public void execute() {
+                float score = -1;
+                while(score<0 || score >5){
+                    System.out.println("Enter the score(1-5):");
+                    score = scanner.nextFloat();
+                }
+                String regex = "show order (\\w+)";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()) {
+                    try{
+                        controller.controlRateProductById(matcher.group(1),score);
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
             }
         };
         menusIn.put("show order (\\w+)", Rate);

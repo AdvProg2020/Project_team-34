@@ -59,7 +59,7 @@ public class ShippingInfoDataBase {
         DataBase.delete("ShippingInfos", "identifier",identifier);
     }
 
-    public static void importAllScores() {
+    public static void importAllShippingInfos() {
         String sql = "SELECT *  FROM ShippingInfos";
 
         try (Connection connection = connect();

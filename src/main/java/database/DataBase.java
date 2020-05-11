@@ -1,8 +1,11 @@
 package database;
 
 import cart.ProductInCart;
+import cart.ShippingInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import feedback.Score;
+import log.CustomerLog;
 import product.Category;
 import product.Product;
 
@@ -83,13 +86,7 @@ public class DataBase {
         return (HashMap<String, String>) gson.fromJson(string,new TypeToken<HashMap<String,String>>(){}.getType());
     }
 
-    public static ArrayList<String> convertProductArrayListToStringArrayList(ArrayList<Product> productArrayList){
-        ArrayList<String> stringArrayList = new ArrayList<>();
-        for (Product eachProduct : productArrayList) {
-            stringArrayList.add(eachProduct.getProductId());
-        }
-        return stringArrayList;
-    }
+
 
     public static ArrayList<String> convertCategoryArrayListToStringArrayList(ArrayList<Category> categoryArrayList){
         ArrayList<String> stringArrayList = new ArrayList<>();
@@ -100,12 +97,34 @@ public class DataBase {
     }
 
 
+    public static ArrayList<String> convertProductArrayListToStringArrayList(ArrayList<Product> productArrayList){
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        for (Product eachProduct : productArrayList) {
+            stringArrayList.add(eachProduct.getProductId());
+        }
+        return stringArrayList;
+    }
+
     public static ArrayList<Product> convertStringArrayListToProductArrayList(ArrayList<String> stringArrayList){
         ArrayList<Product> productArrayList = new ArrayList<>();
         for (String eachId : stringArrayList) {
             productArrayList.add(Product.getProductById(eachId));
         }
         return productArrayList;
+    }
+
+    public static void importAllData(){
+        AccountDataBase.importAllAccounts();
+        ProductDataBase.importAllProducts();
+        CategoryDataBase.importAllCategories();
+        CommentDataBase.importAllComments();
+        ScoreDataBase.importAllScores();
+        CodedDiscountDataBase.importAllCodedDiscounts();
+        SaleDataBase.importAllSales();
+        ProductInCartDataBase.importAllProductInCarts();
+        ShippingInfoDataBase.importAllShippingInfos();
+        CartDataBase.importAllCarts();
+        CustomerLogDataBase.importAllCustomerLogs();
     }
 
 

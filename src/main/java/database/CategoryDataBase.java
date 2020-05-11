@@ -44,6 +44,7 @@ public class CategoryDataBase {
         }
     }
 
+
     private static boolean doesCategoryAlreadyExists(Category category) {
         return !(Category.getCategoryByName(category.getName())==null);
     }

@@ -23,7 +23,7 @@ public class Controller {
     private Account account;
     private Cart cart;
     private boolean isFirstSupervisorCreated;
-    private FilterAndSort filterAndSort;
+    private final FilterAndSort filterAndSort;
 
     public Controller() {
         account = null;
@@ -31,6 +31,8 @@ public class Controller {
         isFirstSupervisorCreated = false;
         filterAndSort = new FilterAndSort();
     }
+
+
 
     public boolean hasSomeOneLoggedIn(){
         return account != null;
@@ -174,12 +176,13 @@ public class Controller {
         category.setName(newName);
     }
 
-    public void controlAddSpecialFilterToCategory(String categoryName, String filterKey, String filterValues)
+    public void controlAddSpecialFieldToCategory(String categoryName, String filterKey, String filterValues)
             throws ExceptionalMassage {
 
     }
 
-    public void controlRemoveSpecialFilterFromCategory(String categoryName, String filterKey) throws ExceptionalMassage {
+    public void controlRemoveSpecialFieldFromCategory(String categoryName, String filterKey)
+            throws ExceptionalMassage {
 
     }
 
@@ -225,7 +228,6 @@ public class Controller {
         isFirstSupervisorCreated = true;
     }
 
-
     public void controlLogin(String username, String password) throws ExceptionalMassage {
         Account account = Account.getAccountByUsername(username);
         if (account == null)
@@ -250,19 +252,7 @@ public class Controller {
     public void controlLogout() {
         account = null;
         cart = new Cart(null);
-        filter = new HashMap<>();
-    }
-
-    public void addFilter(String key, String value) throws ExceptionalMassage {
-
-    }
-
-    public void removeFilter(String key, String value) throws ExceptionalMassage {
-
-    }
-
-    public ArrayList<Product> applyFilter() {
-        return null;
+        filterAndSort.clear();
     }
 
     public String controlViewPersonalInfo() {
@@ -602,17 +592,5 @@ public class Controller {
 
     public void controlEditCategory(String categoryName, String newName) throws ExceptionalMassage {
 
-    }
-
-    public ArrayList<String> currentFilters(){
-        ArrayList<String> filters = new ArrayList<>();
-        for (String s : filter.keySet()) {
-            filters.add(s);
-        }
-        return filters;
-    }
-
-    public String currentSort(){
-        return sortType;
     }
 }

@@ -19,7 +19,7 @@ public class FilterAndSort {
     private final ArrayList<String> brandFilter;
 
     public FilterAndSort() {
-        availabilityFilter = false;
+        this.availabilityFilter = false;
         this.priceLowerBound = null;
         this.priceUpperBound = null;
         this.sortType = SortType.BY_NUMBER_OF_VIEWS;
@@ -29,8 +29,19 @@ public class FilterAndSort {
         this.brandFilter = new ArrayList<>();
     }
 
+    public void clear() {
+        this.availabilityFilter = false;
+        this.priceLowerBound = null;
+        this.priceUpperBound = null;
+        this.sortType = SortType.BY_NUMBER_OF_VIEWS;
+        this.category = Category.superCategory;
+        this.specialFilter.clear();
+        this.nameFilter.clear();
+        this.brandFilter.clear();
+    }
+
     public void clearFiltersExceptCategory() {
-        availabilityFilter = false;
+        this.availabilityFilter = false;
         this.priceLowerBound = null;
         this.priceUpperBound = null;
         this.sortType = SortType.BY_NUMBER_OF_VIEWS;

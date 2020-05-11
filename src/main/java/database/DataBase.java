@@ -1,5 +1,6 @@
 package database;
 
+import cart.ProductInCart;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import product.Category;
@@ -77,6 +78,11 @@ public class DataBase {
         }.getType());
     }
 
+    public static HashMap<String, String> convertJsonToStringStringHashMap(String string){
+        Gson gson= new Gson();
+        return (HashMap<String, String>) gson.fromJson(string,new TypeToken<HashMap<String,String>>(){}.getType());
+    }
+
     public static ArrayList<String> convertProductArrayListToStringArrayList(ArrayList<Product> productArrayList){
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (Product eachProduct : productArrayList) {
@@ -93,6 +99,7 @@ public class DataBase {
         return stringArrayList;
     }
 
+
     public static ArrayList<Product> convertStringArrayListToProductArrayList(ArrayList<String> stringArrayList){
         ArrayList<Product> productArrayList = new ArrayList<>();
         for (String eachId : stringArrayList) {
@@ -100,5 +107,7 @@ public class DataBase {
         }
         return productArrayList;
     }
+
+
 
 }

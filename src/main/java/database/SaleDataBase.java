@@ -24,7 +24,7 @@ public class SaleDataBase {
     }
 
     public static void add(Sale sale) {
-        if (doesScoreAlreadyExists(sale)) {
+        if (doesSaleAlreadyExists(sale)) {
             return;
         }
         String sql = "INSERT into Sales (start , end , percent, offId , listOfProductIds, state) " +
@@ -45,7 +45,7 @@ public class SaleDataBase {
         }
     }
 
-    private static boolean doesScoreAlreadyExists(Sale sale) {
+    private static boolean doesSaleAlreadyExists(Sale sale) {
         ArrayList<Sale> list = getAllSales();
         if (list == null)
             return false;

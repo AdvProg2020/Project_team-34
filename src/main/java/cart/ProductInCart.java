@@ -6,8 +6,10 @@ import product.Product;
 import java.util.ArrayList;
 
 public class ProductInCart {
-    private static final ArrayList<ProductInCart> allProductInCart = new ArrayList<>();
-    private static long numberOfObjectCreated;
+
+
+    private static ArrayList<ProductInCart> allProductInCarts = new ArrayList<>();
+    private static long numberOfObjectCreated =0;
 
     private final String identifier;
     private final Product product;
@@ -17,15 +19,16 @@ public class ProductInCart {
         this.identifier = generateIdentifier();
         this.product = product;
         this.supplier = supplier;
-        allProductInCart.add(this);
+        allProductInCarts.add(this);
         numberOfObjectCreated++;
+        allProductInCarts.add(this);
     }
 
     public ProductInCart(String identifier, Product product, Supplier supplier) {
         this.identifier = identifier;
         this.product = product;
         this.supplier = supplier;
-        allProductInCart.add(this);
+        allProductInCarts.add(this);
         numberOfObjectCreated++;
     }
 
@@ -48,7 +51,7 @@ public class ProductInCart {
     }
 
     public static ProductInCart getProductInCartByIdentifier(String identifier) {
-        for (ProductInCart productInCart : allProductInCart) {
+        for (ProductInCart productInCart : allProductInCarts) {
             if (productInCart.getIdentifier().equals(identifier))
                 return productInCart;
         }

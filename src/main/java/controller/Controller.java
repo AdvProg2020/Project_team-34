@@ -23,14 +23,13 @@ public class Controller {
     private Account account;
     private Cart cart;
     private boolean isFirstSupervisorCreated;
-    private HashMap<String, ArrayList<String>> filter;
-    private String sortType;
+    private FilterAndSort filterAndSort;
 
     public Controller() {
         account = null;
         cart = new Cart(null);
         isFirstSupervisorCreated = false;
-        filter = new HashMap<>();
+        filterAndSort = new FilterAndSort();
     }
 
     public boolean hasSomeOneLoggedIn(){
@@ -75,7 +74,7 @@ public class Controller {
         cart.decreaseProductCount(product, supplier);
     }
 
-    public Cart controlViewCart() throws ExceptionalMassage {
+    public Cart controlViewCart() {
         return cart;
     }
 
@@ -117,7 +116,8 @@ public class Controller {
         return false;
     }
 
-    public void controlAddCategory(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
+    public void controlAddCategory(String name, boolean isParentCategory, String parentCategoryName)
+            throws ExceptionalMassage {
         if (account == null)
             throw new ExceptionalMassage("Login First. <Controller.controlAddCategory>");
         if (!(account instanceof Supervisor))
@@ -147,7 +147,8 @@ public class Controller {
         category.addProduct(product);
     }
 
-    public void controlRemoveProductFromCategory(String categoryName, String productIdentifier) throws ExceptionalMassage {
+    public void controlRemoveProductFromCategory(String categoryName, String productIdentifier)
+            throws ExceptionalMassage {
         //can modify
         if (account == null)
             throw new ExceptionalMassage("Login First. <Controller.controlRemoveProductFromCategory>");
@@ -173,7 +174,8 @@ public class Controller {
         category.setName(newName);
     }
 
-    public void controlAddSpecialFilterToCategory(String categoryName, String filterKey, String filterValues) throws ExceptionalMassage {
+    public void controlAddSpecialFilterToCategory(String categoryName, String filterKey, String filterValues)
+            throws ExceptionalMassage {
 
     }
 
@@ -185,33 +187,34 @@ public class Controller {
         return Account.getAccountByUsername(username) != null;
     }
 
-    public void controlCreateAccount(String username, String type, String name, String familyName, String email, String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
-        //modified by aryan
-        if (doesAccountExist(username))
+    public void controlCreateAccount(String username, String type, String name, String familyName, String email,
+                                     String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
+        if (this.doesAccountExist(username))
             throw new ExceptionalMassage("Duplicate username");
         if (type.equals("customer"))
             controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
         if (type.equals("supplier"))
             controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
-        //check name of company is not duplicate
         if (type.equals("supervisor"))
             controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
         controlLogin(username, password);
-        //edited by aryan
     }
 
-    private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber, String password, int credit) {
+    private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
+                                       String password, int credit) {
         new Customer(username, name, familyName, email, phoneNumber, password, credit);
     }
 
-    private void controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
+    private void controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber,
+                                       String password, int credit, String nameOfCompany) throws ExceptionalMassage {
         if (Supplier.getSupplierByCompanyName(nameOfCompany) != null) {
             throw new ExceptionalMassage("Duplicate company name.");
         }
         new Supplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
     }
 
-    private void controlCreateSupervisor(String username, String name, String familyName, String email, String phoneNumber, String password, int credit) throws ExceptionalMassage {
+    private void controlCreateSupervisor(String username, String name, String familyName, String email,
+                                         String phoneNumber, String password, int credit) throws ExceptionalMassage {
         if (isFirstSupervisorCreated) {
             if (account == null)
                 throw new ExceptionalMassage("You must login as supervisor before create a supervisor account.");
@@ -250,11 +253,11 @@ public class Controller {
         filter = new HashMap<>();
     }
 
-    public void addFilter(String key, String value) throws ExceptionalMassage{
+    public void addFilter(String key, String value) throws ExceptionalMassage {
 
     }
 
-    public void removeFilter(String key, String value) throws ExceptionalMassage{
+    public void removeFilter(String key, String value) throws ExceptionalMassage {
 
     }
 
@@ -407,30 +410,7 @@ public class Controller {
     }
 
     public void controlSort(String typeOfSort) throws ExceptionalMassage{
-        Comparator<Product> SortByAverageScore = new Comparator<Product>() {
-            @Override
-            public int compare(Product firstProduct, Product secondProduct) {
-                return (int)((Score.getAverageScoreForProduct(firstProduct) - Score.getAverageScoreForProduct(secondProduct)) * 100);
-            }
-        };
 
-        Comparator<Product> SortByTime = new Comparator<Product>() {
-            @Override
-            public int compare(Product firstProduct, Product secondProduct) {
-                return convertProductIdToInt(firstProduct.getProductId())- convertProductIdToInt(secondProduct.getProductId());
-            }
-
-            private int convertProductIdToInt(String productId){
-                return Integer.parseInt(productId.substring(4));
-            }
-        };
-
-        Comparator<Product> SortByNumberOfViews = new Comparator<Product>() {
-            @Override
-            public int compare(Product firstProduct, Product secondProduct) {
-                return firstProduct.getNumberOfViews() - secondProduct.getNumberOfViews();
-            }
-        };
     }
 
     public String controlShowCurrentSort(){

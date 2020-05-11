@@ -107,7 +107,7 @@ public class FilterAndSort {
         this.sortType = sortType;
     }
 
-    public void setCategory(Category category) throws ExceptionalMassage {
+    public void setCategory(Category category) {
         //null for no filter
         if (category == null)
             this.category = Category.superCategory;

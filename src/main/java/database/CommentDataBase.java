@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Customer;
+import cart.Cart;
 import feedback.Comment;
 import feedback.CommentState;
 import product.Product;
@@ -55,14 +56,7 @@ public class CommentDataBase {
     }
 
     private static boolean doesCommentAlreadyExists(Comment comment) {
-        ArrayList<Comment> list = getAllComments();
-        if (list == null)
-            return false;
-        for (Comment eachComment : list) {
-            if (eachComment.getCommentId().equals(comment.getCommentId()))
-                return true;
-        }
-        return false;
+        return !(Comment.getCommentByIdentifier(comment.getCommentId())==null);
     }
 
     public static void update(Comment comment) {

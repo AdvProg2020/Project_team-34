@@ -108,6 +108,15 @@ public class Comment {
         return returningComments;
     }
 
+    //Added by rpirayadi
+    public static Comment getCommentByIdentifier(String commentId){
+        for (Comment eachComment : comments) {
+            if(eachComment.getCommentId().equals(commentId))
+                return eachComment;
+        }
+        return null;
+    }
+
     public static void importAllData(){
 
     }

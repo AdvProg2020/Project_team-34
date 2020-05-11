@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Supplier;
+import cart.Cart;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import feedback.Comment;
@@ -111,14 +112,7 @@ public class ProductDataBase {
     }
 
     private static boolean doesProductAlreadyExists(Product product) {
-        ArrayList<Product> list = getAllProducts();
-        if(list == null )
-            return false;
-        for (Product eachProduct : list) {
-            if(eachProduct.getProductId().equals(product.getProductId()))
-                return true;
-        }
-        return false;
+        return !(Product.getProductById(product.getProductId())==null);
     }
 
 

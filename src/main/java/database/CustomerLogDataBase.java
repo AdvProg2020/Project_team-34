@@ -46,14 +46,7 @@ public class CustomerLogDataBase {
     }
 
     private static boolean doesCustomerLogAlreadyExists(CustomerLog customerLog) {
-        ArrayList<CustomerLog> list = getAllCustomerLogs();
-        if (list == null)
-            return false;
-        for (CustomerLog eachCustomerLog : list) {
-            if (eachCustomerLog.getIdentifier().equals(customerLog.getIdentifier()))
-                return true;
-        }
-        return false;
+        return !(CustomerLog.getCustomerLogById(customerLog.getIdentifier())==null);
     }
 
     public static void update(CustomerLog customerLog) {

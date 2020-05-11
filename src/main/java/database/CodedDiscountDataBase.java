@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Customer;
+import cart.Cart;
 import discount.CodedDiscount;
 
 import java.sql.*;
@@ -82,14 +83,7 @@ public class CodedDiscountDataBase {
     }
 
     private static boolean doesCodedDiscountAlreadyExists(CodedDiscount codedDiscount) {
-        ArrayList<CodedDiscount> list = getAllCodedDiscounts();
-        if (list == null)
-            return false;
-        for (CodedDiscount eachCodedDiscount : list) {
-            if (eachCodedDiscount.getDiscountCode().equals(codedDiscount.getDiscountCode()))
-                return true;
-        }
-        return false;
+        return !(CodedDiscount.getCodedDiscountByCode(codedDiscount.getDiscountCode())==null);
     }
 
     public static void update(CodedDiscount codedDiscount) {

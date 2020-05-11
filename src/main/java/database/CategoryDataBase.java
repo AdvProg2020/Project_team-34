@@ -1,5 +1,6 @@
 package database;
 
+import cart.Cart;
 import product.Category;
 import product.Product;
 
@@ -44,14 +45,7 @@ public class CategoryDataBase {
     }
 
     private static boolean doesCategoryAlreadyExists(Category category) {
-        ArrayList<Category> list = getAllCategories();
-        if (list == null)
-            return false;
-        for (Category eachCategory : list) {
-            if (eachCategory.getName().equals(category.getName()))
-                return true;
-        }
-        return false;
+        return !(Category.getCategoryByName(category.getName())==null);
     }
 
 

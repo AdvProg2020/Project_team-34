@@ -1,5 +1,6 @@
 package database;
 
+import cart.Cart;
 import discount.Sale;
 import product.Product;
 import state.State;
@@ -46,14 +47,7 @@ public class SaleDataBase {
     }
 
     private static boolean doesSaleAlreadyExists(Sale sale) {
-        ArrayList<Sale> list = getAllSales();
-        if (list == null)
-            return false;
-        for (Sale eachSale : list) {
-            if (eachSale.getOffId().equals(sale.getOffId()))
-                return true;
-        }
-        return false;
+        return !(Sale.getSaleById(sale.getOffId())==null);
     }
 
     public static void update(Sale sale) {

@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Supplier;
+import cart.Cart;
 import cart.ProductInCart;
 import product.Product;
 
@@ -41,14 +42,7 @@ public class ProductInCartDataBase {
         }
     }
     private static boolean doesProductInCartAlreadyExists(ProductInCart productInCart) {
-        ArrayList<ProductInCart> list = getAllProductInCarts();
-        if (list == null)
-            return false;
-        for (ProductInCart eachProductInCart : list) {
-            if (eachProductInCart.getIdentifier().equals(productInCart.getIdentifier()))
-                return true;
-        }
-        return false;
+        return !(ProductInCart.getProductInCartByIdentifier(productInCart.getIdentifier())==null);
     }
 
     public static void update(ProductInCart productInCart) {

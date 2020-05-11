@@ -68,14 +68,7 @@ public class AccountDataBase {
     }
 
     private static boolean doesAccountAlreadyExists(Account account) {
-        ArrayList<Account> list = getAllAccounts();
-        if(list == null)
-            return false;
-        for (Account eachAccount: list) {
-            if(eachAccount.getUserName().equals(account.getUserName()))
-                return true;
-        }
-        return false;
+        return !(Account.getAccountByUsername(account.getUserName()) == null);
     }
 
     public static void update(Account account) {

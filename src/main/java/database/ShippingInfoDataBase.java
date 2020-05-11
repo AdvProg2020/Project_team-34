@@ -1,6 +1,7 @@
 package database;
 
 
+import cart.Cart;
 import cart.ShippingInfo;
 
 import java.sql.*;
@@ -47,14 +48,7 @@ public class ShippingInfoDataBase {
         }
     }
     private static boolean doesShippingInfoAlreadyExists(ShippingInfo shippingInfo) {
-        ArrayList<ShippingInfo> list = getAllScores();
-        if (list == null)
-            return false;
-        for (ShippingInfo eachShippingInfo : list) {
-            if (eachShippingInfo.getIdentifier().equals(shippingInfo.getIdentifier()))
-                return true;
-        }
-        return false;
+        return !(ShippingInfo.getShippingInfoByIdentifier(shippingInfo.getIdentifier())==null);
     }
 
     public static void update(ShippingInfo shippingInfo) {

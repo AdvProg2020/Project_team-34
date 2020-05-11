@@ -101,14 +101,7 @@ public class CartDataBase {
     }
 
     private static boolean doesCartAlreadyExists(Cart cart) {
-        ArrayList<Cart> list = getAllCarts();
-        if (list == null)
-            return false;
-        for (Cart eachCart : list) {
-            if (eachCart.getIdentifier().equals(cart.getIdentifier()))
-                return true;
-        }
-        return false;
+        return !(Cart.getCartById(cart.getIdentifier())==null);
     }
 
     public static void update(Cart cart) {

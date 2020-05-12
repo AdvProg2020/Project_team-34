@@ -30,7 +30,6 @@ public class SupplierLog {
         this.identifier = generateIdentifier();
         allSupplierLogs.add(this);
         allSupplierLogCreatedCount++;
-        //file modification required
     }
 
     public SupplierLog(String identifier, int earnedMoney, int discountAmount, int totalPurchase, CustomerLog customerLog, Supplier supplier) {
@@ -78,7 +77,6 @@ public class SupplierLog {
     //Modeling methods:
     private static String generateIdentifier() {
         return "T34SL" + String.format("%015d", allSupplierLogCreatedCount + 1);
-        //completed
     }
 
     public static ArrayList<SupplierLog> getSupplierSupplierLog(Supplier supplier) {

@@ -1,8 +1,12 @@
 package log;
 
 import account.Supplier;
+import discount.Sale;
+import product.Product;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * @author Aryan Ahadinia
@@ -19,6 +23,9 @@ public class SupplierLog {
     private final int totalPurchase;
     private final CustomerLog customerLog;
     private final Supplier supplier;
+    private final ArrayList<Product> products;
+    private final HashMap<Product, Integer> productsCount;
+    private final HashMap<Product, Sale> productsSale;
 
     //Constructor:
     public SupplierLog(CustomerLog customerLog, Supplier supplier) {
@@ -28,17 +35,11 @@ public class SupplierLog {
         this.discountAmount = customerLog.getSupplierSaleAmount(supplier);
         this.totalPurchase = customerLog.getTotalPurchaseFromSupplier(supplier);
         this.identifier = generateIdentifier();
+        this.products = customerLog.getProductsBoughtFromSupplier(supplier);
+        this.productsCount = customerLog.getProductsBoughtFromSupplierCount(supplier);
+        this.productsSale = customerLog.getProductsBoughtFromSupplierSale(supplier);
         allSupplierLogs.add(this);
         allSupplierLogCreatedCount++;
-    }
-
-    public SupplierLog(String identifier, int earnedMoney, int discountAmount, int totalPurchase, CustomerLog customerLog, Supplier supplier) {
-        this.identifier = identifier;
-        this.earnedMoney = earnedMoney;
-        this.discountAmount = discountAmount;
-        this.totalPurchase = totalPurchase;
-        this.customerLog = customerLog;
-        this.supplier = supplier;
     }
 
     //Getters:
@@ -64,6 +65,18 @@ public class SupplierLog {
 
     public Supplier getSupplier() {
         return supplier;
+    }
+
+    public ArrayList<Product> getProducts() {
+        return products;
+    }
+
+    public HashMap<Product, Integer> getProductsCount() {
+        return productsCount;
+    }
+
+    public HashMap<Product, Sale> getProductsSale() {
+        return productsSale;
     }
 
     public static ArrayList<SupplierLog> getAllSupplierLogs() {
@@ -94,8 +107,29 @@ public class SupplierLog {
     public static SupplierLog getSupplierLogById(String identifier){
         for (SupplierLog supplierLog : allSupplierLogs) {
             if (supplierLog.getIdentifier().equals(identifier))
-                return supplierLog;;
+                return supplierLog;
         }
         return null;
+    }
+
+    public String productsBoughtString() {
+        StringBuilder string = new StringBuilder();
+        int i = 1;
+        for (Product product : products) {
+            string.append("Product").append(i).append(". ").append(product.getProductId()).append(" X ").append(productsCount.get(product));
+            if (productsSale.get(product) != null) {
+                string.append(" in sale: ").append(productsSale.get(product).getOffId());
+            }
+            string.append("\n");
+        }
+        return string.toString();
+    }
+
+    @Override
+    public String toString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
+        return "SupplierLog on " + formatter.format(customerLog.getDate()) + ", Log identifier: " + identifier + "\n" +
+                "earnedMoney: " + earnedMoney + ", discountAmount: " + discountAmount + ", totalPurchase: " + totalPurchase + "\n" +
+                productsBoughtString();
     }
 }

@@ -5,6 +5,7 @@ import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import database.CustomerLogDataBase;
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 
@@ -192,6 +193,18 @@ public class CustomerLog {
         }
         return productsBoughtFromSupplierCount;
     }
+
+    public HashMap<Product, Sale> getProductsBoughtFromSupplierSale(Supplier supplier) {
+        HashMap<Product, Sale> productsBoughtFromSupplierSale = new HashMap<>();
+        HashMap<ProductInCart, Sale> cartSaleHashMap = cart.getProductInSale();
+        for (ProductInCart productInCart : cart.getProductsIn()) {
+            if (productInCart.getSupplier() == supplier) {
+                productsBoughtFromSupplierSale.put(productInCart.getProduct(), cartSaleHashMap.get(productInCart));
+            }
+        }
+        return productsBoughtFromSupplierSale;
+    }
+
 
     @Override
     public String toString() {

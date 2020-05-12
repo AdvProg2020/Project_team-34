@@ -304,5 +304,17 @@ public class Cart {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder cart = new StringBuilder("Cart, Identifier: " + identifier + " for <username: " + owner.getUserName() + ">" + "\n");
+        cart.append(shippingInfo.toString()).append("\n");
+        int i = 1;
+        for (ProductInCart productInCart : productsIn) {
+            cart.append("Product").append(i).append(". ").append(productInCart.getProduct().getProductId()).append(" X ").append(productInCount.get(productInCart)).append("\n");
+            i++;
+        }
+        return cart.toString();
+    }
 }
 

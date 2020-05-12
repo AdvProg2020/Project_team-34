@@ -3,6 +3,7 @@ package log;
 import account.Customer;
 import account.Supplier;
 import cart.Cart;
+import cart.ProductInCart;
 import database.CustomerLogDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
@@ -10,6 +11,7 @@ import product.Product;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * @author Aryan Ahadinia
@@ -140,7 +142,7 @@ public class CustomerLog {
         return cart.getSupplierEarnedMoney(supplier);
     }
 
-    public static ArrayList<Customer> getCustomerBoughtProduct(Product product) {
+    public static ArrayList<Customer> getAllCustomersBoughtProduct(Product product) {
         ArrayList<Customer> customerBoughtProduct = new ArrayList<>();
         for (CustomerLog customerLog : allCustomerLogs) {
             if ((customerLog.cart).isProductInCart(product)) {
@@ -151,7 +153,7 @@ public class CustomerLog {
         return customerBoughtProduct;
     }
 
-    public static ArrayList<Customer> getCustomerBoughtProductFromSupplier(Product product, Supplier supplier) {
+    public static ArrayList<Customer> getAllCustomersBoughtProductFromSupplier(Product product, Supplier supplier) {
         ArrayList<Customer> customerBoughtProduct = new ArrayList<>();
         for (CustomerLog customerLog : allCustomerLogs) {
             if ((customerLog.cart).isProductInCart(product, supplier)) {
@@ -168,6 +170,27 @@ public class CustomerLog {
                 return customerLog;
         }
         return null;
+    }
+
+    public ArrayList<Product> getProductsBoughtFromSupplier(Supplier supplier) {
+        ArrayList<Product> productsBoughtFromSupplier = new ArrayList<>();
+        for (ProductInCart productInCart : cart.getProductsIn()) {
+            if (productInCart.getSupplier() == supplier) {
+                productsBoughtFromSupplier.add(productInCart.getProduct());
+            }
+        }
+        return productsBoughtFromSupplier;
+    }
+
+    public HashMap<Product, Integer> getProductsBoughtFromSupplierCount(Supplier supplier) {
+        HashMap<Product, Integer> productsBoughtFromSupplierCount = new HashMap<>();
+        HashMap<ProductInCart, Integer> cartCountHashMap = cart.getProductInCount();
+        for (ProductInCart productInCart : cart.getProductsIn()) {
+            if (productInCart.getSupplier() == supplier) {
+                productsBoughtFromSupplierCount.put(productInCart.getProduct(), cartCountHashMap.get(productInCart));
+            }
+        }
+        return productsBoughtFromSupplierCount;
     }
 
     @Override

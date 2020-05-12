@@ -3,9 +3,11 @@ package log;
 import account.Customer;
 import account.Supplier;
 import cart.Cart;
+import database.CustomerLogDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -23,8 +25,8 @@ public class CustomerLog {
     private final int paidAmount;
     private final int codedDiscountAmount;
     private final Customer customer;
-    private LogStatus deliveryStatus;
     private final Cart cart;
+    private LogStatus deliveryStatus;
     //Suppliers Name Saved In a variable: <cart: cart.Cart>
 
     //Constructors:
@@ -39,7 +41,7 @@ public class CustomerLog {
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
         addSubLogForSuppliers();
-        //file modification required
+        CustomerLogDataBase.add(this);
     }
 
     public CustomerLog(String identifier, Date date, LogStatus deliveryStatus, Cart cart) {
@@ -91,7 +93,7 @@ public class CustomerLog {
     //Setters:
     public void setDeliveryStatus(LogStatus deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
-        //file modification required
+        CustomerLogDataBase.update(this);
     }
 
     //Modeling Methods:
@@ -107,11 +109,9 @@ public class CustomerLog {
 
     public static ArrayList<CustomerLog> getCustomerCustomerLogs(Customer customer) {
         ArrayList<CustomerLog> customerLogs = new ArrayList<>();
-        if (allCustomerLogs.size() != 0) {
-            for (CustomerLog customerLog: allCustomerLogs) {
-                if (customerLog.getCustomer() == customer) {
-                    customerLogs.add(customerLog);
-                }
+        for (CustomerLog customerLog: allCustomerLogs) {
+            if (customerLog.getCustomer() == customer) {
+                customerLogs.add(customerLog);
             }
         }
         return customerLogs;
@@ -168,5 +168,16 @@ public class CustomerLog {
                 return customerLog;
         }
         return null;
+    }
+
+    @Override
+    public String toString() {
+        SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
+        return
+                "Order on " + formatter.format(date) + ", Order Identifier: " + identifier + "\n" +
+                "delivery status: " + deliveryStatus.toString() + "\n" +
+                "paidAmount: " + paidAmount + "\n" +
+                "codedDiscountAmount: " + codedDiscountAmount + "\n" +
+                cart.toString();
     }
 }

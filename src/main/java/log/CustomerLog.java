@@ -205,7 +205,6 @@ public class CustomerLog {
         return productsBoughtFromSupplierSale;
     }
 
-
     @Override
     public String toString() {
         SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");

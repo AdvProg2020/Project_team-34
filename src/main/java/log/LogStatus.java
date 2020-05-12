@@ -23,4 +23,15 @@ public enum LogStatus {
     public LogStatus nextStep() {
         return next;
     }
+
+    @Override
+    public String toString() {
+        if (this == LogStatus.PENDING)
+            return "PENDING";
+        if (this == LogStatus.PREPARING)
+            return "PREPARING";
+        if (this == LogStatus.SENDING)
+            return "SENDING";
+        return "DELIVERED";
+    }
 }

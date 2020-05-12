@@ -92,4 +92,16 @@ public class ShippingInfo {
         }
         return null;
     }
+
+    @Override
+    public String toString() {
+        return "ShippingInfo{" +
+                "firstName: '" + firstName + '\'' +
+                ", lastName: '" + lastName + '\'' +
+                ", city: '" + city + '\'' +
+                ", address: '" + address + '\'' +
+                ", postalCode: '" + postalCode + '\'' +
+                ", phoneNumber: '" + phoneNumber + '\'' +
+                '}';
+    }
 }

@@ -1,5 +1,6 @@
 package database;
 
+import cart.Cart;
 import product.Category;
 import product.Product;
 
@@ -43,15 +44,9 @@ public class CategoryDataBase {
         }
     }
 
+
     private static boolean doesCategoryAlreadyExists(Category category) {
-        ArrayList<Category> list = getAllCategories();
-        if (list == null)
-            return false;
-        for (Category eachCategory : list) {
-            if (eachCategory.getName().equals(category.getName()))
-                return true;
-        }
-        return false;
+        return !(Category.getCategoryByName(category.getName())==null);
     }
 
 
@@ -66,13 +61,12 @@ public class CategoryDataBase {
         DataBase.delete("Categories", "name", categoryName);
     }
 
-    public static ArrayList<Category> getAllCategories() {
+    public static void importAllCategories() {
         String sql = "SELECT *  FROM Categories";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<Category> categories = new ArrayList<>();
             while (resultSet.next()) {
                 String name = resultSet.getString("name");
                 String parentCategoryName = resultSet.getString("parentCategoryName");
@@ -82,12 +76,9 @@ public class CategoryDataBase {
 
                 new Category(name,parentCategoryName,allCategoriesInName,allProductsIn,filters);
             }
-            return categories;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
-
 
     }
 

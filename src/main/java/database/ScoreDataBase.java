@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Customer;
+import cart.Cart;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
@@ -30,7 +31,7 @@ public class ScoreDataBase {
             return;
         }
         String sql = "INSERT into Scores (scoreId, customerUsername, productId,score) " +
-                "VALUES (?,?, ? )";
+                "VALUES (?,?, ? ,?)";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -46,14 +47,7 @@ public class ScoreDataBase {
     }
 
     private static boolean doesScoreAlreadyExists(Score score) {
-        ArrayList<Score> list = getAllScores();
-        if (list == null)
-            return false;
-        for (Score eachScore : list) {
-            if (eachScore.getIdentifier().equals(score.getIdentifier()))
-                return true;
-        }
-        return false;
+        return !(Score.getScoreByIdentifier(score.getIdentifier())==null);
     }
 
     public static void update(Score score) {
@@ -66,25 +60,22 @@ public class ScoreDataBase {
     }
 
 
-    public static ArrayList<Score> getAllScores() {
+    public static void importAllScores() {
         String sql = "SELECT *  FROM Scores";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<Score> scores = new ArrayList<>();
             while (resultSet.next()) {
                 String scoreId = resultSet.getString("scoreId");
                 Customer customer = (Customer) (Account.getAccountByUsername(resultSet.getString("customerUsername")));
                 Product product = Product.getProductById(resultSet.getString("productId"));
                 Float score = resultSet.getFloat("score");
 
-                scores.add(new Score(scoreId,customer,product,score));
+                new Score(scoreId,customer,product,score);
             }
-            return scores;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }

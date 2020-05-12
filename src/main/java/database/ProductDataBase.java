@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Supplier;
+import cart.Cart;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import feedback.Comment;
@@ -50,7 +51,7 @@ public class ProductDataBase {
             statement.setString(4, product.getName());
             statement.setString(5, product.getNameOfCompany());
             statement.setString(6, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getPriceForEachSupplier())));
-            statement.setString(7, convertObjectToJsonString(covertSupplierArrayListToStringArrayList(product.getListOfSuppliers())));
+            statement.setString(7, convertObjectToJsonString(convertSupplierArrayListToStringArrayList(product.getListOfSuppliers())));
             statement.setString(8, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getRemainedNumberForEachSupplier())));
             statement.setString(9, product.getDescription());
             statement.setString(10, convertObjectToJsonString(product.getSpecification()));
@@ -78,7 +79,7 @@ public class ProductDataBase {
         return supplierHashMap;
     }
 
-    private static ArrayList<String> covertSupplierArrayListToStringArrayList(ArrayList<Supplier> supplierArrayList){
+    private static ArrayList<String> convertSupplierArrayListToStringArrayList(ArrayList<Supplier> supplierArrayList){
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (Supplier supplier : supplierArrayList) {
             stringArrayList.add(supplier.getUserName());
@@ -111,14 +112,7 @@ public class ProductDataBase {
     }
 
     private static boolean doesProductAlreadyExists(Product product) {
-        ArrayList<Product> list = getAllProducts();
-        if(list == null )
-            return false;
-        for (Product eachProduct : list) {
-            if(eachProduct.getProductId().equals(product.getProductId()))
-                return true;
-        }
-        return false;
+        return !(Product.getProductById(product.getProductId())==null);
     }
 
 
@@ -131,13 +125,12 @@ public class ProductDataBase {
             DataBase.delete("Products", "productId",productId);
     }
 
-    public static ArrayList<Product> getAllProducts() {
+    public static void importAllProducts() {
         String sql = "SELECT *  FROM Products";
 
         try (Connection connection = connect();
              Statement stmt = connection.createStatement();
              ResultSet resultSet = stmt.executeQuery(sql)) {
-            ArrayList<Product> products = new ArrayList<>();
             while (resultSet.next()) {
 
                 String name = resultSet.getString("name");
@@ -150,15 +143,12 @@ public class ProductDataBase {
                 String productId = resultSet.getString("productId");
                 State state = State.valueOf(resultSet.getString("productState"));
                 String rootProductId = resultSet.getString("rootProductId");
-                Product product = new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,
+                new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,
                         remainedNumberForEachSupplier,description,numberOfViews,productId,state, rootProductId);
-                products.add(product);
             }
-            return products;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 
 

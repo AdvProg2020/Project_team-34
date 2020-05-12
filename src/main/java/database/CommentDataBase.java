@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Customer;
+import cart.Cart;
 import feedback.Comment;
 import feedback.CommentState;
 import product.Product;
@@ -55,14 +56,7 @@ public class CommentDataBase {
     }
 
     private static boolean doesCommentAlreadyExists(Comment comment) {
-        ArrayList<Comment> list = getAllComments();
-        if (list == null)
-            return false;
-        for (Comment eachComment : list) {
-            if (eachComment.getCommentId().equals(comment.getCommentId()))
-                return true;
-        }
-        return false;
+        return !(Comment.getCommentByIdentifier(comment.getCommentId())==null);
     }
 
     public static void update(Comment comment) {
@@ -75,13 +69,12 @@ public class CommentDataBase {
     }
 
 
-    public static ArrayList<Comment> getAllComments() {
+    public static void importAllComments() {
         String sql = "SELECT *  FROM Comments";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<Comment> comments = new ArrayList<>();
             while (resultSet.next()) {
                 String commentId = resultSet.getString("commentId");
                 Customer customer = (Customer) (Account.getAccountByUsername(resultSet.getString("customerUsername")));
@@ -91,12 +84,10 @@ public class CommentDataBase {
 
                 CommentState commentState = CommentState.valueOf(resultSet.getString("commentState"));
                 boolean customerBoughtThisProduct = resultSet.getBoolean("customerBoughtThisProduct");
-                comments.add(new Comment(customer, product, title, content, commentState, customerBoughtThisProduct, commentId));
+                new Comment(customer, product, title, content, commentState, customerBoughtThisProduct, commentId);
             }
-            return comments;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }

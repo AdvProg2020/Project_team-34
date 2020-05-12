@@ -101,14 +101,7 @@ public class CartDataBase {
     }
 
     private static boolean doesCartAlreadyExists(Cart cart) {
-        ArrayList<Cart> list = getAllCarts();
-        if (list == null)
-            return false;
-        for (Cart eachCart : list) {
-            if (eachCart.getIdentifier().equals(cart.getIdentifier()))
-                return true;
-        }
-        return false;
+        return !(Cart.getCartById(cart.getIdentifier())==null);
     }
 
     public static void update(Cart cart) {
@@ -120,13 +113,12 @@ public class CartDataBase {
         DataBase.delete("Carts", "identifier", cartId);
     }
 
-    public static ArrayList<Cart> getAllCarts() {
+    public static void importAllCarts() {
         String sql = "SELECT *  FROM Carts";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<Cart> carts = new ArrayList<>();
             while (resultSet.next()) {
                 String cartId = resultSet.getString("identifier");
                 Customer owner = (Customer) (Account.getAccountByUsername(resultSet.getString("ownerUsername")));
@@ -136,13 +128,11 @@ public class CartDataBase {
                 CodedDiscount codedDiscount = CodedDiscount.getCodedDiscountByCode(resultSet.getString("discountCode"));
                 ShippingInfo shippingInfo = ShippingInfo.getShippingInfoByIdentifier(resultSet.getString("shippingInfoId"));
 
-                carts.add(new Cart(cartId,owner,productInCarts,productInCount,productInSale,codedDiscount,shippingInfo));
+               new Cart(cartId,owner,productInCarts,productInCount,productInSale,codedDiscount,shippingInfo);
             }
-            return carts;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 
 

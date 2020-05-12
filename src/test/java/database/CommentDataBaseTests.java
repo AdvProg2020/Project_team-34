@@ -11,6 +11,7 @@ import product.Product;
 import java.util.ArrayList;
 
 public class CommentDataBaseTests {
+    /*
 
     @Test
     public void Test(){
@@ -36,4 +37,6 @@ public class CommentDataBaseTests {
 
         Assert.assertArrayEquals(new String[] {"Your Opinion"}, actualTitles);
     }
+
+     */
 }

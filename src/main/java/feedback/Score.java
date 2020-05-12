@@ -76,6 +76,15 @@ public class Score {
         return "T34P" + String.format("%015d", allCreatedScoreNum + 1);
     }
 
+    //Added by rpirayadi
+    public static Score getScoreByIdentifier(String scoreId){
+        for (Score eachScore : scores) {
+            if(eachScore.getIdentifier().equals(scoreId))
+                return eachScore;
+        }
+        return null;
+    }
+
     public static void importAllData(){
 
     }

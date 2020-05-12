@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Supplier;
+import cart.Cart;
 import cart.ProductInCart;
 import product.Product;
 
@@ -41,14 +42,7 @@ public class ProductInCartDataBase {
         }
     }
     private static boolean doesProductInCartAlreadyExists(ProductInCart productInCart) {
-        ArrayList<ProductInCart> list = getAllProductInCarts();
-        if (list == null)
-            return false;
-        for (ProductInCart eachProductInCart : list) {
-            if (eachProductInCart.getIdentifier().equals(productInCart.getIdentifier()))
-                return true;
-        }
-        return false;
+        return !(ProductInCart.getProductInCartByIdentifier(productInCart.getIdentifier())==null);
     }
 
     public static void update(ProductInCart productInCart) {
@@ -61,25 +55,22 @@ public class ProductInCartDataBase {
     }
 
 
-    public static ArrayList<ProductInCart> getAllProductInCarts() {
+    public static void importAllProductInCarts() {
         String sql = "SELECT *  FROM ProductInCarts";
 
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            ArrayList<ProductInCart> productInCarts = new ArrayList<>();
             while (resultSet.next()) {
                 String productInCartId = resultSet.getString("productInCartId");
                 Product product = Product.getProductById(resultSet.getString("productId"));
                 Supplier supplier = (Supplier) Account.getAccountByUsername(resultSet.getString("supplierId"));
 
-                productInCarts.add(new ProductInCart(productInCartId,product,supplier));
+                new ProductInCart(productInCartId,product,supplier);
             }
-            return productInCarts;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return null;
     }
 }
 

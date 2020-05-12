@@ -311,7 +311,7 @@ public class Cart {
         cart.append(shippingInfo.toString()).append("\n");
         int i = 1;
         for (ProductInCart productInCart : productsIn) {
-            cart.append("Product").append(i).append(". ").append(productInCart.getProduct().getProductId()).append(" X ").append(productInCount.get(productInCart)).append("\n");
+            cart.append("Product").append(i).append(". ").append(productInCart.getProduct().getProductId()).append(" from ").append(productInCart.getSupplier().getNameOfCompany()).append(" X ").append(productInCount.get(productInCart)).append("\n");
             i++;
         }
         return cart.toString();

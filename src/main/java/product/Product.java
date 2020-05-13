@@ -1,6 +1,7 @@
 package product;
 
 import account.Supplier;
+import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import state.State;
 
@@ -26,6 +27,7 @@ public class Product {
     //private ArrayList<Comment> comments;
     private HashMap<String, String> specification; //method check
     private String rootProductId ;
+    private boolean isProductValid ;
 
 
     public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,String rootProductId) {
@@ -44,12 +46,14 @@ public class Product {
         this.description = description;
         //comments = new ArrayList<>();
         this.rootProductId = rootProductId;
+        isProductValid = true;
         allCreatedProductNum ++;
+        allProduct.add(this);
     }
 
     public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
                    HashMap<Supplier,Integer> remainedNumberForEachSupplier, String description,
-                   int numberOfViews , String productId,State state,String rootProductId) {
+                   int numberOfViews , String productId,State state,String rootProductId, boolean isProductValid) {
         this.productState = state;
         this.productId = productId;
         this.name = name;
@@ -62,9 +66,26 @@ public class Product {
         //this.comments = comments;
         this.numberOfViews= numberOfViews;
         this.rootProductId = rootProductId;
+        this.isProductValid = isProductValid;
+        allCreatedProductNum ++;
+        allProduct.add(this);
 
     }
 
+    public Product(Product product) {
+        this.productId = generateIdentifier();
+        this.name = product.getName();
+        this.nameOfCompany = product.getNameOfCompany();
+        this.priceForEachSupplier = product.getPriceForEachSupplier();
+        this.listOfSuppliers = product.getListOfSuppliers();
+        this.remainedNumberForEachSupplier = product.getRemainedNumberForEachSupplier();
+        this.description = product.getDescription();
+        this.numberOfViews= product.getNumberOfViews();
+        this.rootProductId = product.getProductId();
+        this.isProductValid = product.getIsProductValid();
+        allCreatedProductNum ++;
+        allProduct.add(this);
+    }
 
     private String generateIdentifier(){
         return "T34P" + String.format("%015d", allCreatedProductNum + 1);
@@ -128,8 +149,12 @@ public class Product {
         return specification;
     }
 
+    public boolean getIsProductValid() {
+        return isProductValid;
+    }
+
     public void removeProduct(){
-        allProduct.remove(this);
+        isProductValid = false;
     }
 
     public void addProduct(){
@@ -141,11 +166,11 @@ public class Product {
         return listOfSuppliers.contains(supplier);
     }
 
-    public static ArrayList<String> getProductIdForSupplier(Supplier supplier){
-        ArrayList<String> result = new ArrayList<>();
+    public static ArrayList<Product> getProductForSupplier(Supplier supplier){
+        ArrayList<Product> result = new ArrayList<>();
         for (Product product : allProduct) {
             if(product.doesSupplierSellThisProduct(supplier))
-                result.add(product.getProductId());
+                result.add(product);
         }
         return result;
     }
@@ -172,9 +197,6 @@ public class Product {
         //aryan
     }
 
-    public static void importAll(){
-
-    }
 
     public void setNumberOfViews(int numberOfViews) {
         this.numberOfViews = numberOfViews;
@@ -208,10 +230,19 @@ public class Product {
     }
      */
 
-    public void setSpecification(HashMap<String, String> specification) {
-        this.specification = specification;
+    public void editSpecialField(String field, String value) throws ExceptionalMassage {
+        if(!specification.containsKey(field))
+            throw new ExceptionalMassage("No such field was found");
+        specification.put(field,value);
+
     }
 
+
+    public void addNewSupplierForProduct(Supplier supplier, int price , int remainedNumber){
+        listOfSuppliers.add(supplier);
+        priceForEachSupplier.put(supplier,price);
+        remainedNumberForEachSupplier.put(supplier,remainedNumber);
+    }
     public boolean isProductAvailableNow() {
         return false;
     }
@@ -223,4 +254,41 @@ public class Product {
     public boolean isProductProvidedInPriceUpperThan(int lowerBound) {
         return false;
     }
+
+    public static ArrayList<String> getAllProductRequestId(){
+        ArrayList<String > result = new ArrayList<>();
+        String id;
+        for (Product eachProduct : allProduct) {
+            if(eachProduct.getProductState() == State.PREPARING_TO_EDIT){
+                result.add(convertProductIdToRequestId(eachProduct.getProductId()));
+            }
+        }
+        return result;
+    }
+
+    public static String getDetailsForProductRequest(String requestId){
+        Product product = Product.getProductById(convertRequestIdToProductId(requestId));
+        Product rootProduct = Product.getProductById(product.getRootProductId());
+        StringBuilder result = new StringBuilder();
+        result.append("name= ").append(rootProduct.getName()).append("==>").append(product.getName()).append("\n");
+        result.append("nameOfCompany= ").append(rootProduct.getNameOfCompany()).append("==>").append(product.getNameOfCompany()).append("\n");
+        result.append("description= ").append(rootProduct.getDescription()).append("==>").append(product.getDescription()).append("\n");
+        HashMap<String, String> firstSpecification = rootProduct.getSpecification();
+        HashMap<String, String> secondSpecification = product.getSpecification();
+        for (String specialField : firstSpecification.keySet()) {
+            result.append(specialField).append("= ").append(firstSpecification.get(specialField)).append("==>").append(secondSpecification.get(specialField)).append("\n");
+        }
+        return String.valueOf(result);
+    }
+
+    private static String convertProductIdToRequestId(String requestId){
+        return  "T34PR"+requestId.substring(4);
+    }
+
+    private static String convertRequestIdToProductId(String productId){
+        return  "T34P"+productId.substring(5);
+    }
+
+
+
 }

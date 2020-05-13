@@ -1,6 +1,7 @@
 package account;
 
 
+import database.AccountDataBase;
 import exceptionalMassage.ExceptionalMassage;
 
 import java.util.ArrayList;
@@ -64,26 +65,32 @@ public abstract class Account {
 
     public void setName(String name) {
         this.name = name;
+        AccountDataBase.update(this);
     }
 
     public void setFamilyName(String familyName) {
         this.familyName = familyName;
+        AccountDataBase.update(this);
     }
 
     public void setEmail(String email) {
         this.email = email;
+        AccountDataBase.update(this);
     }
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+        AccountDataBase.update(this);
     }
 
     public void setPassword(String password) {
         this.password = password;
+        AccountDataBase.update(this);
     }
 
     public void setCredit(int credit) {
         this.credit = credit;
+        AccountDataBase.update(this);
     }
 
     public static Account getAccountByUsername(String userName) {

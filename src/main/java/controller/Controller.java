@@ -535,13 +535,13 @@ public class Controller {
         controlGetDiscountByCode(code).setMaxDiscountAmount(newMaxDiscount);
     }
 
-    public void controlCreateCodedDiscount(String code,Date startDate, Date endDate, int percent, int maxDiscountAmount) throws ExceptionalMassage {
+    public void controlCreateCodedDiscount(String code,Date startDate, Date endDate, int percent, int maxDiscountAmount, HashMap<Customer, Integer> maxNumberOfUsage) throws ExceptionalMassage {
         for (CodedDiscount codedDiscount : controlGetAllCodedDiscounts()) {
             if(codedDiscount.getDiscountCode().equals(code)){
                 throw new ExceptionalMassage("Code already exists!");
             }
         }
-        //new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount);
+        new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount,maxNumberOfUsage);
     }
 
     public void controlRemoveDiscountCode(String code) throws ExceptionalMassage{
@@ -552,7 +552,7 @@ public class Controller {
     }
 
     public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products) throws ExceptionalMassage {
-        Sale newSale = new Sale(startDate,endDate,percent);
+        Sale newSale = new Sale((Supplier)this.account,startDate,endDate,percent);
         for (Product product : products) {
             newSale.addProductToSale(product);
         }
@@ -576,7 +576,7 @@ public class Controller {
         if(controlGetSaleById(id) == null){
             throw new ExceptionalMassage("No such sale with this code!");
         }
-        Sale newSale = new Sale(newStartDate,newEndDate,newPercent,id);
+        Sale newSale = new Sale((Supplier)this.account,newStartDate,newEndDate,newPercent,id);
         for (Product product : controlGetSaleById(id).getProducts()) {
             newSale.addProductToSale(product);
         }

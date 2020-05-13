@@ -20,8 +20,9 @@ public class Sale extends Discount{
     private String offId;
     private ArrayList<Product> products;
     private State state;
+    private Supplier supplier;
 
-    public Sale(Date start, Date end, int percent) {
+    public Sale(Supplier supplier,Date start, Date end, int percent) {
         super(start, end, percent);
         state = State.PREPARING_TO_BUILD;
         this.offId = generateOffId();
@@ -29,14 +30,14 @@ public class Sale extends Discount{
         addSale(this);
     }
 
-    public Sale(Date start, Date end,int percent, String offId) {
+    public Sale(Supplier supplier,Date start, Date end,int percent, String offId) {
         super(start, end, percent);
         state = State.PREPARING_TO_EDIT;
         this.offId = offId;
         addSale(this);
     }
 
-    public Sale(Date start, Date end, int percent, String offId, ArrayList<Product> products, State state) {
+    public Sale( Date start, Date end, int percent, String offId, ArrayList<Product> products, State state) {
         super(start, end, percent);
         this.offId = offId;
         this.products = products;
@@ -100,6 +101,10 @@ public class Sale extends Discount{
 
     }
 
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
     public boolean isProductInSale(Product product){
         for (Product product1 : products) {
             if(product1 == product){
@@ -131,9 +136,9 @@ public class Sale extends Discount{
     public static Sale getProductSale(Product product, Supplier supplier) {
         //HAZARD!!!
         //this method has written by Aryan Ahadinia for use in Cart.java
-        //not usable
+        //usable!
         for (Sale sale : sales) {
-            if (sale.isProductInSale(product)) {
+            if (sale.isProductInSale(product) && sale.getSupplier() == supplier) {
                 return sale;
             }
         }

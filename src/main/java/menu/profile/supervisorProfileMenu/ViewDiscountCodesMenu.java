@@ -1,5 +1,6 @@
 package menu.profile.supervisorProfileMenu;
 
+import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 
@@ -108,5 +109,13 @@ public class ViewDiscountCodesMenu extends Menu {
         };
         menusIn.put("^remove discount code (\\w+)$", RemoveDiscountCode);
         menuForShow.add("Remove Discount Code");
+    }
+
+    @Override
+    public void show() {
+        for (CodedDiscount codedDiscount : controller.controlGetAllCodedDiscounts()) {
+            System.out.println(codedDiscount.getDiscountCode());
+        }
+        super.show();
     }
 }

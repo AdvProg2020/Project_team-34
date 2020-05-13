@@ -5,7 +5,7 @@ import menu.menuAbstract.Menu;
 import product.Category;
 
 import java.util.regex.Matcher;
-
+//show arian
 public class ManageCategoriesMenu extends Menu {
     public ManageCategoriesMenu(Menu parentMenu) {
         super("Manage Categories Menu", parentMenu);

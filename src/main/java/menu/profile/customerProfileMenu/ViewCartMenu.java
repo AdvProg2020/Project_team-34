@@ -30,7 +30,7 @@ public class ViewCartMenu extends Menu {
 
             @Override
             public void execute() {
-                //System.out.println(controller.getCart().getProductsIn());
+                System.out.println(controller.getCart().getProductsIn());
             }
         };
         menusIn.put("^show products$", ShowProduct);
@@ -112,7 +112,7 @@ public class ViewCartMenu extends Menu {
 
             @Override
             public void execute() {
-                //controller.getCart().pri
+                System.out.println(controller.getCart().getBill());
             }
         };
         menusIn.put("^show total price$", ShowTotalPrice);

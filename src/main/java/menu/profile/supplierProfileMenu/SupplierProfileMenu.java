@@ -1,8 +1,11 @@
 package menu.profile.supplierProfileMenu;
 
+import account.Supplier;
 import exceptionalMassage.ExceptionalMassage;
+import log.SupplierLog;
 import menu.menuAbstract.Menu;
 import menu.profile.ProfileMenu;
+import product.Category;
 
 import java.util.regex.Matcher;
 
@@ -33,7 +36,9 @@ public class SupplierProfileMenu extends ProfileMenu {
         Menu ViewSalesHistory = new Menu("View Sales History", this) {
             @Override
             public void show() {
-                //System.out.println(controller.showSalesHistory());
+                for (SupplierLog log : SupplierLog.getSupplierSupplierLog((Supplier) controller.getAccount())) {
+                    System.out.println(log);
+                }
             }
 
             @Override
@@ -55,9 +60,26 @@ public class SupplierProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
-                //need modification!
-                System.out.println();
-                //controller.controlAddProduct();
+                System.out.println("Enter product name:");
+                String productName = scanner.nextLine();
+                System.out.println("Enter name of company");
+                String nameOfCompany = scanner.nextLine();
+                System.out.println("Enter the price");
+                int price = scanner.nextInt();
+                System.out.println("Enter remained numbers");
+                int numbers = scanner.nextInt();
+                System.out.println("Enter the category name");
+                String categoryName = scanner.nextLine();
+                System.out.println("Enter description");
+                String description = scanner.nextLine();
+                try{
+                    controller.controlAddProduct(productName, nameOfCompany, price, numbers,Category.getCategoryByName(categoryName),description);
+                } catch (ExceptionalMassage ex){
+                    System.out.println(ex.getMessage());
+                }
+                parentMenu.show();
+                parentMenu.execute();
+
             }
         };
         menusIn.put("^add product$", AddProduct);
@@ -107,11 +129,12 @@ public class SupplierProfileMenu extends ProfileMenu {
         Menu ViewBalance = new Menu("View Balance", this) {
             @Override
             public void show() {
+                System.out.println(controller.controlViewBalance());
             }
 
             @Override
             public void execute() {
-                System.out.println(controller.controlViewBalance());
+
                 parentMenu.show();
                 parentMenu.execute();
             }

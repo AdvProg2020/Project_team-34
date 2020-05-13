@@ -1,11 +1,13 @@
 package menu.profile.supervisorProfileMenu;
 
+import account.Customer;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 import menu.profile.ProfileMenu;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class SupervisorProfileMenu extends ProfileMenu {
     public SupervisorProfileMenu( Menu parentMenu) {
@@ -24,6 +26,7 @@ public class SupervisorProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
+                HashMap<Customer, Integer> maxNumberOfUsagePerCustomer = new HashMap<>();
                 System.out.println("Enter the starting date: (dd/MM/yyyy HH:mm:ss) ");
                 String startingDate = scanner.next();
                 Date startDate = null;
@@ -50,8 +53,21 @@ public class SupervisorProfileMenu extends ProfileMenu {
                 int maxAmount = scanner.nextInt();
                 System.out.println("Enter the discount code :");
                 String code = scanner.nextLine();
+                String customerId;
+                int max;
+                System.out.println("Enter customer id :");
+                while((customerId = scanner.nextLine()).equalsIgnoreCase("end")) {
+                    System.out.println("enter max number of usage :");
+                    max = scanner.nextInt();
+                    if(Customer.getAccountByUsername(customerId) == null){
+                        System.out.println("no such username!");
+                    } else {
+                        maxNumberOfUsagePerCustomer.put((Customer)Customer.getAccountByUsername(customerId), max);
+                    }
+                    System.out.println("Enter customer id:");
+                }
                 try {
-                    controller.controlCreateCodedDiscount(code,startDate,endDate,percent,maxAmount);
+                    controller.controlCreateCodedDiscount(code,startDate,endDate,percent,maxAmount, maxNumberOfUsagePerCustomer);
                 } catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }

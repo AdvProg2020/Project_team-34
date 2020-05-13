@@ -73,6 +73,7 @@ public class Controller {
     public void setIsFirstSupervisorCreated(boolean firstSupervisorCreated) {
         isFirstSupervisorCreated = firstSupervisorCreated;
     }
+}
 
 
 

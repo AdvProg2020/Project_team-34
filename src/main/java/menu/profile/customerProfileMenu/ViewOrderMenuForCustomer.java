@@ -1,6 +1,8 @@
 package menu.profile.customerProfileMenu;
 
+import account.Customer;
 import exceptionalMassage.ExceptionalMassage;
+import log.CustomerLog;
 import menu.menuAbstract.Menu;
 
 import java.util.regex.Matcher;
@@ -17,7 +19,18 @@ public class ViewOrderMenuForCustomer extends Menu {
 
             @Override
             public void execute() {
-                //controller.
+                String regex = "show order (\\w+)";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+
+                    if(CustomerLog.getCustomerLogById(matcher.group(1)) == null){
+                        System.out.println("no such Log!");
+                    } else {
+                        System.out.println(CustomerLog.getCustomerLogById(matcher.group(1)));
+                    }
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("show order (\\w+)", ShowOrderForCustomer);
@@ -35,7 +48,7 @@ public class ViewOrderMenuForCustomer extends Menu {
                     System.out.println("Enter the score(1-5):");
                     score = scanner.nextFloat();
                 }
-                String regex = "show order (\\w+)";
+                String regex = "rate product (\\w+)";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()) {
                     try{
@@ -46,7 +59,15 @@ public class ViewOrderMenuForCustomer extends Menu {
                 }
             }
         };
-        menusIn.put("show order (\\w+)", Rate);
+        menusIn.put("rate product (\\w+)", Rate);
         menuForShow.add("Rate");
+    }
+
+    @Override
+    public void show() {
+        for (CustomerLog log : CustomerLog.getCustomerCustomerLogs((Customer) controller.getAccount())) {
+            System.out.println(log);
+        }
+        super.show();
     }
 }

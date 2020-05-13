@@ -45,6 +45,10 @@ public class Controller {
         return account;
     }
 
+    public Cart getCart() {
+        return cart;
+    }
+
     public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
         Product product = Product.getProductById(productId);
         if (product == null)

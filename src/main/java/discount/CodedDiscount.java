@@ -19,14 +19,16 @@ public class CodedDiscount extends Discount{
     private String discountCode;
     private int maxDiscountAmount;
     private HashMap<Customer, Integer> usedDiscountPerCustomer;
+    private HashMap<Customer, Integer> maximumNumberOfUsagePerCustomer;
     private ArrayList<Customer> customers;
 
 
-    public CodedDiscount(String code, Date start, Date end, int percent, int maxDiscountPercent) {
-
+    public CodedDiscount(String code, Date start, Date end, int percent, int maxDiscountAmount,
+                         HashMap<Customer, Integer> maximumNumberOfUsagePerCustomer) {
         super(start, end, percent);
         this.discountCode = code;
-        this.maxDiscountAmount = maxDiscountPercent;
+        this.maxDiscountAmount = maxDiscountAmount;
+        this.maximumNumberOfUsagePerCustomer = maximumNumberOfUsagePerCustomer;
     }
 
     public CodedDiscount(Date start, Date end, int percent) {
@@ -44,10 +46,6 @@ public class CodedDiscount extends Discount{
     }
 
     public static String codeGenerator(){
-        return null;
-    }
-
-    public String getDiscountCode() {
         Random rand = new Random();
         int upperBound = LETTERS_SET.length()-1;
         String code = "";
@@ -55,6 +53,10 @@ public class CodedDiscount extends Discount{
             code += LETTERS_SET.charAt(rand.nextInt(upperBound));
         }
         return code;
+    }
+
+    public String getDiscountCode() {
+        return discountCode;
     }
 
     public int getMaxDiscountAmount() {

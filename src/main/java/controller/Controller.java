@@ -18,6 +18,7 @@ import request.Request;
 import request.SaleRequest;
 
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 public class Controller {
     private Account account;
@@ -431,12 +432,12 @@ public class Controller {
         return String.valueOf(Product.getProductById(productId));
     }
 
-    public void controlEditProductById(String productId, HashMap<String, String> fieldsToChange) {
+    public void controlEditProductById(String productId, HashMap<String, String> fieldsToChange) throws ExceptionalMassage{
 
     }
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers,
-                                  Category category, String description) {
+                                  Category category, String description) throws ExceptionalMassage{
         Product newProduct, product;
         product = Product.getProductByName(name);
         /*if (product == null)
@@ -540,7 +541,7 @@ public class Controller {
                 throw new ExceptionalMassage("Code already exists!");
             }
         }
-        new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount);
+        //new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount);
     }
 
     public void controlRemoveDiscountCode(String code) throws ExceptionalMassage{
@@ -550,7 +551,7 @@ public class Controller {
         CodedDiscount.removeCodeFromList(controlGetDiscountByCode(code));
     }
 
-    public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products){
+    public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products) throws ExceptionalMassage {
         Sale newSale = new Sale(startDate,endDate,percent);
         for (Product product : products) {
             newSale.addProductToSale(product);
@@ -695,4 +696,5 @@ public class Controller {
     public ArrayList<String> controlViewBuyersOfProduct(String productId) throws ExceptionalMassage{
         return null;
     }
+
 }

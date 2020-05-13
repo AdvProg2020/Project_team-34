@@ -1,6 +1,6 @@
-package Menu;
+package menu.mainMenu;
 
-import menu.mainMenu.MainMenu;
+
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
@@ -11,7 +11,7 @@ import static org.junit.Assert.assertEquals;
 public class MainMenuTest {
 
     @Test
-    public void mainMenuOutPut() {
+    public void testShow() {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(baos);
         PrintStream old = System.out;

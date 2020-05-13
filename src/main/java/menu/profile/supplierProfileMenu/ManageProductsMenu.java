@@ -4,6 +4,7 @@ import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 import product.Product;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class ManageProductsMenu extends Menu {
@@ -60,12 +61,28 @@ public class ManageProductsMenu extends Menu {
         Menu Edit = new Menu("Edit", this) {
             @Override
             public void show() {
+                System.out.println("For editing this product select a field and write the new one:");
             }
 
             @Override
             public void execute() {
-                //need modification!
-                //controller.controlEditProductById();
+                String regex = "^edit (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                HashMap<String, String> fieldToChange = new HashMap<>();
+                String field = null;
+                String newAttribute = null;
+                while(!(field = scanner.nextLine()).equalsIgnoreCase("end")){
+                    newAttribute =scanner.nextLine();
+                    fieldToChange.put(field, newAttribute);
+                }
+                if(matcher.find()){
+                    try {
+                        controller.controlEditProductById(matcher.group(1), fieldToChange);
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
+
             }
         };
         menusIn.put("^edit (\\w+)$", Edit);

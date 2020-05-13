@@ -18,6 +18,7 @@ public class Sale extends Discount{
     private static ArrayList<Sale> sales = new ArrayList<>();
     private static int allCreatedSalesNum = 0;
     private String offId;
+    private String rootSaleId;
     private ArrayList<Product> products;
     private State state;
     private Supplier supplier;

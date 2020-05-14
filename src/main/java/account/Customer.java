@@ -1,6 +1,7 @@
 package account;
 
 import cart.Cart;
+import database.AccountDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 
@@ -14,11 +15,13 @@ public class Customer extends Account {
     public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit) {
         super(userName, name, familyName, email, phoneNumber, password, credit);
         this.cartIdentifier = new Cart(this).getIdentifier();
+        AccountDataBase.add(this);
     }
 
-    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit,  String cartIdentidier) {
+    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit,  String cartIdentifier) {
         super(userName, name, familyName, email, phoneNumber, password, credit);
-        this.cartIdentifier = cartIdentidier;
+        this.cartIdentifier = cartIdentifier;
+
     }
 
     public Cart getCart() {
@@ -27,7 +30,7 @@ public class Customer extends Account {
 
     public void setCart(Cart cart) {
         this.cartIdentifier = cart.getIdentifier();
-        //file modification required
+        AccountDataBase.update(this);
     }
 
     @Override

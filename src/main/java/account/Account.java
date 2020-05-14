@@ -110,7 +110,4 @@ public abstract class Account {
 
     public abstract String getType();
 
-    public static void importAll(){
-
-    }
 }

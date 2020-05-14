@@ -18,7 +18,11 @@ public class ProductMenu extends Menu {
         Menu attributes = new Menu("Attributes", this) {
             @Override
             public void show() {
-                System.out.println(controller.controlGetAttributesOfProduct(currentProduct));
+                try{
+                    System.out.println(controller.getProductController().controlGetAttributesOfProduct(currentProduct.getProductId()));
+                } catch (ExceptionalMassage ex){
+                    System.out.println(ex.getMessage());
+                }
             }
 
             @Override
@@ -38,7 +42,7 @@ public class ProductMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try {
-                        System.out.println(controller.controlCompare(currentProduct.getProductId(), matcher.group(1)));
+                        System.out.println(controller.getProductController().controlCompare(currentProduct.getProductId(), matcher.group(1)));
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }

@@ -14,7 +14,7 @@ public class FilteringMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("Filters :");
-                for (String filter : controller.controlGetAllAvailableFilters()) {
+                for (String filter : controller.getProductController().controlGetAllAvailableFilters()) {
                     System.out.println(filter);
                 }
             }
@@ -42,7 +42,7 @@ public class FilteringMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try {
-                        controller.controlFilterAddSpecialFilter(matcher.group(1), type);
+                        controller.getProductController().controlFilterAddSpecialFilter(matcher.group(1), type);
                     }
                     catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
@@ -58,7 +58,7 @@ public class FilteringMenu extends Menu {
         Menu currentFilters = new Menu("Current Filters", this) {
             @Override
             public void show() {
-                System.out.println(controller.controlCurrentFilters());
+                System.out.println(controller.getProductController().controlCurrentFilters());
             }
 
             @Override
@@ -84,7 +84,7 @@ public class FilteringMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{
-                        controller.controlFilterRemoveSpecialFilter(matcher.group(1), type);
+                        controller.getProductController().controlFilterRemoveSpecialFilter(matcher.group(1), type);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }

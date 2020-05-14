@@ -15,7 +15,7 @@ import java.util.Random;
 
 public class CodedDiscount extends Discount{
     private static final String LETTERS_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static ArrayList<CodedDiscount> codedDiscounts;
+    private static ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
     private String discountCode;
     private int maxDiscountAmount;
     private HashMap<Customer, Integer> usedDiscountPerCustomer;
@@ -29,10 +29,7 @@ public class CodedDiscount extends Discount{
         this.discountCode = code;
         this.maxDiscountAmount = maxDiscountAmount;
         this.maximumNumberOfUsagePerCustomer = maximumNumberOfUsagePerCustomer;
-    }
-
-    public CodedDiscount(Date start, Date end, int percent) {
-        super(start, end, percent);
+        codedDiscounts.add(this);
     }
 
     // Added by rpirayadi

@@ -52,7 +52,7 @@ public class ViewOrderMenuForCustomer extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()) {
                     try{
-                        controller.controlRateProductById(matcher.group(1),score);
+                        controller.getProductController().controlRateProductById(matcher.group(1),score);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }

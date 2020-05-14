@@ -22,7 +22,7 @@ public class ManageProductsMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()) {
                     try {
-                        System.out.println(controller.controlGetDigestInfosOfProduct(Product.getProductById(matcher.group(1))));
+                        System.out.println(controller.getProductController().controlGetDigestInfosOfProduct(Product.getProductById(matcher.group(1))));
                     }
                     catch (ExceptionalMassage ex) {
                         System.out.println(ex.getMessage());
@@ -46,7 +46,7 @@ public class ManageProductsMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                    try {
-                       controller.controlViewBuyersOfProduct(matcher.group(1));
+                       controller.getProductController().controlViewBuyersOfProduct(matcher.group(1));
                    } catch (ExceptionalMassage ex){
                        System.out.println(ex.getMessage());
                    }
@@ -77,7 +77,7 @@ public class ManageProductsMenu extends Menu {
                 }
                 if(matcher.find()){
                     try {
-                        controller.controlEditProductById(matcher.group(1), fieldToChange);
+                        controller.getProductController().controlEditProductById(matcher.group(1), fieldToChange);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -91,7 +91,11 @@ public class ManageProductsMenu extends Menu {
 
     @Override
     public void show() {
-        System.out.println(controller.controlGetListOfProductsForThisSupplier());
+        try {
+            System.out.println(controller.getAccountController().controlGetListOfProductsForThisSupplier());
+        } catch (ExceptionalMassage ex){
+            System.out.println(ex.getMessage());
+        }
         super.show();
     }
 }

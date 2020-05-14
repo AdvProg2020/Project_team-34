@@ -18,7 +18,7 @@ public class ManageProductsMenu extends Menu {
                 System.out.println("Enter the product ID");
                 id = scanner.nextLine();
                 try {
-                    controller.controlRemoveProductById(id);
+                    controller.getProductController().controlRemoveProductById(id);
                 } catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }

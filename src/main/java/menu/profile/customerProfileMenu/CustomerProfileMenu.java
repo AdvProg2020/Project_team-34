@@ -26,7 +26,7 @@ public class CustomerProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
-                System.out.println(controller.controlViewBalance());
+                System.out.println(controller.getAccountController().controlViewBalance());
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -41,7 +41,7 @@ public class CustomerProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
-                for (CodedDiscount codedDiscount : controller.controlGetCodedDiscountByCustomer()) {
+                for (CodedDiscount codedDiscount : controller.getOffController().controlGetCodedDiscountByCustomer()) {
                     System.out.println(codedDiscount.getDiscountCode());
                 }
                 parentMenu.show();

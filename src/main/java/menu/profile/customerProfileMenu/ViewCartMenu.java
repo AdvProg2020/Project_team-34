@@ -69,7 +69,7 @@ public class ViewCartMenu extends Menu {
                 if(matcher.find()){
                     Product product = Product.getProductById(matcher.group(1));
                     try {
-                        controller.increaseProductQuantity(matcher.group(1),product.getNameOfCompany());
+                        controller.getAccountController().increaseProductQuantity(matcher.group(1),product.getNameOfCompany());
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -93,7 +93,7 @@ public class ViewCartMenu extends Menu {
                 if(matcher.find()){
                     Product product = Product.getProductById(matcher.group(1));
                     try {
-                        controller.decreaseProductQuantity(matcher.group(1),product.getNameOfCompany());
+                        controller.getAccountController().decreaseProductQuantity(matcher.group(1),product.getNameOfCompany());
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -124,7 +124,7 @@ public class ViewCartMenu extends Menu {
 
     @Override
     public void show() {
-        System.out.println(controller.controlViewCart());
+        System.out.println(controller.getAccountController().controlViewCart());
         super.show();
     }
 }

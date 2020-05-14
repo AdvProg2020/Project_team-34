@@ -28,7 +28,7 @@ public class LoginMenu extends Menu {
                 System.out.print("Enter password: ");
                 String password = scanner.nextLine();
                 try {
-                    controller.controlLogin(username, password);
+                    controller.getAccountController().controlLogin(username, password);
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }
@@ -67,7 +67,7 @@ public class LoginMenu extends Menu {
                     companyName = scanner.nextLine();
                 }
                 try {
-                    controller.controlCreateAccount(username, type, name, familyName, email, phoneNumber, password, 0, companyName);
+                    controller.getAccountController().controlCreateAccount(username, type, name, familyName, email, phoneNumber, password, 0, companyName);
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }

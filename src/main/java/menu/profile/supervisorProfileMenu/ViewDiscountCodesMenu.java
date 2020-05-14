@@ -27,10 +27,10 @@ public class ViewDiscountCodesMenu extends Menu {
                 String regex = "^view discount code (\\w+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    if(controller.controlGetDiscountByCode(matcher.group(1)) == null){
+                    if(controller.getOffController().controlGetDiscountByCode(matcher.group(1)) == null){
                         System.out.println("no such code");
                     } else {
-                        System.out.println(controller.controlGetDiscountByCode(matcher.group(1)));
+                        System.out.println(controller.getOffController().controlGetDiscountByCode(matcher.group(1)));
                     }
                 }
                 parentMenu.show();
@@ -75,7 +75,7 @@ public class ViewDiscountCodesMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{
-                        controller.controlEditDiscountByCode(matcher.group(1),startDate,endDate,percent,maxAmount);
+                        controller.getOffController().controlEditDiscountByCode(matcher.group(1),startDate,endDate,percent,maxAmount);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -98,7 +98,7 @@ public class ViewDiscountCodesMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{
-                        controller.controlRemoveDiscountCode(matcher.group(1));
+                        controller.getOffController().controlRemoveDiscountCode(matcher.group(1));
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -113,7 +113,7 @@ public class ViewDiscountCodesMenu extends Menu {
 
     @Override
     public void show() {
-        for (CodedDiscount codedDiscount : controller.controlGetAllCodedDiscounts()) {
+        for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
             System.out.println(codedDiscount.getDiscountCode());
         }
         super.show();

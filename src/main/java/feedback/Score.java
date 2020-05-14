@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 
 public class Score {
-    private static ArrayList<Score> scores;
+    private static ArrayList<Score> scores = new ArrayList<>();
     private static int allCreatedScoreNum = 0 ;
     private String identifier ;
     private Customer customer;
@@ -26,6 +26,7 @@ public class Score {
         this.product = product;
         this.identifier = generateIdentifier();
         allCreatedScoreNum ++ ;
+        scores.add(this);
     }
 
     public Score(String identifier, Customer customer, Product product, float score) {
@@ -34,11 +35,7 @@ public class Score {
         this.product = product;
         this.score = score;
     }
-
-    public Score(float score, Customer customer) {
-        this.score = score;
-        this.customer = customer;
-    }
+    
 
     public Customer getCustomer() {
         return customer;

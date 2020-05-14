@@ -29,10 +29,10 @@ public class ViewOffsMenu extends Menu {
                 String regex = "^view (\\w+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    if(controller.controlGetSaleById(matcher.group(1)) == null){
+                    if(controller.getOffController().controlGetSaleById(matcher.group(1)) == null){
                         System.out.println("no such id!");
                     } else {
-                        System.out.println(controller.controlGetSaleById(matcher.group(1)));
+                        System.out.println(controller.getOffController().controlGetSaleById(matcher.group(1)));
                     }
                 }
                 parentMenu.show();
@@ -95,7 +95,7 @@ public class ViewOffsMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{
-                        controller.controlEditSaleById(productId,endDate,startDate,newPercent,addingProduct,removingProduct);
+                        controller.getOffController().controlEditSaleById(productId,endDate,startDate,newPercent,addingProduct,removingProduct);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -148,11 +148,7 @@ public class ViewOffsMenu extends Menu {
                         addingProduct.add(Product.getProductById(productId));
                     }
                 }
-                try {
-                    controller.controlCreateSale(startDate, endDate, percent, addingProduct);
-                } catch (ExceptionalMassage ex){
-                    System.out.println(ex.getMessage());
-                }
+                controller.getOffController().controlCreateSale(startDate, endDate, percent, addingProduct);
                 parentMenu.show();
                 parentMenu.execute();
             }

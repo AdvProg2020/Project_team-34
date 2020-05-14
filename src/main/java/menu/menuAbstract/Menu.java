@@ -95,7 +95,7 @@ public abstract class Menu {
     public void show() {
         menusInClone = new HashMap<>(menusIn);
         menuForShowClone = new ArrayList<>(menuForShow);
-        if (!controller.hasSomeOneLoggedIn()) {
+        if (!controller.getAccountController().hasSomeOneLoggedIn()) {
             if (!(menuName.equals("Login/Register Menu") || menuName.equals("Login") || menuName.equals("Create Account"))) {
                 menusInClone.put("^login/register$", new LoginMenu(this));
                 menuForShowClone.add("Login/Register");
@@ -109,7 +109,7 @@ public abstract class Menu {
 
                     @Override
                     public void execute() {
-                        controller.controlLogout();
+                        controller.getAccountController().controlLogout();
                         Menu newLoginMenu = new LoginMenu(null);
                         newLoginMenu.show();
                         newLoginMenu.execute();
@@ -127,7 +127,7 @@ public abstract class Menu {
 
                     @Override
                     public void execute() {
-                        String type = controller.loggedInAccountType();
+                        String type = controller.getAccountController().loggedInAccountType();
                         Menu nextMenu = null;
                         if (type.equals("Customer")) {
                             nextMenu = new CustomerProfileMenu(parentMenu);

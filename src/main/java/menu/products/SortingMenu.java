@@ -12,7 +12,7 @@ public class SortingMenu extends Menu {
         Menu showAvailableSorts = new Menu("Show All Sorts", this) {
             @Override
             public void show() {
-                for (String sort : controller.controlGetAllAvailableSorts()) {
+                for (String sort : controller.getProductController().controlGetAllAvailableSorts()) {
                     System.out.println(sort);
                 }
             }
@@ -38,7 +38,7 @@ public class SortingMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try {
-                        controller.controlSort(matcher.group(1));
+                        controller.getProductController().controlSort(matcher.group(1));
                     }
                     catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
@@ -54,7 +54,7 @@ public class SortingMenu extends Menu {
         Menu currentSort = new Menu("Current Sort", this) {
             @Override
             public void show() {
-                System.out.println(controller.controlShowCurrentSort());
+                System.out.println(controller.getProductController().controlShowCurrentSort());
             }
 
             @Override
@@ -73,7 +73,7 @@ public class SortingMenu extends Menu {
 
             @Override
             public void execute() {
-                controller.controlDisableSort();
+                controller.getProductController().controlDisableSort();
                 parentMenu.show();
                 parentMenu.execute();
             }

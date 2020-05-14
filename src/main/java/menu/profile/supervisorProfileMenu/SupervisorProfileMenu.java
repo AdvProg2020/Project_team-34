@@ -67,7 +67,7 @@ public class SupervisorProfileMenu extends ProfileMenu {
                     System.out.println("Enter customer id:");
                 }
                 try {
-                    controller.controlCreateCodedDiscount(code,startDate,endDate,percent,maxAmount, maxNumberOfUsagePerCustomer);
+                    controller.getOffController().controlCreateCodedDiscount(code,startDate,endDate,percent,maxAmount, maxNumberOfUsagePerCustomer);
                 } catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }

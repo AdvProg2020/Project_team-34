@@ -2,6 +2,7 @@ package controller;
 
 import account.Account;
 import account.Customer;
+import account.Supplier;
 import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
@@ -10,6 +11,7 @@ import request.SaleRequest;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class OffController {
 
@@ -59,13 +61,13 @@ public class OffController {
         controlGetDiscountByCode(code).setMaxDiscountAmount(newMaxDiscount);
     }
 
-    public void controlCreateCodedDiscount(String code,Date startDate, Date endDate, int percent, int maxDiscountAmount) throws ExceptionalMassage {
+    public void controlCreateCodedDiscount(String code, Date startDate, Date endDate, int percent, int maxDiscountAmount, HashMap<Customer, Integer> maxNumberOfUsage) throws ExceptionalMassage {
         for (CodedDiscount codedDiscount : controlGetAllCodedDiscounts()) {
             if(codedDiscount.getDiscountCode().equals(code)){
                 throw new ExceptionalMassage("Code already exists!");
             }
         }
-        new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount);
+        new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount, maxNumberOfUsage);
     }
 
     public void controlRemoveDiscountCode(String code) throws ExceptionalMassage{
@@ -76,7 +78,7 @@ public class OffController {
     }
 
     public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products){
-        Sale newSale = new Sale(startDate,endDate,percent);
+        Sale newSale = new Sale((Supplier)mainController.getAccount(),startDate,endDate,percent);
         for (Product product : products) {
             newSale.addProductToSale(product);
         }
@@ -100,7 +102,7 @@ public class OffController {
         if(controlGetSaleById(id) == null){
             throw new ExceptionalMassage("No such sale with this code!");
         }
-        Sale newSale = new Sale(newStartDate,newEndDate,newPercent,id);
+        Sale newSale = new Sale((Supplier)mainController.getAccount(),newStartDate,newEndDate,newPercent,id);
         for (Product product : controlGetSaleById(id).getProducts()) {
             newSale.addProductToSale(product);
         }

@@ -24,7 +24,7 @@ public class ManageUsersMenu extends Menu {
                 Matcher commandMatcher = getMatcher(command, "^view (\\w+)$");
                 if (commandMatcher.find()) {
                     try {
-                        String info = controller.controlViewUserInfo(commandMatcher.group(1));
+                        String info = controller.getAccountController().controlViewUserInfo(commandMatcher.group(1));
                         System.out.println(info);
                     } catch (ExceptionalMassage e) {
                         System.out.println(e.getMessage());
@@ -48,7 +48,7 @@ public class ManageUsersMenu extends Menu {
                 commandMatcher.find();
                 String username = commandMatcher.group(1);
                 try {
-                    controller.controlDeleteUser(username);
+                    controller.getAccountController().controlDeleteUser(username);
                     System.out.println("User deleted successfully.");
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
@@ -81,7 +81,7 @@ public class ManageUsersMenu extends Menu {
                 System.out.print("Enter phone number: ");
                 String phoneNumber = scanner.nextLine();
                 try {
-                    controller.controlCreateAccount(username, "supervisor", name, familyName, email, phoneNumber, password, 0, null);
+                    controller.getAccountController().controlCreateAccount(username, "supervisor", name, familyName, email, phoneNumber, password, 0, null);
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }

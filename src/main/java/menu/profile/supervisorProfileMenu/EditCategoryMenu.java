@@ -22,7 +22,7 @@ public class EditCategoryMenu extends Menu {
                 System.out.print("Enter new name: ");
                 String newName = scanner.nextLine();
                 try {
-                    controller.controlChangeCategoryName(category.getName(), newName);
+                    controller.getProductController().controlChangeCategoryName(category.getName(), newName);
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }

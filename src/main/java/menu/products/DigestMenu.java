@@ -23,13 +23,13 @@ public class DigestMenu extends Menu {
 
             @Override
             public void execute() {
-                if(!controller.hasSomeOneLoggedIn()){
+                if(!controller.getAccountController().hasSomeOneLoggedIn()){
                     menusIn.get("Login/Register").show();
                     menusIn.get("Login/Register").execute();
                 } else {
                     //need modification
                     try {
-                        controller.controlAddToCart(product.getProductId(), seller.getName());
+                        controller.getAccountController().controlAddToCart(product.getProductId(), seller.getName());
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -43,7 +43,7 @@ public class DigestMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("Sellers :");
-                for (Supplier supplier : controller.controlGetAllSuppliersForAProduct(product)) {
+                for (Supplier supplier : controller.getProductController().controlGetAllSuppliersForAProduct(product)) {
                     System.out.println(supplier.getUserName());
                 }
             }
@@ -53,7 +53,7 @@ public class DigestMenu extends Menu {
                 String regex = "^select seller ([^\\s]+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    if(controller.doesThisSupplierSellsThisProduct(product)){
+                    if(controller.getProductController().doesThisSupplierSellThisProduct(product)){
                         seller =  (Supplier)(Account.getAccountByUsername(matcher.group(1)));
                         System.out.println("Seller selected!");
                     }   else   {
@@ -72,7 +72,7 @@ public class DigestMenu extends Menu {
     public void show() {
         System.out.println("Product info : ");
         try {
-            System.out.println(controller.controlGetDigestInfosOfProduct(product));
+            System.out.println(controller.getProductController().controlGetDigestInfosOfProduct(product));
         } catch (ExceptionalMassage ex){
             System.out.println(ex.getMessage());
         }

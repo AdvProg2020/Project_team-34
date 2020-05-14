@@ -21,7 +21,7 @@ public class SupplierProfileMenu extends ProfileMenu {
         Menu ViewCompanyInformation = new Menu("View Company Information", this) {
             @Override
             public void show() {
-                System.out.println(controller.controlViewCompanyInfo());
+                System.out.println(controller.getAccountController().controlViewCompanyInfo());
             }
 
             @Override
@@ -73,7 +73,7 @@ public class SupplierProfileMenu extends ProfileMenu {
                 System.out.println("Enter description");
                 String description = scanner.nextLine();
                 try{
-                    controller.controlAddProduct(productName, nameOfCompany, price, numbers,Category.getCategoryByName(categoryName),description);
+                    controller.getProductController().controlAddProduct(productName, nameOfCompany, price, numbers,Category.getCategoryByName(categoryName),description);
                 } catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }
@@ -96,7 +96,7 @@ public class SupplierProfileMenu extends ProfileMenu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{
-                        controller.controlRemoveProductById(matcher.group(1));
+                        controller.getProductController().controlRemoveProductById(matcher.group(1));
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -111,7 +111,7 @@ public class SupplierProfileMenu extends ProfileMenu {
         Menu ShowCategories = new Menu("ShowCategories", this) {
             @Override
             public void show() {
-                System.out.println(controller.controlGetAllCategories());
+                System.out.println(controller.getProductController().controlGetAllCategories());
             }
 
             @Override
@@ -129,7 +129,7 @@ public class SupplierProfileMenu extends ProfileMenu {
         Menu ViewBalance = new Menu("View Balance", this) {
             @Override
             public void show() {
-                System.out.println(controller.controlViewBalance());
+                System.out.println(controller.getAccountController().controlViewBalance());
             }
 
             @Override

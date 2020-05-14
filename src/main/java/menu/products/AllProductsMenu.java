@@ -2,6 +2,7 @@ package menu.products;
 
 import menu.menuAbstract.Menu;
 import product.Category;
+import product.Product;
 
 import java.sql.SQLOutput;
 import java.util.ArrayList;
@@ -17,7 +18,7 @@ public class AllProductsMenu extends Menu {
 
             @Override
             public void execute() {
-                System.out.println(controller.controlGetAllCategories());
+                System.out.println(controller.getProductController().controlGetAllCategories());
                 parentMenu.show();
                 parentMenu.execute();
             }
@@ -39,7 +40,7 @@ public class AllProductsMenu extends Menu {
 
             @Override
             public void execute() {
-                for (String product : controller.controlGetAllProducts()) {
+                for (String product : controller.getProductController().controlGetAllProducts()) {
                     //Need a quick introduction!
                     System.out.println(product);
                 }
@@ -57,4 +58,11 @@ public class AllProductsMenu extends Menu {
 
     }
 
+    @Override
+    public void show() {
+        for (String product : controller.getProductController().controlGetAllProducts()) {
+            System.out.println(product);
+        }
+        super.show();
+    }
 }

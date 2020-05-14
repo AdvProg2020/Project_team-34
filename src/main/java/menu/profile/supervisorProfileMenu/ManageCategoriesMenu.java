@@ -23,7 +23,7 @@ public class ManageCategoriesMenu extends Menu {
                     System.out.println("Enter the new Name: ");
                     newName  = scanner.nextLine();
                     try {
-                        controller.controlChangeCategoryName(matcher.group(1), newName);
+                        controller.getProductController().controlChangeCategoryName(matcher.group(1), newName);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -50,7 +50,7 @@ public class ManageCategoriesMenu extends Menu {
                 parentName = scanner.nextLine();
                 if(parentName == "0"){
                     try{
-                        controller.controlAddCategory(newCategoryName, true,null);
+                        controller.getProductController().controlAddCategory(newCategoryName, true,null);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                         parentMenu.show();
@@ -58,7 +58,7 @@ public class ManageCategoriesMenu extends Menu {
                     }
                 } else {
                     try{
-                        controller.controlAddCategory(newCategoryName, false,parentName);
+                        controller.getProductController().controlAddCategory(newCategoryName, false,parentName);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                         parentMenu.show();
@@ -82,7 +82,7 @@ public class ManageCategoriesMenu extends Menu {
                 System.out.println("Enter the name:");
                 name = scanner.nextLine();
                 try {
-                    controller.controlRemoveCategory(name);
+                    controller.getProductController().controlRemoveCategory(name);
                 } catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }
@@ -97,7 +97,7 @@ public class ManageCategoriesMenu extends Menu {
 
     @Override
     public void show() {
-        System.out.println(controller.controlGetAllCategories());
+        System.out.println(controller.getProductController().controlGetAllCategories());
         super.show();
     }
 }

@@ -13,7 +13,7 @@ import java.util.ArrayList;
 
 
 public class Comment {
-    private static ArrayList<Comment> comments;
+    private static ArrayList<Comment> comments = new ArrayList<>();
     private static int allCommentsNum = 0 ;
     private String commentId ;
     private Customer customer;
@@ -32,6 +32,7 @@ public class Comment {
         this.state = state;
         this.customerBoughtThisProduct = customerBoughtThisProduct;
         this.commentId = commentId;
+        comments.add(this);
     }
 
     public Comment(Customer customer, Product product, String title, String content,boolean customerBoughtThisProduct) {

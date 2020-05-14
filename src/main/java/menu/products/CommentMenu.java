@@ -24,7 +24,7 @@ public class CommentMenu extends Menu {
                 title = scanner.nextLine();
                 System.out.println("Enter the content");
                 content = scanner.nextLine();
-                controller.controlAddCommentToProduct(title,content,product);
+                controller.getProductController().controlAddCommentToProduct(title,content,product);
                 System.out.println("comment added successfully!");
                 parentMenu.show();
                 parentMenu.execute();
@@ -38,7 +38,7 @@ public class CommentMenu extends Menu {
     @Override
     public void show() {
         System.out.println("Comments : ");
-        for (Comment comment : controller.controlGetConfirmedComments()) {
+        for (Comment comment : controller.getProductController().controlGetConfirmedComments()) {
             System.out.println(comment);
         }
         super.show();

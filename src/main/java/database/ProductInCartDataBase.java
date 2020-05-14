@@ -18,7 +18,7 @@ public class ProductInCartDataBase {
         HashMap<String, String> content = new HashMap<>();
         content.put("productInCartId", "String");
         content.put("productId", "String");
-        content.put("customerName", "String");
+        content.put("supplierUserName", "String");
 
         DataBase.createNewTable("ProductInCarts", content);
     }
@@ -61,7 +61,7 @@ public class ProductInCartDataBase {
             while (resultSet.next()) {
                 String productInCartId = resultSet.getString("productInCartId");
                 Product product = Product.getProductById(resultSet.getString("productId"));
-                Supplier supplier = (Supplier) Account.getAccountByUsername(resultSet.getString("supplierId"));
+                Supplier supplier = (Supplier) Account.getAccountByUsername(resultSet.getString("supplierUsername"));
 
                 new ProductInCart(productInCartId,product,supplier);
             }

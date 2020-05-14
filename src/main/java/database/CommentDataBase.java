@@ -32,7 +32,7 @@ public class CommentDataBase {
 
 
     public static void add(Comment comment) {
-        if (doesCommentAlreadyExists(comment)) {
+        if (DataBase.doesIdAlreadyExist("Comments", "commentId" ,comment.getCommentId())) {
             return;
         }
         String sql = "INSERT into Comments (commentId , customerUsername, productId, title, content, commentState,customerBoughtThisProduct) " +
@@ -55,9 +55,6 @@ public class CommentDataBase {
         }
     }
 
-    private static boolean doesCommentAlreadyExists(Comment comment) {
-        return !(Comment.getCommentByIdentifier(comment.getCommentId())==null);
-    }
 
     public static void update(Comment comment) {
         delete(comment.getCommentId());

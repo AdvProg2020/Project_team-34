@@ -36,7 +36,7 @@ public class ProductDataBase {
 
 
     public static void add(Product product) {
-        if (doesProductAlreadyExists(product)) {
+        if (DataBase.doesIdAlreadyExist("Products", "productId", product.getProductId())) {
            return;
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, priceForEachSupplier," +
@@ -111,10 +111,6 @@ public class ProductDataBase {
         return commentArrayList;
     }
 
-    private static boolean doesProductAlreadyExists(Product product) {
-        return !(Product.getProductById(product.getProductId())==null);
-    }
-
 
     public static void update(Product product) {
         delete(product.getProductId());
@@ -143,6 +139,7 @@ public class ProductDataBase {
                 String productId = resultSet.getString("productId");
                 State state = State.valueOf(resultSet.getString("productState"));
                 String rootProductId = resultSet.getString("rootProductId");
+                //new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,remainedNumberForEachSupplier,description,numberOfViews,productId,state,rootProductId)
                 //new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,
                  //       remainedNumberForEachSupplier,description,numberOfViews,productId,state, rootProductId);
             }

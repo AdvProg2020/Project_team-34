@@ -27,7 +27,7 @@ public class ScoreDataBase {
     }
 
     public static void add(Score score) {
-        if (doesScoreAlreadyExists(score)) {
+        if (DataBase.doesIdAlreadyExist("Scores", "scoreId", score.getIdentifier())) {
             return;
         }
         String sql = "INSERT into Scores (scoreId, customerUsername, productId,score) " +
@@ -46,9 +46,6 @@ public class ScoreDataBase {
         }
     }
 
-    private static boolean doesScoreAlreadyExists(Score score) {
-        return !(Score.getScoreByIdentifier(score.getIdentifier())==null);
-    }
 
     public static void update(Score score) {
         delete(score.getIdentifier());

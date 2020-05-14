@@ -28,7 +28,7 @@ public class CodedDiscountDataBase {
     }
 
     public static void add(CodedDiscount codedDiscount) {
-        if (doesCodedDiscountAlreadyExists(codedDiscount)) {
+        if (DataBase.doesIdAlreadyExist("CodedDiscounts","discountCode", codedDiscount.getDiscountCode())) {
             return;
         }
         String sql = "INSERT into DiscountCodes (start , end , percent, discountCode, maxDiscountAmount,usedDiscountPerCustomer , listOfCustomers) " +
@@ -82,9 +82,6 @@ public class CodedDiscountDataBase {
         return supplierArrayList;
     }
 
-    private static boolean doesCodedDiscountAlreadyExists(CodedDiscount codedDiscount) {
-        return !(CodedDiscount.getCodedDiscountByCode(codedDiscount.getDiscountCode())==null);
-    }
 
     public static void update(CodedDiscount codedDiscount) {
         delete(codedDiscount.getDiscountCode());

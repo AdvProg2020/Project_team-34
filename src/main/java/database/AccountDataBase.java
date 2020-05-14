@@ -31,7 +31,7 @@ public class AccountDataBase {
 
 
     public static void add(Account account) {
-        if (doesAccountAlreadyExists(account)){
+        if (DataBase.doesIdAlreadyExist("Accounts", "username", account.getUserName())){
             return;
         }
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
@@ -67,9 +67,6 @@ public class AccountDataBase {
         }
     }
 
-    private static boolean doesAccountAlreadyExists(Account account) {
-        return !(Account.getAccountByUsername(account.getUserName()) == null);
-    }
 
     public static void update(Account account) {
         delete(account.getUserName());

@@ -26,7 +26,7 @@ public class CustomerLogDataBase {
     }
 
     public static void add(CustomerLog customerLog) {
-        if (doesCustomerLogAlreadyExists(customerLog)) {
+        if (DataBase.doesIdAlreadyExist("CustomerLogs", "identifier", customerLog.getIdentifier())) {
             return;
         }
         String sql = "INSERT into CustomerLogs (identifier, date, deliveryStatus, cartId) " +
@@ -45,9 +45,6 @@ public class CustomerLogDataBase {
         }
     }
 
-    private static boolean doesCustomerLogAlreadyExists(CustomerLog customerLog) {
-        return !(CustomerLog.getCustomerLogById(customerLog.getIdentifier())==null);
-    }
 
     public static void update(CustomerLog customerLog) {
         delete(customerLog.getIdentifier());

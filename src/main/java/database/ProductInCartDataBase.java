@@ -24,7 +24,7 @@ public class ProductInCartDataBase {
     }
 
     public static void add(ProductInCart productInCart) {
-        if (doesProductInCartAlreadyExists(productInCart)) {
+        if (DataBase.doesIdAlreadyExist("ProductInCarts", "productInCartId", productInCart.getIdentifier())) {
             return;
         }
         String sql = "INSERT into ProductInCarts (productInCartId, productId, supplierUsername) " +
@@ -40,9 +40,6 @@ public class ProductInCartDataBase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-    private static boolean doesProductInCartAlreadyExists(ProductInCart productInCart) {
-        return !(ProductInCart.getProductInCartByIdentifier(productInCart.getIdentifier())==null);
     }
 
     public static void update(ProductInCart productInCart) {

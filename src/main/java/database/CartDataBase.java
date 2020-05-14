@@ -31,7 +31,7 @@ public class CartDataBase {
     }
 
     public static void add(Cart cart) {
-        if (doesCartAlreadyExists(cart)) {
+        if (DataBase.doesIdAlreadyExist("Carts", "identifier", cart.getIdentifier())) {
             return;
         }
         String sql = "INSERT into Carts (identifier, ownerUsername, listOfProductInCartIds, countForEachProductIn,saleForEachProductIn , discountCode, shippingInfoId) " +
@@ -100,9 +100,6 @@ public class CartDataBase {
         return productInCartSaleHashMap;
     }
 
-    private static boolean doesCartAlreadyExists(Cart cart) {
-        return !(Cart.getCartById(cart.getIdentifier())==null);
-    }
 
     public static void update(Cart cart) {
         delete(cart.getIdentifier());

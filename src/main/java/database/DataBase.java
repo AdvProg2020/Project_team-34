@@ -1,16 +1,19 @@
 package database;
 
+import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import feedback.Score;
 import log.CustomerLog;
+import log.LogStatus;
 import product.Category;
 import product.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class DataBase {
@@ -29,7 +32,7 @@ public class DataBase {
 
     public static void createNewTable(String nameOfTable, HashMap<String,String> content) {
 
-        StringBuilder sql = new StringBuilder("CREATE TABLE IF NOT EXISTS");
+        StringBuilder sql = new StringBuilder("CREATE TABLE IF NOT EXISTS ");
         sql.append(nameOfTable).append("(\n");
         for (String columnName : content.keySet()) {
             sql.append(columnName).append(" ").append(content.get(columnName)).append(",\n");
@@ -57,6 +60,24 @@ public class DataBase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static boolean doesIdAlreadyExist(String nameOfTable, String nameOfColumn , String identifier){
+        StringBuilder sql = new StringBuilder("SELECT ");
+        sql.append(nameOfColumn).append(" FROM ").append(nameOfTable);
+
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(String.valueOf(sql))) {
+            while (resultSet.next()) {
+                if(resultSet.getString(nameOfColumn).equals(identifier))
+                    return true;
+            }
+            return false;
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return true;
     }
 
     public static String convertObjectToJsonString(Object object) {

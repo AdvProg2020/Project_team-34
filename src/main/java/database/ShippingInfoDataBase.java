@@ -24,7 +24,7 @@ public class ShippingInfoDataBase {
     }
 
     public static void add(ShippingInfo shippingInfo) {
-        if (doesShippingInfoAlreadyExists(shippingInfo)) {
+        if (DataBase.doesIdAlreadyExist("ShippingInfos", "identifier", shippingInfo.getIdentifier())) {
             return;
         }
         String sql = "INSERT into ShippingInfos (identifier, firstName, lastName , city , address , postalCode, phoneNumber) " +
@@ -45,9 +45,6 @@ public class ShippingInfoDataBase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-    private static boolean doesShippingInfoAlreadyExists(ShippingInfo shippingInfo) {
-        return !(ShippingInfo.getShippingInfoByIdentifier(shippingInfo.getIdentifier())==null);
     }
 
     public static void update(ShippingInfo shippingInfo) {

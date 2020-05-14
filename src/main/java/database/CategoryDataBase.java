@@ -24,7 +24,7 @@ public class CategoryDataBase {
     }
 
     public static void add(Category category) {
-        if (doesCategoryAlreadyExists(category)) {
+        if (DataBase.doesIdAlreadyExist("Categories", "name", category.getName())) {
             return;
         }
         String sql = "INSERT into scores (name , parentCategoryName, listOfAllProductsId, listOfCategoriesInName, specialFields) " +
@@ -42,11 +42,6 @@ public class CategoryDataBase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-    }
-
-
-    private static boolean doesCategoryAlreadyExists(Category category) {
-        return !(Category.getCategoryByName(category.getName())==null);
     }
 
 

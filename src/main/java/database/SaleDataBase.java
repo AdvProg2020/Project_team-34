@@ -25,7 +25,7 @@ public class SaleDataBase {
     }
 
     public static void add(Sale sale) {
-        if (doesSaleAlreadyExists(sale)) {
+        if (DataBase.doesIdAlreadyExist("Sales", "offId", sale.getOffId())) {
             return;
         }
         String sql = "INSERT into Sales (start , end , percent, offId , listOfProductIds, state) " +
@@ -46,9 +46,6 @@ public class SaleDataBase {
         }
     }
 
-    private static boolean doesSaleAlreadyExists(Sale sale) {
-        return !(Sale.getSaleById(sale.getOffId())==null);
-    }
 
     public static void update(Sale sale) {
         delete(sale.getOffId());

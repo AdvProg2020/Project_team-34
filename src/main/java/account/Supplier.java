@@ -1,5 +1,6 @@
 package account;
 
+import database.AccountDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import log.SupplierLog;
 
@@ -16,6 +17,7 @@ public class Supplier extends Account{
                     int credit , String nameOfCompany) {
         super(userName, name, familyName, email, phoneNumber, password, credit);
         this.nameOfCompany = nameOfCompany;
+        AccountDataBase.add(this);
     }
 
 

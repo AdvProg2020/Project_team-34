@@ -143,8 +143,8 @@ public class ProductDataBase {
                 String productId = resultSet.getString("productId");
                 State state = State.valueOf(resultSet.getString("productState"));
                 String rootProductId = resultSet.getString("rootProductId");
-                new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,
-                        remainedNumberForEachSupplier,description,numberOfViews,productId,state, rootProductId);
+                //new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,
+                 //       remainedNumberForEachSupplier,description,numberOfViews,productId,state, rootProductId);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

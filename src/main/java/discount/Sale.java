@@ -28,6 +28,8 @@ public class Sale extends Discount{
         state = State.PREPARING_TO_BUILD;
         this.offId = generateOffId();
         allCreatedSalesNum++;
+        products = new ArrayList<>();
+        this.supplier = supplier;
         addSale(this);
     }
 
@@ -127,7 +129,7 @@ public class Sale extends Discount{
 
     public boolean isSaleActive(){
         Date date = new Date(System.currentTimeMillis());
-        if(this.getState() == State.CONFIRMED && (this.start.after(date) && this.end.before(date))){
+        if(this.getState() == State.CONFIRMED && (this.start.before(date) && this.end.after(date))){
             return true;
         } else {
             return false;
@@ -146,10 +148,6 @@ public class Sale extends Discount{
         return null;
     }
 
-    /**
-     *
-     * @return returns the String form of a JSON object for storing in the database.
-     */
     @Override
     public String toString() {
         return "Sale{" +

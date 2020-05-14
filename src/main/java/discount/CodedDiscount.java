@@ -29,6 +29,12 @@ public class CodedDiscount extends Discount{
         this.discountCode = code;
         this.maxDiscountAmount = maxDiscountAmount;
         this.maximumNumberOfUsagePerCustomer = maximumNumberOfUsagePerCustomer;
+        usedDiscountPerCustomer = new HashMap<>();
+        customers = new ArrayList<>();
+        for (Customer customer : maximumNumberOfUsagePerCustomer.keySet()) {
+            usedDiscountPerCustomer.put(customer, 0);
+            customers.add(customer);
+        }
         codedDiscounts.add(this);
     }
 
@@ -81,7 +87,8 @@ public class CodedDiscount extends Discount{
     }
 
     public boolean canCustomerUseCode(Customer customer){
-        if(usedDiscountPerCustomer.get(customer) == 1){
+        Date present = new Date(System.currentTimeMillis());
+        if(usedDiscountPerCustomer.get(customer) == maximumNumberOfUsagePerCustomer.get(customer) || (present.before(start)) || (present.after(end))){
             return false;
         }   else    {
             return true;

@@ -43,7 +43,7 @@ public class Comment {
         this.commentId = generateIdentifier();
         this.customerBoughtThisProduct = customerBoughtThisProduct;
         this.state = CommentState.CONFIRMED;
-
+        comments.add(this);
         allCommentsNum ++;
     }
 
@@ -99,7 +99,7 @@ public class Comment {
         return "T34C" + String.format("%015d", allCommentsNum + 1);
     }
 
-    public ArrayList<Comment> getCommentsForProduct(Product product) {
+    public static ArrayList<Comment> getCommentsForProduct(Product product) {
         ArrayList<Comment> returningComments = new ArrayList<>();
         for (Comment comment : comments) {
             if(comment.getProduct() == product){

@@ -1,6 +1,7 @@
 package product;
 
 import account.Supplier;
+import database.ProductDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import state.State;
@@ -27,7 +28,7 @@ public class Product {
     //private ArrayList<Comment> comments;
     private HashMap<String, String> specification; //method check
     private String rootProductId ;
-    private boolean isProductValid ;
+
 
 
     public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,String rootProductId) {
@@ -46,14 +47,13 @@ public class Product {
         this.description = description;
         //comments = new ArrayList<>();
         this.rootProductId = rootProductId;
-        isProductValid = true;
         allCreatedProductNum ++;
         allProduct.add(this);
     }
 
     public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
                    HashMap<Supplier,Integer> remainedNumberForEachSupplier, String description,
-                   int numberOfViews , String productId,State state,String rootProductId, boolean isProductValid) {
+                   int numberOfViews , String productId,State state,String rootProductId) {
         this.productState = state;
         this.productId = productId;
         this.name = name;
@@ -66,7 +66,6 @@ public class Product {
         //this.comments = comments;
         this.numberOfViews= numberOfViews;
         this.rootProductId = rootProductId;
-        this.isProductValid = isProductValid;
         allCreatedProductNum ++;
         allProduct.add(this);
 
@@ -82,7 +81,6 @@ public class Product {
         this.description = product.getDescription();
         this.numberOfViews= product.getNumberOfViews();
         this.rootProductId = product.getProductId();
-        this.isProductValid = product.getIsProductValid();
         allCreatedProductNum ++;
         allProduct.add(this);
     }
@@ -149,12 +147,9 @@ public class Product {
         return specification;
     }
 
-    public boolean getIsProductValid() {
-        return isProductValid;
-    }
 
     public void removeProduct(){
-        isProductValid = false;
+        setProductState(State.DELETED);
     }
 
     public void addProduct(){
@@ -200,18 +195,22 @@ public class Product {
 
     public void setNumberOfViews(int numberOfViews) {
         this.numberOfViews = numberOfViews;
+        ProductDataBase.update(this);
     }
 
     public void setProductState(State productState) {
         this.productState = productState;
+        ProductDataBase.update(this);
     }
 
     public void setName(String name) {
         this.name = name;
+        ProductDataBase.update(this);
     }
 
     public void setNameOfCompany(String nameOfCompany) {
         this.nameOfCompany = nameOfCompany;
+        ProductDataBase.update(this);
     }
 
     /*
@@ -222,6 +221,7 @@ public class Product {
 
     public void setDescription(String description) {
         this.description = description;
+        ProductDataBase.update(this);
     }
 
     /*

@@ -295,17 +295,22 @@ public class Product {
         ProductDataBase.delete(productRequest.getProductId());
     }
 
-    public static void acceptOrDeclineRequest(String requestId, boolean isAccepted){
+    public static void acceptOrDeclineRequest(String requestId, boolean isAccepted) throws  ExceptionalMassage{
         Product productRequest = Product.getProductById(convertRequestIdToProductId(requestId));
+        if(productRequest == null)
+            throw new ExceptionalMassage("Invalid request identifier");
         if(!isAccepted) {
             removeProductRequest(productRequest);
             return;
         }
-        if(productRequest.getProductState() == State.PREPARING_TO_BUILD)
+        if(productRequest.getProductState() == State.PREPARING_TO_BUILD) {
             productRequest.setProductState(State.CONFIRMED);
+            ProductDataBase.update(productRequest);
+        }
         else {
             setRequestValuesInRealProduct(productRequest);
             removeProductRequest(productRequest);
+            ProductDataBase.update(Product.getProductById(productRequest.getRootProductId()));
         }
 
     }

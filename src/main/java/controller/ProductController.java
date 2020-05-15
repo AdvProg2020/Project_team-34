@@ -158,9 +158,12 @@ public class ProductController {
         return null;
     }
 
-    public boolean doesThisSupplierSellThisProduct(Product product){
-        //product.doesSupplierSellThisProduct();
-        return false;
+    public boolean doesThisSupplierSellThisProduct(Product product) throws ExceptionalMassage{
+        if(!(mainController.getAccount() instanceof Supplier))
+            throw new ExceptionalMassage("Login as a Supplier");
+
+        Supplier supplier = (Supplier)mainController.getAccount();
+        return product.doesSupplierSellThisProduct(supplier);
     }
 
     //related to Category:
@@ -307,13 +310,13 @@ public class ProductController {
         }
     }
 
-    public Response controlAcceptOrDeclineRequest(String requestId, boolean isAccepted) {
-        Request request = Request.getRequestById(requestId);
-        if(request != null) {
-            request.doRequest(isAccepted);
-            return Response.OK;
+    public void controlAcceptOrDeclineRequest(String requestId, boolean isAccepted) {
+        if(requestId.charAt(3) == 'P'){
+            Product.acceptOrDeclineRequest(requestId, isAccepted);
         }
-        return Response.INVALID_REQUEST_ID;
+        else {
+            // sale method
+        }
     }
 
 

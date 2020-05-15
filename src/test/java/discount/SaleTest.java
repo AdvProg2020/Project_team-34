@@ -14,7 +14,7 @@ public class SaleTest {
     private static final int percent = 20;
     private static final Date start = new Date(System.currentTimeMillis()-1000000);
     private static final Date end = new Date(System.currentTimeMillis()+1000000);
-    private static final Sale sale = new Sale(supplier1,start,end,percent);
+    private static final Sale sale = new Sale(supplier1,start,end,percent,null);
     private static final Product product1 = new Product(supplier1, "p1", "b1", 100,
             10, "A good product1", null);
 

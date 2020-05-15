@@ -1,6 +1,7 @@
 package discount;
 
 import account.Supplier;
+import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import state.State;
 
@@ -8,6 +9,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 /**
  * @author soheil
@@ -23,20 +25,18 @@ public class Sale extends Discount{
     private State state;
     private Supplier supplier;
 
-    public Sale(Supplier supplier,Date start, Date end, int percent) {
+    public Sale(Supplier supplier,Date start, Date end, int percent,String rootSaleId) {
         super(start, end, percent);
-        state = State.PREPARING_TO_BUILD;
+
         this.offId = generateOffId();
         allCreatedSalesNum++;
         products = new ArrayList<>();
+        if(rootSaleId == null){
+            state = State.PREPARING_TO_BUILD;
+        } else {
+            state = State.PREPARING_TO_EDIT;
+        }
         this.supplier = supplier;
-        addSale(this);
-    }
-
-    public Sale(Supplier supplier,Date start, Date end,int percent, String offId) {
-        super(start, end, percent);
-        state = State.PREPARING_TO_EDIT;
-        this.offId = offId;
         addSale(this);
     }
 
@@ -147,6 +147,54 @@ public class Sale extends Discount{
         }
         return null;
     }
+
+    public static ArrayList<String> getAllSaleRequestId(){
+        ArrayList<String > result = new ArrayList<>();
+        String id;
+        for (Sale sale : sales)
+        {
+            if(sale.getState() == State.PREPARING_TO_EDIT || sale.getState() == State.PREPARING_TO_BUILD){
+                result.add(convertSaleIdToRequestId(sale.getOffId()));
+            }
+        }
+        return result;
+    }
+
+    public String getRootSaleId() {
+        return rootSaleId;
+    }
+
+    public static String getDetailsForSaleRequest(String requestId) throws ExceptionalMassage{
+        if(Sale.getSaleById(convertRequestIdToSaleId(requestId)) == null){
+            throw new ExceptionalMassage("No such id!");
+        }
+        Sale sale = Sale.getSaleById(convertRequestIdToSaleId(requestId));
+        Sale rootSale = Sale.getSaleById(sale.getRootSaleId());
+        String result = "";
+        result = result + "start date :" +rootSale.getStart().toString() + "==>" + sale.getStart().toString() + "\n";
+        result = result + "end date :" + rootSale.getEnd().toString() + "==>" + sale.getEnd().toString() + "\n";
+        result = result + "off percent :" + rootSale.getPercent() +"==>" + sale.getPercent() + "\n";
+        result += "current products in the sale :\n";
+        for (Product product : rootSale.getProducts()) {
+            result += product.getName() + "\n";
+        }
+        result += "products after being edited :\n";
+        for (Product product : sale.getProducts()) {
+            result += product.getName() + "\n";
+        }
+        return result;
+    }
+
+    private static String convertSaleIdToRequestId(String requestId){
+        return  "T34SR"+requestId.substring(4);
+    }
+
+    private static String convertRequestIdToSaleId(String productId){
+        return  "T34S"+productId.substring(5);
+    }
+
+
+
 
     @Override
     public String toString() {

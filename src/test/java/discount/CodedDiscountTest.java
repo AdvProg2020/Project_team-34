@@ -31,7 +31,7 @@ public class CodedDiscountTest {
         Assert.assertEquals(end, codedDiscount.getEnd());
         Assert.assertEquals("salam", codedDiscount.getDiscountCode());
         Assert.assertEquals(100,codedDiscount.getMaxDiscountAmount());
-        Assert.assertEquals(customer1,codedDiscount.getCustomers().get(0));
+        Assert.assertEquals(customer2,codedDiscount.getCustomers().get(0));
         codedDiscount.addUsedCountForCustomer(customer1);
         Assert.assertEquals("1", codedDiscount.getUsedDiscountPerCustomer().get(customer1).toString());
     }

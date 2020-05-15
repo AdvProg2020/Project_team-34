@@ -8,6 +8,7 @@ import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import request.SaleRequest;
+import state.State;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -78,11 +79,11 @@ public class OffController {
     }
 
     public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products){
-        Sale newSale = new Sale((Supplier)mainController.getAccount(),startDate,endDate,percent);
+        Sale newSale = new Sale((Supplier)mainController.getAccount(),startDate,endDate,percent,null);
         for (Product product : products) {
             newSale.addProductToSale(product);
         }
-        new SaleRequest(null, newSale);
+        newSale.setState(State.PREPARING_TO_BUILD);
     }
 
     public ArrayList<Sale> controlGetAllSales(){
@@ -112,7 +113,6 @@ public class OffController {
         for (Product product : removingProduct) {
             newSale.removeProductFromSale(product);
         }
-        new SaleRequest(controlGetSaleById(id),newSale);
     }
 
     public void controlRemoveSaleById(String id) throws ExceptionalMassage{

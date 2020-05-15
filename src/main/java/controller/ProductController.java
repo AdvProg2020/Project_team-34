@@ -292,19 +292,18 @@ public class ProductController {
         for (String requestId : allProductRequestId) {
             result.append(requestId).append('\n');
         }
-        //
-        //adding saleRequestId required
-
+        for (String requestId : Sale.getAllSaleRequestId()) {
+            result.append(requestId).append('\n');
+        }
         return result.toString();
     }
 
-    public String controlShowDetailForRequest(String requestId) {
+    public String controlShowDetailForRequest(String requestId) throws ExceptionalMassage{
         if(requestId.charAt(3) == 'P'){
             return Product.getDetailsForProductRequest(requestId);
         }
         else {
-            // saleRequestId
-            return null;
+            return Sale.getDetailsForSaleRequest(requestId);
         }
     }
 

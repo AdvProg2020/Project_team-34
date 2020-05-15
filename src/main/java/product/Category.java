@@ -107,7 +107,7 @@ public class Category {
             throw new ExceptionalMassage("Category with this name has already initialized. <Category.setName>");
         }
         this.name = name;
-        //file modification required
+        CategoryDataBase.update(this);
     }
 
     //Modeling methods:

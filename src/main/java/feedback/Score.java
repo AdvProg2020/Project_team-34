@@ -82,9 +82,6 @@ public class Score {
         return null;
     }
 
-    public static void importAllData(){
-
-    }
 
 
 

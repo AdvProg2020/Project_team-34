@@ -1,6 +1,7 @@
 package discount;
 
 import account.Supplier;
+import database.SaleDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import state.State;
@@ -69,14 +70,17 @@ public class Sale extends Discount{
 
     public void setOffId(String offId) {
         this.offId = offId;
+        SaleDataBase.update(this);
     }
 
     public void setState(State state) {
         this.state = state;
+        SaleDataBase.update(this);
     }
 
     public void removeProductFromSale(Product product){
         products.remove(product);
+        SaleDataBase.update(this);
     }
 
     public ArrayList<Product> getProducts() {

@@ -2,6 +2,7 @@ package cart;
 
 import account.Customer;
 import account.Supplier;
+import database.CartDataBase;
 import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
@@ -38,7 +39,9 @@ public class Cart {
         this.shippingInfo = null;
         allCarts.add(this);
         countOfCartCreated++;
-        //file modification required if <owner != null>
+        if(owner != null)
+            CartDataBase.add(this);
+
     }
 
     public Cart(String identifier, Customer owner, ArrayList<ProductInCart> productsIn, HashMap<ProductInCart, Integer> productInCount,
@@ -90,17 +93,19 @@ public class Cart {
     //Setters:
     public void setOwner(Customer owner) {
         this.owner = owner;
-        //file modification required
+        CartDataBase.update(this);
     }
 
     private void setCodedDiscount(CodedDiscount codedDiscount) {
         this.codedDiscount = codedDiscount;
-        //file modification required <owner != null>
+        if(owner!= null)
+            CartDataBase.update(this);
     }
 
     private void setShippingInfo(ShippingInfo shippingInfo) {
         this.shippingInfo = shippingInfo;
-        //file modification required <owner != null>
+        if(owner!= null)
+            CartDataBase.update(this);
     }
 
     //Modeling methods:
@@ -135,7 +140,8 @@ public class Cart {
             productsIn.add(productInCart);
             productInCount.put(productInCart, 1);
             productInSale.put(productInCart, Sale.getProductSale(product, supplier));
-            //file modification required if <owner != null>
+            if(owner!= null)
+                CartDataBase.update(this);
         }
     }
 
@@ -146,7 +152,8 @@ public class Cart {
         productsIn.remove(productInCart);
         productInCount.remove(productInCart);
         productInSale.remove(productInCart);
-        //file modification required if <owner != null>
+        if(owner!= null)
+            CartDataBase.update(this);
     }
 
     private void changeQuantityOfProductInCart(Product product, Supplier supplier, int newQuantity) throws ExceptionalMassage {
@@ -159,7 +166,8 @@ public class Cart {
             }
             productInCount.replace(productInCart, newQuantity);
         }
-        //file modification required if <owner != null>
+        if(owner!= null)
+            CartDataBase.update(this);
     }
 
     public void increaseProductCount(Product product, Supplier supplier) throws ExceptionalMassage {

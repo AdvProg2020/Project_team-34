@@ -1,6 +1,7 @@
 package feedback;
 
 import account.Customer;
+import database.CommentDataBase;
 import product.Product;
 
 import java.util.ArrayList;
@@ -45,6 +46,7 @@ public class Comment {
         this.state = CommentState.CONFIRMED;
         comments.add(this);
         allCommentsNum ++;
+        CommentDataBase.add(this);
     }
 
     public String getCommentId() {
@@ -77,6 +79,7 @@ public class Comment {
 
     public void setTitle(String title) {
         this.title = title;
+        CommentDataBase.update(this);
     }
 
     public boolean hasCustomerBoughtThisProduct(Customer customer){
@@ -85,6 +88,7 @@ public class Comment {
 
     public void setCustomerBoughtThisProduct(boolean customerBoughtThisProduct) {
         this.customerBoughtThisProduct = customerBoughtThisProduct;
+        CommentDataBase.update(this);
     }
 
     public static ArrayList<Comment> getComments(){
@@ -118,9 +122,6 @@ public class Comment {
         return null;
     }
 
-    public static void importAllData(){
-
-    }
 
     /**
      *

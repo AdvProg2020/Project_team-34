@@ -310,7 +310,7 @@ public class ProductController {
         }
     }
 
-    public void controlAcceptOrDeclineRequest(String requestId, boolean isAccepted) {
+    public void controlAcceptOrDeclineRequest(String requestId, boolean isAccepted) throws ExceptionalMassage {
         if(requestId.charAt(3) == 'P'){
             Product.acceptOrDeclineRequest(requestId, isAccepted);
         }

@@ -230,6 +230,16 @@ public class Product {
     }
      */
 
+    public void setPriceForEachSupplier(HashMap<Supplier, Integer> priceForEachSupplier) {
+        this.priceForEachSupplier = priceForEachSupplier;
+        ProductDataBase.update(this);
+    }
+
+    public void setRemainedNumberForEachSupplier(HashMap<Supplier, Integer> remainedNumberForEachSupplier) {
+        this.remainedNumberForEachSupplier = remainedNumberForEachSupplier;
+        ProductDataBase.update(this);
+    }
+
     public void editSpecialField(String field, String value) throws ExceptionalMassage {
         if(!specification.containsKey(field))
             throw new ExceptionalMassage("No such field was found");
@@ -257,9 +267,8 @@ public class Product {
 
     public static ArrayList<String> getAllProductRequestId(){
         ArrayList<String > result = new ArrayList<>();
-        String id;
         for (Product eachProduct : allProduct) {
-            if(eachProduct.getProductState() == State.PREPARING_TO_EDIT){
+            if(eachProduct.getProductState() == State.PREPARING_TO_EDIT || eachProduct.getProductState() == State.PREPARING_TO_BUILD){
                 result.add(convertProductIdToRequestId(eachProduct.getProductId()));
             }
         }
@@ -279,6 +288,35 @@ public class Product {
             result.append(specialField).append("= ").append(firstSpecification.get(specialField)).append("==>").append(secondSpecification.get(specialField)).append("\n");
         }
         return String.valueOf(result);
+    }
+
+    private static void removeProductRequest(Product productRequest){
+        allProduct.remove(productRequest);
+        ProductDataBase.delete(productRequest.getProductId());
+    }
+
+    public static void acceptOrDeclineRequest(String requestId, boolean isAccepted){
+        Product productRequest = Product.getProductById(convertRequestIdToProductId(requestId));
+        if(!isAccepted) {
+            removeProductRequest(productRequest);
+            return;
+        }
+        if(productRequest.getProductState() == State.PREPARING_TO_BUILD)
+            productRequest.setProductState(State.CONFIRMED);
+        else {
+            setRequestValuesInRealProduct(productRequest);
+            removeProductRequest(productRequest);
+        }
+
+    }
+
+    private static void setRequestValuesInRealProduct(Product productRequest){
+        Product realProduct = Product.getProductById(productRequest.getRootProductId());
+        realProduct.setName(productRequest.getName());
+        realProduct.setNameOfCompany(productRequest.getNameOfCompany());
+        realProduct.setDescription(productRequest.getDescription());
+        realProduct.setPriceForEachSupplier(productRequest.getPriceForEachSupplier());
+        realProduct.setRemainedNumberForEachSupplier(productRequest.getRemainedNumberForEachSupplier());
     }
 
     private static String convertProductIdToRequestId(String requestId){

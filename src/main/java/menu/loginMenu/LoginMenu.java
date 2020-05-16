@@ -47,7 +47,7 @@ public class LoginMenu extends Menu {
 
             @Override
             public void execute() {
-                Matcher commandMatcher = getMatcher(parentMenu.command, "^create account ((customer|supplier|supervisor)) (\\w+)$");
+                Matcher commandMatcher = getMatcher(parentMenu.command, "^create account (customer|supplier|supervisor) (\\w+)$");
                 commandMatcher.find();
                 String username = commandMatcher.group(2);
                 String type = commandMatcher.group(1);

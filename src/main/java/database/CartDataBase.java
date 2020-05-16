@@ -40,12 +40,26 @@ public class CartDataBase {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1,cart.getIdentifier());
-            statement.setString(2,cart.getOwner().getUserName());
+            if(cart.getOwner() == null)
+                statement.setString(2,null);
+            else {
+                statement.setString(2,cart.getOwner().getUserName());
+            }
             statement.setString(3, convertObjectToJsonString(convertProductInCartArrayListToStringArrayList(cart.getProductsIn())));
             statement.setString(4, convertObjectToJsonString(convertProductInCartIntegerHashMapToStringIntegerHashMap(cart.getProductInCount())));
             statement.setString(5, convertObjectToJsonString(convertProductInCartSaleHashMapToStringHashMap(cart.getProductInSale())) );
-            statement.setString(6, cart.getCodedDiscount().getDiscountCode());
-            statement.setString(6, cart.getShippingInfo().getIdentifier());
+            if(cart.getCodedDiscount() == null){
+                statement.setString(6,null);
+            }
+            else {
+                statement.setString(6, cart.getCodedDiscount().getDiscountCode());
+            }
+            if(cart.getShippingInfo() == null){
+                statement.setString(7, null);
+            }
+            else {
+                statement.setString(7, cart.getShippingInfo().getIdentifier());
+            }
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -87,7 +101,15 @@ public class CartDataBase {
     private static HashMap<String,String> convertProductInCartSaleHashMapToStringHashMap (HashMap<ProductInCart, Sale> productInCartSaleHashMap){
         HashMap<String , String> stringHashMap = new HashMap<>();
         for (ProductInCart eachProductInCart : productInCartSaleHashMap.keySet()) {
-            stringHashMap.put(eachProductInCart.getIdentifier(),productInCartSaleHashMap.get(eachProductInCart).getOffId());
+            Sale sale = productInCartSaleHashMap.get(eachProductInCart);
+            String saleId;
+            if(sale == null){
+               saleId = null;
+            }
+            else {
+                saleId = sale.getOffId();
+            }
+            stringHashMap.put(eachProductInCart.getIdentifier(),saleId);
         }
         return stringHashMap;
     }
@@ -119,7 +141,7 @@ public class CartDataBase {
             while (resultSet.next()) {
                 String cartId = resultSet.getString("identifier");
                 Customer owner = (Customer) (Account.getAccountByUsername(resultSet.getString("ownerUsername")));
-                ArrayList<ProductInCart> productInCarts = convertStringArrayListToProductInCartArrayList(convertJsonToArrayList(resultSet.getString("listOfProductInCartsId")));
+                ArrayList<ProductInCart> productInCarts = convertStringArrayListToProductInCartArrayList(convertJsonToArrayList(resultSet.getString("listOfProductInCartIds")));
                 HashMap<ProductInCart, Integer> productInCount = convertStringIntegerHashMapToProductInCartIntegerHashMap(convertJsonToHashMap(resultSet.getString("countForEachProductIn")));
                 HashMap<ProductInCart, Sale> productInSale = convertStringHashMapToProductInCartSaleHashMap(convertJsonToStringStringHashMap(resultSet.getString("saleForEachProductIn")));
                 CodedDiscount codedDiscount = CodedDiscount.getCodedDiscountByCode(resultSet.getString("discountCode"));

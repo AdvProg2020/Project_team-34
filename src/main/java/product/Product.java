@@ -43,12 +43,11 @@ public class Product {
         listOfSuppliers.add(supplier);
         this.remainedNumberForEachSupplier = new HashMap<>();
         this.remainedNumberForEachSupplier.put(supplier,remainedNumber);
-        //this.category = category;
         this.description = description;
-        //comments = new ArrayList<>();
         this.rootProductId = rootProductId;
         allCreatedProductNum ++;
         allProduct.add(this);
+        ProductDataBase.add(this);
     }
 
     public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
@@ -61,14 +60,11 @@ public class Product {
         this.priceForEachSupplier = priceForEachSupplier;
         this.listOfSuppliers = listOfSuppliers;
         this.remainedNumberForEachSupplier = remainedNumberForEachSupplier;
-        //this.category = category;
         this.description = description;
-        //this.comments = comments;
         this.numberOfViews= numberOfViews;
         this.rootProductId = rootProductId;
         allCreatedProductNum ++;
         allProduct.add(this);
-
     }
 
     public Product(Product product) {
@@ -83,6 +79,7 @@ public class Product {
         this.rootProductId = product.getProductId();
         allCreatedProductNum ++;
         allProduct.add(this);
+        ProductDataBase.add(this);
     }
 
     private String generateIdentifier(){
@@ -96,12 +93,6 @@ public class Product {
     public String getName() {
         return name;
     }
-
-    /*
-    public ArrayList<Comment> getComments() {
-        return comments;
-    }
-     */
 
     public ArrayList<Supplier> getListOfSuppliers() {
         return listOfSuppliers;
@@ -133,12 +124,6 @@ public class Product {
         return productState;
     }
 
-    /*
-    public Category getCategory() {
-        return category;
-    }
-     */
-
     public String getRootProductId() {
         return rootProductId;
     }
@@ -154,7 +139,6 @@ public class Product {
 
     public void addProduct(){
         productState = State.CONFIRMED;
-        allProduct.add(this);
     }
 
     public boolean doesSupplierSellThisProduct (Supplier supplier){

@@ -65,6 +65,9 @@ public class AccountTest {
         Account gotByWrongUsername = Account.getAccountByUsername("not a valid username:)");
         Assert.assertNull(gotByWrongUsername);
 
+        Account gotByNull = Account.getAccountByUsername(null);
+        Assert.assertNull(gotByNull);
+
     }
 
     @Test

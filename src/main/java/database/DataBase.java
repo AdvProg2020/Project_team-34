@@ -40,7 +40,6 @@ public class DataBase {
         }
         sql.delete(sql.length()-2,sql.length());
         sql.append(" \n )");
-        System.out.println(sql);
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
             stmt.execute(String.valueOf(sql));

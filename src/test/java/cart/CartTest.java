@@ -9,6 +9,8 @@ import org.junit.Test;
 import product.Product;
 
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 public class CartTest {
     private static final Customer owner = new Customer("aryanahadinia24", "Aryan", "Ahadinia",
@@ -26,6 +28,18 @@ public class CartTest {
             0, "A good Product3", null);
     private static final ShippingInfo shippingInfo = new ShippingInfo("aryan", "ahadinia",
             "tehran", "d5", "1477996171", "09306926009");
+    private static final CodedDiscount codedDiscount1 = new CodedDiscount("cartTester1",
+            new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis() + 10000), 50,
+            10000, getUsageHashMap());
+    private static final CodedDiscount codedDiscount2 = new CodedDiscount("cartTester2",
+            new Date(System.currentTimeMillis()), new Date(System.currentTimeMillis() + 10000), 50,
+            100, getUsageHashMap());
+
+    private static HashMap<Customer, Integer> getUsageHashMap() {
+        HashMap<Customer, Integer> customerIntegerHashMap = new HashMap<>();
+        customerIntegerHashMap.put(owner, 100);
+        return customerIntegerHashMap;
+    }
 
     @Test
     public void testGetOwner() {
@@ -295,4 +309,36 @@ public class CartTest {
         Assert.assertTrue(cart.isCartClear());
     }
 
+    @Test
+    public void testCodedDiscount() throws ExceptionalMassage {
+        String massage = "";
+        try {
+            cart.removeCodedDiscount();
+        } catch (ExceptionalMassage e) {
+            massage = e.getMessage();
+        }
+        cart.addProductToCart(product1, supplier1);
+        cart.increaseProductCount(product1, supplier1);
+        cart.increaseProductCount(product1, supplier1);
+        cart.addProductToCart(product2, supplier2);
+        cart.increaseProductCount(product2, supplier2);
+        Assert.assertEquals(700, cart.getBill());
+        Assert.assertEquals(massage, "Code hasn't applied yet.");
+        cart.applyCodedDiscount(codedDiscount1.getDiscountCode());
+        Assert.assertEquals( codedDiscount1, cart.getCodedDiscount());
+        Assert.assertEquals(350, cart.getBill());
+        cart.removeCodedDiscount();
+        try {
+            cart.applyCodedDiscount("jojo");
+        } catch (ExceptionalMassage e) {
+            massage = e.getMessage();
+        }
+        Assert.assertEquals("This Code is invalid.", massage);
+        cart.applyCodedDiscount(codedDiscount2.getDiscountCode());
+        Assert.assertEquals(600, cart.getBill());
+        cart.removeCodedDiscount();
+        cart.removeProductFromCart(product1, supplier1);
+        cart.removeProductFromCart(product2, supplier2);
+        Assert.assertTrue(cart.isCartClear());
+    }
 }

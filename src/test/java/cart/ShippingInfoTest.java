@@ -41,6 +41,13 @@ public class ShippingInfoTest {
     }
 
     @Test
+    public void testGetShippingInfoByIdentifier() {
+        String identifier = "T34SI" + String.format("%015d", shippingInfoCreatedCountBefore + 1);
+        Assert.assertNotNull(ShippingInfo.getShippingInfoByIdentifier(identifier));
+        Assert.assertEquals("firstName 1", ShippingInfo.getShippingInfoByIdentifier(identifier).getFirstName());
+    }
+
+    @Test
     public void testLastName() {
         ShippingInfo shippingInfo = testInstances.get(10);
         Assert.assertEquals("lastName 11", shippingInfo.getLastName());

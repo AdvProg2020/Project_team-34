@@ -124,6 +124,11 @@ public class CodedDiscount extends Discount{
         this.maxDiscountAmount = maxDiscountAmount;
     }
 
+    public int discountAmountFor(int initialAmount) {
+        //Aryan
+        return Integer.min((initialAmount * percent) / 100, maxDiscountAmount);
+    }
+
     /**
      *
      * @return returns the String form of a JSON object for storing in the database.

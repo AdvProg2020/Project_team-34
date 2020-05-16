@@ -35,7 +35,9 @@ public class ProductController {
 
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers,
-                                  Category category, String description) throws ExceptionalMassage{
+                                  Category category, String description) throws ExceptionalMassage {
+        if (mainController.getAccount() == null)
+            throw new ExceptionalMassage("Sing in first.");
         if(!(mainController.getAccount() instanceof Supplier))
             throw new ExceptionalMassage("Sign in as a Supplier");
         Supplier supplier = (Supplier) mainController.getAccount();
@@ -158,10 +160,11 @@ public class ProductController {
         return null;
     }
 
-    public boolean doesThisSupplierSellThisProduct(Product product) throws ExceptionalMassage{
+    public boolean doesThisSupplierSellThisProduct(Product product) throws ExceptionalMassage {
+        if (mainController.getAccount() == null)
+            throw new ExceptionalMassage("Sing in first.");
         if(!(mainController.getAccount() instanceof Supplier))
             throw new ExceptionalMassage("Login as a Supplier");
-
         Supplier supplier = (Supplier)mainController.getAccount();
         return product.doesSupplierSellThisProduct(supplier);
     }

@@ -41,7 +41,6 @@ public class Cart {
         countOfCartCreated++;
         if(owner != null)
             CartDataBase.add(this);
-
     }
 
     public Cart(String identifier, Customer owner, ArrayList<ProductInCart> productsIn, HashMap<ProductInCart, Integer> productInCount,
@@ -92,8 +91,13 @@ public class Cart {
 
     //Setters:
     public void setOwner(Customer owner) {
-        this.owner = owner;
-        CartDataBase.update(this);
+        if (owner != null) {
+            this.owner = owner;
+            CartDataBase.update(this);
+        } else if (this.owner != null){
+            this.owner = null; //owner will be always null here
+            CartDataBase.delete(identifier); //check
+        }
     }
 
     private void setCodedDiscount(CodedDiscount codedDiscount) {
@@ -185,7 +189,7 @@ public class Cart {
     }
 
     public void update() {
-
+        //update database
     }
 
     public void applyCodedDiscount(String discountCode) throws ExceptionalMassage {

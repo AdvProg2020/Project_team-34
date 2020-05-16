@@ -25,6 +25,8 @@ public class AccountController {
     }
 
     public String loggedInAccountType() {
+        if (mainController.getAccount() == null)
+            return null;
         return mainController.getAccount().getType();
     }
 

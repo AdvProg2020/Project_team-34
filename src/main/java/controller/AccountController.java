@@ -15,7 +15,6 @@ public class AccountController {
 
     private Controller mainController;
 
-
     public AccountController(Controller mainController) {
         this.mainController = mainController;
     }

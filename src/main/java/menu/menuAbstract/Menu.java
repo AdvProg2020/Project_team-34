@@ -144,7 +144,7 @@ public abstract class Menu {
                 menuForShowClone.add("Profile");
             }
         }
-        for (String s : menuForShow) {
+        for (String s : menuForShowClone) {
             System.out.println(s);
         }
     }

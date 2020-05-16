@@ -45,7 +45,6 @@ public class Controller {
         return productController;
     }
 
-
     public OffController getOffController() {
         return offController;
     }

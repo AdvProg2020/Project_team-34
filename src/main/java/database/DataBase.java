@@ -5,6 +5,7 @@ import cart.ProductInCart;
 import cart.ShippingInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import discount.CodedDiscount;
 import feedback.Score;
 import log.CustomerLog;
 import log.LogStatus;
@@ -146,6 +147,20 @@ public class DataBase {
         ShippingInfoDataBase.importAllShippingInfos();
         CartDataBase.importAllCarts();
         CustomerLogDataBase.importAllCustomerLogs();
+    }
+
+    public static void createNewTablesToStart(){
+        AccountDataBase.createNewTable();
+        ProductDataBase.createNewTable();
+        CategoryDataBase.createNewTable();
+        CommentDataBase.createNewTable();
+        ScoreDataBase.createNewTable();
+        CodedDiscountDataBase.createNewTable();
+        SaleDataBase.createNewTable();
+        ProductDataBase.createNewTable();
+        ShippingInfoDataBase.createNewTable();
+        CartDataBase.createNewTable();
+        CustomerLogDataBase.createNewTable();
     }
 
 

@@ -1,5 +1,6 @@
 import account.Customer;
 import account.Supplier;
+import database.DataBase;
 import exceptionalMassage.ExceptionalMassage;
 import menu.mainMenu.MainMenu;
 
@@ -10,7 +11,8 @@ public class Main {
     private static final long WEEK = 7*24*3600*1000;
 
     public static void main(String[] args) {
-        //after importing all the data base
+        DataBase.createNewTablesToStart();
+        DataBase.importAllData();
         timeProgramWasOpened = System.currentTimeMillis();
         if(timeProgramWasOpened - timeBeginning > timesDiscountCodeGenerated * WEEK ){
             generateRandomCodes();

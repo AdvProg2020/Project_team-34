@@ -53,11 +53,16 @@ public class DigestMenu extends Menu {
                 String regex = "^select seller ([^\\s]+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    if(controller.getProductController().doesThisSupplierSellThisProduct(product)) {
-                        seller =  (Supplier)(Account.getAccountByUsername(matcher.group(1)));
-                        System.out.println("Seller selected!");
-                    }   else   {
-                        System.out.println("This seller is not available for this product!");
+                    try {
+                        if (controller.getProductController().doesThisSupplierSellThisProduct(product)) {
+                            seller = (Supplier) (Account.getAccountByUsername(matcher.group(1)));
+                            System.out.println("Seller selected!");
+                        } else {
+                            System.out.println("This seller is not available for this product!");
+                        }
+                    }
+                    catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
                     }
                 }
                 parentMenu.show();

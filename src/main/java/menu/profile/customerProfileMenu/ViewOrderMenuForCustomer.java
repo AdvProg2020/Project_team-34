@@ -45,7 +45,7 @@ public class ViewOrderMenuForCustomer extends Menu {
             public void execute() {
                 float score = -1;
                 while(score<0 || score >5){
-                    System.out.println("Enter the score(1-5):");
+                    System.out.println("Enter the score(0-5):");
                     score = scanner.nextFloat();
                 }
                 String regex = "rate product (\\w+)";

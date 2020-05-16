@@ -29,4 +29,12 @@ public class ManageProductsMenu extends Menu {
         menusIn.put("^remove \\w+$", RemoveProduct);
         menuForShow.add("Remove");
     }
+
+    @Override
+    public void show() {
+        for (String product : controller.getProductController().controlGetAllProducts()) {
+            System.out.println(product);
+        }
+        super.show();
+    }
 }

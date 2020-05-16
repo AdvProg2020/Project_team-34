@@ -1,6 +1,9 @@
 package menu.profile.supervisorProfileMenu;
 
+import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
+
+import java.util.regex.Matcher;
 
 public class ManageRequestsMenu extends Menu {
     public ManageRequestsMenu(Menu parentMenu) {
@@ -9,10 +12,22 @@ public class ManageRequestsMenu extends Menu {
         Menu Details = new Menu("Details", this) {
             @Override
             public void show() {
+                String regex = "^$details (\\w+)";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    try{
+                        controller.getProductController().controlShowDetailForRequest(matcher.group(1));
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
+
             }
 
             @Override
             public void execute() {
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^$details (\\w+)", Details);
@@ -25,6 +40,17 @@ public class ManageRequestsMenu extends Menu {
 
             @Override
             public void execute() {
+                String regex = "^accept (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    try{
+                        controller.getProductController().controlAcceptOrDeclineRequest(matcher.group(1), true);
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^accept (\\w+)$", AcceptRequest);
@@ -37,9 +63,26 @@ public class ManageRequestsMenu extends Menu {
 
             @Override
             public void execute() {
+                String regex = "^accept (\\w+)$";
+                Matcher matcher = getMatcher(command, regex);
+                if(matcher.find()){
+                    try{
+                        controller.getProductController().controlAcceptOrDeclineRequest(matcher.group(1), true);
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^decline (\\w+)$", DeclineRequest);
         menuForShow.add("Decline");
+    }
+
+    @Override
+    public void show() {
+        System.out.println(controller.getProductController().controlGetListOfRequestId());
+        super.show();
     }
 }

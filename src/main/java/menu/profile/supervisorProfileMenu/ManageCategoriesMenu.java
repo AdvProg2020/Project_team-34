@@ -45,8 +45,8 @@ public class ManageCategoriesMenu extends Menu {
                 String newCategoryName = scanner.nextLine();
                 System.out.print("Enter the upper level category (if you dont want enter 0): ");
                 String parentName = scanner.nextLine();
-                if (newCategoryName.equals("0"))
-                    newCategoryName = "All Products";
+                if (parentName.equals("0"))
+                    parentName = "All Products";
                 System.out.print("Is this category a category classifier? (y for yes, any other expresion for no): ");
                 String isParentCategoryString = scanner.nextLine();
                 boolean isParentCategoryBoolean = isParentCategoryString.equalsIgnoreCase("y");

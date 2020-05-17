@@ -91,8 +91,10 @@ public class Category {
 
     public ArrayList<Category> getAllCategoriesIn() {
         ArrayList<Category> allCategoriesIn = new ArrayList<>();
-        for (String name : allCategoriesInName) {
-            allCategoriesIn.add(getCategoryByName(name));
+        if (allCategoriesInName != null) {
+            for (String name : allCategoriesInName) {
+                allCategoriesIn.add(getCategoryByName(name));
+            }
         }
         return allCategoriesIn;
     }
@@ -119,6 +121,11 @@ public class Category {
         return this.allProductsIn.contains(product);
     }
 
+    public HashMap<String, String> implementedSpecification(Product product) {
+        HashMap<String, String> specifications = product.getSpecification();
+        return specifications;
+    }
+
     public void addProduct(Product product) throws ExceptionalMassage {
         if (this.isCategoryClassifier())
             throw new ExceptionalMassage("Cannot Add Product to this category. <Category.addProduct>");
@@ -126,6 +133,7 @@ public class Category {
             throw new ExceptionalMassage("This product has already added to this category. <Category.addProduct>");
         if (Category.getProductCategory(product) != null)
             throw new ExceptionalMassage("This product has already added to another category. <Category.addProduct>");
+
         this.allProductsIn.add(product);
         CategoryDataBase.update(this);
         //modify product specifications

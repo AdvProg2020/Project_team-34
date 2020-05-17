@@ -268,7 +268,7 @@ public class ProductController {
                 categoryDescription += "Parent: " + category.getParentCategory().getName() + " ";
             }
             categoryDescription += "Is Category Classifier: " + category.isCategoryClassifier() + "\n";
-            categoryDescription += "\t" + "Fields: " + category.getSpecialFields();
+            categoryDescription += "\t" + "Fields: " + category.getSpecialFields() + "\n";
             allCategories += categoryDescription;
         }
         return allCategories;

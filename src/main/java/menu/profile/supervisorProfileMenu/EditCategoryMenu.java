@@ -63,8 +63,10 @@ public class EditCategoryMenu extends Menu {
             public void execute() {
                 System.out.print("Enter filter key: ");
                 String filterKey = scanner.nextLine();
+                System.out.print("Enter filter value: ");
+                String filterValue = scanner.nextLine();
                 try {
-                    controller.getProductController().controlRemoveSpecialFieldFromCategory(category.getName(), filterKey);
+                    controller.getProductController().controlRemoveSpecialFieldFromCategory(category.getName(), filterKey, filterValue);
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }

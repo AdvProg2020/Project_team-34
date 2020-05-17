@@ -1,6 +1,0 @@
-package controller;
-
-public enum Response {
-    INVALID_USERNAME , INVALID_PASSWORD, OK,
-    INVALID_PRODUCT_ID, INVALID_REQUEST_ID , ACCESS_DENIED
-}

@@ -233,17 +233,41 @@ public class ProductController {
 
     public void controlAddSpecialFieldToCategory(String categoryName, String filterKey, String filterValues)
             throws ExceptionalMassage {
-
+        Account account = mainController.getAccount();
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Supervisor))
+            throw new ExceptionalMassage("Login as a supervisor.");
+        Category category = Category.getCategoryByName(categoryName);
+        if (category == null)
+            throw new ExceptionalMassage("Category not found.");
+        category.addField(filterKey, filterValues);
     }
 
-    public void controlRemoveSpecialFieldFromCategory(String categoryName, String filterKey)
+    public void controlRemoveSpecialFieldFromCategory(String categoryName, String filterKey, String filterValue)
             throws ExceptionalMassage {
-
+        Account account = mainController.getAccount();
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Supervisor))
+            throw new ExceptionalMassage("Login as a supervisor.");
+        Category category = Category.getCategoryByName(categoryName);
+        if (category == null)
+            throw new ExceptionalMassage("Category not found.");
+        category.removeField(filterKey, filterValue);
     }
 
     public String controlGetAllCategories(){
-        //I need a printable string of all categories!
-        return null;
+        String allCategories = "";
+        for (Category category : Category.allCategories) {
+            String categoryDescription = "";
+            categoryDescription += "Name: " + category.getName() + " ";
+            categoryDescription += "Parent: " + category.getParentCategory().getName() + " ";
+            categoryDescription += "Is Category Classifier: " + category.isCategoryClassifier() + "\n";
+            categoryDescription += "\t" + "Fields: " + category.getSpecialFields();
+            allCategories += categoryDescription;
+        }
+        return allCategories;
     }
 
 
@@ -450,10 +474,6 @@ public class ProductController {
 
     public String controlCurrentFilters(){
         return null;
-    }
-
-    public Response controlDisableFilter(String filter){
-        return Response.OK;
     }
 
     public void controlSort(String typeOfSort) throws ExceptionalMassage{

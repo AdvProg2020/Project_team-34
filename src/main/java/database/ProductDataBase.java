@@ -36,7 +36,7 @@ public class ProductDataBase {
         if (DataBase.doesIdAlreadyExist("Products", "productId", product.getProductId())) {
            return;
         }
-        String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, priceForEachSupplier," +
+        String sql = "INSERT into Products (numberOfViews,productId ,productState, name, priceForEachSupplier," +
                 "listOfSuppliers, remainedNumberForEachSupplier, description , specification, rootProductId)" +
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?)";
         try (Connection conn = connect();
@@ -46,13 +46,12 @@ public class ProductDataBase {
             statement.setString(2, product.getProductId());
             statement.setString(3, String.valueOf(product.getProductState()));
             statement.setString(4, product.getName());
-            statement.setString(5, product.getNameOfCompany());
-            statement.setString(6, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getPriceForEachSupplier())));
-            statement.setString(7, convertObjectToJsonString(convertSupplierArrayListToStringArrayList(product.getListOfSuppliers())));
-            statement.setString(8, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getRemainedNumberForEachSupplier())));
-            statement.setString(9, product.getDescription());
-            statement.setString(10, convertObjectToJsonString(product.getSpecification()));
-            statement.setString(11, product.getRootProductId());
+            statement.setString(5, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getPriceForEachSupplier())));
+            statement.setString(6, convertObjectToJsonString(convertSupplierArrayListToStringArrayList(product.getListOfSuppliers())));
+            statement.setString(7, convertObjectToJsonString(convertSupplierHashMapToStringHashMap(product.getRemainedNumberForEachSupplier())));
+            statement.setString(8, product.getDescription());
+            statement.setString(9, convertObjectToJsonString(product.getSpecification()));
+            statement.setString(10, product.getRootProductId());
 
             statement.executeUpdate();
         } catch (SQLException e) {

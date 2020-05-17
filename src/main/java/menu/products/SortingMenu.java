@@ -12,9 +12,9 @@ public class SortingMenu extends Menu {
         Menu showAvailableSorts = new Menu("Show All Sorts", this) {
             @Override
             public void show() {
-                System.out.println("Number of views");
-                System.out.println("Time it was created");
-                System.out.println("Score");
+                System.out.println("by number of views");
+                System.out.println("by time added");
+                System.out.println("by score");
             }
 
             @Override

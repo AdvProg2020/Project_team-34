@@ -476,10 +476,6 @@ public class ProductController {
         return null;
     }
 
-    public Response controlDisableFilter(String filter){
-        return Response.OK;
-    }
-
     public void controlSort(String typeOfSort) throws ExceptionalMassage{
 
     }

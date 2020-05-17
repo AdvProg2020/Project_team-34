@@ -1,24 +1,7 @@
 package controller;
 
 import account.Account;
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
 import cart.Cart;
-import exceptionalMassage.ExceptionalMassage;
-import feedback.CommentState;
-import feedback.Score;
-import cart.ShippingInfo;
-import discount.CodedDiscount;
-import discount.Sale;
-import feedback.Comment;
-import product.Category;
-import product.Product;
-import request.Request;
-import request.SaleRequest;
-
-import java.util.*;
-import java.util.concurrent.ExecutionException;
 
 public class Controller {
     private Account account;

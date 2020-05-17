@@ -2,12 +2,10 @@ package database;
 
 import account.Account;
 import account.Supplier;
-import cart.Cart;
 import cart.ProductInCart;
 import product.Product;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static database.DataBase.connect;

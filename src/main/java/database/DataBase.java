@@ -1,20 +1,12 @@
 package database;
 
-import cart.Cart;
-import cart.ProductInCart;
-import cart.ShippingInfo;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
-import discount.CodedDiscount;
-import feedback.Score;
-import log.CustomerLog;
-import log.LogStatus;
 import product.Category;
 import product.Product;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class DataBase {

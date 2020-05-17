@@ -2,14 +2,12 @@ package database;
 
 import account.Account;
 import account.Customer;
-import cart.Cart;
 import discount.CodedDiscount;
 
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Date;
 
 import static database.DataBase.*;
 

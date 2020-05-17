@@ -1,16 +1,10 @@
 package menu.profile.customerProfileMenu;
 
-import account.Supplier;
-import cart.Cart;
-//import com.sun.tools.javac.tree.JCTree;
-import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 import menu.products.ProductMenu;
 import product.Product;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.regex.Matcher;
 
 /**

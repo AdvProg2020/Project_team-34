@@ -1,6 +1,5 @@
 package menu.profile.supervisorProfileMenu;
 
-import account.Account;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 

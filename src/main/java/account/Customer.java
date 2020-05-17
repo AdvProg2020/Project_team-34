@@ -2,8 +2,6 @@ package account;
 
 import cart.Cart;
 import database.AccountDataBase;
-import exceptionalMassage.ExceptionalMassage;
-import log.CustomerLog;
 
 /**
  * @author rpirayadi

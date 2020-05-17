@@ -4,11 +4,8 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
-import cart.Cart;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 

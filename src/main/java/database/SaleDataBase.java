@@ -1,6 +1,5 @@
 package database;
 
-import cart.Cart;
 import discount.Sale;
 import product.Product;
 import state.State;

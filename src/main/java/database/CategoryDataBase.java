@@ -1,6 +1,5 @@
 package database;
 
-import cart.Cart;
 import product.Category;
 import product.Product;
 

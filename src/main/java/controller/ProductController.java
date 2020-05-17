@@ -4,7 +4,6 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
-import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
@@ -12,11 +11,8 @@ import feedback.CommentState;
 import feedback.Score;
 import product.Category;
 import product.Product;
-import request.Request;
-import request.SaleRequest;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class ProductController {

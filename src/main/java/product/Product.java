@@ -3,7 +3,6 @@ package product;
 import account.Supplier;
 import database.ProductDataBase;
 import exceptionalMassage.ExceptionalMassage;
-import feedback.Comment;
 import state.State;
 
 import java.util.ArrayList;

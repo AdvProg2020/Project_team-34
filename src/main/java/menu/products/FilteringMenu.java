@@ -3,8 +3,6 @@ package menu.products;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 import java.util.regex.Matcher;
 
 public class FilteringMenu extends Menu {

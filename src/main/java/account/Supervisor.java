@@ -1,7 +1,6 @@
 package account;
 
 import database.AccountDataBase;
-import exceptionalMassage.ExceptionalMassage;
 
 /**
  * @author rpirayadi

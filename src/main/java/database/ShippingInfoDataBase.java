@@ -1,7 +1,5 @@
 package database;
 
-
-import cart.Cart;
 import cart.ShippingInfo;
 
 import java.sql.*;

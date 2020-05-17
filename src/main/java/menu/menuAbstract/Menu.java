@@ -1,7 +1,6 @@
 package menu.menuAbstract;
 
 import controller.Controller;
-import exceptionalMassage.ExceptionalMassage;
 import menu.loginMenu.LoginMenu;
 import menu.profile.customerProfileMenu.CustomerProfileMenu;
 import menu.profile.supervisorProfileMenu.SupervisorProfileMenu;

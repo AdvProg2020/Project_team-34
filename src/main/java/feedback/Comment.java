@@ -11,8 +11,6 @@ import java.util.ArrayList;
  * @since 0.01
  */
 
-
-
 public class Comment {
     private static ArrayList<Comment> comments = new ArrayList<>();
     private static int allCommentsNum = 0 ;

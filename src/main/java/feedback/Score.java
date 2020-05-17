@@ -10,7 +10,6 @@ import java.util.ArrayList;
  * @since 0.01
  */
 
-
 public class Score {
     private static ArrayList<Score> scores = new ArrayList<>();
     private static int allCreatedScoreNum = 0 ;

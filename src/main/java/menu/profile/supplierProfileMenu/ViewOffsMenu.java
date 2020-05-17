@@ -2,7 +2,6 @@ package menu.profile.supplierProfileMenu;
 
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
-import menu.profile.ProfileMenu;
 import product.Product;
 
 import java.text.SimpleDateFormat;

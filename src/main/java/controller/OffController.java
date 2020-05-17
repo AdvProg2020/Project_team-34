@@ -7,7 +7,6 @@ import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
-import request.SaleRequest;
 import state.State;
 
 import java.util.ArrayList;

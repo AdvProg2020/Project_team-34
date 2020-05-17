@@ -1,11 +1,6 @@
 package menu.products;
 
 import menu.menuAbstract.Menu;
-import product.Category;
-import product.Product;
-
-import java.sql.SQLOutput;
-import java.util.ArrayList;
 
 public class AllProductsMenu extends Menu {
     public AllProductsMenu(Menu parentMenu) {

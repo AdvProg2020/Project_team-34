@@ -2,11 +2,8 @@ package database;
 
 import account.Account;
 import account.Supplier;
-import cart.Cart;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import feedback.Comment;
-import product.Category;
 import product.Product;
 import state.State;
 

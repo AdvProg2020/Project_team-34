@@ -3,7 +3,6 @@ package menu.loginMenu;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 
-import java.util.Scanner;
 import java.util.regex.Matcher;
 
 /**

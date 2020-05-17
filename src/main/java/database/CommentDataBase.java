@@ -2,13 +2,11 @@ package database;
 
 import account.Account;
 import account.Customer;
-import cart.Cart;
 import feedback.Comment;
 import feedback.CommentState;
 import product.Product;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static database.DataBase.connect;

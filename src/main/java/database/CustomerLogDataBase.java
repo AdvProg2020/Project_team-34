@@ -1,13 +1,10 @@
 package database;
 
-import account.Account;
-import account.Customer;
 import cart.Cart;
 import log.CustomerLog;
 import log.LogStatus;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Date;
 

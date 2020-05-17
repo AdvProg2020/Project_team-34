@@ -1,6 +1,5 @@
 package menu.mainMenu;
 
-import menu.loginMenu.LoginMenu;
 import menu.menuAbstract.Menu;
 import menu.products.AllProductsMenu;
 import menu.products.SalesMenu;

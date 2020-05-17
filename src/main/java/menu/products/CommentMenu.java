@@ -1,6 +1,5 @@
 package menu.products;
 
-import account.Customer;
 import feedback.Comment;
 import menu.menuAbstract.Menu;
 import product.Product;

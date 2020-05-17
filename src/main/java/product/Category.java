@@ -74,6 +74,7 @@ public class Category {
         this.allCategoriesInName = allCategoriesInName;
         this.allProductsIn = allProductsIn;
         this.specialFields = filters;
+        allCategories.add(this);
     }
 
     //Getters:

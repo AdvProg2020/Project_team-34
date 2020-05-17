@@ -41,28 +41,19 @@ public class ManageCategoriesMenu extends Menu {
 
             @Override
             public void execute() {
-                String newCategoryName;
-                String parentName;
                 System.out.println("Enter the name:");
-                newCategoryName = scanner.nextLine();
-                System.out.println("Enter the upper level category(if you dont want enter 0)");
-                parentName = scanner.nextLine();
-                if(parentName.equals("0")){
-                    try{
-                        controller.getProductController().controlAddCategory(newCategoryName, true,"All Products");
-                    } catch (ExceptionalMassage ex){
-                        System.out.println(ex.getMessage());
-                        parentMenu.show();
-                        parentMenu.execute();
-                    }
-                } else {
-                    try{
-                        controller.getProductController().controlAddCategory(newCategoryName, false,parentName);
-                    } catch (ExceptionalMassage ex){
-                        System.out.println(ex.getMessage());
-                        parentMenu.show();
-                        parentMenu.execute();
-                    }
+                String newCategoryName = scanner.nextLine();
+                System.out.print("Enter the upper level category (if you dont want enter 0): ");
+                String parentName = scanner.nextLine();
+                if (newCategoryName.equals("0"))
+                    newCategoryName = "All Products";
+                System.out.print("Is this category a category classifier? (y for yes, any other expresion for no): ");
+                String isParentCategoryString = scanner.nextLine();
+                boolean isParentCategoryBoolean = isParentCategoryString.equalsIgnoreCase("y");
+                try {
+                    controller.getProductController().controlAddCategory(newCategoryName, isParentCategoryBoolean, parentName);
+                } catch (ExceptionalMassage e) {
+                    System.out.println(e.getMessage());
                 }
                 parentMenu.show();
                 parentMenu.execute();

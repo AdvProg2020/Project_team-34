@@ -66,8 +66,10 @@ public class SupplierProfileMenu extends ProfileMenu {
                 String nameOfCompany = scanner.nextLine();
                 System.out.println("Enter the price");
                 int price = scanner.nextInt();
+                String junk1 = scanner.nextLine();
                 System.out.println("Enter remained numbers");
                 int numbers = scanner.nextInt();
+                String junk2 = scanner.nextLine();
                 System.out.println("Enter the category name");
                 String categoryName = scanner.nextLine();
                 System.out.println("Enter description");

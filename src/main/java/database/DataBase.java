@@ -102,6 +102,8 @@ public class DataBase {
 
 
     public static ArrayList<String> convertCategoryArrayListToStringArrayList(ArrayList<Category> categoryArrayList){
+        if(categoryArrayList == null)
+            return null;
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (Category eachCategory : categoryArrayList) {
             stringArrayList.add(eachCategory.getName());

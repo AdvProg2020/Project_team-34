@@ -258,8 +258,16 @@ public class ProductController {
     }
 
     public String controlGetAllCategories(){
-        //I need a printable string of all categories!
-        return null;
+        String allCategories = "";
+        for (Category category : Category.allCategories) {
+            String categoryDescription = "";
+            categoryDescription += "Name: " + category.getName() + " ";
+            categoryDescription += "Parent: " + category.getParentCategory().getName() + " ";
+            categoryDescription += "Is Category Classifier: " + category.isCategoryClassifier() + "\n";
+            categoryDescription += "\t" + "Fields: " + category.getSpecialFields();
+            allCategories += categoryDescription;
+        }
+        return allCategories;
     }
 
 

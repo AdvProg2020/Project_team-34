@@ -117,7 +117,7 @@ public class Category {
         if (getCategoryByName(name) != null) {
             throw new ExceptionalMassage("Category with this name has already initialized. <Category.setName>");
         }
-        CategoryDataBase.delete(name);
+        CategoryDataBase.delete(this.name);
         this.name = name;
         CategoryDataBase.add(this);
     }

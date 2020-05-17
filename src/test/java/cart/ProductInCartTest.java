@@ -15,7 +15,7 @@ public class ProductInCartTest {
     private static final Supplier supplier1 = new Supplier("sup1", "fs1", "ls1",
             "1@sup.com", "09111111111", "1111", 111, "c1");
     private static final Product product1 = new Product(supplier1, "p1", "b1", 100,
-            10, "A good product1", null);
+            10, "A good product1", null, null);
     private static final ProductInCart productInCartDataBaseConstructedInstance =
             new ProductInCart("Instance C", product1, supplier1);
     private static final ArrayList<ProductInCart> testInstances = createTestInstances();

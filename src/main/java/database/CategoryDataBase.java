@@ -26,7 +26,7 @@ public class CategoryDataBase {
         if (DataBase.doesIdAlreadyExist("Categories", "name", category.getName())) {
             return;
         }
-        String sql = "INSERT into scores (name , parentCategoryName, listOfAllProductsId, listOfCategoriesInName, specialFields) " +
+        String sql = "INSERT into Categories (name , parentCategoryName, listOfAllProductsId, listOfCategoriesInName, specialFields) " +
                 "VALUES (?,?, ? ,?,?)";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {

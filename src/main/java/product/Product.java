@@ -259,9 +259,10 @@ public class Product {
 
 
     public void addNewSupplierForProduct(Supplier supplier, int price , int remainedNumber){
-        listOfSuppliers.add(supplier);
-        priceForEachSupplier.put(supplier,price);
-        remainedNumberForEachSupplier.put(supplier,remainedNumber);
+        Product newProduct = new Product(this);
+        newProduct.getListOfSuppliers().add(supplier);
+        newProduct.getPriceForEachSupplier().put(supplier,price);
+        newProduct.getRemainedNumberForEachSupplier().put(supplier,remainedNumber);
     }
     public boolean isProductAvailableNow() {
         for (Supplier supplier : remainedNumberForEachSupplier.keySet()) {
@@ -332,6 +333,7 @@ public class Product {
         }
         if(productRequest.getProductState() == State.PREPARING_TO_BUILD) {
             productRequest.setProductState(State.CONFIRMED);
+            Category.getCategoryByName(productRequest.getFutureCategoryName()).addProduct(productRequest);
             ProductDataBase.update(productRequest);
         }
         else {

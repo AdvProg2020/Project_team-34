@@ -44,7 +44,19 @@ public enum SortType {
         };
     }
 
+    private String printableType;
+
+    static {
+        BY_NUMBER_OF_VIEWS.printableType = "by number of views";
+        BY_AVERAGE_SCORE.printableType = "by score";
+        BY_TIME.printableType = "by time added";
+    }
+
     public Comparator<Product> getComparator() {
         return comparator;
+    }
+
+    public String getPrintableType() {
+        return printableType;
     }
 }

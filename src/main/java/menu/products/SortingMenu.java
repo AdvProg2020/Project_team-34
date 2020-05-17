@@ -1,5 +1,6 @@
 package menu.products;
 
+import controller.SortType;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 
@@ -36,24 +37,19 @@ public class SortingMenu extends Menu {
                 String regex = "^sort (.+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    try {
-                        controller.getProductController().controlSort(matcher.group(1));
-                    }
-                    catch (ExceptionalMassage ex){
-                        System.out.println(ex.getMessage());
-                    }
+                    controller.getProductController().controlFilterSetSortType(matcher.group(1));
                 }
                 parentMenu.show();
                 parentMenu.execute();
             }
         };
-        menusIn.put("^sort (.+)$", sort);
+        menusIn.put("^sort (by number of views|by time added|by score)$", sort);
         menuForShow.add("Sort [an available sort]");
 
         Menu currentSort = new Menu("Current Sort", this) {
             @Override
             public void show() {
-                System.out.println(controller.getProductController().controlShowCurrentSort());
+                System.out.println(controller.getProductController().controlFilterGetSortType().getPrintableType());
             }
 
             @Override
@@ -72,7 +68,7 @@ public class SortingMenu extends Menu {
 
             @Override
             public void execute() {
-                controller.getProductController().controlDisableSort();
+                controller.getProductController().controlFilterSetSortType("by number of views");
                 parentMenu.show();
                 parentMenu.execute();
             }

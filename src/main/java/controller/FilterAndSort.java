@@ -284,5 +284,18 @@ public class FilterAndSort {
         products = sort(products);
         return products;
     }
+
+    @Override
+    public String toString() {
+        return "Filters and Sort:" + "\n" +
+                "\t" + "availabilityFilter:" + availabilityFilter + "\n" +
+                "\t" + "priceLowerBound:" + priceLowerBound + "\n" +
+                "\t" + "priceUpperBound:" + priceUpperBound + "\n" +
+                "\t" + "sortType:" + sortType.getPrintableType() + "\n" +
+                "\t" + "category:" + category.getName() + "\n" +
+                "\t" + "specialFilter:" + specialFilter + "\n" +
+                "\t" + "nameFilter:" + nameFilter + "\n" +
+                "\t" + "brandFilter:" + brandFilter;
+    }
 }
 

@@ -402,8 +402,18 @@ public class ProductController {
         //explain
     }
 
-    public void controlFilterSetSortType(SortType sortType) {
-        filterAndSort.setSortType(sortType);
+    public void controlFilterSetSortType(String sortType) {
+        switch (sortType) {
+            case "by number of views":
+                filterAndSort.setSortType(SortType.BY_NUMBER_OF_VIEWS);
+                break;
+            case "by time added":
+                filterAndSort.setSortType(SortType.BY_TIME);
+                break;
+            case "by score":
+                filterAndSort.setSortType(SortType.BY_AVERAGE_SCORE);
+                break;
+        }
     }
 
     public void controlFilterAddSpecialFilter(String key, String value) throws ExceptionalMassage {
@@ -433,58 +443,12 @@ public class ProductController {
     public ArrayList<Product> controlFilterGetFilteredAndSortedProducts() {
         return filterAndSort.getProducts();
     }
-    //Filter and sort End
-
-    //!!
-    // Here are some methods that were added by soheil or rpirayadi but I think they are no longer needed due to
-    // the changes in filter and sort
-    // delete if you dont need them :)))
 
     public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters(){
         return filterAndSort.getCategory().getAvailableSpecialFilters();
     }
 
-    public ArrayList<String> controlGetAllAvailableSorts(){
-        // method is clear from its name !
-        return null;
-    }
-
-    public boolean isThisFilterAvailable(String filter){
-        // method is clear from its name !
-        return false;
-    }
-
-    public boolean isThisSortAvailable(String sort) {
-        // method is clear from its name !
-        return false;
-    }
-
-    public ArrayList<Product> controlGetAllProducts(){
-        return filterAndSort.getProducts();
-    }
-
-    public String controlShowAvailableFilters(){
-        return null;
-    }
-
-
-    public void controlFilter(String filter){
-
-    }
-
     public String controlCurrentFilters(){
-        return null;
-    }
-
-    public void controlSort(String typeOfSort) throws ExceptionalMassage{
-
-    }
-
-    public String controlShowCurrentSort(){
-        return null;
-    }
-
-    public void controlDisableSort(){
-
+        return filterAndSort.toString();
     }
 }

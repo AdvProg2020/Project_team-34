@@ -41,6 +41,7 @@ public class CustomerLog {
         this.paidAmount = cart.getBill();
         this.codedDiscountAmount = cart.getAmountOfCodedDiscount();
         this.deliveryStatus = LogStatus.PENDING;
+        this.customer.setCredit(this.customer.getCredit() - this.paidAmount);
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
         addSubLogForSuppliers();

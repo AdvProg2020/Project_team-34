@@ -247,7 +247,6 @@ public class Cart {
     }
 
     public int getAmountOfSale() {
-        //cart must be updated before
         int saleAmount = 0;
         for (ProductInCart productInCart : productsIn) {
             Sale productSale = productInSale.get(productInCart);

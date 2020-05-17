@@ -22,9 +22,7 @@ public class Product {
     private HashMap<Supplier, Integer> priceForEachSupplier;
     private ArrayList<Supplier> listOfSuppliers;
     private HashMap<Supplier,Integer> remainedNumberForEachSupplier;
-    //private Category category;
     private String description;
-    //private ArrayList<Comment> comments;
     private HashMap<String, String> specification; //method check
     private String rootProductId ;
 
@@ -76,6 +74,8 @@ public class Product {
         this.description = product.getDescription();
         this.numberOfViews= product.getNumberOfViews();
         this.rootProductId = product.getProductId();
+        this.productState = State.PREPARING_TO_EDIT;
+        this.specification = product.getSpecification();
         allCreatedProductNum ++;
         allProduct.add(this);
         ProductDataBase.add(this);
@@ -91,18 +91,6 @@ public class Product {
 
     public String getName() {
         return name;
-    }
-
-    public ArrayList<Supplier> getListOfSuppliers() {
-        return listOfSuppliers;
-    }
-
-    public static Product getProductById(String productId){
-        for (Product eachProduct : allProduct) {
-            if(eachProduct.getProductId().equals(productId))
-                return eachProduct;
-        }
-        return null;
     }
 
     public int getNumberOfViews() {
@@ -137,41 +125,6 @@ public class Product {
         return specification;
     }
 
-
-    public void removeProduct(){
-        setProductState(State.DELETED);
-    }
-
-    public void addProduct(){
-        productState = State.CONFIRMED;
-    }
-
-    public boolean doesSupplierSellThisProduct (Supplier supplier){
-        return listOfSuppliers.contains(supplier);
-    }
-
-    public static ArrayList<Product> getProductForSupplier(Supplier supplier){
-        ArrayList<Product> result = new ArrayList<>();
-        for (Product product : allProduct) {
-            if(product.doesSupplierSellThisProduct(supplier))
-                result.add(product);
-        }
-        return result;
-    }
-
-    public static Product getProductByName (String name){
-        for (Product product : allProduct) {
-            if(product.getName().equals(name))
-                return product;
-        }
-        return null;
-    }
-
-    public void reduceRemainedNumber (Supplier supplier, int amount){
-        int remainedNumber = remainedNumberForEachSupplier.get(supplier);
-        remainedNumberForEachSupplier.put(supplier, remainedNumber - amount);
-    }
-
     public int getPrice(Supplier supplier) {
         return priceForEachSupplier.get(supplier);
     }
@@ -202,22 +155,10 @@ public class Product {
         ProductDataBase.update(this);
     }
 
-    /*
-    public void setCategory(Category category) {
-        this.category = category;
-    }
-     */
-
     public void setDescription(String description) {
         this.description = description;
         ProductDataBase.update(this);
     }
-
-    /*
-    public void setComments(ArrayList<Comment> comments) {
-        this.comments = comments;
-    }
-     */
 
     public void setPriceForEachSupplier(HashMap<Supplier, Integer> priceForEachSupplier) {
         this.priceForEachSupplier = priceForEachSupplier;
@@ -227,6 +168,64 @@ public class Product {
     public void setRemainedNumberForEachSupplier(HashMap<Supplier, Integer> remainedNumberForEachSupplier) {
         this.remainedNumberForEachSupplier = remainedNumberForEachSupplier;
         ProductDataBase.update(this);
+    }
+
+    public void setSpecification(HashMap<String, String> specification) {
+        this.specification = specification;
+    }
+
+    public ArrayList<Supplier> getListOfSuppliers() {
+        return listOfSuppliers;
+    }
+
+    private ArrayList<Product> getConfirmedProducts(){
+        ArrayList<Product> confirmedProducts = new ArrayList<>();
+        for (Product eachProduct : allProduct) {
+            if(eachProduct.getProductState() == State.CONFIRMED)
+                confirmedProducts.add(eachProduct);
+        }
+        return confirmedProducts;
+    }
+    public static Product getProductById(String productId){
+        for (Product eachProduct : allProduct) {
+            if(eachProduct.getProductId().equals(productId))
+                return eachProduct;
+        }
+        return null;
+    }
+
+
+    public void removeProduct(){
+        setProductState(State.DELETED);
+    }
+
+    public void addProduct(){
+        productState = State.CONFIRMED;
+    }
+
+    public boolean doesSupplierSellThisProduct (Supplier supplier){
+        return listOfSuppliers.contains(supplier);
+    }
+
+    public static ArrayList<Product> getProductForSupplier(Supplier supplier){
+        ArrayList<Product> result = new ArrayList<>();
+        for (Product product : allProduct) {
+            if(product.doesSupplierSellThisProduct(supplier))
+                result.add(product);
+        }
+        return result;
+    }
+
+    public static Product getProductByName (String name){
+        for (Product product : allProduct) {
+            if(product.getName().equals(name))
+                return product;
+        }
+        return null;
+    }
+    public void reduceRemainedNumber (Supplier supplier, int amount){
+        int remainedNumber = remainedNumberForEachSupplier.get(supplier);
+        remainedNumberForEachSupplier.put(supplier, remainedNumber - amount);
     }
 
     public void editSpecialField(String field, String value) throws ExceptionalMassage {

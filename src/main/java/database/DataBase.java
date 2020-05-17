@@ -79,7 +79,7 @@ public class DataBase {
 
     public static HashMap<String, ArrayList<String>> convertJsonToSpecialHashMap(String string ){
         Gson gson = new Gson();
-        return (HashMap<String, ArrayList<String>>) gson.fromJson(string, new TypeToken<ArrayList<String>>() {
+        return (HashMap<String, ArrayList<String>>) gson.fromJson(string, new TypeToken<HashMap<String, ArrayList<String>>>() {
         }.getType());
     }
     public static ArrayList<String> convertJsonToArrayList(String string) {

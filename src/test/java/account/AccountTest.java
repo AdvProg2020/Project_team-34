@@ -92,4 +92,19 @@ public class AccountTest {
                 " phoneNumber='34', password='r1234', credit=10000000}",supervisor.toString());
     }
 
+    @Test
+    public void testSetNameOfCompany(){
+        supplier.setNameOfCompany("Team_340");
+        Assert.assertEquals("Team_340", supplier.getNameOfCompany());
+        supplier.setNameOfCompany("Team_34");
+    }
+
+    @Test
+    public void testGetSupplierById(){
+        /*
+        Supplier supplierGotByCompanyName = Supplier.getSupplierByCompanyName(supplier.getNameOfCompany());
+        Assert.assertEquals(supplier,supplierGotByCompanyName);
+         */
+    }
+
 }

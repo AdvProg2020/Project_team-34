@@ -27,7 +27,7 @@ public class Supplier extends Account{
     }
 
     public static Supplier getSupplierByCompanyName(String nameOfCompany) {
-        return null;
+        return Account.getSupplierByCompanyName(nameOfCompany);
     }
 
     @Override

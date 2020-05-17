@@ -105,4 +105,12 @@ public abstract class Account {
     public void removeAccount (){
         allAccounts.remove(this);
     }
+
+    public static Supplier getSupplierByCompanyName(String companyName){
+        for (Account account : allAccounts) {
+            if(account instanceof  Supplier && ((Supplier) account).getNameOfCompany().equals(companyName))
+                return (Supplier)account;
+        }
+        return null;
+    }
 }

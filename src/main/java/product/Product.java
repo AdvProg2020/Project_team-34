@@ -25,10 +25,11 @@ public class Product {
     private String description;
     private HashMap<String, String> specification; //method check
     private String rootProductId ;
+    private String futureCategoryName ;
 
 
 
-    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,String rootProductId) {
+    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,String rootProductId,String futureCategoryName) {
         numberOfViews = 0;
         this.productState = State.PREPARING_TO_BUILD;
         this.productId = generateIdentifier();
@@ -42,6 +43,7 @@ public class Product {
         this.remainedNumberForEachSupplier.put(supplier,remainedNumber);
         this.description = description;
         this.rootProductId = rootProductId;
+        this.futureCategoryName = futureCategoryName;
         allCreatedProductNum ++;
         allProduct.add(this);
         ProductDataBase.add(this);
@@ -49,7 +51,7 @@ public class Product {
 
     public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
                    HashMap<Supplier,Integer> remainedNumberForEachSupplier, String description,
-                   int numberOfViews , String productId,State state,String rootProductId) {
+                   int numberOfViews , String productId,State state,String rootProductId,String futureCategoryName) {
         this.productState = state;
         this.productId = productId;
         this.name = name;
@@ -60,6 +62,7 @@ public class Product {
         this.description = description;
         this.numberOfViews= numberOfViews;
         this.rootProductId = rootProductId;
+        this.futureCategoryName = futureCategoryName;
         allCreatedProductNum ++;
         allProduct.add(this);
     }
@@ -76,6 +79,7 @@ public class Product {
         this.rootProductId = product.getProductId();
         this.productState = State.PREPARING_TO_EDIT;
         this.specification = product.getSpecification();
+        this.futureCategoryName = product.getFutureCategoryName();
         allCreatedProductNum ++;
         allProduct.add(this);
         ProductDataBase.add(this);
@@ -134,6 +138,9 @@ public class Product {
         //aryan
     }
 
+    public String getFutureCategoryName() {
+        return futureCategoryName;
+    }
 
     public void setNumberOfViews(int numberOfViews) {
         this.numberOfViews = numberOfViews;
@@ -172,6 +179,10 @@ public class Product {
 
     public void setSpecification(HashMap<String, String> specification) {
         this.specification = specification;
+    }
+
+    public void setFutureCategoryName(String futureCategoryName) {
+        this.futureCategoryName = futureCategoryName;
     }
 
     public ArrayList<Supplier> getListOfSuppliers() {

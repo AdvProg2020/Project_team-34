@@ -98,13 +98,14 @@ public class Category {
     }
 
     public ArrayList<Category> getAllCategoriesIn() {
-        ArrayList<Category> allCategoriesIn = new ArrayList<>();
         if (allCategoriesInName != null) {
+            ArrayList<Category> allCategoriesIn = new ArrayList<>();
             for (String name : allCategoriesInName) {
                 allCategoriesIn.add(getCategoryByName(name));
             }
+            return allCategoriesIn;
         }
-        return allCategoriesIn;
+        return null;
     }
 
     public HashMap<String, ArrayList<String>> getSpecialFields() {
@@ -126,7 +127,9 @@ public class Category {
     }
 
     public boolean isProductIn(Product product) {
-        return this.allProductsIn.contains(product);
+        if (!isCategoryClassifier())
+            return this.allProductsIn.contains(product);
+        return false;
     }
 
     public HashMap<String, String> implementedSpecification(Product product) {

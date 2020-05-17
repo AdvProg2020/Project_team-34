@@ -261,11 +261,11 @@ public class ProductController {
         String allCategories = "";
         for (Category category : Category.allCategories) {
             String categoryDescription = "";
-            categoryDescription += "Name: " + category.getName() + " ";
+            categoryDescription += "Name: " + category.getName() + ", ";
             if (category.getParentCategory() == null) {
-                categoryDescription += "Parent: " + null + " ";
+                categoryDescription += "Parent: " + null + ", ";
             } else {
-                categoryDescription += "Parent: " + category.getParentCategory().getName() + " ";
+                categoryDescription += "Parent: " + category.getParentCategory().getName() + ", ";
             }
             categoryDescription += "Is Category Classifier: " + category.isCategoryClassifier() + "\n";
             categoryDescription += "\t" + "Fields: " + category.getSpecialFields() + "\n";

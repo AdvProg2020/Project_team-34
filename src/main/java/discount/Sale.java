@@ -164,22 +164,34 @@ public class Sale extends Discount{
     }
 
     public static String getDetailsForSaleRequest(String requestId) throws ExceptionalMassage{
+        String result = "";
         if(Sale.getSaleById(convertRequestIdToSaleId(requestId)) == null){
             throw new ExceptionalMassage("No such id!");
         }
         Sale sale = Sale.getSaleById(convertRequestIdToSaleId(requestId));
-        Sale rootSale = Sale.getSaleById(sale.getRootSaleId());
-        String result = "";
-        result = result + "start date :" +rootSale.getStart().toString() + "==>" + sale.getStart().toString() + "\n";
-        result = result + "end date :" + rootSale.getEnd().toString() + "==>" + sale.getEnd().toString() + "\n";
-        result = result + "off percent :" + rootSale.getPercent() +"==>" + sale.getPercent() + "\n";
-        result += "current products in the sale :\n";
-        for (Product product : rootSale.getProducts()) {
-            result += product.getName() + "\n";
-        }
-        result += "products after being edited :\n";
-        for (Product product : sale.getProducts()) {
-            result += product.getName() + "\n";
+        if(sale.getState() == State.PREPARING_TO_BUILD){
+            result += "This Sale wants to be created!\n";
+            result += "sale info :\n";
+            result += "start date :" + sale.getStart().toString() + "\n";
+            result += "end date :" + sale.getEnd().toString() + "\n";
+            result = result + "off percent :" + sale.getPercent() + "\n";
+            result += "products:\n";
+            for (Product product : sale.getProducts()) {
+                result += product.getName() + "\n";
+            }
+        } else {
+            Sale rootSale = Sale.getSaleById(sale.getRootSaleId());
+            result = result + "start date :" + rootSale.getStart().toString() + "==>" + sale.getStart().toString() + "\n";
+            result = result + "end date :" + rootSale.getEnd().toString() + "==>" + sale.getEnd().toString() + "\n";
+            result = result + "off percent :" + rootSale.getPercent() + "==>" + sale.getPercent() + "\n";
+            result += "current products in the sale :\n";
+            for (Product product : rootSale.getProducts()) {
+                result += product.getName() + "\n";
+            }
+            result += "products after being edited :\n";
+            for (Product product : sale.getProducts()) {
+                result += product.getName() + "\n";
+            }
         }
         return result;
     }
@@ -233,8 +245,7 @@ public class Sale extends Discount{
 
     @Override
     public String toString() {
-        return "Sale{" +
-                "offId='" + offId + '\'' +
+        return "offId=" + offId + "\n" +
                 ", products=" + products +
                 ", state=" + state +
                 ", percent=" + percent +

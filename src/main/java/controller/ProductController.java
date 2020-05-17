@@ -40,7 +40,7 @@ public class ProductController {
         Product  product;
         product = Product.getProductByName(name);
         if (product == null)
-            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description,null);
+            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description,null,category.getName());
         else {
             product.addNewSupplierForProduct(supplier,price,remainedNumbers);
         }

@@ -8,6 +8,11 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public class FilterAndSort {
     private boolean availabilityFilter;
     private Integer priceLowerBound;

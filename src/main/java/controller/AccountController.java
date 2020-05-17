@@ -7,7 +7,6 @@ import account.Supplier;
 import cart.Cart;
 import cart.ShippingInfo;
 import exceptionalMassage.ExceptionalMassage;
-import log.CustomerLog;
 import product.Product;
 
 import java.util.ArrayList;

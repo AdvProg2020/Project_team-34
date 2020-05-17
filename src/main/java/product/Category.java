@@ -98,13 +98,14 @@ public class Category {
     }
 
     public ArrayList<Category> getAllCategoriesIn() {
-        ArrayList<Category> allCategoriesIn = new ArrayList<>();
         if (allCategoriesInName != null) {
+            ArrayList<Category> allCategoriesIn = new ArrayList<>();
             for (String name : allCategoriesInName) {
                 allCategoriesIn.add(getCategoryByName(name));
             }
+            return allCategoriesIn;
         }
-        return allCategoriesIn;
+        return null;
     }
 
     public HashMap<String, ArrayList<String>> getSpecialFields() {
@@ -116,8 +117,9 @@ public class Category {
         if (getCategoryByName(name) != null) {
             throw new ExceptionalMassage("Category with this name has already initialized. <Category.setName>");
         }
+        CategoryDataBase.delete(this.name);
         this.name = name;
-        CategoryDataBase.update(this);
+        CategoryDataBase.add(this);
     }
 
     //Modeling methods:
@@ -126,20 +128,24 @@ public class Category {
     }
 
     public boolean isProductIn(Product product) {
-        return this.allProductsIn.contains(product);
+        if (!isCategoryClassifier())
+            return this.allProductsIn.contains(product);
+        return false;
     }
 
     public HashMap<String, String> implementedSpecification(Product product) {
         HashMap<String, String> implementedSpecification = new HashMap<>();
         HashMap<String, String> specification = product.getSpecification();
-        for (String key : specification.keySet()) {
-            if (specialFields.containsKey(key)) {
-                implementedSpecification.put(key, specification.get(key));
+        if (specification.size() != 0) {
+            for (String key : specification.keySet()) {
+                if (specialFields.containsKey(key)) {
+                    implementedSpecification.put(key, specification.get(key));
+                }
             }
-        }
-        for (String key : specialFields.keySet()) {
-            if (!implementedSpecification.containsKey(key)) {
-                implementedSpecification.put(key, "Not Assigned");
+            for (String key : specialFields.keySet()) {
+                if (!implementedSpecification.containsKey(key)) {
+                    implementedSpecification.put(key, "Not Assigned");
+                }
             }
         }
         return implementedSpecification;

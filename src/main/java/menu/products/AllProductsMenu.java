@@ -36,7 +36,7 @@ public class AllProductsMenu extends Menu {
 
             @Override
             public void execute() {
-                for (Product product : controller.getProductController().controlGetAllProducts()) {
+                for (Product product : controller.getProductController().controlFilterGetFilteredAndSortedProducts()) {
                     System.out.println("name =>" + product.getName() + "ID =>" + product.getProductId());
                 }
                 parentMenu.show();
@@ -55,7 +55,7 @@ public class AllProductsMenu extends Menu {
 
     @Override
     public void show() {
-        for (Product product : controller.getProductController().controlGetAllProducts()) {
+        for (Product product : controller.getProductController().controlFilterGetFilteredAndSortedProducts()) {
             System.out.println("name =>" + product.getName() + "ID =>" + product.getProductId());
         }
         super.show();

@@ -33,7 +33,7 @@ public class ManageProductsMenu extends Menu {
 
     @Override
     public void show() {
-        for (Product product : controller.getProductController().controlGetAllProducts()) {
+        for (Product product : controller.getProductController().controlFilterGetFilteredAndSortedProducts()) {
             System.out.println("name =>" + product.getName() + "ID =>" + product.getProductId());
         }
         super.show();

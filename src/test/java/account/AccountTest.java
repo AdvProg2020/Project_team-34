@@ -101,10 +101,13 @@ public class AccountTest {
 
     @Test
     public void testGetSupplierById(){
-        /*
         Supplier supplierGotByCompanyName = Supplier.getSupplierByCompanyName(supplier.getNameOfCompany());
         Assert.assertEquals(supplier,supplierGotByCompanyName);
-         */
+    }
+
+    @Test
+    public void testToString(){
+        System.out.println(supplier.toString());
     }
 
 }

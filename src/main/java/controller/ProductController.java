@@ -314,7 +314,7 @@ public class ProductController {
             Product.acceptOrDeclineRequest(requestId, isAccepted);
         }
         else {
-            // sale method
+            Sale.acceptOrDeclineRequest(requestId, isAccepted);
         }
     }
 

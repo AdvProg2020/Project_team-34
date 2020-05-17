@@ -275,11 +275,12 @@ public class Category {
         if (!this.specialFields.get(filterKey).contains(filterValue))
             throw new ExceptionalMassage("\"" + filterValue + "\" " + "not found in " + "\"" + filterKey + "\". " + "<Category.removeFilter>");
         specialFields.get(filterKey).remove(filterValue);
+        if (specialFields.get(filterKey).size() == 0)
+            specialFields.remove(filterKey);
         for (Product product : allProductsIn) {
             product.setSpecification(implementedSpecification(product));
         }
         CategoryDataBase.update(this);
-        //modify product specifications
     }
 
     public HashMap<String, ArrayList<String>> getAvailableSpecialFilters() {

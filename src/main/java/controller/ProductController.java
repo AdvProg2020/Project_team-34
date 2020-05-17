@@ -233,12 +233,28 @@ public class ProductController {
 
     public void controlAddSpecialFieldToCategory(String categoryName, String filterKey, String filterValues)
             throws ExceptionalMassage {
-
+        Account account = mainController.getAccount();
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Supervisor))
+            throw new ExceptionalMassage("Login as a supervisor.");
+        Category category = Category.getCategoryByName(categoryName);
+        if (category == null)
+            throw new ExceptionalMassage("Category not found.");
+        category.addField(filterKey, filterValues);
     }
 
-    public void controlRemoveSpecialFieldFromCategory(String categoryName, String filterKey)
+    public void controlRemoveSpecialFieldFromCategory(String categoryName, String filterKey, String filterValue)
             throws ExceptionalMassage {
-
+        Account account = mainController.getAccount();
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Supervisor))
+            throw new ExceptionalMassage("Login as a supervisor.");
+        Category category = Category.getCategoryByName(categoryName);
+        if (category == null)
+            throw new ExceptionalMassage("Category not found.");
+        category.removeField(filterKey, filterValue);
     }
 
     public String controlGetAllCategories(){

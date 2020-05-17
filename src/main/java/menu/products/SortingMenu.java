@@ -12,9 +12,9 @@ public class SortingMenu extends Menu {
         Menu showAvailableSorts = new Menu("Show All Sorts", this) {
             @Override
             public void show() {
-                for (String sort : controller.getProductController().controlGetAllAvailableSorts()) {
-                    System.out.println(sort);
-                }
+                System.out.println("Number of views");
+                System.out.println("Time it was created");
+                System.out.println("Score");
             }
 
             @Override

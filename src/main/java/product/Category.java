@@ -32,7 +32,6 @@ public class Category {
         this.allCategoriesInName = new ArrayList<>();
         this.specialFields = null;
         allCategories.add(this);
-        //DataBase Banned
     }
 
     private Category(String name, boolean isParentCategory, String parentCategoryName) {
@@ -54,6 +53,16 @@ public class Category {
         CategoryDataBase.add(this);
     }
 
+    public Category(String name, String parentCategoryName, ArrayList<String> allCategoriesInName,
+                    ArrayList<Product> allProductsIn, HashMap<String, ArrayList<String>> filters) {
+        this.name = name;
+        this.parentCategoryName = parentCategoryName;
+        this.allCategoriesInName = allCategoriesInName;
+        this.allProductsIn = allProductsIn;
+        this.specialFields = filters;
+        allCategories.add(this);
+    }
+
     public static Category getInstance(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
         if (getCategoryByName(name) != null)
             throw new ExceptionalMassage("Category with name " + name + " has already created.");
@@ -64,17 +73,8 @@ public class Category {
             throw new ExceptionalMassage("Category " + parentCategoryName + " is a product classifier.");
         Category addingCategory = new Category(name, isParentCategory, parentCategoryName);
         parentCategory.addToSubCategoryList(addingCategory);
+        CategoryDataBase.update(parentCategory);
         return addingCategory;
-    }
-
-    public Category(String name, String parentCategoryName, ArrayList<String> allCategoriesInName,
-                    ArrayList<Product> allProductsIn, HashMap<String, ArrayList<String>> filters) {
-        this.name = name;
-        this.parentCategoryName = parentCategoryName;
-        this.allCategoriesInName = allCategoriesInName;
-        this.allProductsIn = allProductsIn;
-        this.specialFields = filters;
-        allCategories.add(this);
     }
 
     //Getters:
@@ -123,8 +123,8 @@ public class Category {
     }
 
     public HashMap<String, String> implementedSpecification(Product product) {
-        HashMap<String, String> specifications = product.getSpecification();
-        return specifications;
+        HashMap<String, String> specifications = new HashMap<>(product.getSpecification());
+        return null;
     }
 
     public void addProduct(Product product) throws ExceptionalMassage {
@@ -149,7 +149,7 @@ public class Category {
         CategoryDataBase.update(this);
     }
 
-    public void addToSubCategoryList(Category addingCategory) throws ExceptionalMassage {
+    private void addToSubCategoryList(Category addingCategory) throws ExceptionalMassage {
         if (!this.isCategoryClassifier())
             throw new ExceptionalMassage("Cannot add a subcategory to this category. <Category.addSubCategory>");
         this.allCategoriesInName.add(addingCategory.getName());
@@ -161,12 +161,11 @@ public class Category {
         Category.getInstance(addingCategoryName, isParentCategory, this.getName());
     }
 
-    public void removeSubCategory(String removingCategoryName) throws ExceptionalMassage {
+    private void removeSubCategory(String removingCategoryName) throws ExceptionalMassage {
         if (!this.isCategoryClassifier())
             throw new ExceptionalMassage("This category is a product classifier. <Category.removeSubCategory>");
         if (!this.allCategoriesInName.contains(removingCategoryName))
             throw new ExceptionalMassage("This subcategory is not in this category. <Category.removeSubCategory>");
-        //check if category is empty if required
         Category.allCategories.remove(getCategoryByName(removingCategoryName));
         this.allCategoriesInName.remove(removingCategoryName);
         CategoryDataBase.update(this);
@@ -176,7 +175,10 @@ public class Category {
         Category removingCategory = Category.getCategoryByName(removingCategoryName);
         if (removingCategory == null)
             throw new ExceptionalMassage("Category not found. <Category.removingCategory>");
+        if (removingCategory.allCategoriesInName != null && removingCategory.allProductsIn != null)
+            throw new ExceptionalMassage("Category is not empty. <Category.removingCategory>");
         (removingCategory.getParentCategory()).removeSubCategory(removingCategoryName);
+        CategoryDataBase.delete(removingCategory.name);
     }
 
     public ArrayList<Category> getReference() {

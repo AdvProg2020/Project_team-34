@@ -6,10 +6,10 @@ import database.AccountDataBase;
  * @author rpirayadi
  * @since 0.0.1
  */
+
 public class Supplier extends Account{
 
     private String nameOfCompany;
-
 
     public Supplier(String userName, String name, String familyName, String email, String phoneNumber, String password,
                     int credit , String nameOfCompany) {
@@ -17,7 +17,6 @@ public class Supplier extends Account{
         this.nameOfCompany = nameOfCompany;
         AccountDataBase.add(this);
     }
-
 
     public String getNameOfCompany() {
         return nameOfCompany;
@@ -29,11 +28,6 @@ public class Supplier extends Account{
 
     public static Supplier getSupplierByCompanyName(String nameOfCompany) {
         return null;
-    }
-
-    @Override
-    public String getType() {
-        return "Supplier";
     }
 
     @Override

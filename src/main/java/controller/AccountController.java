@@ -7,6 +7,7 @@ import account.Supplier;
 import cart.Cart;
 import cart.ShippingInfo;
 import exceptionalMassage.ExceptionalMassage;
+import log.CustomerLog;
 import product.Product;
 
 import java.util.ArrayList;
@@ -24,9 +25,14 @@ public class AccountController {
     }
 
     public String loggedInAccountType() {
-        if (mainController.getAccount() == null)
+        Account account = mainController.getAccount();
+        if (account == null)
             return null;
-        return mainController.getAccount().getType();
+        if (account instanceof Customer)
+            return "Customer";
+        if (account instanceof Supervisor)
+            return "Supervisor";
+        return "Supplier";
     }
 
     public Account getAccount() {

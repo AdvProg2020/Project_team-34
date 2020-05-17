@@ -24,36 +24,42 @@ public class AccountTest {
     public void testSetName(){
         supervisor.setName("roozbeh");
         Assert.assertEquals("roozbeh", supervisor.getName());
+        supervisor.setName("rouzbeh");
     }
 
     @Test
     public void testSetEmail(){
         supervisor.setEmail("r@gmail");
         Assert.assertEquals("r@gmail", supervisor.getEmail());
+        supervisor.setEmail("r@yahoo");
     }
 
     @Test
     public void testSetPhoneNumber(){
         supervisor.setPhoneNumber("4426");
         Assert.assertEquals("4426", supervisor.getPhoneNumber());
+        supervisor.setPhoneNumber("34");
     }
 
     @Test
     public void testSetFamilyName(){
         supervisor.setFamilyName("not pirayadi");
         Assert.assertEquals("not pirayadi", supervisor.getFamilyName());
+        supervisor.setFamilyName("pirayadi");
     }
 
     @Test
     public void testSetPassword(){
         supervisor.setPassword("r4321");
         Assert.assertEquals("r4321", supervisor.getPassword());
+        supervisor.setPassword("r1234");
     }
 
     @Test
     public void testSetCredit(){
         supervisor.setCredit(10000001);
         Assert.assertEquals(10000001, supervisor.getCredit());
+        supervisor.setCredit(10000000);
     }
     @Test
     public void testGetByUsername() {
@@ -78,6 +84,17 @@ public class AccountTest {
         expectedUsername.add("AA");
         expectedUsername.add("Soheil.MH");
         Assert.assertEquals(expectedUsername, allUsername);
+    }
+
+    @Test
+    public void testSupervisorGetType(){
+        Assert.assertEquals("Supervisor", supervisor.getType());
+    }
+
+    @Test
+    public void testSupervisorToString(){
+        Assert.assertEquals("Supervisor{userName='rpirayadi', name='rouzbeh', familyName='pirayadi', email='r@yahoo'," +
+                " phoneNumber='34', password='r1234', credit=10000000}",supervisor.toString());
     }
 
 }

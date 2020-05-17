@@ -34,7 +34,7 @@ public class FilteringMenu extends Menu {
 
             @Override
             public void execute() {
-                System.out.println("Pls select the filter type :");
+                System.out.println("Please select the filter type :");
                 String type = scanner.nextLine();
                 String regex = "^filter (.+)$";
                 Matcher matcher = getMatcher(command, regex);

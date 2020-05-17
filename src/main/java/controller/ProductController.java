@@ -416,9 +416,8 @@ public class ProductController {
     // the changes in filter and sort
     // delete if you dont need them :)))
 
-    public ArrayList<String> controlGetAllAvailableFilters(){
-        // method is clear from its name!
-        return null;
+    public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters(){
+        return filterAndSort.getCategory().getAvailableSpecialFilters();
     }
 
     public ArrayList<String> controlGetAllAvailableSorts(){

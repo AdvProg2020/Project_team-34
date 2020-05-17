@@ -256,8 +256,27 @@ public class AccountController {
             throw new ExceptionalMassage("Login as a customer.");
         mainController.getCart().removeShippingInfo();
     }
+    public void controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
+        Account account = mainController.getAccount();
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Customer))
+            throw new ExceptionalMassage("Login as a customer.");
+        mainController.getCart().applyCodedDiscount(discountCode);
+    }
+
+    public void controlRemoveDiscountCode() throws ExceptionalMassage {
+        Account account = mainController.getAccount();
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Customer))
+            throw new ExceptionalMassage("Login as a customer.");
+        mainController.getCart().removeCodedDiscount();
+    }
 
     public boolean controlFinalizeOrder() {
         return false;
+        //discount code usage
+        //customer credit decrease
     }
 }

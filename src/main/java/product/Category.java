@@ -23,7 +23,6 @@ public class Category {
     private final ArrayList<Product> allProductsIn;
     private final HashMap<String, ArrayList<String>> specialFields;
 
-
     //Constructors:
     private Category() {
         this.name = "All Products";
@@ -57,6 +56,13 @@ public class Category {
                     ArrayList<Product> allProductsIn, HashMap<String, ArrayList<String>> filters) {
         this.name = name;
         this.parentCategoryName = parentCategoryName;
+        if (parentCategoryName.equals("All Products")) {
+            try {
+                superCategory.addToSubCategoryList(this);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
+        }
         this.allCategoriesInName = allCategoriesInName;
         this.allProductsIn = allProductsIn;
         this.specialFields = filters;

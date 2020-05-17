@@ -5,6 +5,11 @@ import product.Product;
 
 import java.util.Comparator;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public enum SortType {
     BY_AVERAGE_SCORE,
     BY_TIME,

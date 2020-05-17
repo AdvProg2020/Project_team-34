@@ -47,9 +47,9 @@ public class ManageCategoriesMenu extends Menu {
                 newCategoryName = scanner.nextLine();
                 System.out.println("Enter the upper level category(if you dont want enter 0)");
                 parentName = scanner.nextLine();
-                if(parentName == "0"){
+                if(parentName.equals("0")){
                     try{
-                        controller.getProductController().controlAddCategory(newCategoryName, true,null);
+                        controller.getProductController().controlAddCategory(newCategoryName, true,"All Products");
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                         parentMenu.show();

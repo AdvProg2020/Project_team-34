@@ -2,6 +2,7 @@ package menu.profile.supervisorProfileMenu;
 
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
+import product.Product;
 
 public class ManageProductsMenu extends Menu {
     public ManageProductsMenu(Menu parentMenu) {
@@ -32,8 +33,8 @@ public class ManageProductsMenu extends Menu {
 
     @Override
     public void show() {
-        for (String product : controller.getProductController().controlGetAllProducts()) {
-            System.out.println(product);
+        for (Product product : controller.getProductController().controlGetAllProducts()) {
+            System.out.println("name =>" + product.getName() + "ID =>" + product.getProductId());
         }
         super.show();
     }

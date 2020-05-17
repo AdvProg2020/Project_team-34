@@ -87,11 +87,6 @@ public class AccountTest {
     }
 
     @Test
-    public void testSupervisorGetType(){
-        Assert.assertEquals("Supervisor", supervisor.getType());
-    }
-
-    @Test
     public void testSupervisorToString(){
         Assert.assertEquals("Supervisor{userName='rpirayadi', name='rouzbeh', familyName='pirayadi', email='r@yahoo'," +
                 " phoneNumber='34', password='r1234', credit=10000000}",supervisor.toString());

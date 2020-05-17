@@ -6,6 +6,11 @@ import product.Product;
 
 import java.util.ArrayList;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.1
+ */
+
 public class ProductInCart {
     private static final ArrayList<ProductInCart> allProductInCarts = new ArrayList<>();
     private static long numberOfObjectCreated = 0;

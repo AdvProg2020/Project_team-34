@@ -32,11 +32,6 @@ public class Customer extends Account {
     }
 
     @Override
-    public String getType() {
-        return "Customer";
-    }
-
-    @Override
     public String toString() {
         return "Customer{" +
                 "userName='" + userName + '\'' +

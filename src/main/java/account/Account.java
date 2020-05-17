@@ -1,6 +1,5 @@
 package account;
 
-
 import database.AccountDataBase;
 
 import java.util.ArrayList;
@@ -9,10 +8,11 @@ import java.util.ArrayList;
  * @author rpirayadi
  * @since 0.0.1
  */
+
 public abstract class Account {
     protected String userName , name , familyName , email , phoneNumber , password;
     protected int credit;
-    private static ArrayList<Account> allAccounts = new ArrayList<>();
+    private static final ArrayList<Account> allAccounts = new ArrayList<>();
 
     public Account(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit) {
         this.userName = userName;
@@ -52,7 +52,6 @@ public abstract class Account {
     public int getCredit() {
         return credit;
     }
-
 
     public static ArrayList<String> getAllUsername(){
         ArrayList <String> allUsername= new ArrayList<>();
@@ -106,7 +105,4 @@ public abstract class Account {
     public void removeAccount (){
         allAccounts.remove(this);
     }
-
-    public abstract String getType();
-
 }

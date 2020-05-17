@@ -21,23 +21,6 @@ public class OffController {
         this.mainController = mainController;
     }
 
-    public void controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
-        mainController.getCart().applyCodedDiscount(discountCode);
-    }
-
-    public void controlRemoveDiscountCode() throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
-        mainController.getCart().removeCodedDiscount();
-    }
     public ArrayList<CodedDiscount> controlGetAllCodedDiscounts(){
         return CodedDiscount.getCodedDiscounts();
     }

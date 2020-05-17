@@ -3,6 +3,8 @@ package menu.products;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.regex.Matcher;
 
 public class FilteringMenu extends Menu {
@@ -12,8 +14,12 @@ public class FilteringMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("Filters :");
-                for (String filter : controller.getProductController().controlGetAllAvailableFilters()) {
-                    System.out.println(filter);
+                HashMap<String , ArrayList<String>> filters = controller.getProductController().controlGetAllAvailableFilters();
+                for (String filter : filters.keySet()) {
+                    System.out.println(filter + " : ");
+                    for (String available : filters.get(filter)) {
+                        System.out.println(available);
+                    }
                 }
             }
 
@@ -34,7 +40,7 @@ public class FilteringMenu extends Menu {
 
             @Override
             public void execute() {
-                System.out.println("Pls select the filter type :");
+                System.out.println("Please select the filter type :");
                 String type = scanner.nextLine();
                 String regex = "^filter (.+)$";
                 Matcher matcher = getMatcher(command, regex);

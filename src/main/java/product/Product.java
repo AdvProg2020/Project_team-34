@@ -97,7 +97,13 @@ public class Product {
         return listOfSuppliers;
     }
 
-    public static Product getProductById(String productId){return null;}
+    public static Product getProductById(String productId){
+        for (Product eachProduct : allProduct) {
+            if(eachProduct.getProductId().equals(productId))
+                return eachProduct;
+        }
+        return null;
+    }
 
     public int getNumberOfViews() {
         return numberOfViews;

@@ -262,7 +262,11 @@ public class ProductController {
         for (Category category : Category.allCategories) {
             String categoryDescription = "";
             categoryDescription += "Name: " + category.getName() + " ";
-            categoryDescription += "Parent: " + category.getParentCategory().getName() + " ";
+            if (category.getParentCategory() == null) {
+                categoryDescription += "Parent: " + null + " ";
+            } else {
+                categoryDescription += "Parent: " + category.getParentCategory().getName() + " ";
+            }
             categoryDescription += "Is Category Classifier: " + category.isCategoryClassifier() + "\n";
             categoryDescription += "\t" + "Fields: " + category.getSpecialFields();
             allCategories += categoryDescription;

@@ -39,7 +39,7 @@ public class ProductDataBase {
         if (DataBase.doesIdAlreadyExist("Products", "productId", product.getProductId())) {
            return;
         }
-        String sql = "INSERT into Products (numberOfViews,productId ,productState, name, nameOfCompany, priceForEachSupplier," +
+        String sql = "INSERT into Products (numberOfViews,productId ,productState, name, priceForEachSupplier," +
                 "listOfSuppliers, remainedNumberForEachSupplier, description , specification, rootProductId)" +
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?)";
         try (Connection conn = connect();

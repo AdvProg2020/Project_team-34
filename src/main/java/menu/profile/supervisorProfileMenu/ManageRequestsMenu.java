@@ -16,7 +16,7 @@ public class ManageRequestsMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{
-                        controller.getProductController().controlShowDetailForRequest(matcher.group(1));
+                        System.out.println(controller.getProductController().controlShowDetailForRequest(matcher.group(1)));
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
@@ -63,7 +63,7 @@ public class ManageRequestsMenu extends Menu {
 
             @Override
             public void execute() {
-                String regex = "^accept (\\w+)$";
+                String regex = "^decline (\\w+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{

@@ -135,14 +135,16 @@ public class Category {
     public HashMap<String, String> implementedSpecification(Product product) {
         HashMap<String, String> implementedSpecification = new HashMap<>();
         HashMap<String, String> specification = product.getSpecification();
-        for (String key : specification.keySet()) {
-            if (specialFields.containsKey(key)) {
-                implementedSpecification.put(key, specification.get(key));
+        if (specification.size() != 0) {
+            for (String key : specification.keySet()) {
+                if (specialFields.containsKey(key)) {
+                    implementedSpecification.put(key, specification.get(key));
+                }
             }
-        }
-        for (String key : specialFields.keySet()) {
-            if (!implementedSpecification.containsKey(key)) {
-                implementedSpecification.put(key, "Not Assigned");
+            for (String key : specialFields.keySet()) {
+                if (!implementedSpecification.containsKey(key)) {
+                    implementedSpecification.put(key, "Not Assigned");
+                }
             }
         }
         return implementedSpecification;

@@ -67,7 +67,7 @@ public class ManageRequestsMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{
-                        controller.getProductController().controlAcceptOrDeclineRequest(matcher.group(1), true);
+                        controller.getProductController().controlAcceptOrDeclineRequest(matcher.group(1), false);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }

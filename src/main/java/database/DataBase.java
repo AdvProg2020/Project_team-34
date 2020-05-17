@@ -123,6 +123,8 @@ public class DataBase {
     }
 
     public static ArrayList<Product> convertStringArrayListToProductArrayList(ArrayList<String> stringArrayList){
+        if(stringArrayList == null)
+            return null;
         ArrayList<Product> productArrayList = new ArrayList<>();
         for (String eachId : stringArrayList) {
             productArrayList.add(Product.getProductById(eachId));

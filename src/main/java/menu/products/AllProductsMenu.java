@@ -1,6 +1,7 @@
 package menu.products;
 
 import menu.menuAbstract.Menu;
+import product.Product;
 
 public class AllProductsMenu extends Menu {
     public AllProductsMenu(Menu parentMenu) {
@@ -35,9 +36,8 @@ public class AllProductsMenu extends Menu {
 
             @Override
             public void execute() {
-                for (String product : controller.getProductController().controlGetAllProducts()) {
-                    //Need a quick introduction!
-                    System.out.println(product);
+                for (Product product : controller.getProductController().controlGetAllProducts()) {
+                    System.out.println("name =>" + product.getName() + "ID =>" + product.getProductId());
                 }
                 parentMenu.show();
                 parentMenu.execute();
@@ -55,8 +55,8 @@ public class AllProductsMenu extends Menu {
 
     @Override
     public void show() {
-        for (String product : controller.getProductController().controlGetAllProducts()) {
-            System.out.println(product);
+        for (Product product : controller.getProductController().controlGetAllProducts()) {
+            System.out.println("name =>" + product.getName() + "ID =>" + product.getProductId());
         }
         super.show();
     }

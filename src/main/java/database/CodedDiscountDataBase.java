@@ -20,7 +20,7 @@ public class CodedDiscountDataBase {
         content.put("discountCode" , "String");
         content.put("maxDiscountAmount" , "int");
         content.put("usedDiscountPerCustomer" , "String");
-        content.put("listOfCustomers" , "String");
+        content.put("maximumNumberOfUsagePerCustomer" , "String");
 
         DataBase.createNewTable("CodedDiscounts", content);
     }
@@ -29,7 +29,7 @@ public class CodedDiscountDataBase {
         if (DataBase.doesIdAlreadyExist("CodedDiscounts","discountCode", codedDiscount.getDiscountCode())) {
             return;
         }
-        String sql = "INSERT into DiscountCodes (start , end , percent, discountCode, maxDiscountAmount,usedDiscountPerCustomer , listOfCustomers) " +
+        String sql = "INSERT into DiscountCodes (start , end , percent, discountCode, maxDiscountAmount,usedDiscountPerCustomer , maximumNumberOfUsagePerCustomer) " +
                 "VALUES (?,?, ? , ? , ? , ?,?)";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
@@ -40,7 +40,7 @@ public class CodedDiscountDataBase {
             statement.setString(4,codedDiscount.getDiscountCode());
             statement.setInt(5, codedDiscount.getMaxDiscountAmount());
             statement.setString(6, convertObjectToJsonString(convertCustomerHashMapToStringHashMap(codedDiscount.getUsedDiscountPerCustomer())));
-            statement.setString(7, convertObjectToJsonString(convertCustomerArrayListToStringArrayList(codedDiscount.getCustomers())));
+            statement.setString(7, convertObjectToJsonString(convertCustomerHashMapToStringHashMap(codedDiscount.getMaximumNumberOfUsagePerCustomer())));
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -103,12 +103,12 @@ public class CodedDiscountDataBase {
                 String discountCode = resultSet.getString("discountCode");
                 int maxDiscountAmount = resultSet.getInt("maxDiscountAmount");
                 HashMap<Customer , Integer> usedDiscountPerCustomer = convertStringHashMapToCustomerHashMap(convertJsonToHashMap(resultSet.getString("usedDiscountPerCustomer")));
-                ArrayList<Customer> listOfCustomers =convertStringArrayListToCustomerArrayList(convertJsonToArrayList("listOfCustomers"));
+                HashMap<Customer,Integer> maximumNumberOfUsagePerCustomer = convertStringHashMapToCustomerHashMap(convertJsonToHashMap(resultSet.getString("maximumNumberOfUsagePerCustomer")));
 
 
 
 
-                new CodedDiscount(start,end,percent,discountCode,maxDiscountAmount,usedDiscountPerCustomer,listOfCustomers);
+                new CodedDiscount(start,end,percent,discountCode,maxDiscountAmount,usedDiscountPerCustomer,maximumNumberOfUsagePerCustomer);
 
             }
         } catch (SQLException e) {

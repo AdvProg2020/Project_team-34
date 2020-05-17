@@ -111,6 +111,8 @@ public class DataBase {
 
 
     public static ArrayList<String> convertProductArrayListToStringArrayList(ArrayList<Product> productArrayList){
+        if(productArrayList == null )
+            return null;
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (Product eachProduct : productArrayList) {
             stringArrayList.add(eachProduct.getProductId());
@@ -148,7 +150,7 @@ public class DataBase {
         ScoreDataBase.createNewTable();
         CodedDiscountDataBase.createNewTable();
         SaleDataBase.createNewTable();
-        ProductDataBase.createNewTable();
+        ProductInCartDataBase.createNewTable();
         ShippingInfoDataBase.createNewTable();
         CartDataBase.createNewTable();
         CustomerLogDataBase.createNewTable();

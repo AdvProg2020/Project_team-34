@@ -178,7 +178,7 @@ public class Product {
         return listOfSuppliers;
     }
 
-    private ArrayList<Product> getConfirmedProducts(){
+    private static ArrayList<Product> getConfirmedProducts(){
         ArrayList<Product> confirmedProducts = new ArrayList<>();
         for (Product eachProduct : allProduct) {
             if(eachProduct.getProductState() == State.CONFIRMED)
@@ -186,8 +186,19 @@ public class Product {
         }
         return confirmedProducts;
     }
+
+
     public static Product getProductById(String productId){
         for (Product eachProduct : allProduct) {
+            if(eachProduct.getProductId().equals(productId))
+                return eachProduct;
+        }
+        return null;
+    }
+
+    public static Product getConFirmedProductById(String productId){
+        ArrayList<Product> confirmedProducts = getConfirmedProducts();
+        for (Product eachProduct : confirmedProducts) {
             if(eachProduct.getProductId().equals(productId))
                 return eachProduct;
         }
@@ -242,14 +253,26 @@ public class Product {
         remainedNumberForEachSupplier.put(supplier,remainedNumber);
     }
     public boolean isProductAvailableNow() {
+        for (Supplier supplier : remainedNumberForEachSupplier.keySet()) {
+            if(remainedNumberForEachSupplier.get(supplier) > 0)
+                return true;
+        }
         return false;
     }
 
     public boolean isProductProvidedInPriceLowerThan(int upperBound) {
+        for (Supplier supplier : priceForEachSupplier.keySet()) {
+            if(priceForEachSupplier.get(supplier) <= upperBound )
+                return true;
+        }
         return false;
     }
 
     public boolean isProductProvidedInPriceUpperThan(int lowerBound) {
+        for (Supplier supplier : priceForEachSupplier.keySet()) {
+            if(priceForEachSupplier.get(supplier) >= lowerBound)
+                return true;
+        }
         return false;
     }
 

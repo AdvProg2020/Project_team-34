@@ -436,9 +436,8 @@ public class ProductController {
         return false;
     }
 
-    public ArrayList<String> controlGetAllProducts(){
-        //apply filters and sorts!
-        return null;
+    public ArrayList<Product> controlGetAllProducts(){
+        return filterAndSort.getProducts();
     }
 
     public String controlShowAvailableFilters(){

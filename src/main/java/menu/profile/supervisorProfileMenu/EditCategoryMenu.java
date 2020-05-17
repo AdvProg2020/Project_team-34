@@ -43,17 +43,17 @@ public class EditCategoryMenu extends Menu {
                 String filterKey = scanner.nextLine();
                 System.out.print("Enter filter values separated by \",\" in a line: ");
                 String filterValues = scanner.nextLine();
-                //try {
-                    //controller.controlAddSpecialFilterToCategory(category.getName(), filterKey, filterValues);
-                //} catch (ExceptionalMassage e) {
-                   // System.out.println(e.getMessage());
-                //}
+                try {
+                    controller.getProductController().controlAddSpecialFieldToCategory(category.getName(), filterKey, filterValues);
+                } catch (ExceptionalMassage e) {
+                    System.out.println(e.getMessage());
+                }
             }
         };
         menusIn.put("add special filter", AddSpecialFilter);
         menuForShow.add("Add Special Filter");
 
-        Menu RemoveSpecialFilter = new Menu("Remove Special Filter Command", this) {
+        Menu RemoveSpecialField = new Menu("Remove Special Filter Command", this) {
             @Override
             public void show() {
                 System.out.println("Add Special Filter: ");
@@ -63,14 +63,14 @@ public class EditCategoryMenu extends Menu {
             public void execute() {
                 System.out.print("Enter filter key: ");
                 String filterKey = scanner.nextLine();
-                //try {
-                    //controller.controlRemoveSpecialFilterFromCategory(category.getName(), filterKey);
-                //} catch (ExceptionalMassage e) {
-                    //System.out.println(e.getMessage());
-                //}
+                try {
+                    controller.getProductController().controlRemoveSpecialFieldFromCategory(category.getName(), filterKey);
+                } catch (ExceptionalMassage e) {
+                    System.out.println(e.getMessage());
+                }
             }
         };
-        menusIn.put("remove special filter", AddSpecialFilter);
-        menuForShow.add("Remove Special Filter");
+        menusIn.put("remove special field", RemoveSpecialField);
+        menuForShow.add("Remove Special Field");
     }
 }

@@ -138,11 +138,8 @@ public class Sale extends Discount{
     }
 
     public static Sale getProductSale(Product product, Supplier supplier) {
-        //HAZARD!!!
-        //this method has written by Aryan Ahadinia for use in Cart.java
-        //usable!
         for (Sale sale : sales) {
-            if (sale.isProductInSale(product) && sale.getSupplier() == supplier) {
+            if (sale.isProductInSale(product) && sale.getSupplier() == supplier && sale.isSaleActive()) {
                 return sale;
             }
         }

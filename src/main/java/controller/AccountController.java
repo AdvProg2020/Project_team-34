@@ -7,6 +7,7 @@ import account.Supplier;
 import cart.Cart;
 import cart.ShippingInfo;
 import exceptionalMassage.ExceptionalMassage;
+import log.CustomerLog;
 import product.Product;
 
 import java.util.ArrayList;
@@ -274,9 +275,17 @@ public class AccountController {
         mainController.getCart().removeCodedDiscount();
     }
 
-    public boolean controlFinalizeOrder() {
-        return false;
-        //discount code usage
+    public void FinalizeOrder() throws ExceptionalMassage {
+        Account account = mainController.getAccount();
+        if (account == null)
+            throw new ExceptionalMassage("Login First.");
+        if (!(account instanceof Customer))
+            throw new ExceptionalMassage("Login as a customer.");
+        Cart cart = mainController.getCart();
+        Customer customer = (Customer) mainController.getAccount();
+        customer.setCart(new Cart(customer));
+        mainController.setCart(customer.getCart());
+        CustomerLog customerLog = new CustomerLog(cart);
         //customer credit decrease
     }
 }

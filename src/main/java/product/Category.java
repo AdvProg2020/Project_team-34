@@ -152,10 +152,9 @@ public class Category {
             throw new ExceptionalMassage("This product has already added to this category. <Category.addProduct>");
         if (Category.getProductCategory(product) != null)
             throw new ExceptionalMassage("This product has already added to another category. <Category.addProduct>");
-
+        product.setSpecification(implementedSpecification(product));
         this.allProductsIn.add(product);
         CategoryDataBase.update(this);
-        //modify product specifications
     }
 
     public void removeProduct(Product product) throws ExceptionalMassage {
@@ -261,9 +260,11 @@ public class Category {
             ArrayList<String> filterKeyValue = new ArrayList<>();
             filterKeyValue.add(filterValue);
             specialFields.put(filterKey, filterKeyValue);
+            for (Product product : allProductsIn) {
+                product.setSpecification(implementedSpecification(product));
+            }
         }
         CategoryDataBase.update(this);
-        //modify product specifications
     }
 
     public void removeField(String filterKey, String filterValue) throws ExceptionalMassage {
@@ -274,6 +275,9 @@ public class Category {
         if (!this.specialFields.get(filterKey).contains(filterValue))
             throw new ExceptionalMassage("\"" + filterValue + "\" " + "not found in " + "\"" + filterKey + "\". " + "<Category.removeFilter>");
         specialFields.get(filterKey).remove(filterValue);
+        for (Product product : allProductsIn) {
+            product.setSpecification(implementedSpecification(product));
+        }
         CategoryDataBase.update(this);
         //modify product specifications
     }

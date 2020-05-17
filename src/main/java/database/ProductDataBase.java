@@ -39,7 +39,7 @@ public class ProductDataBase {
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name,nameOfCompany,  priceForEachSupplier," +
                 "listOfSuppliers, remainedNumberForEachSupplier, description , specification, rootProductId)" +
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?)";
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?)";
         try (Connection conn = connect();
              PreparedStatement statement = conn.prepareStatement(sql)) {
 

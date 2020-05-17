@@ -92,11 +92,18 @@ public class Cart {
     //Setters:
     public void setOwner(Customer owner) {
         if (owner != null) {
-            this.owner = owner;
-            CartDataBase.update(this);
-        } else if (this.owner != null){
-            this.owner = null; //owner will be always null here
-            CartDataBase.delete(identifier); //check
+            if (this.owner != null) {
+                this.owner = owner;
+                CartDataBase.update(this);
+            } else {
+                this.owner = owner;
+                CartDataBase.add(this);
+            }
+        } else {
+            if (this.owner != null) {
+                this.owner = null;
+                CartDataBase.delete(this.getIdentifier());
+            }
         }
     }
 
@@ -189,7 +196,10 @@ public class Cart {
     }
 
     public void update() {
-        //update database
+        for (ProductInCart productInCart : productsIn) {
+            productInSale.replace(productInCart, Sale.getProductSale(productInCart.getProduct(), productInCart.getSupplier()));
+        }
+        CartDataBase.update(this);
     }
 
     public void applyCodedDiscount(String discountCode) throws ExceptionalMassage {
@@ -203,7 +213,6 @@ public class Cart {
         if (!discount.canCustomerUseCode(owner)) {
             throw new ExceptionalMassage("You can't use this code.");
         }
-        //check for time
         setCodedDiscount(discount);
     }
 

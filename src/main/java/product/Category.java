@@ -73,7 +73,8 @@ public class Category {
             throw new ExceptionalMassage("Category " + parentCategoryName + " is a product classifier.");
         Category addingCategory = new Category(name, isParentCategory, parentCategoryName);
         parentCategory.addToSubCategoryList(addingCategory);
-        CategoryDataBase.update(parentCategory);
+        if (parentCategory != superCategory)
+            CategoryDataBase.update(parentCategory);
         return addingCategory;
     }
 
@@ -123,8 +124,19 @@ public class Category {
     }
 
     public HashMap<String, String> implementedSpecification(Product product) {
-        HashMap<String, String> specifications = new HashMap<>(product.getSpecification());
-        return null;
+        HashMap<String, String> implementedSpecification = new HashMap<>();
+        HashMap<String, String> specification = product.getSpecification();
+        for (String key : specification.keySet()) {
+            if (specialFields.containsKey(key)) {
+                implementedSpecification.put(key, specification.get(key));
+            }
+        }
+        for (String key : specialFields.keySet()) {
+            if (!implementedSpecification.containsKey(key)) {
+                implementedSpecification.put(key, "Not Assigned");
+            }
+        }
+        return implementedSpecification;
     }
 
     public void addProduct(Product product) throws ExceptionalMassage {

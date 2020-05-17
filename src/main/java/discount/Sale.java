@@ -1,6 +1,7 @@
 package discount;
 
 import account.Supplier;
+import database.ProductDataBase;
 import database.SaleDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
@@ -190,6 +191,42 @@ public class Sale extends Discount{
     private static String convertRequestIdToSaleId(String productId){
         return  "T34S"+productId.substring(5);
     }
+
+    public static void acceptOrDeclineRequest(String requestId, boolean isAccepted) throws  ExceptionalMassage{
+        Sale saleRequest = Sale.getSaleById(convertRequestIdToSaleId(requestId));
+        if(saleRequest == null)
+            throw new ExceptionalMassage("Invalid request identifier");
+        if(!isAccepted) {
+            sales.remove(saleRequest);
+            ProductDataBase.delete(saleRequest.getOffId());
+            return;
+        }
+        if(saleRequest.getState() == State.PREPARING_TO_BUILD) {
+            saleRequest.setState(State.CONFIRMED);
+            SaleDataBase.update(saleRequest);
+        }
+        else {
+            setRequestValuesInRealSale(saleRequest);
+            sales.remove(saleRequest);
+            ProductDataBase.delete(saleRequest.getOffId());
+            SaleDataBase.update(Sale.getSaleById(saleRequest.getRootSaleId()));
+        }
+
+    }
+
+    public void setProducts(ArrayList<Product> products) {
+        this.products = products;
+    }
+
+    private static void setRequestValuesInRealSale(Sale saleRequest){
+        Sale realSale = Sale.getSaleById(saleRequest.getRootSaleId());
+        realSale.setStart(saleRequest.getStart());
+        realSale.setEnd(saleRequest.getEnd());
+        realSale.setPercent(saleRequest.getPercent());
+        realSale.setProducts(saleRequest.getProducts());
+
+    }
+
 
 
 

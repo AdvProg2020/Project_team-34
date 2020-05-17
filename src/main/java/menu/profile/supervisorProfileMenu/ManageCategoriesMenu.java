@@ -8,31 +8,10 @@ import java.util.regex.Matcher;
 public class ManageCategoriesMenu extends Menu {
     public ManageCategoriesMenu(Menu parentMenu) {
         super("Manage Categories Menu", parentMenu);
-        Menu  editCategory = new Menu("Edit Category", this) {
-            @Override
-            public void show() {
-            }
 
-            @Override
-            public void execute() {
-                String regex = "^edit (\\w+)$";
-                Matcher matcher = getMatcher(command, regex);
-                if(matcher.find()){
-                    String newName;
-                    System.out.println("Enter the new Name: ");
-                    newName  = scanner.nextLine();
-                    try {
-                        controller.getProductController().controlChangeCategoryName(matcher.group(1), newName);
-                    } catch (ExceptionalMassage ex){
-                        System.out.println(ex.getMessage());
-                    }
-                }
-                parentMenu.show();
-                parentMenu.execute();
-            }
-        };
-        menusIn.put("^edit \\w+$", editCategory);
-        menuForShow.add("Edit");
+        menusIn.put("^edit category (\\w+)$", new EditCategoryMenu("Edit category",this));
+        menuForShow.add("Edit category");
+
 
         Menu RemoveProduct = new Menu("Add category", this) {
             @Override

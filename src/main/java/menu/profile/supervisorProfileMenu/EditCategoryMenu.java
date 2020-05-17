@@ -3,13 +3,15 @@ package menu.profile.supervisorProfileMenu;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 import product.Category;
+import product.Product;
+
+import java.util.regex.Matcher;
 
 public class EditCategoryMenu extends Menu {
     Category category;
 
-    public EditCategoryMenu(String menuName, Menu parentMenu, Category category) {
+    public EditCategoryMenu(String menuName, Menu parentMenu) {
         super(menuName, parentMenu);
-        this.category = category;
 
         Menu EditName = new Menu("Edit Category Name Command", this) {
             @Override
@@ -74,5 +76,20 @@ public class EditCategoryMenu extends Menu {
         };
         menusIn.put("remove special field", RemoveSpecialField);
         menuForShow.add("Remove Special Field");
+    }
+
+    @Override
+    public void execute() {
+        String regex = "^edit category (\\w+)$";
+        Matcher matcher = getMatcher(command, regex);
+        if(matcher.find()){
+            if(Category.getCategoryByName(matcher.group(1)) == null){
+                System.out.println("No such category");
+                parentMenu.show();
+                parentMenu.execute();
+            }
+            category = Category.getCategoryByName(matcher.group(1));
+        }
+        super.execute();
     }
 }

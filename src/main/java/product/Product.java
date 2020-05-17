@@ -288,15 +288,20 @@ public class Product {
 
     public static String getDetailsForProductRequest(String requestId){
         Product product = Product.getProductById(convertRequestIdToProductId(requestId));
-        Product rootProduct = Product.getProductById(product.getRootProductId());
         StringBuilder result = new StringBuilder();
-        result.append("name= ").append(rootProduct.getName()).append("==>").append(product.getName()).append("\n");
-        result.append("nameOfCompany= ").append(rootProduct.getNameOfCompany()).append("==>").append(product.getNameOfCompany()).append("\n");
-        result.append("description= ").append(rootProduct.getDescription()).append("==>").append(product.getDescription()).append("\n");
-        HashMap<String, String> firstSpecification = rootProduct.getSpecification();
-        HashMap<String, String> secondSpecification = product.getSpecification();
-        for (String specialField : firstSpecification.keySet()) {
-            result.append(specialField).append("= ").append(firstSpecification.get(specialField)).append("==>").append(secondSpecification.get(specialField)).append("\n");
+        if(product.getProductState() == State.PREPARING_TO_EDIT){
+            Product rootProduct = Product.getProductById(product.getRootProductId());
+            result.append("name= ").append(rootProduct.getName()).append("==>").append(product.getName()).append("\n");
+            result.append("nameOfCompany= ").append(rootProduct.getNameOfCompany()).append("==>").append(product.getNameOfCompany()).append("\n");
+            result.append("description= ").append(rootProduct.getDescription()).append("==>").append(product.getDescription()).append("\n");
+            HashMap<String, String> firstSpecification = rootProduct.getSpecification();
+            HashMap<String, String> secondSpecification = product.getSpecification();
+            for (String specialField : firstSpecification.keySet()) {
+                result.append(specialField).append("= ").append(firstSpecification.get(specialField)).append("==>").append(secondSpecification.get(specialField)).append("\n");
+            }
+        }
+        else {
+            result.append(product.toString());
         }
         return String.valueOf(result);
     }
@@ -343,6 +348,18 @@ public class Product {
         return  "T34P"+productId.substring(5);
     }
 
-
-
+    @Override
+    public String toString() {
+        return "Product{" +
+                "numberOfViews=" + numberOfViews +
+                ", productId='" + productId + '\'' +
+                ", name='" + name + '\'' +
+                ", nameOfCompany='" + nameOfCompany + '\'' +
+                ", priceForEachSupplier=" + priceForEachSupplier +
+                ", listOfSuppliers=" + listOfSuppliers +
+                ", remainedNumberForEachSupplier=" + remainedNumberForEachSupplier +
+                ", description='" + description + '\'' +
+                ", specification=" + specification +
+                '}';
+    }
 }

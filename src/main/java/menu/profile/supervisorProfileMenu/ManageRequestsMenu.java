@@ -12,7 +12,7 @@ public class ManageRequestsMenu extends Menu {
         Menu Details = new Menu("Details", this) {
             @Override
             public void show() {
-                String regex = "^$details (\\w+)";
+                String regex = "^details (\\w+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try{
@@ -30,7 +30,7 @@ public class ManageRequestsMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("^$details (\\w+)", Details);
+        menusIn.put("^details (\\w+)$", Details);
         menuForShow.add("Details");
 
         Menu AcceptRequest = new Menu("Accept Request", this) {

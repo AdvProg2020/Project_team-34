@@ -8,7 +8,10 @@ import account.Supplier;
 import java.sql.*;
 import java.util.HashMap;
 
-
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ */
 public class AccountDataBase {
 
     public static void createNewTable() {

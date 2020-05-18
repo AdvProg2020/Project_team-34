@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.Date;
 import static database.DataBase.*;
 
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ */
 public class SaleDataBase {
     public static void createNewTable() {
         HashMap<String, String> content = new HashMap<>();

@@ -34,14 +34,13 @@ public class Customer extends Account {
 
     @Override
     public String toString() {
-        return "Customer{" +
-                "userName='" + userName + '\'' +
-                ", name='" + name + '\'' +
-                ", familyName='" + familyName + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", password='" + password + '\'' +
-                ", credit=" + credit +
-                '}';
+        return "Customer: \n" +
+                "userName='" + userName +  "\n" +
+                "name='" + name +"\n" +
+                "familyName='" + familyName + "\n" +
+                "email='" + email + "\n" +
+                "phoneNumber='" + phoneNumber + "\n" +
+                "password='" + password + "\n" +
+                "credit=" + credit +"\n" ;
     }
 }

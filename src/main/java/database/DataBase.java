@@ -9,6 +9,10 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ */
 public class DataBase {
 
     private  final static String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";

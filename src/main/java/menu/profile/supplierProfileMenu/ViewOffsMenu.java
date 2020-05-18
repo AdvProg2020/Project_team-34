@@ -1,5 +1,6 @@
 package menu.profile.supplierProfileMenu;
 
+import account.Supplier;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 import product.Product;
@@ -148,7 +149,14 @@ public class ViewOffsMenu extends Menu {
                     if(Product.getProductById(productId) == null){
                         System.out.println("no such id!");
                     } else {
-                        addingProduct.add(Product.getProductById(productId));
+                        try{
+                            if(controller.getProductController().doesThisSupplierSellThisProduct((Supplier)controller.getAccount(),Product.getProductById(productId)))
+                                addingProduct.add(Product.getProductById(productId));
+                            else
+                                System.out.println("You can't sell this product!");
+                        } catch (ExceptionalMassage ex){
+                            System.out.println(ex.getMessage());
+                        }
                     }
                     System.out.println("Enter the adding products IDs :");
                 }

@@ -11,6 +11,10 @@ import java.util.HashMap;
 
 import static database.DataBase.connect;
 
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ */
 public class CommentDataBase {
 
     public static void createNewTable() {

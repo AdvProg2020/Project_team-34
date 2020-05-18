@@ -11,6 +11,10 @@ import java.util.HashMap;
 
 import static database.DataBase.*;
 
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ */
 public class CodedDiscountDataBase {
     public static void createNewTable() {
         HashMap<String, String> content = new HashMap<>();

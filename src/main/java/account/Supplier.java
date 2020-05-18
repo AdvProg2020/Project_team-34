@@ -37,15 +37,14 @@ public class Supplier extends Account{
 
     @Override
     public String toString() {
-        return "Supplier{" +
-                "userName='" + userName + '\'' +
-                ", name='" + name + '\'' +
-                ", familyName='" + familyName + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                ", password='" + password + '\'' +
-                ", credit=" + credit +
-                ", nameOfCompany='" + nameOfCompany + '\'' +
-                '}';
+        return "Supplier :" +
+                "userName='" + userName +'\''+  "\n"+
+                "name='" + name +'\''+  "\n"+
+                "familyName='" + familyName +'\''+  "\n"+
+                "email='" + email  +'\''+  "\n"+
+                "phoneNumber='" +'\''+  "\n"+
+                "password='" + password +'\''+  "\n"+
+                "credit=" + credit +'\''+  "\n"+
+                "nameOfCompany='" + nameOfCompany +'\''+  "\n";
     }
 }

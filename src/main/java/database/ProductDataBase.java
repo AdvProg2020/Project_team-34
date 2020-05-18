@@ -13,6 +13,10 @@ import java.util.HashMap;
 
 import static database.DataBase.*;
 
+/**
+ * @author rpirayadi
+ * @since 0.0.1
+ */
 public class ProductDataBase {
 
     public static void createNewTable() {

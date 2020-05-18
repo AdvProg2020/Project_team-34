@@ -115,21 +115,21 @@ public class ViewOffsMenu extends Menu {
             @Override
             public void execute() {
                 ArrayList<Product> addingProduct = new ArrayList<>();
-                System.out.println("Enter the starting date: (dd/MM/yyyy HH:mm:ss) ");
+                System.out.println("Enter the starting date: (dd/MM/yyyy) ");
                 String startingDate = scanner.nextLine();
                 Date startDate = null;
                 try {
-                    startDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(startingDate);
+                    startDate = new SimpleDateFormat("dd/MM/yyyy").parse(startingDate);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                     parentMenu.show();
                     parentMenu.execute();
                 }
-                System.out.println("Enter the ending date: (dd/MM/yyyy HH:mm:ss) ");
+                System.out.println("Enter the ending date: (dd/MM/yyyy) ");
                 String endingDate = scanner.nextLine();
                 Date endDate = null;
                 try {
-                    endDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(endingDate);
+                    endDate = new SimpleDateFormat("dd/MM/yyyy").parse(endingDate);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                     parentMenu.show();
@@ -137,7 +137,11 @@ public class ViewOffsMenu extends Menu {
                 }
                 System.out.println("enter the percent :");
                 int percent = 0;
-                percent = scanner.nextInt();
+                try {
+                    percent = Integer.parseInt(scanner.nextLine());
+                }catch (Exception ex){
+                    System.out.println(ex.getMessage());
+                }
                 String productId = null;
                 System.out.println("Enter the adding products IDs :");
                 while(!(productId = scanner.nextLine()).equalsIgnoreCase("end")){
@@ -146,6 +150,7 @@ public class ViewOffsMenu extends Menu {
                     } else {
                         addingProduct.add(Product.getProductById(productId));
                     }
+                    System.out.println("Enter the adding products IDs :");
                 }
                 controller.getOffController().controlCreateSale(startDate, endDate, percent, addingProduct);
                 parentMenu.show();

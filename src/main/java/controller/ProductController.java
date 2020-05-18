@@ -159,13 +159,10 @@ public class ProductController {
         return null;
     }
 
-    public boolean doesThisSupplierSellThisProduct(Product product) throws ExceptionalMassage {
+    public boolean doesThisSupplierSellThisProduct(Supplier seller,Product product) throws ExceptionalMassage {
         if (mainController.getAccount() == null)
             throw new ExceptionalMassage("Sing in first.");
-        if(!(mainController.getAccount() instanceof Supplier))
-            throw new ExceptionalMassage("Login as a Supplier");
-        Supplier supplier = (Supplier)mainController.getAccount();
-        return product.doesSupplierSellThisProduct(supplier);
+        return product.doesSupplierSellThisProduct(seller);
     }
 
     //related to Category:

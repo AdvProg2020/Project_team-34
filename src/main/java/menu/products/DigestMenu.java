@@ -40,10 +40,7 @@ public class DigestMenu extends Menu {
         Menu selectSeller = new Menu("Select Seller", this) {
             @Override
             public void show() {
-                System.out.println("Sellers :");
-                for (Supplier supplier : controller.getProductController().controlGetAllSuppliersForAProduct(product)) {
-                    System.out.println(supplier.getUserName());
-                }
+
             }
 
             @Override
@@ -52,11 +49,12 @@ public class DigestMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try {
-                        if (controller.getProductController().doesThisSupplierSellThisProduct(product)) {
-                            seller = (Supplier) (Account.getAccountByUsername(matcher.group(1)));
+                        seller = (Supplier) (Account.getAccountByUsername(matcher.group(1)));
+                        if(seller == null){
+                            System.out.println("No such supplier!");
+                        }
+                        if (controller.getProductController().doesThisSupplierSellThisProduct(seller, product)) {
                             System.out.println("Seller selected!");
-                        } else {
-                            System.out.println("This seller is not available for this product!");
                         }
                     }
                     catch (ExceptionalMassage ex){

@@ -327,8 +327,15 @@ public class Cart {
 
     @Override
     public String toString() {
+        update();
         StringBuilder cart = new StringBuilder("Cart, Identifier: " + identifier + " for <username: " + owner.getUserName() + ">" + "\n");
-        cart.append(shippingInfo.toString()).append("\n");
+        if (shippingInfo != null)
+            cart.append(shippingInfo.toString()).append("\n");
+        if (codedDiscount != null)
+            cart.append(codedDiscount.getDiscountCode()).append("\n");
+        cart.append("Bill: ").append(getBill()).append("\n");
+        cart.append("Sale: ").append(getAmountOfSale()).append("\n");
+        cart.append("Coded Discount Amount: ").append(getAmountOfCodedDiscount()).append("\n");
         int i = 1;
         for (ProductInCart productInCart : productsIn) {
             cart.append("Product").append(i).append(". ").append(productInCart.getProduct().getProductId()).append(" from ").append(productInCart.getSupplier().getNameOfCompany()).append(" X ").append(productInCount.get(productInCart)).append("\n");
@@ -337,4 +344,3 @@ public class Cart {
         return cart.toString();
     }
 }
-

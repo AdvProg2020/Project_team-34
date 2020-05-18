@@ -321,10 +321,16 @@ public class Category {
             return specialFields;
         } else {
             Set<String> keys = new HashSet<>();
+            boolean firstRetain = true;
             for (String categoryName : allCategoriesInName) {
                 Category category = getCategoryByName(categoryName);
                 Set<String> categoryFilterKeys = category.getAvailableSpecialFilters().keySet();
-                keys.retainAll(categoryFilterKeys);
+                if (firstRetain) {
+                    keys.addAll(categoryFilterKeys);
+                    firstRetain = false;
+                } else {
+                    keys.retainAll(categoryFilterKeys);
+                }
             }
             HashMap<String, ArrayList<String>> availableFilters = new HashMap<>();
             for (String key : keys) {

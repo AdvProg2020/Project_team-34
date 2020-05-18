@@ -75,7 +75,7 @@ public class ManageProductsMenu extends Menu {
                     newAttribute =scanner.nextLine();
                     fieldToChange.put(field, newAttribute);
                 }
-                if(matcher.find()){
+                if (matcher.find()){
                     try {
                         controller.getProductController().controlEditProductById(matcher.group(1), fieldToChange);
                     } catch (ExceptionalMassage ex){

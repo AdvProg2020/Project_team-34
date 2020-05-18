@@ -119,17 +119,20 @@ public class Category {
     }
 
     public void setName(String name) throws ExceptionalMassage {
+        if (name.equals("All Products"))
+            throw new ExceptionalMassage("You cannot modify this category.");
         if (getCategoryByName(name) != null) {
             throw new ExceptionalMassage("Category with this name has already initialized. <Category.setName>");
         }
         CategoryDataBase.delete(this.name);
         getParentCategory().allCategoriesInName.remove(this.name);
         getParentCategory().allCategoriesInName.add(name);
-        CategoryDataBase.update(getParentCategory());
         this.name = name;
         for (Category category : getAllCategoriesIn()) {
             category.setParentCategoryName(name);
         }
+        if (getParentCategory() != superCategory)
+            CategoryDataBase.update(getParentCategory());
         CategoryDataBase.add(this);
     }
 

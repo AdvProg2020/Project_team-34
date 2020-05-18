@@ -67,7 +67,7 @@ public class LoginMenu extends Menu {
                 }
                 int credit = 0;
                 if (type.equals("customer")) {
-                    System.out.println("Enter credit: ");
+                    System.out.print("Enter credit: ");
                     credit = scanner.nextInt();
                     String junk = scanner.nextLine();
                 }

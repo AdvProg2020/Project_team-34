@@ -20,7 +20,7 @@ public class ManageCategoriesMenu extends Menu {
 
             @Override
             public void execute() {
-                System.out.println("Enter the name:");
+                System.out.print("Enter the name:");
                 String newCategoryName = scanner.nextLine();
                 System.out.print("Enter the upper level category (if you dont want enter 0): ");
                 String parentName = scanner.nextLine();

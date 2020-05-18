@@ -76,6 +76,7 @@ public class AccountController {
 
     private void controlCreateSupervisor(String username, String name, String familyName, String email,
                                          String phoneNumber, String password, int credit) throws ExceptionalMassage {
+        mainController.setIsFirstSupervisorCreated(Account.isSupervisorCreated());
         if (mainController.getIsFirstSupervisorCreated()) {
             if (mainController.getAccount() == null)
                 throw new ExceptionalMassage("You must login as supervisor before create a supervisor account.");

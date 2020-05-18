@@ -45,7 +45,7 @@ public class EditCategoryMenu extends Menu {
             public void execute() {
                 System.out.print("Enter filter key: ");
                 String filterKey = scanner.nextLine();
-                System.out.print("Enter filter values separated by \",\" in a line: ");
+                System.out.print("Enter filter values: ");
                 String filterValues = scanner.nextLine();
                 try {
                     controller.getProductController().controlAddSpecialFieldToCategory(category.getName(), filterKey, filterValues);

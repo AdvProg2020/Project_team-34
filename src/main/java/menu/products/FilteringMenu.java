@@ -14,6 +14,11 @@ public class FilteringMenu extends Menu {
             @Override
             public void show() {
                 System.out.println("Filters :");
+                System.out.println("price\n"+
+                                    "name\n"+
+                                    "category\n"+
+                                    "availability\n"+
+                                    "brand");
                 HashMap<String , ArrayList<String>> filters = controller.getProductController().controlGetAllAvailableFilters();
                 for (String filter : filters.keySet()) {
                     System.out.println(filter + " : ");
@@ -40,16 +45,73 @@ public class FilteringMenu extends Menu {
 
             @Override
             public void execute() {
-                System.out.println("Please select the filter type :");
-                String type = scanner.nextLine();
                 String regex = "^filter (.+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    try {
-                        controller.getProductController().controlFilterAddSpecialFilter(matcher.group(1), type);
+                    if(matcher.group(1).equals("price")){
+                        System.out.println("Enter upper price bound:  (Enter 0 for no filter)");
+                        int upperBound=0;
+                        try{
+                            upperBound = Integer.parseInt(scanner.nextLine());
+                        }catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                        System.out.println("Enter lower price bound:  (Enter 0 for no filter)");
+                        int lowerBound=0;
+                        try{
+                            lowerBound = Integer.parseInt(scanner.nextLine());
+                        } catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }try {
+                            controller.getProductController().controlFilterSetPriceLowerBound(lowerBound);
+                            controller.getProductController().controlFilterSetPriceUpperBound(upperBound);
+                        }catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+
                     }
-                    catch (ExceptionalMassage ex){
-                        System.out.println(ex.getMessage());
+                    else if(matcher.group(1).equals("name")){
+                        System.out.println("Enter the name:");
+                        String name = scanner.nextLine();
+                        try {
+                            controller.getProductController().controlFilterAddNameFilter(name);
+                        }catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else if(matcher.group(1).equals("category")){
+                        System.out.println("Enter the category");
+                        String name = scanner.nextLine();
+                        try{
+                            controller.getProductController().controlFilterSetCategoryFilter(name);
+                        } catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else if(matcher.group(1).equals("availability")){
+                        try{
+                            controller.getProductController().controlFilterSetAvailabilityFilter(true);
+                        } catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else if(matcher.group(1).equals("brand")){
+                        System.out.println("Enter brand name: ");
+                        String brandName = scanner.nextLine();
+                        try{
+                            controller.getProductController().controlFilterAddBrandFilter(brandName);
+                        } catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else {
+                        System.out.println("enter the type:");
+                        String type = scanner.nextLine();
+                        try {
+                            controller.getProductController().controlFilterAddSpecialFilter(matcher.group(1), type);
+                        } catch (ExceptionalMassage ex) {
+                            System.out.println(ex.getMessage());
+                        }
                     }
                 }
                 parentMenu.show();
@@ -82,15 +144,58 @@ public class FilteringMenu extends Menu {
 
             @Override
             public void execute() {
-                System.out.println("Select the filter type:");
-                String type = scanner.nextLine();
-                String regex = "^disable filter (.+)$";
+                String regex = "^filter (.+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    try{
-                        controller.getProductController().controlFilterRemoveSpecialFilter(matcher.group(1), type);
-                    } catch (ExceptionalMassage ex){
-                        System.out.println(ex.getMessage());
+                    if(matcher.group(1).equals("price")){
+                        try {
+                            controller.getProductController().controlFilterSetPriceLowerBound(0);
+                            controller.getProductController().controlFilterSetPriceUpperBound(0);
+                        }catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+
+                    }
+                    else if(matcher.group(1).equals("name")){
+                        System.out.println("Enter the name:");
+                        String name = scanner.nextLine();
+                        try {
+                            controller.getProductController().controlFilterRemoveNameFilter(name);
+                        }catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else if(matcher.group(1).equals("category")){
+                        try{
+                            controller.getProductController().controlFilterSetCategoryFilter(null);
+                        } catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else if(matcher.group(1).equals("availability")){
+                        try{
+                            controller.getProductController().controlFilterSetAvailabilityFilter(false);
+                        } catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else if(matcher.group(1).equals("brand")){
+                        System.out.println("Enter brand name: ");
+                        String brandName = scanner.nextLine();
+                        try{
+                            controller.getProductController().controlFilterRemoveBrandFilter(brandName);
+                        } catch (Exception ex){
+                            System.out.println(ex.getMessage());
+                        }
+                    }
+                    else {
+                        System.out.println("enter the type:");
+                        String type = scanner.nextLine();
+                        try {
+                            controller.getProductController().controlFilterRemoveSpecialFilter(matcher.group(1), type);
+                        } catch (ExceptionalMassage ex) {
+                            System.out.println(ex.getMessage());
+                        }
                     }
                 }
                 parentMenu.show();

@@ -61,21 +61,21 @@ public class SupplierProfileMenu extends ProfileMenu {
 
             @Override
             public void execute() {
-                System.out.println("Enter product name:");
+                System.out.print("Enter product name: ");
                 String productName = scanner.nextLine();
-                System.out.println("Enter name of company");
+                System.out.print("Enter name of company: ");
                 String nameOfCompany = scanner.nextLine();
-                System.out.println("Enter the price");
-                int price = scanner.nextInt();
-                String junk1 = scanner.nextLine();
-                System.out.println("Enter remained numbers");
-                int numbers = scanner.nextInt();
-                String junk2 = scanner.nextLine();
-                System.out.println("Enter the category name");
+                System.out.print("Enter the price: ");
+                int price;
+                String priceIO = scanner.nextLine();
+                System.out.print("Enter remained numbers: ");
+                int numbers;
+                String numberIO = scanner.nextLine();
+                System.out.print("Enter the category name: ");
                 String categoryName = scanner.nextLine();
-                System.out.println("Enter description");
+                System.out.print("Enter description: ");
                 String description = scanner.nextLine();
-                System.out.println("Enter the field of specification:(enter end when u are finished)");
+                System.out.println("Enter the field of specification:(enter \"end\" when you are finished)");
                 String field = null;
                 HashMap<String, String> specifications = new HashMap<>();
                 while(!(field = scanner.nextLine()).equalsIgnoreCase("end")){
@@ -84,10 +84,16 @@ public class SupplierProfileMenu extends ProfileMenu {
                     specifications.put(field, value);
                     System.out.println("Enter the field of specification:(enter end when u are finished)");
                 }
-                try{
-                    controller.getProductController().controlAddProduct(productName, nameOfCompany, price, numbers, categoryName, description, specifications);
-                } catch (ExceptionalMassage ex){
-                    System.out.println(ex.getMessage());
+                try {
+                    price = Integer.parseInt(priceIO);
+                    numbers = Integer.parseInt(numberIO);
+                    try {
+                        controller.getProductController().controlAddProduct(productName, nameOfCompany, price, numbers, categoryName, description, specifications);
+                    } catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                } catch (NumberFormatException e) {
+                    System.out.println("you must enter integer for values of price and remained number.");
                 }
                 parentMenu.show();
                 parentMenu.execute();

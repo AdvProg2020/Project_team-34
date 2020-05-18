@@ -136,4 +136,15 @@ public abstract class Account {
         }
         return availableAccounts;
     }
+
+    public static boolean isSupervisorCreated() {
+        if (allAccounts.size() != 0) {
+            for (Account account : allAccounts) {
+                if (account instanceof Supervisor) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
 }

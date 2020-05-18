@@ -34,6 +34,10 @@ public class CommentMenu extends Menu {
 
     }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     @Override
     public void show() {
         System.out.println("Comments : ");

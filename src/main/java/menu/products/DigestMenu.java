@@ -23,10 +23,10 @@ public class DigestMenu extends Menu {
 
             @Override
             public void execute() {
-                if(!controller.getAccountController().hasSomeOneLoggedIn()){
-                    menusIn.get("Login/Register").show();
-                    menusIn.get("Login/Register").execute();
-                } else {
+                //if(!controller.getAccountController().hasSomeOneLoggedIn()){
+                 //   menusIn.get("Login/Register").show();
+                  //  menusIn.get("Login/Register").execute();
+                //} else {
                     //need modification
                     try {
                         controller.getAccountController().controlAddToCart(product.getProductId(), seller.getName());
@@ -34,7 +34,7 @@ public class DigestMenu extends Menu {
                         System.out.println(ex.getMessage());
                     }
                 }
-            }
+            //}
         };
         menusIn.put("^add to cart$", addToCart);
         menuForShow.add("add to cart");
@@ -73,6 +73,11 @@ public class DigestMenu extends Menu {
         menuForShow.add("select seller [seller_username]");
     }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
+
     @Override
     public void show() {
         System.out.println("Product info : ");
@@ -81,6 +86,7 @@ public class DigestMenu extends Menu {
         } catch (ExceptionalMassage ex){
             System.out.println(ex.getMessage());
         }
+        seller = product.getListOfSuppliers().get(0);
         super.show();
     }
 }

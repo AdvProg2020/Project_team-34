@@ -128,7 +128,8 @@ public class Category {
         getParentCategory().allCategoriesInName.remove(this.name);
         getParentCategory().allCategoriesInName.add(name);
         this.name = name;
-        for (Category category : getAllCategoriesIn()) {
+        if (getAllCategoriesIn() != null)
+            for (Category category : getAllCategoriesIn()) {
             category.setParentCategoryName(name);
         }
         if (getParentCategory() != superCategory)

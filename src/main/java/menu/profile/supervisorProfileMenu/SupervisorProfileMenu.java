@@ -17,7 +17,7 @@ public class SupervisorProfileMenu extends ProfileMenu {
         menuForShow.add("Manage Users");
 
         menusIn.put("^manage all products$", new ManageProductsMenu(this));
-        menuForShow.add("Manage Products");
+        menuForShow.add("Manage All Products");
 
         Menu CreateDiscountCode = new Menu("Create Discount Code", this) {
             @Override

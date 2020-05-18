@@ -27,7 +27,7 @@ public class ManageProductsMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("^remove \\w+$", RemoveProduct);
+        menusIn.put("^remove$", RemoveProduct);
         menuForShow.add("Remove");
     }
 

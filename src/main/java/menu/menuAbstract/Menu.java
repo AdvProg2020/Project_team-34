@@ -2,6 +2,7 @@ package menu.menuAbstract;
 
 import controller.Controller;
 import menu.loginMenu.LoginMenu;
+import menu.mainMenu.MainMenu;
 import menu.profile.customerProfileMenu.CustomerProfileMenu;
 import menu.profile.supervisorProfileMenu.SupervisorProfileMenu;
 import menu.profile.supplierProfileMenu.SupplierProfileMenu;
@@ -109,7 +110,7 @@ public abstract class Menu {
                     @Override
                     public void execute() {
                         controller.getAccountController().controlLogout();
-                        Menu newLoginMenu = new LoginMenu(null);
+                        Menu newLoginMenu = new MainMenu();
                         newLoginMenu.show();
                         newLoginMenu.execute();
                     }

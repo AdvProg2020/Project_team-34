@@ -78,6 +78,8 @@ public class ProductMenu extends Menu {
                 parentMenu.execute();
             }
             currentProduct = Product.getProductById(matcher.group(1));
+            ((DigestMenu)menusIn.get("^digest$")).setProduct(currentProduct);
+            ((CommentMenu)menusIn.get("^Comments$")).setProduct(currentProduct);
         }
         super.execute();
     }

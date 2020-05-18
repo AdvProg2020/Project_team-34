@@ -9,7 +9,7 @@ public class ManageCategoriesMenu extends Menu {
     public ManageCategoriesMenu(Menu parentMenu) {
         super("Manage Categories Menu", parentMenu);
 
-        menusIn.put("^edit category (\\w+)$", new EditCategoryMenu("Edit category",this));
+        menusIn.put("^edit category (.+)$", new EditCategoryMenu("Edit category",this));
         menuForShow.add("Edit category");
 
 

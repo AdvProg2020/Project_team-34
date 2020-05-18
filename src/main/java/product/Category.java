@@ -93,6 +93,10 @@ public class Category {
         return getCategoryByName(parentCategoryName);
     }
 
+    public String getParentCategoryName() {
+        return parentCategoryName;
+    }
+
     public ArrayList<Product> getAllProductsIn() {
         return allProductsIn;
     }
@@ -106,6 +110,10 @@ public class Category {
             return allCategoriesIn;
         }
         return null;
+    }
+
+    public ArrayList<String> getAllCategoriesInName() {
+        return allCategoriesInName;
     }
 
     public HashMap<String, ArrayList<String>> getSpecialFields() {

@@ -28,6 +28,8 @@ public class EditCategoryMenu extends Menu {
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("^edit name$", EditName);
@@ -36,7 +38,7 @@ public class EditCategoryMenu extends Menu {
         Menu AddSpecialFilter = new Menu("Add Special Filter Command", this) {
             @Override
             public void show() {
-                System.out.println("Remove Special Filter: ");
+                System.out.println("Add Special Filter: ");
             }
 
             @Override
@@ -50,6 +52,8 @@ public class EditCategoryMenu extends Menu {
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("add special filter", AddSpecialFilter);
@@ -58,7 +62,7 @@ public class EditCategoryMenu extends Menu {
         Menu RemoveSpecialField = new Menu("Remove Special Filter Command", this) {
             @Override
             public void show() {
-                System.out.println("Add Special Filter: ");
+                System.out.println("Remove Special Filter: ");
             }
 
             @Override
@@ -72,6 +76,8 @@ public class EditCategoryMenu extends Menu {
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("remove special field", RemoveSpecialField);
@@ -93,3 +99,5 @@ public class EditCategoryMenu extends Menu {
         super.execute();
     }
 }
+
+

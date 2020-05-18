@@ -275,7 +275,7 @@ public class AccountController {
         mainController.getCart().removeCodedDiscount();
     }
 
-    public void FinalizeOrder() throws ExceptionalMassage {
+    public void finalizeOrder() throws ExceptionalMassage {
         Account account = mainController.getAccount();
         if (account == null)
             throw new ExceptionalMassage("Login First.");

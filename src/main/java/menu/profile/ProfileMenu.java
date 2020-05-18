@@ -11,7 +11,7 @@ public abstract class ProfileMenu extends Menu {
     public ProfileMenu(String menuName, Menu parentMenu) {
         super(menuName, parentMenu);
 
-        menusIn.put("^view personal info$", this);
+        menusIn.put("^view personal info$", new ViewPersonalInfoMenu(this));
         menuForShow.add("View Personal Info");
     }
 }

@@ -18,7 +18,7 @@ public class Category {
     public static final Category superCategory = new Category();
 
     private String name;
-    private final String parentCategoryName;
+    private String parentCategoryName;
     private final ArrayList<String> allCategoriesInName;
     private final ArrayList<Product> allProductsIn;
     private final HashMap<String, ArrayList<String>> specialFields;
@@ -113,12 +113,21 @@ public class Category {
     }
 
     //Setters:
+    private void setParentCategoryName(String name) {
+        this.parentCategoryName = name;
+    }
+
     public void setName(String name) throws ExceptionalMassage {
         if (getCategoryByName(name) != null) {
             throw new ExceptionalMassage("Category with this name has already initialized. <Category.setName>");
         }
         CategoryDataBase.delete(this.name);
+        getParentCategory().allCategoriesInName.remove(this.name);
+        getParentCategory().allCategoriesInName.add(name);
         this.name = name;
+        for (Category category : getAllCategoriesIn()) {
+            category.setParentCategoryName(name);
+        }
         CategoryDataBase.add(this);
     }
 

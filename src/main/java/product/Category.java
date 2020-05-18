@@ -132,9 +132,6 @@ public class Category {
     }
 
     //Modeling methods:
-    private void setNewChildName(String oldName, String newName) {
-    }
-
     public boolean isCategoryClassifier() {
         return this.allProductsIn == null;
     }

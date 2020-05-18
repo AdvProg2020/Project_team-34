@@ -29,7 +29,7 @@ public class Product {
 
 
 
-    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,String rootProductId,String futureCategoryName) {
+    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,String rootProductId,String futureCategoryName, HashMap<String,String> specification) {
         numberOfViews = 0;
         this.productState = State.PREPARING_TO_BUILD;
         this.productId = generateIdentifier();
@@ -44,6 +44,7 @@ public class Product {
         this.description = description;
         this.rootProductId = rootProductId;
         this.futureCategoryName = futureCategoryName;
+        this.specification = specification;
         allCreatedProductNum ++;
         allProduct.add(this);
         ProductDataBase.add(this);

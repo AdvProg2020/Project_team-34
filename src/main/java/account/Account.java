@@ -12,9 +12,10 @@ import java.util.ArrayList;
 public abstract class Account {
     protected String userName , name , familyName , email , phoneNumber , password;
     protected int credit;
+    protected boolean isAvailable ;
     private static final ArrayList<Account> allAccounts = new ArrayList<>();
 
-    public Account(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit) {
+    public Account(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit, boolean isAvailable) {
         this.userName = userName;
         this.name = name;
         this.familyName = familyName;
@@ -22,6 +23,7 @@ public abstract class Account {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.credit = credit;
+        this.isAvailable = isAvailable;
         allAccounts.add(this);
     }
 
@@ -53,9 +55,14 @@ public abstract class Account {
         return credit;
     }
 
+    public boolean getIsAvailable() {
+        return isAvailable;
+    }
+
     public static ArrayList<String> getAllUsername(){
+        ArrayList<Account> availableAccounts = getAllAvailableAccounts();
         ArrayList <String> allUsername= new ArrayList<>();
-        for (Account account : allAccounts) {
+        for (Account account :availableAccounts) {
             allUsername.add(account.getUserName());
         }
         return allUsername;
@@ -91,9 +98,14 @@ public abstract class Account {
         AccountDataBase.update(this);
     }
 
+    public void setIsAvailable(boolean IsAvailable) {
+        isAvailable = IsAvailable;
+    }
+
     public static Account getAccountByUsername(String userName) {
-        if (allAccounts.size() != 0) {
-            for (Account account : allAccounts) {
+        ArrayList<Account> availableAccounts = getAllAvailableAccounts();
+        if( availableAccounts.size() != 0) {
+            for (Account account : availableAccounts) {
                 if (account.getUserName().equals(userName)) {
                     return account;
                 }
@@ -103,14 +115,24 @@ public abstract class Account {
     }
 
     public void removeAccount (){
-        allAccounts.remove(this);
+        isAvailable = false;
     }
 
     public static Supplier getSupplierByCompanyName(String companyName){
-        for (Account account : allAccounts) {
+        ArrayList<Account> availableAccounts = getAllAvailableAccounts();
+        for (Account account : availableAccounts) {
             if(account instanceof  Supplier && ((Supplier) account).getNameOfCompany().equals(companyName))
                 return (Supplier)account;
         }
         return null;
+    }
+
+    private static ArrayList<Account> getAllAvailableAccounts (){
+        ArrayList<Account> availableAccounts = new ArrayList<>();
+        for (Account account : allAccounts) {
+            if(account.isAvailable)
+                availableAccounts.add(account);
+        }
+        return availableAccounts;
     }
 }

@@ -11,13 +11,14 @@ public class Customer extends Account {
     private String cartIdentifier;
 
     public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit) {
-        super(userName, name, familyName, email, phoneNumber, password, credit);
+        super(userName, name, familyName, email, phoneNumber, password, credit,true);
         this.cartIdentifier = new Cart(this).getIdentifier();
         AccountDataBase.add(this);
     }
 
-    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit,  String cartIdentifier) {
-        super(userName, name, familyName, email, phoneNumber, password, credit);
+    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password,
+                    int credit,  String cartIdentifier, boolean isAvailable) {
+        super(userName, name, familyName, email, phoneNumber, password, credit,isAvailable);
         this.cartIdentifier = cartIdentifier;
 
     }

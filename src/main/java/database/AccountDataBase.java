@@ -22,6 +22,7 @@ public class AccountDataBase {
         content.put("credit", "int");
         content.put("cartId", "String");
         content.put("nameOfCompany", "String");
+        content.put("isAvailable", "boolean");
 
         DataBase.createNewTable("Accounts", content);
     }
@@ -32,8 +33,8 @@ public class AccountDataBase {
             return;
         }
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
-                " cartId, nameOfCompany)"+
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? )";
+                " cartId, nameOfCompany,isAvailable)"+
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ?,? )";
         try (Connection connection = DataBase.connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -44,6 +45,7 @@ public class AccountDataBase {
             statement.setString(5, account.getPhoneNumber());
             statement.setString(6, account.getPassword());
             statement.setInt(7, account.getCredit());
+            statement.setBoolean(10,account.getIsAvailable());
 
             if(account instanceof Customer){
                 statement.setString(8,((Customer)account).getCart().getIdentifier());
@@ -91,17 +93,18 @@ public class AccountDataBase {
                 int credit =resultSet.getInt("credit");
                 String cartId = resultSet.getString("cartId");
                 String nameOfCompany = resultSet.getString("nameOfCompany");
+                boolean isAvailable = resultSet.getBoolean("isAvailable");
 
 
                 if(cartId!= null){
                     Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit,
-                             cartId);
+                             cartId, isAvailable);
                 }
                 else if(nameOfCompany != null){
-                    Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,nameOfCompany);
+                    Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,isAvailable,nameOfCompany);
                 }
                 else{
-                    Supervisor supervisor = new Supervisor(username,name, familyName, email,phoneNumber,password,credit);
+                    Supervisor supervisor = new Supervisor(username,name, familyName, email,phoneNumber,password,credit,isAvailable);
                 }
 
             }

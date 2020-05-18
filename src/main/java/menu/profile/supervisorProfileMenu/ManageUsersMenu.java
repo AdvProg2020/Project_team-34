@@ -91,4 +91,10 @@ public class ManageUsersMenu extends Menu {
         menusIn.put("^create manager profile \\w+$", CreateSupervisorProfile);
         menuForShow.add("Create Manager Profile");
     }
+
+    @Override
+    public void show() {
+        System.out.println(controller.getAccountController().controlGetListOfAccounts());
+        super.show();
+    }
 }

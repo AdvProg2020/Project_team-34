@@ -29,7 +29,7 @@ public class CodedDiscountDataBase {
         if (DataBase.doesIdAlreadyExist("CodedDiscounts","discountCode", codedDiscount.getDiscountCode())) {
             return;
         }
-        String sql = "INSERT into DiscountCodes (start , end , percent, discountCode, maxDiscountAmount,usedDiscountPerCustomer , maximumNumberOfUsagePerCustomer) " +
+        String sql = "INSERT into CodedDiscounts (start , end , percent, discountCode, maxDiscountAmount,usedDiscountPerCustomer , maximumNumberOfUsagePerCustomer) " +
                 "VALUES (?,?, ? , ? , ? , ?,?)";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {

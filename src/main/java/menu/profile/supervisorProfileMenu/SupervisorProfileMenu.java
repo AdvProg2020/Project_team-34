@@ -27,21 +27,21 @@ public class SupervisorProfileMenu extends ProfileMenu {
             @Override
             public void execute() {
                 HashMap<Customer, Integer> maxNumberOfUsagePerCustomer = new HashMap<>();
-                System.out.println("Enter the starting date: (dd/MM/yyyy HH:mm:ss) ");
+                System.out.println("Enter the starting date: (dd/MM/yyyy) ");
                 String startingDate = scanner.next();
                 Date startDate = null;
                 try {
-                    startDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(startingDate);
+                    startDate = new SimpleDateFormat("dd/MM/yyyy").parse(startingDate);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                     parentMenu.show();
                     parentMenu.execute();
                 }
-                System.out.println("Enter the ending date: (dd/MM/yyyy HH:mm:ss) ");
+                System.out.println("Enter the ending date: (dd/MM/yyyy) ");
                 String endingDate = scanner.next();
                 Date endDate = null;
                 try {
-                    endDate = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss").parse(endingDate);
+                    endDate = new SimpleDateFormat("dd/MM/yyyy").parse(endingDate);
                 } catch (Exception ex) {
                     System.out.println(ex.getMessage());
                     parentMenu.show();
@@ -49,16 +49,19 @@ public class SupervisorProfileMenu extends ProfileMenu {
                 }
                 System.out.println("Enter the discount percent :");
                 int percent = scanner.nextInt();
+                String juk1 = scanner.nextLine();
                 System.out.println("Enter the maximum discount amount :");
                 int maxAmount = scanner.nextInt();
+                String junk2 = scanner.nextLine();
                 System.out.println("Enter the discount code :");
                 String code = scanner.nextLine();
                 String customerId;
                 int max;
                 System.out.println("Enter customer id :");
-                while((customerId = scanner.nextLine()).equalsIgnoreCase("end")) {
+                while(!(customerId = scanner.nextLine()).equalsIgnoreCase("end")) {
                     System.out.println("enter max number of usage :");
                     max = scanner.nextInt();
+                    String junk3 = scanner.nextLine();
                     if(Customer.getAccountByUsername(customerId) == null){
                         System.out.println("no such username!");
                     } else {

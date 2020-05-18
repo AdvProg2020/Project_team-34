@@ -1,6 +1,7 @@
 package discount;
 
 import account.Customer;
+import database.CodedDiscountDataBase;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -35,6 +36,7 @@ public class CodedDiscount extends Discount{
             customers.add(customer);
         }
         codedDiscounts.add(this);
+        CodedDiscountDataBase.add(this);
     }
 
     // Added by rpirayadi

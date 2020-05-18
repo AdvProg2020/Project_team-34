@@ -65,8 +65,14 @@ public class LoginMenu extends Menu {
                     System.out.print("Enter company name: ");
                     companyName = scanner.nextLine();
                 }
+                int credit = 0;
+                if (type.equals("customer")) {
+                    System.out.println("Enter credit: ");
+                    credit = scanner.nextInt();
+                    String junk = scanner.nextLine();
+                }
                 try {
-                    controller.getAccountController().controlCreateAccount(username, type, name, familyName, email, phoneNumber, password, 0, companyName);
+                    controller.getAccountController().controlCreateAccount(username, type, name, familyName, email, phoneNumber, password, credit, companyName);
                 } catch (ExceptionalMassage e) {
                     System.out.println(e.getMessage());
                 }

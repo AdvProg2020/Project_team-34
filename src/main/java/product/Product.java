@@ -250,6 +250,7 @@ public class Product {
     public void reduceRemainedNumber (Supplier supplier, int amount){
         int remainedNumber = remainedNumberForEachSupplier.get(supplier);
         remainedNumberForEachSupplier.put(supplier, remainedNumber - amount);
+        ProductDataBase.update(this);
     }
 
     public void editSpecialField(String field, String value) throws ExceptionalMassage {

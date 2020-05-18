@@ -221,8 +221,12 @@ public class Category {
         Category removingCategory = Category.getCategoryByName(removingCategoryName);
         if (removingCategory == null)
             throw new ExceptionalMassage("Category not found. <Category.removingCategory>");
-        if (removingCategory.allCategoriesInName != null && removingCategory.allProductsIn != null)
-            throw new ExceptionalMassage("Category is not empty. <Category.removingCategory>");
+        if (removingCategory.allCategoriesInName != null)
+            if (removingCategory.allCategoriesInName.size() != 0)
+                throw new ExceptionalMassage("Category is not empty. <Category.removingCategory>");
+        if (removingCategory.allProductsIn != null)
+            if (removingCategory.allProductsIn.size() != 0)
+                throw new ExceptionalMassage("Category is not empty. <Category.removingCategory>");
         (removingCategory.getParentCategory()).removeSubCategory(removingCategoryName);
         CategoryDataBase.delete(removingCategory.name);
     }

@@ -5,12 +5,14 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import cart.Cart;
+import cart.ProductInCart;
 import cart.ShippingInfo;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import product.Product;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AccountController {
 
@@ -148,14 +150,17 @@ public class AccountController {
                 break;
             case "nameOfCompany":
                 if (account instanceof Supplier)
-                    account.setFamilyName(newValue);
+                    ((Supplier) account).setNameOfCompany(newValue);
                 else
                     throw new ExceptionalMassage("You must login as a Supplier to edit company name");
                 break;
             case  "username":
                 throw new ExceptionalMassage("You can not edit username");
+            case "password":
+                account.setPassword(newValue);
+                break;
             default:
-                throw new ExceptionalMassage("No such field" + field);
+                throw new ExceptionalMassage("No such field " + field);
         }
 
     }
@@ -287,6 +292,16 @@ public class AccountController {
             throw new ExceptionalMassage("Login as a customer.");
         Cart cart = mainController.getCart();
         Customer customer = (Customer) mainController.getAccount();
+        if (cart.isCartClear())
+            throw new ExceptionalMassage("Your cart is clear.");
+        if (account.getCredit() < cart.getBill())
+            throw new ExceptionalMassage("You don't have enough credit.");
+        HashMap<ProductInCart, Integer> productInCount = cart.getProductInCount();
+        for (ProductInCart productInCart : cart.getProductsIn()) {
+            if (productInCart.getProduct().getRemainedNumber(productInCart.getSupplier()) < productInCount.get(productInCart))
+                throw new ExceptionalMassage("Product " + productInCart.getProduct().getName() +
+                        " is not available in this amount, please reduce.");
+        }
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);

@@ -48,7 +48,7 @@ public class ManageCategoriesMenu extends Menu {
             @Override
             public void execute() {
                 String name;
-                System.out.println("Enter the name:");
+                System.out.print("Enter the name: ");
                 name = scanner.nextLine();
                 try {
                     controller.getProductController().controlRemoveCategory(name);
@@ -59,7 +59,7 @@ public class ManageCategoriesMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("^remove \\w+$", RemoveCategory);
+        menusIn.put("^remove$", RemoveCategory);
         menuForShow.add("Remove");
 
     }

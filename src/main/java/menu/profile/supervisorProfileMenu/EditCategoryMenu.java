@@ -56,8 +56,8 @@ public class EditCategoryMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("add special filter", AddSpecialFilter);
-        menuForShow.add("Add Special Filter");
+        menusIn.put("^add special field$", AddSpecialFilter);
+        menuForShow.add("Add Special Field");
 
         Menu RemoveSpecialField = new Menu("Remove Special Filter Command", this) {
             @Override
@@ -80,7 +80,7 @@ public class EditCategoryMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("remove special field", RemoveSpecialField);
+        menusIn.put("^remove special field$", RemoveSpecialField);
         menuForShow.add("Remove Special Field");
     }
 

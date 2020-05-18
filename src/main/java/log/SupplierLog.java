@@ -6,6 +6,7 @@ import product.Product;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 /**
@@ -18,6 +19,7 @@ public class SupplierLog {
     private static int allSupplierLogCreatedCount = 0;
 
     private final String identifier;
+    private final Date date;
     private final int earnedMoney;
     private final int discountAmount;
     private final int totalPurchase;
@@ -39,6 +41,7 @@ public class SupplierLog {
         this.productsCount = customerLog.getProductsBoughtFromSupplierCount(supplier);
         this.productsSale = customerLog.getProductsBoughtFromSupplierSale(supplier);
         this.supplier.setCredit(this.supplier.getCredit() + earnedMoney);
+        this.date = customerLog.getDate();
         allSupplierLogs.add(this);
         allSupplierLogCreatedCount++;
     }

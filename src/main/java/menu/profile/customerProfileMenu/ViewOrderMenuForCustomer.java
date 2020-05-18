@@ -57,6 +57,8 @@ public class ViewOrderMenuForCustomer extends Menu {
                         System.out.println(ex.getMessage());
                     }
                 }
+                parentMenu.show();
+                parentMenu.execute();
             }
         };
         menusIn.put("rate product (\\w+)", Rate);

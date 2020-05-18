@@ -218,8 +218,9 @@ public class Product {
     }
 
 
-    public void removeProduct(){
+    public void removeProduct() throws ExceptionalMassage {
         setProductState(State.DELETED);
+        Category.getProductCategory(this).removeProduct(this);
     }
 
     public void addProduct(){

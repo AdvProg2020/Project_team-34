@@ -2,6 +2,7 @@ package database;
 
 import account.Account;
 import account.Supplier;
+import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import log.SupplierLog;
 
@@ -10,26 +11,26 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static database.DataBase.connect;
+import static database.DataBase.doesIdAlreadyExist;
 
 public class SupplierLogDataBase {
-    /*
-
     public static void createNewTable() {
         HashMap<String, String> content = new HashMap<>();
         content.put("identifier", "String");
         content.put("earnedMoney", "int");
         content.put("discountAmount", "int");
         content.put("totalPurchase", "int");
+        content.put("date", "long");
 
         DataBase.createNewTable("SupplierLogs", content);
     }
 
     public static void add(SupplierLog supplierLog) {
-        if (doesSupplierLogAlreadyExists(supplierLog)) {
+        if (doesIdAlreadyExist("SupplierLogs", "identifier", supplierLog.getIdentifier())) {
             return;
         }
-        String sql = "INSERT into SupplierLogs (identifier,earnedMoney, discountAmount, totalPurchase, customerLogId, supplierUsername) " +
-                "VALUES (?,?, ? ,?, ?,?)";
+        String sql = "INSERT into SupplierLogs (identifier,earnedMoney, discountAmount, totalPurchase , date) " +
+                "VALUES (?,?, ? ,?, ?)";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -37,8 +38,7 @@ public class SupplierLogDataBase {
             statement.setInt(2, supplierLog.getEarnedMoney());
             statement.setInt(3, supplierLog.getDiscountAmount());
             statement.setInt(4, supplierLog.getTotalPurchase());
-            statement.setString(5, supplierLog.getCustomerLog().getIdentifier());
-            statement.setString(6, supplierLog.getSupplier().getUserName());
+            statement.setLong(5, supplierLog.getDate().getTime());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -46,16 +46,6 @@ public class SupplierLogDataBase {
         }
     }
 
-    private static boolean doesSupplierLogAlreadyExists(SupplierLog supplierLog) {
-        ArrayList<SupplierLog> list = getAllSupplierLogs();
-        if (list == null)
-            return false;
-        for (SupplierLog eachSupplierLog : list) {
-            if (eachSupplierLog.getIdentifier().equals(supplierLog.getIdentifier()))
-                return true;
-        }
-        return false;
-    }
 
     public static void update(SupplierLog supplierLog) {
         delete(supplierLog.getIdentifier());
@@ -66,5 +56,26 @@ public class SupplierLogDataBase {
         DataBase.delete("SupplierLogs", "identifier", supplierLogId);
     }
 
-     */
+    public static ArrayList<SupplierLog> sortSupplierLog(String field , ArrayList<String> whatToShow) throws ExceptionalMassage {
+        if(!field.equals("earnedMoney") && !field.equals("discountAmount") && !field.equals("totalPurchase") && !field.equals("date" ))
+            throw  new ExceptionalMassage("Invalid field to sort with");
+        String sql = "SELECT username FROM SupplierLogs ORDER BY " + field + " ASC;";
+        ArrayList<SupplierLog> result = new ArrayList<>();
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            String identifier ;
+            while (resultSet.next()) {
+                identifier = resultSet.getString("identifier");
+                if(whatToShow.contains(identifier))
+                    result.add(SupplierLog.getSupplierLogById(identifier));
+            }
+            return result;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
 }

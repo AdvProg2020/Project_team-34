@@ -32,9 +32,9 @@ public class CategoryDataBase {
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
             statement.setString(1,category.getName());
-            statement.setString(2,category.getParentCategory().getName());
+            statement.setString(2,category.getParentCategoryName());
             statement.setString(3,convertObjectToJsonString(convertProductArrayListToStringArrayList( category.getAllProductsIn())));
-            statement.setString(4,convertObjectToJsonString(convertCategoryArrayListToStringArrayList(category.getAllCategoriesIn())));
+            statement.setString(4,convertObjectToJsonString(category.getAllCategoriesInName()));
             statement.setString(5,convertObjectToJsonString(category.getSpecialFields()));
 
             statement.executeUpdate();

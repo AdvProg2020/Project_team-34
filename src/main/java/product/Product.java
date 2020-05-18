@@ -53,7 +53,7 @@ public class Product {
 
     public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
                    HashMap<Supplier,Integer> remainedNumberForEachSupplier, String description,
-                   int numberOfViews , String productId,State state,String rootProductId,String futureCategoryName) {
+                   int numberOfViews , String productId,State state,String rootProductId,String futureCategoryName, HashMap<String, String> specification) {
         this.productState = state;
         this.productId = productId;
         this.name = name;
@@ -65,6 +65,7 @@ public class Product {
         this.numberOfViews= numberOfViews;
         this.rootProductId = rootProductId;
         this.futureCategoryName = futureCategoryName;
+        this.specification = specification;
         allCreatedProductNum ++;
         allProduct.add(this);
     }

@@ -142,7 +142,8 @@ public class ProductDataBase {
                 State state = State.valueOf(resultSet.getString("productState"));
                 String rootProductId = resultSet.getString("rootProductId");
                 String futureCategoryName = resultSet.getString("futureCategoryName");
-                new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,remainedNumberForEachSupplier,description,numberOfViews,productId,state,rootProductId,futureCategoryName);
+                HashMap<String,String> specification = convertJsonToStringStringHashMap((resultSet.getString("specification")));
+                new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,remainedNumberForEachSupplier,description,numberOfViews,productId,state,rootProductId,futureCategoryName,specification);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

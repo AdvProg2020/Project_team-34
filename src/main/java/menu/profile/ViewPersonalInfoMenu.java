@@ -31,7 +31,7 @@ public class ViewPersonalInfoMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("edit (\\w+)", EditPersonalInfo);
+        menusIn.put("^edit (\\w+)$", EditPersonalInfo);
         menuForShow.add("Edit Personal Info");
     }
 

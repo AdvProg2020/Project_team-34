@@ -124,9 +124,11 @@ public class Category {
         CategoryDataBase.delete(this.name);
         getParentCategory().allCategoriesInName.remove(this.name);
         getParentCategory().allCategoriesInName.add(name);
+        CategoryDataBase.update(getParentCategory());
         this.name = name;
         for (Category category : getAllCategoriesIn()) {
             category.setParentCategoryName(name);
+            CategoryDataBase.update(this);
         }
         CategoryDataBase.add(this);
     }

@@ -7,6 +7,7 @@ import state.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * @author rpirayadi
@@ -79,7 +80,7 @@ public class Product {
         this.numberOfViews= product.getNumberOfViews();
         this.rootProductId = product.getProductId();
         this.productState = State.PREPARING_TO_EDIT;
-        this.specification = product.getSpecification();
+        this.specification = new HashMap<>(product.getSpecification());
         this.futureCategoryName = product.getFutureCategoryName();
         allCreatedProductNum ++;
         allProduct.add(this);
@@ -266,7 +267,9 @@ public class Product {
         newProduct.getListOfSuppliers().add(supplier);
         newProduct.getPriceForEachSupplier().put(supplier,price);
         newProduct.getRemainedNumberForEachSupplier().put(supplier,remainedNumber);
+        ProductDataBase.update(newProduct);
     }
+
     public boolean isProductAvailableNow() {
         for (Supplier supplier : remainedNumberForEachSupplier.keySet()) {
             if(remainedNumberForEachSupplier.get(supplier) > 0)

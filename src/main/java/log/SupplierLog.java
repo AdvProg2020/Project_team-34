@@ -51,6 +51,10 @@ public class SupplierLog {
         return identifier;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
     public int getEarnedMoney() {
         return earnedMoney;
     }

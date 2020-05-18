@@ -16,14 +16,19 @@ import java.util.HashMap;
 public class DataBase {
 
     private  final static String url = "jdbc:sqlite:.\\src\\main\\java\\DataBase.db";
+    private final static Connection connection = connect();
 
-    public static Connection connect() {
+    private static Connection connect() {
         Connection connection = null;
         try {
             connection = DriverManager.getConnection(url);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+        return connection;
+    }
+
+    public static Connection getConnection() {
         return connection;
     }
 

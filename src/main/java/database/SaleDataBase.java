@@ -1,6 +1,5 @@
 package database;
 
-import account.Account;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
@@ -35,8 +34,7 @@ public class SaleDataBase {
         }
         String sql = "INSERT into Sales (start , end , percent, offId , listOfProductIds, state) " +
                 "VALUES (?,?, ? , ? , ? , ?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setLong(1,sale.getStart().getTime());
             statement.setLong(2,sale.getEnd().getTime());
@@ -64,8 +62,7 @@ public class SaleDataBase {
     public static void importAllSales() {
         String sql = "SELECT *  FROM Sales";
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 Date start = new Date(resultSet.getLong("start"));
@@ -89,8 +86,7 @@ public class SaleDataBase {
             throw  new ExceptionalMassage("Invalid field to sort with");
         String sql = "SELECT offId FROM Sales ORDER BY " + field + " ASC;";
         ArrayList<Sale> result = new ArrayList<>();
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             String offId ;
             while (resultSet.next()) {

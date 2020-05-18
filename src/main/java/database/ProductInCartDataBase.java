@@ -5,10 +5,10 @@ import account.Supplier;
 import cart.ProductInCart;
 import product.Product;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.HashMap;
 
-import static database.DataBase.connect;
 
 /**
  * @author rpirayadi
@@ -31,8 +31,7 @@ public class ProductInCartDataBase {
         }
         String sql = "INSERT into ProductInCarts (productInCartId, productId, supplierUsername) " +
                 "VALUES (?,?, ?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setString(1, productInCart.getIdentifier());
             statement.setString(2, productInCart.getProduct().getProductId());
@@ -57,8 +56,7 @@ public class ProductInCartDataBase {
     public static void importAllProductInCarts() {
         String sql = "SELECT *  FROM ProductInCarts";
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String productInCartId = resultSet.getString("productInCartId");

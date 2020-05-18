@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Date;
 
-import static database.DataBase.connect;
 
 /**
  * @author rpirayadi
@@ -36,8 +35,7 @@ public class CustomerLogDataBase {
         }
         String sql = "INSERT into CustomerLogs (identifier, date, deliveryStatus, cartId,amount) " +
                 "VALUES (?,?, ? ,?, ?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setString(1,customerLog.getIdentifier());
             statement.setLong(2,customerLog.getDate().getTime());
@@ -64,8 +62,7 @@ public class CustomerLogDataBase {
     public static void importAllCustomerLogs() {
         String sql = "SELECT *  FROM CustomerLogs";
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String customerLogId = resultSet.getString("identifier");
@@ -86,8 +83,7 @@ public class CustomerLogDataBase {
             throw  new ExceptionalMassage("Invalid field to sort with");
         String sql = "SELECT identifier FROM CustomerLogs ORDER BY " + field + " ASC;";
         ArrayList<CustomerLog> result = new ArrayList<>();
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             String identifier ;
             while (resultSet.next()) {

@@ -35,8 +35,7 @@ public class CodedDiscountDataBase {
         }
         String sql = "INSERT into CodedDiscounts (start , end , percent, discountCode, maxDiscountAmount,usedDiscountPerCustomer , maximumNumberOfUsagePerCustomer) " +
                 "VALUES (?,?, ? , ? , ? , ?,?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setLong(1,codedDiscount.getStart().getTime());
             statement.setLong(2,codedDiscount.getEnd().getTime());
@@ -97,8 +96,7 @@ public class CodedDiscountDataBase {
     public static void  importAllCodedDiscounts() {
         String sql = "SELECT *  FROM CodedDiscounts";
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 Date start = new Date(resultSet.getLong("start"));
@@ -123,8 +121,7 @@ public class CodedDiscountDataBase {
     public static ArrayList<CodedDiscount> sortCodedDiscount(String field , ArrayList<String> whatToShow) {
         String sql = "SELECT discountCode FROM CodedDiscounts ORDER BY " + field + " ASC;";
         ArrayList<CodedDiscount> result = new ArrayList<>();
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             String discountCode ;
             while (resultSet.next()) {

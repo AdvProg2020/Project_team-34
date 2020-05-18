@@ -45,8 +45,7 @@ public class ProductDataBase {
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name,nameOfCompany,  priceForEachSupplier," +
                 "listOfSuppliers, remainedNumberForEachSupplier, description , specification, rootProductId,futureCategoryName)" +
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?)";
-        try (Connection conn = connect();
-             PreparedStatement statement = conn.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setInt(1, product.getNumberOfViews());
             statement.setString(2, product.getProductId());
@@ -128,8 +127,7 @@ public class ProductDataBase {
     public static void importAllProducts() {
         String sql = "SELECT *  FROM Products";
 
-        try (Connection connection = connect();
-             Statement stmt = connection.createStatement();
+        try (Statement stmt = DataBase.getConnection().createStatement();
              ResultSet resultSet = stmt.executeQuery(sql)) {
             while (resultSet.next()) {
 

@@ -5,10 +5,10 @@ import account.Customer;
 import feedback.Score;
 import product.Product;
 
+import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.HashMap;
 
-import static database.DataBase.connect;
 
 /**
  * @author rpirayadi
@@ -32,8 +32,7 @@ public class ScoreDataBase {
         }
         String sql = "INSERT into Scores (scoreId, customerUsername, productId,score) " +
                 "VALUES (?,?, ? ,?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setString(1,score.getIdentifier());
             statement.setString(2,score.getCustomer().getUserName());
@@ -60,8 +59,7 @@ public class ScoreDataBase {
     public static void importAllScores() {
         String sql = "SELECT *  FROM Scores";
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String scoreId = resultSet.getString("scoreId");

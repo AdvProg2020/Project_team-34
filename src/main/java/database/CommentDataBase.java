@@ -9,7 +9,6 @@ import product.Product;
 import java.sql.*;
 import java.util.HashMap;
 
-import static database.DataBase.connect;
 
 /**
  * @author rpirayadi
@@ -39,8 +38,7 @@ public class CommentDataBase {
         }
         String sql = "INSERT into Comments (commentId , customerUsername, productId, title, content, commentState,customerBoughtThisProduct) " +
                 "VALUES (?,?, ? , ? , ? , ?,?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setString(1, comment.getCommentId());
             statement.setString(2, comment.getCustomer().getUserName());
@@ -71,8 +69,7 @@ public class CommentDataBase {
     public static void importAllComments() {
         String sql = "SELECT *  FROM Comments";
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String commentId = resultSet.getString("commentId");

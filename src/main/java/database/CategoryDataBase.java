@@ -32,8 +32,7 @@ public class CategoryDataBase {
         }
         String sql = "INSERT into Categories (name , parentCategoryName, listOfAllProductsId, listOfCategoriesInName, specialFields) " +
                 "VALUES (?,?, ? ,?,?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setString(1,category.getName());
             statement.setString(2,category.getParentCategoryName());
@@ -62,8 +61,7 @@ public class CategoryDataBase {
     public static void importAllCategories() {
         String sql = "SELECT *  FROM Categories";
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String name = resultSet.getString("name");

@@ -185,8 +185,9 @@ public class AccountController {
         Account accountGotByUsername = Account.getAccountByUsername(username);
         if (accountGotByUsername == null)
             throw new ExceptionalMassage("Account not found.");
+        if(accountGotByUsername.equals(mainController.getAccount().getUserName()))
+            throw new ExceptionalMassage("You cannot delete Your self");
         accountGotByUsername.removeAccount();
-        //data base
     }
 
     public String controlViewCompanyInfo() {

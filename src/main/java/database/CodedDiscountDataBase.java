@@ -119,4 +119,24 @@ public class CodedDiscountDataBase {
             System.out.println(e.getMessage());
         }
     }
+
+    public static ArrayList<CodedDiscount> sortCodedDiscount(String field , ArrayList<String> whatToShow) {
+        String sql = "SELECT discountCode FROM CodedDiscounts ORDER BY " + field + " ASC;";
+        ArrayList<CodedDiscount> result = new ArrayList<>();
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            CodedDiscount codedDiscount;
+            while (resultSet.next()) {
+                codedDiscount = CodedDiscount.getCodedDiscountByCode(resultSet.getString("discountCode"));
+                if(whatToShow.contains(codedDiscount.getDiscountCode()))
+                    result.add(codedDiscount);
+            }
+            return result;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }

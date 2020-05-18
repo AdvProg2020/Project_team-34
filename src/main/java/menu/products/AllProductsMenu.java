@@ -37,7 +37,7 @@ public class AllProductsMenu extends Menu {
             @Override
             public void execute() {
                 for (Product product : controller.getProductController().controlFilterGetFilteredAndSortedProducts()) {
-                    System.out.println("name =>" + product.getName() + "ID =>" + product.getProductId());
+                    System.out.println(product.getNameOfCompany() + " " + product.getName() + " ID:" + product.getProductId());
                 }
                 parentMenu.show();
                 parentMenu.execute();

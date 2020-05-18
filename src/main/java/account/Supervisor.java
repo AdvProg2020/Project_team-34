@@ -20,12 +20,12 @@ public class Supervisor extends Account {
 
     public String toString() {
         return "Supervisor: " +
-                "userName='" + userName +'\''+  "\n"+
-                "name='" + name + '\'' +  "\n"+
-                "familyName='" + familyName +'\''+  "\n"+
-                "email='" + email + '\''+  "\n"+
-                "phoneNumber='" + phoneNumber +'\''+  "\n"+
-                "password='" + password +'\''+  "\n"+
-                "credit=" + credit +'\''+  "\n";
+                "userName=\'" + userName + '\'' + "\n"+
+                "name=\'" + name + '\'' + "\n"+
+                "familyName=\'" + familyName + '\'' + "\n"+
+                "email=\'" + email + '\'' + "\n"+
+                "phoneNumber=\'" + phoneNumber + '\'' + "\n"+
+                "password=\'" + password + '\'' + "\n"+
+                "credit=\'" + credit + '\'' + "\n";
     }
 }

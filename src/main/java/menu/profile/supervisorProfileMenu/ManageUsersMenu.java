@@ -88,7 +88,7 @@ public class ManageUsersMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("^create manager profile \\w+$", CreateSupervisorProfile);
+        menusIn.put("^create manager profile$", CreateSupervisorProfile);
         menuForShow.add("Create Manager Profile");
     }
 

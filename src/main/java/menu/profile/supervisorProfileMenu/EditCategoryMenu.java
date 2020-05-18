@@ -86,7 +86,7 @@ public class EditCategoryMenu extends Menu {
 
     @Override
     public void execute() {
-        String regex = "^edit category (\\w+)$";
+        String regex = "^edit category (.+)$";
         Matcher matcher = getMatcher(command, regex);
         if(matcher.find()){
             if(Category.getCategoryByName(matcher.group(1)) == null){

@@ -11,7 +11,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static database.DataBase.connect;
 
 /**
  * @author rpirayadi
@@ -43,9 +42,7 @@ public class AccountDataBase {
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
                 " cartId, nameOfCompany,isAvailable)"+
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ?,? )";
-        try (Connection connection = DataBase.connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
-
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
             statement.setString(1, account.getUserName());
             statement.setString(2,account.getName());
             statement.setString(3, account.getFamilyName());
@@ -69,6 +66,7 @@ public class AccountDataBase {
             }
 
             statement.executeUpdate();
+
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
@@ -88,8 +86,7 @@ public class AccountDataBase {
     public static void importAllAccounts() {
         String sql = "SELECT *  FROM Accounts";
 
-        try (Connection connection = DataBase.connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String username = resultSet.getString("username");
@@ -118,6 +115,7 @@ public class AccountDataBase {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            System.out.println("hi");
         }
     }
 
@@ -126,8 +124,7 @@ public class AccountDataBase {
             throw  new ExceptionalMassage("Invalid field to sort with");
         String sql = "SELECT username FROM Accounts ORDER BY " + field + " ASC;";
         ArrayList<Account> result = new ArrayList<>();
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             String username ;
             while (resultSet.next()) {

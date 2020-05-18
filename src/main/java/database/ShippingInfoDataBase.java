@@ -5,7 +5,6 @@ import cart.ShippingInfo;
 import java.sql.*;
 import java.util.HashMap;
 
-import static database.DataBase.connect;
 
 /**
  * @author rpirayadi
@@ -31,8 +30,7 @@ public class ShippingInfoDataBase {
         }
         String sql = "INSERT into ShippingInfos (identifier, firstName, lastName , city , address , postalCode, phoneNumber) " +
                 "VALUES (?,?, ? ,?,?, ?, ?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setString(1,shippingInfo.getIdentifier());
             statement.setString(2,shippingInfo.getFirstName());
@@ -61,8 +59,7 @@ public class ShippingInfoDataBase {
     public static void importAllShippingInfos() {
         String sql = "SELECT *  FROM ShippingInfos";
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String identifier = resultSet.getString("identifier");

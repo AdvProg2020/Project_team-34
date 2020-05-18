@@ -10,7 +10,6 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static database.DataBase.connect;
 import static database.DataBase.doesIdAlreadyExist;
 
 public class SupplierLogDataBase {
@@ -31,8 +30,7 @@ public class SupplierLogDataBase {
         }
         String sql = "INSERT into SupplierLogs (identifier,earnedMoney, discountAmount, totalPurchase , date) " +
                 "VALUES (?,?, ? ,?, ?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement =DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setString(1, supplierLog.getIdentifier());
             statement.setInt(2, supplierLog.getEarnedMoney());
@@ -61,8 +59,7 @@ public class SupplierLogDataBase {
             throw  new ExceptionalMassage("Invalid field to sort with");
         String sql = "SELECT username FROM SupplierLogs ORDER BY " + field + " ASC;";
         ArrayList<SupplierLog> result = new ArrayList<>();
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             String identifier ;
             while (resultSet.next()) {

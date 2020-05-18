@@ -40,8 +40,7 @@ public class CartDataBase {
         }
         String sql = "INSERT into Carts (identifier, ownerUsername, listOfProductInCartIds, countForEachProductIn,saleForEachProductIn , discountCode, shippingInfoId) " +
                 "VALUES (?,?, ? , ? , ? , ?,?)";
-        try (Connection connection = connect();
-             PreparedStatement statement = connection.prepareStatement(sql)) {
+        try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setString(1,cart.getIdentifier());
             if(cart.getOwner() == null)
@@ -139,8 +138,7 @@ public class CartDataBase {
     public static void importAllCarts() {
         String sql = "SELECT *  FROM Carts";
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String cartId = resultSet.getString("identifier");

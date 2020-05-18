@@ -12,7 +12,7 @@ public class ProductMenu extends Menu {
         super("Product Menu", parentMenu);
 
 
-        menusIn.put("^digest$", new DigestMenu(this,currentProduct));
+        menusIn.put("^digest$", new DigestMenu(this));
         menuForShow.add("Digest Menu");
 
         Menu attributes = new Menu("Attributes", this) {

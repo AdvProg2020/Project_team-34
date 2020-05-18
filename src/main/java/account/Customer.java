@@ -36,7 +36,7 @@ public class Customer extends Account {
     public String toString() {
         return "Customer: \n" +
                 "userName='" + userName +  "\n" +
-                "name='" + name +"\n" +
+                "name='" + name + "\n" +
                 "familyName='" + familyName + "\n" +
                 "email='" + email + "\n" +
                 "phoneNumber='" + phoneNumber + "\n" +

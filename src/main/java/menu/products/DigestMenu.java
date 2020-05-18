@@ -11,9 +11,9 @@ import java.util.regex.Matcher;
 public class DigestMenu extends Menu {
     private Product product;
     private Supplier seller;
-    public DigestMenu(Menu parentMenu,Product product) {
+    public DigestMenu(Menu parentMenu) {
         super("Digest Menu", parentMenu);
-        this.product = product;
+
 
         Menu addToCart = new Menu("Add To Cart", this) {
             @Override
@@ -23,18 +23,16 @@ public class DigestMenu extends Menu {
 
             @Override
             public void execute() {
-                //if(!controller.getAccountController().hasSomeOneLoggedIn()){
-                 //   menusIn.get("Login/Register").show();
-                  //  menusIn.get("Login/Register").execute();
-                //} else {
-                    //need modification
+
                     try {
-                        controller.getAccountController().controlAddToCart(product.getProductId(), seller.getName());
+                        controller.getAccountController().controlAddToCart(product.getProductId(), seller.getNameOfCompany());
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
                     }
+                    parentMenu.show();
+                    parentMenu.execute();
                 }
-            //}
+
         };
         menusIn.put("^add to cart$", addToCart);
         menuForShow.add("add to cart");

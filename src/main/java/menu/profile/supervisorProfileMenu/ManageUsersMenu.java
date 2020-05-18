@@ -94,6 +94,7 @@ public class ManageUsersMenu extends Menu {
 
     @Override
     public void show() {
+        System.out.println("All users:");
         System.out.println(controller.getAccountController().controlGetListOfAccounts());
         super.show();
     }

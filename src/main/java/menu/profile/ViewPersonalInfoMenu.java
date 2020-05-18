@@ -18,7 +18,7 @@ public class ViewPersonalInfoMenu extends Menu {
             public void execute() {
                 String regex = "edit (\\w+)";
                 Matcher matcher = getMatcher(command, regex);
-                System.out.println("Enter the new value:");
+                System.out.print("Enter the new value:");
                 String newValue = scanner.nextLine();
                 if(matcher.find()){
                     try{
@@ -31,7 +31,7 @@ public class ViewPersonalInfoMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("edit (\\w+)", EditPersonalInfo);
+        menusIn.put("^edit (\\w+)$", EditPersonalInfo);
         menuForShow.add("Edit Personal Info");
     }
 

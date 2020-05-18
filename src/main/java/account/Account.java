@@ -100,6 +100,7 @@ public abstract class Account {
 
     public void setIsAvailable(boolean IsAvailable) {
         isAvailable = IsAvailable;
+        AccountDataBase.update(this);
     }
 
     public static Account getAccountByUsername(String userName) {
@@ -115,7 +116,7 @@ public abstract class Account {
     }
 
     public void removeAccount (){
-        isAvailable = false;
+       setIsAvailable(false);
     }
 
     public static Supplier getSupplierByCompanyName(String companyName){

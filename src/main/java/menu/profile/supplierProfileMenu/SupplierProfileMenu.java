@@ -7,6 +7,7 @@ import menu.menuAbstract.Menu;
 import menu.profile.ProfileMenu;
 import product.Category;
 
+import java.util.HashMap;
 import java.util.regex.Matcher;
 
 /**
@@ -74,8 +75,17 @@ public class SupplierProfileMenu extends ProfileMenu {
                 String categoryName = scanner.nextLine();
                 System.out.println("Enter description");
                 String description = scanner.nextLine();
+                System.out.println("Enter the field of specification:(enter end when u are finished)");
+                String field = null;
+                HashMap<String, String> specifications = new HashMap<>();
+                while(!(field = scanner.nextLine()).equalsIgnoreCase("end")){
+                    System.out.println("Enter the specification:");
+                    String value = scanner.nextLine();
+                    specifications.put(field, value);
+                    System.out.println("Enter the field of specification:(enter end when u are finished)");
+                }
                 try{
-                    controller.getProductController().controlAddProduct(productName, nameOfCompany, price, numbers,Category.getCategoryByName(categoryName),description);
+                    controller.getProductController().controlAddProduct(productName, nameOfCompany, price, numbers,Category.getCategoryByName(categoryName),description,specifications);
                 } catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }

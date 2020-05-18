@@ -16,7 +16,7 @@ public class SaleTest {
     private static final Date end = new Date(System.currentTimeMillis()+1000000);
     private static final Sale sale = new Sale(supplier1,start,end,percent,null);
     private static final Product product1 = new Product(supplier1, "p1", "b1", 100,
-            10, "A good product1", null, null);
+            10, "A good product1", null, null,null);
 
     @Test
     public void testIdGenerator(){

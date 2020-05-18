@@ -13,7 +13,7 @@ public class ScoreTest {
             "Ahadinia1", "aryanahadinia24@gmail.com1", "11111111111", "1111",
             1000);
     private static final Product product1 = new Product(supplier1, "p1", "b1", 100,
-            10, "A good product1", null, null);
+            10, "A good product1", null, null,null);
     private static final Score score = new Score((float) 3.4,customer1,product1);
 
     @Test

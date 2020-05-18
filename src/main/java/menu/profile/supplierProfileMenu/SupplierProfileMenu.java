@@ -85,7 +85,7 @@ public class SupplierProfileMenu extends ProfileMenu {
                     System.out.println("Enter the field of specification:(enter end when u are finished)");
                 }
                 try{
-                    controller.getProductController().controlAddProduct(productName, nameOfCompany, price, numbers,Category.getCategoryByName(categoryName),description,specifications);
+                    controller.getProductController().controlAddProduct(productName, nameOfCompany, price, numbers, categoryName, description, specifications);
                 } catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }

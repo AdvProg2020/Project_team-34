@@ -31,7 +31,7 @@ public class ProductController {
 
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers,
-                                  Category category, String description,HashMap<String, String> specifications) throws ExceptionalMassage {
+                                  String category, String description,HashMap<String, String> specifications) throws ExceptionalMassage {
         if (mainController.getAccount() == null)
             throw new ExceptionalMassage("Sing in first.");
         if(!(mainController.getAccount() instanceof Supplier))
@@ -39,8 +39,11 @@ public class ProductController {
         Supplier supplier = (Supplier) mainController.getAccount();
         Product  product;
         product = Product.getProductByName(name);
+        if (Category.getCategoryByName(category) == null) {
+            throw new ExceptionalMassage("Category not found.");
+        }
         if (product == null)
-            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description,null,category.getName(),specifications);
+            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications);
         else {
             product.addNewSupplierForProduct(supplier,price,remainedNumbers);
         }

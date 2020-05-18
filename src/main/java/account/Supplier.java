@@ -38,13 +38,13 @@ public class Supplier extends Account{
     @Override
     public String toString() {
         return "Supplier :" +
-                "userName='" + userName +'\''+  "\n"+
-                "name='" + name +'\''+  "\n"+
-                "familyName='" + familyName +'\''+  "\n"+
-                "email='" + email  +'\''+  "\n"+
-                "phoneNumber='" +'\''+  "\n"+
-                "password='" + password +'\''+  "\n"+
-                "credit=" + credit +'\''+  "\n"+
-                "nameOfCompany='" + nameOfCompany +'\''+  "\n";
+                "userName=\'" + userName + '\'' + "\n" +
+                "name=\'" + name +'\''+ "\n" +
+                "familyName=\'" + familyName +'\''+ "\n" +
+                "email=\'" + email + '\'' + "\n" +
+                "phoneNumber=\'" + '\'' + phoneNumber + "\n" +
+                "password=\'" + password + '\''+ "\n" +
+                "credit=\'" + credit + '\''+ "\n" +
+                "nameOfCompany=\'" + nameOfCompany + '\'' + "\n";
     }
 }

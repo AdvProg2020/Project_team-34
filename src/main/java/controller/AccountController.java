@@ -152,6 +152,10 @@ public class AccountController {
                 else
                     throw new ExceptionalMassage("You must login as a Supplier to edit company name");
                 break;
+            case  "username":
+                throw new ExceptionalMassage("You can not edit username");
+            default:
+                throw new ExceptionalMassage("No such field" + field);
         }
 
     }

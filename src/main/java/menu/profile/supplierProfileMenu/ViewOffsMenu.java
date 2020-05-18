@@ -143,7 +143,7 @@ public class ViewOffsMenu extends Menu {
                     System.out.println(ex.getMessage());
                 }
                 String productId = null;
-                System.out.println("Enter the adding products IDs :");
+                System.out.println("Enter the adding products IDs : (enter end if you are finished)");
                 while(!(productId = scanner.nextLine()).equalsIgnoreCase("end")){
                     if(Product.getProductById(productId) == null){
                         System.out.println("no such id!");

@@ -115,6 +115,7 @@ public class Category {
     //Setters:
     private void setParentCategoryName(String name) {
         this.parentCategoryName = name;
+        CategoryDataBase.update(this);
     }
 
     public void setName(String name) throws ExceptionalMassage {
@@ -128,7 +129,6 @@ public class Category {
         this.name = name;
         for (Category category : getAllCategoriesIn()) {
             category.setParentCategoryName(name);
-            CategoryDataBase.update(this);
         }
         CategoryDataBase.add(this);
     }

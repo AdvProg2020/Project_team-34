@@ -3,6 +3,7 @@ package menu.loginMenu;
 import exceptionalMassage.ExceptionalMassage;
 import menu.menuAbstract.Menu;
 
+import java.util.InputMismatchException;
 import java.util.regex.Matcher;
 
 /**
@@ -66,15 +67,26 @@ public class LoginMenu extends Menu {
                     companyName = scanner.nextLine();
                 }
                 int credit = 0;
+                String creditIO;
                 if (type.equals("customer")) {
                     System.out.print("Enter credit: ");
-                    credit = scanner.nextInt();
-                    String junk = scanner.nextLine();
-                }
-                try {
-                    controller.getAccountController().controlCreateAccount(username, type, name, familyName, email, phoneNumber, password, credit, companyName);
-                } catch (ExceptionalMassage e) {
-                    System.out.println(e.getMessage());
+                    creditIO = scanner.nextLine();
+                    try {
+                        credit = Integer.parseInt(creditIO);
+                        try {
+                            controller.getAccountController().controlCreateAccount(username, type, name, familyName, email, phoneNumber, password, credit, companyName);
+                        } catch (ExceptionalMassage e) {
+                            System.out.println(e.getMessage());
+                        }
+                    } catch (InputMismatchException e) {
+                        System.out.println("You should enter a integer for credit.");
+                    }
+                } else {
+                    try {
+                        controller.getAccountController().controlCreateAccount(username, type, name, familyName, email, phoneNumber, password, credit, companyName);
+                    } catch (ExceptionalMassage e) {
+                        System.out.println(e.getMessage());
+                    }
                 }
                 parentMenu.show();
                 parentMenu.execute();

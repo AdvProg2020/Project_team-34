@@ -1,10 +1,13 @@
 package database;
 
+import account.Account;
 import cart.Cart;
+import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import log.LogStatus;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Date;
 
@@ -21,6 +24,7 @@ public class CustomerLogDataBase {
         content.put("date" , "long");
         content.put("deliveryStatus", "String");
         content.put("cartId", "String");
+        content.put("amount", "int");
 
 
         DataBase.createNewTable("CustomerLogs", content);
@@ -30,8 +34,8 @@ public class CustomerLogDataBase {
         if (DataBase.doesIdAlreadyExist("CustomerLogs", "identifier", customerLog.getIdentifier())) {
             return;
         }
-        String sql = "INSERT into CustomerLogs (identifier, date, deliveryStatus, cartId) " +
-                "VALUES (?,?, ? ,?)";
+        String sql = "INSERT into CustomerLogs (identifier, date, deliveryStatus, cartId,amount) " +
+                "VALUES (?,?, ? ,?, ?)";
         try (Connection connection = connect();
              PreparedStatement statement = connection.prepareStatement(sql)) {
 
@@ -39,6 +43,7 @@ public class CustomerLogDataBase {
             statement.setLong(2,customerLog.getDate().getTime());
             statement.setString(3, String.valueOf(customerLog.getDeliveryStatus()));
             statement.setString(4, customerLog.getCart().getIdentifier());
+            statement.setInt(5,customerLog.getCart().getBill());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -76,6 +81,27 @@ public class CustomerLogDataBase {
         }
     }
 
+    public static ArrayList<CustomerLog> sortCustomerLog(String field , ArrayList<String> whatToShow) throws ExceptionalMassage {
+        if(!field.equals("date") && !field.equals("amount"))
+            throw  new ExceptionalMassage("Invalid field to sort with");
+        String sql = "SELECT identifier FROM CustomerLogs ORDER BY " + field + " ASC;";
+        ArrayList<CustomerLog> result = new ArrayList<>();
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            String identifier ;
+            while (resultSet.next()) {
+                identifier = resultSet.getString("identifier");
+                if(whatToShow.contains(identifier))
+                    result.add(CustomerLog.getCustomerLogById(identifier));
+            }
+            return result;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
 
 

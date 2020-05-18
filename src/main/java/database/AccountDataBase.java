@@ -4,9 +4,14 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
+import discount.CodedDiscount;
+import exceptionalMassage.ExceptionalMassage;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+
+import static database.DataBase.connect;
 
 /**
  * @author rpirayadi
@@ -116,12 +121,27 @@ public class AccountDataBase {
         }
     }
 
-    /*
-    public static void sortAccounts(String field ){
-        String sql = "SELECT *  FROM Accounts ORDER BY";
-    }
+    public static ArrayList<Account> sortAccount(String field , ArrayList<String> whatToShow) throws ExceptionalMassage{
+        if(!field.equals("username") && !field.equals("credit"))
+            throw  new ExceptionalMassage("Invalid field to sort with");
+        String sql = "SELECT username FROM Accounts ORDER BY " + field + " ASC;";
+        ArrayList<Account> result = new ArrayList<>();
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            String username ;
+            while (resultSet.next()) {
+                username = resultSet.getString("username");
+                if(whatToShow.contains(username))
+                    result.add(Account.getAccountByUsername(username));
+            }
+            return result;
 
-     */
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 }
 
 

@@ -126,11 +126,11 @@ public class CodedDiscountDataBase {
         try (Connection connection = connect();
              Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
-            CodedDiscount codedDiscount;
+            String discountCode ;
             while (resultSet.next()) {
-                codedDiscount = CodedDiscount.getCodedDiscountByCode(resultSet.getString("discountCode"));
-                if(whatToShow.contains(codedDiscount.getDiscountCode()))
-                    result.add(codedDiscount);
+                discountCode = resultSet.getString("discountCode");
+                if(whatToShow.contains(discountCode))
+                    result.add(CodedDiscount.getCodedDiscountByCode(discountCode));
             }
             return result;
 

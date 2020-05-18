@@ -1,6 +1,8 @@
 package database;
 
+import account.Account;
 import discount.Sale;
+import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import state.State;
 
@@ -80,5 +82,27 @@ public class SaleDataBase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public static ArrayList<Sale> sortSale(String field , ArrayList<String> whatToShow) throws ExceptionalMassage {
+        if(!field.equals("percent") && !field.equals("start") && !field.equals("end"))
+            throw  new ExceptionalMassage("Invalid field to sort with");
+        String sql = "SELECT offId FROM Sales ORDER BY " + field + " ASC;";
+        ArrayList<Sale> result = new ArrayList<>();
+        try (Connection connection = connect();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(sql)) {
+            String offId ;
+            while (resultSet.next()) {
+                offId = resultSet.getString("offId");
+                if(whatToShow.contains(offId))
+                    result.add(Sale.getSaleById(offId));
+            }
+            return result;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

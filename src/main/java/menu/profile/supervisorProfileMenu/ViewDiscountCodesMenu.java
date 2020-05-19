@@ -114,8 +114,9 @@ public class ViewDiscountCodesMenu extends Menu {
     @Override
     public void show() {
         for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-            System.out.println(codedDiscount.getDiscountCode());
+            System.out.println(codedDiscount.getDiscountCode() + " Percent: " + codedDiscount.getPercent() + "% Maximum: " + codedDiscount.getMaxDiscountAmount());
         }
+        System.out.println();
         super.show();
     }
 }

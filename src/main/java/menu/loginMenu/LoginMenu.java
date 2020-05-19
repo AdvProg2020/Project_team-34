@@ -78,7 +78,7 @@ public class LoginMenu extends Menu {
                         } catch (ExceptionalMassage e) {
                             System.out.println(e.getMessage());
                         }
-                    } catch (InputMismatchException e) {
+                    } catch (NumberFormatException e) {
                         System.out.println("You should enter a integer for credit.");
                     }
                 } else {

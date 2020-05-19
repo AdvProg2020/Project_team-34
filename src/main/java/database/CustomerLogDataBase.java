@@ -69,9 +69,7 @@ public class CustomerLogDataBase {
                 Date date = new Date(resultSet.getLong("date"));
                 LogStatus deliveryStatus = LogStatus.valueOf(resultSet.getString("deliveryStatus"));
                 Cart cart = Cart.getCartById(resultSet.getString("cartId"));
-
                 new CustomerLog(customerLogId,date,deliveryStatus,cart);
-
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

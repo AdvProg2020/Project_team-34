@@ -95,13 +95,8 @@ public class ShippingInfo {
 
     @Override
     public String toString() {
-        return "ShippingInfo{" +
-                "firstName: '" + firstName + '\'' +
-                ", lastName: '" + lastName + '\'' +
-                ", city: '" + city + '\'' +
-                ", address: '" + address + '\'' +
-                ", postalCode: '" + postalCode + '\'' +
-                ", phoneNumber: '" + phoneNumber + '\'' +
-                '}';
+        return "Ship to: " + city + ", " + address + "Postal code: " + postalCode + "\n" +
+                "Deliver to: " + firstName + " " + lastName + "\n" +
+                "Contact information: " + phoneNumber;
     }
 }

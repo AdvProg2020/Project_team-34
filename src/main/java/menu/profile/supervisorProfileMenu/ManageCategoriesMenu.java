@@ -38,7 +38,7 @@ public class ManageCategoriesMenu extends Menu {
                 parentMenu.execute();
             }
         };
-        menusIn.put("^add \\w+$", RemoveProduct);
+        menusIn.put("^add category$", RemoveProduct);
         menuForShow.add("Add Category");
 
         Menu RemoveCategory = new Menu("Remove Category", this) {

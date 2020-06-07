@@ -5,6 +5,8 @@ import gui.GMenu;
 import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
 import menu.menuAbstract.Menu;
 
 public class ProfileGMenu extends GMenu {
@@ -23,6 +25,7 @@ public class ProfileGMenu extends GMenu {
         TextField email = new TextField();
         TextField phoneNumber = new TextField();
         PasswordField password = new PasswordField();
+        GridPane gridPane = new GridPane();
 
         TextField nameOfCompany = new TextField();
         TextField credit = new TextField();

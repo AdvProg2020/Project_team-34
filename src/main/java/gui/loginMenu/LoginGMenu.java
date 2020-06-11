@@ -140,6 +140,20 @@ public class LoginGMenu extends GMenu {
 
         // Adding controller!
 
+        signUp.setOnMouseClicked(e ->{
+            stage.setScene(new RegisterGMenu("Register Menu",this,stage).getScene());
+        });
+
+        String username = usernameField.getText();
+        String password = passwordField.getText();
+
+        signIn.setOnAction(e -> {
+            try {
+                controller.getAccountController().controlLogin(username, password);
+            } catch (ExceptionalMassage ex){
+                System.out.println(ex.getMessage());
+            }
+        });
 
 
         return new Scene(anchorPane0);

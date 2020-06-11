@@ -12,7 +12,7 @@ public abstract class GMenu {
     public static final Node HEADER = createHeader();
     private final Menu parentMenu;
     private final String menuName;
-    private final Controller controller;
+    protected final Controller controller;
 
     public GMenu(String menuName, Menu parentMenu) {
         this.menuName = menuName;

@@ -1,5 +1,6 @@
 package gui.loginMenu;
 
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -194,24 +195,23 @@ public class RegisterGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(gridPane15);
-        RadioButton radioButton24 = new RadioButton();
-        radioButton24.setLayoutX(319.0);
-        radioButton24.setLayoutY(129.0);
-        radioButton24.setText("Customer");
-        radioButton24.setMnemonicParsing(false);
-        radioButton24.setSelected(true);
+        RadioButton customerButton = new RadioButton();
+        customerButton.setLayoutX(319.0);
+        customerButton.setLayoutY(129.0);
+        customerButton.setText("Customer");
+        customerButton.setMnemonicParsing(false);
+        customerButton.setSelected(true);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(radioButton24);
-        RadioButton radioButton25 = new RadioButton();
-        //radioButton25.setToggleGroup("AccountType");
-        radioButton25.setLayoutX(450.0);
-        radioButton25.setLayoutY(129.0);
-        radioButton25.setText("Supplier");
-        radioButton25.setMnemonicParsing(false);
+        anchorPane0.getChildren().add(customerButton);
+        RadioButton supplierButton = new RadioButton();
+        supplierButton.setLayoutX(450.0);
+        supplierButton.setLayoutY(129.0);
+        supplierButton.setText("Supplier");
+        supplierButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(radioButton25);
+        anchorPane0.getChildren().add(supplierButton);
         Label label26 = new Label();
         label26.setLayoutX(179.0);
         label26.setLayoutY(129.0);
@@ -255,11 +255,60 @@ public class RegisterGMenu extends GMenu {
 
         gridPane15.setVgap(10);
         gridPane15.setHgap(15);
+        // Adding Toggle Group
 
+        ToggleGroup accountType = new ToggleGroup();
+
+        customerButton.setToggleGroup(accountType);
+        supplierButton.setToggleGroup(accountType);
+
+
+        customerButton.setOnMouseClicked(e ->{
+            companyNameField.setDisable(true);
+            creditField.setDisable(false);
+        });
+
+        supplierButton.setOnMouseClicked(e ->{
+            companyNameField.setDisable(false);
+            creditField.setDisable(true);
+        });
         // Adding Controller
+        if(((RadioButton)accountType.getSelectedToggle()).getText().equals("Customer")){
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String email = emailField.getText();
+            String phoneNum = phoneNumber.getText();
+            String userName = usernameField.getText();
+            String password = passwordField.getText();
+            String companyName = companyNameField.getText();
+            try{
+                int credit = Integer.parseInt(creditField.getText());
+                try{
+                    controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,credit,companyName);
+                }catch (ExceptionalMassage ex){
+                    System.out.println(ex.getMessage());
+                }
+            } catch (NumberFormatException ex){
+                System.out.println(ex.getMessage());
+            }
+        } else {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String email = emailField.getText();
+            String phoneNum = phoneNumber.getText();
+            String userName = usernameField.getText();
+            String password = passwordField.getText();
+            String companyName = companyNameField.getText();
+            try{
+                controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,0,companyName);
+            }catch (ExceptionalMassage ex){
+                System.out.println(ex.getMessage());
+            }
+        }
 
-
-
+        singInText.setOnMouseClicked(e -> {
+            stage.setScene(new LoginGMenu("Login menu", this , stage).getScene());
+        });
 
         anchorPane0.getChildren().add(text29);
 

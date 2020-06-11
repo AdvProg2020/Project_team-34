@@ -47,4 +47,17 @@ public class Supplier extends Account{
                 "credit=\'" + credit + '\''+ "\n" +
                 "nameOfCompany=\'" + nameOfCompany + '\'' + "\n";
     }
+
+
+    public void editAllFields(String name, String familyName, String email, String phoneNumber,
+                              String password, String nameOfCompany) {
+        this.userName = userName;
+        this.name = name;
+        this.familyName = familyName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.credit = credit;
+        this.nameOfCompany = nameOfCompany;
+    }
 }

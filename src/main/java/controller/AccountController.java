@@ -166,6 +166,20 @@ public class AccountController {
 
     }
 
+    public void editAllFieldsSupplier(String name, String familyName, String email, String phoneNumber, String password,
+                                      int credit, String nameOfCompany) {
+        if (password == null || password.trim().length() == 0) {
+            password = getAccount().getPassword();
+        }
+        if (getAccount() instanceof Customer) {
+            ((Customer) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, credit);
+        } else if (getAccount() instanceof Supplier) {
+            ((Supplier) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
+        } else if (getAccount() instanceof Supervisor) {
+            ((Supervisor) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, credit);
+        }
+    }
+
     public String controlGetListOfAccounts() {
         ArrayList<String> allUsername = Account.getAllUsername();
         StringBuilder result = new StringBuilder();
@@ -308,5 +322,33 @@ public class AccountController {
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);
         //customer credit decrease
+    }
+
+    public String getAccountUsername() {
+        return getAccount().getUserName();
+    }
+
+    public String getAccountName() {
+        return getAccount().getName();
+    }
+
+    public String getAccountFamilyName() {
+        return getAccount().getFamilyName();
+    }
+
+    public String getAccountEmail() {
+        return getAccount().getEmail();
+    }
+
+    public String getAccountPhoneNumber() {
+        return getAccount().getPhoneNumber();
+    }
+
+    public int getAccountCredit() {
+        return getAccount().getCredit();
+    }
+
+    public String getAccountNameOfCompany() {
+        return ((Supplier) getAccount()).getNameOfCompany();
     }
 }

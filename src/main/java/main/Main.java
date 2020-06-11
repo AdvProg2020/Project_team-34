@@ -6,7 +6,7 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import menu.mainMenu.MainMenu;
 
-public class Main extends Application{
+public class Main extends Application {
     private static long timeBeginning;
     private static long timeProgramWasOpened;
     private static int timesDiscountCodeGenerated;

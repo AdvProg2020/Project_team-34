@@ -15,7 +15,8 @@ public abstract class Account {
     protected boolean isAvailable ;
     private static final ArrayList<Account> allAccounts = new ArrayList<>();
 
-    public Account(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit, boolean isAvailable) {
+    public Account(String userName, String name, String familyName, String email, String phoneNumber, String password,
+                   int credit, boolean isAvailable) {
         this.userName = userName;
         this.name = name;
         this.familyName = familyName;
@@ -146,5 +147,16 @@ public abstract class Account {
             }
         }
         return false;
+    }
+
+    public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,
+                              int credit) {
+        this.userName = userName;
+        this.name = name;
+        this.familyName = familyName;
+        this.email = email;
+        this.phoneNumber = phoneNumber;
+        this.password = password;
+        this.credit = credit;
     }
 }

@@ -2,6 +2,7 @@ package main;
 
 import database.DataBase;
 import gui.allProductMenu.AllProductGMenu;
+import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -38,7 +39,7 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        AllProductGMenu menu = new AllProductGMenu("all Prodcut", null, stage);
+        CartGMenu menu = new CartGMenu("Cart GMenu", null, stage);
         stage.setScene(menu.getScene());
         stage.show();
 //        LoginGMenu menu = new LoginGMenu("login", null);

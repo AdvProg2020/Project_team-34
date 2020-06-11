@@ -4,6 +4,7 @@ import account.Account;
 import account.Supervisor;
 import account.Supplier;
 import gui.GMenu;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
@@ -50,8 +51,8 @@ public class ProfileGMenu extends GMenu {
         Label nameOfCompanyLabel = new Label("Name of Company");
         Label creditLabel = new Label("Credit");
 
-
         GridPane gridPane = new GridPane();
+        gridPane.setAlignment(Pos.CENTER);
         Scene scene = new Scene(gridPane);
 
         usernameField.setText(account.getUserName());
@@ -100,6 +101,7 @@ public class ProfileGMenu extends GMenu {
         gridPane.add(passwordLabel, 0, row);
         gridPane.add(passwordField, 1, row);
         row++;
+        
 
         return scene;
     }

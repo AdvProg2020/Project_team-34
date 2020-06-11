@@ -2,9 +2,13 @@ package gui;
 
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import menu.menuAbstract.Menu;
 
+import java.io.File;
+
 public abstract class GMenu {
+
     public static final Node HEADER = createHeader();
     private final Menu parentMenu;
     private final String menuName;

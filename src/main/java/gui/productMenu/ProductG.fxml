@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="800.0" prefWidth="1200.0" style="-fx-background-color: #f5f5f2;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.productMenu.ProductMenuG">
+   <children>
+      <ImageView fitHeight="305.0" fitWidth="285.0" layoutX="76.0" layoutY="60.0" pickOnBounds="true" preserveRatio="true" />
+      <Label layoutX="76.0" layoutY="390.0" text="Product Name:">
+         <font>
+            <Font name="Aganè 65" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="191.0" layoutY="390.0" text="&quot;name sits here&quot;">
+         <font>
+            <Font name="Aganè 55" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="76.0" layoutY="417.0" text="Price:">
+         <font>
+            <Font name="Aganè 65" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="131.0" layoutY="417.0" text="&quot;price sits here&quot;">
+         <font>
+            <Font name="Aganè 55" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="76.0" layoutY="444.0" text="Score:">
+         <font>
+            <Font name="Aganè 65" size="15.0" />
+         </font>
+      </Label>
+      <Label layoutX="131.0" layoutY="444.0" text="&quot;Score sits here&quot;">
+         <font>
+            <Font name="Aganè 55" size="15.0" />
+         </font>
+      </Label>
+      <TabPane layoutY="571.0" prefHeight="229.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Comments">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #f8e8e2;" />
+            </content>
+          </Tab>
+          <Tab text="Details">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: f8e8e2;">
+                     <children>
+                        <ScrollBar layoutX="1186.0" orientation="VERTICAL" prefHeight="191.0" prefWidth="18.0" />
+                     </children>
+                  </AnchorPane>
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+      <Label layoutX="380.0" layoutY="50.0" />
+      <Label layoutX="380.0" layoutY="62.0" text="Description:">
+         <font>
+            <Font name="Aganè 65" size="15.0" />
+         </font>
+      </Label>
+      <TextFlow layoutX="476.0" layoutY="62.0" prefHeight="200.0" prefWidth="208.0" />
+   </children>
+</AnchorPane>

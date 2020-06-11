@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="650.0" prefWidth="880.0" style="-fx-background-color: #f5f5f2;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.loginMenu.RegisterGMenu">
+   <children>
+      <HBox prefHeight="102.0" prefWidth="883.0" style="-fx-background-color: #4477c8;">
+         <children>
+            <Circle fill="#f8e8e2" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="810.0" translateY="10.0" />
+            <Circle fill="#eeb39e" radius="15.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" translateX="815.0" translateY="10.0" />
+         </children></HBox>
+      <HBox layoutY="548.0" prefHeight="102.0" prefWidth="883.0" style="-fx-background-color: #4477c8;" />
+      <Label layoutX="58.0" layoutY="127.0" prefHeight="24.0" prefWidth="121.0" text="Sign Up">
+         <font>
+            <Font name="Aganè 65" size="19.0" />
+         </font>
+      </Label>
+      <GridPane layoutX="58.0" layoutY="187.0" prefHeight="277.0" prefWidth="356.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+        </rowConstraints>
+         <children>
+            <HBox prefHeight="60.0" prefWidth="316.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;">
+               <children>
+                  <TextField opacity="0.83" prefHeight="51.0" prefWidth="295.0" promptText="First name" style="-fx-background-color: transparent;">
+                     <font>
+                        <Font name="Aganè 55" size="16.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin>
+            </HBox>
+            <HBox prefHeight="51.0" prefWidth="345.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;" GridPane.rowIndex="1">
+               <children>
+                  <TextField opacity="0.83" prefHeight="51.0" prefWidth="295.0" promptText="Last name" style="-fx-background-color: transparent;">
+                     <font>
+                        <Font name="Aganè 55" size="16.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin>
+            </HBox>
+            <HBox prefHeight="51.0" prefWidth="345.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;" GridPane.rowIndex="2">
+               <children>
+                  <TextField opacity="0.83" prefHeight="51.0" prefWidth="295.0" promptText="Email" style="-fx-background-color: transparent;">
+                     <font>
+                        <Font name="Aganè 55" size="16.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin>
+            </HBox>
+            <HBox prefHeight="51.0" prefWidth="345.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;" GridPane.rowIndex="3">
+               <children>
+                  <TextField opacity="0.83" prefHeight="51.0" prefWidth="295.0" promptText="Phone number" style="-fx-background-color: transparent;">
+                     <font>
+                        <Font name="Aganè 55" size="16.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin>
+            </HBox>
+         </children>
+      </GridPane>
+      <GridPane layoutX="460.0" layoutY="187.0" prefHeight="277.0" prefWidth="356.0">
+         <children>
+            <HBox prefHeight="60.0" prefWidth="316.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;">
+               <children>
+                  <TextField opacity="0.83" prefHeight="51.0" prefWidth="295.0" promptText="Username" style="-fx-background-color: transparent;">
+                     <font>
+                        <Font name="Aganè 55" size="16.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin>
+            </HBox>
+            <HBox prefHeight="51.0" prefWidth="345.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;" GridPane.rowIndex="2">
+               <children>
+                  <TextField opacity="0.83" prefHeight="51.0" prefWidth="295.0" promptText="Company name" style="-fx-background-color: transparent;">
+                     <font>
+                        <Font name="Aganè 55" size="16.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin>
+            </HBox>
+            <HBox prefHeight="51.0" prefWidth="345.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;" GridPane.rowIndex="3">
+               <children>
+                  <TextField opacity="0.83" prefHeight="51.0" prefWidth="295.0" promptText="Credit" style="-fx-background-color: transparent;">
+                     <font>
+                        <Font name="Aganè 55" size="16.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin>
+            </HBox>
+            <HBox prefHeight="16.0" prefWidth="356.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;" GridPane.rowIndex="1">
+               <children>
+                  <PasswordField prefHeight="41.0" prefWidth="295.0" promptText="Password" style="-fx-background-color: transparent;">
+                     <font>
+                        <Font name="Aganè 55" size="16.0" />
+                     </font>
+                  </PasswordField>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <GridPane.margin>
+                  <Insets top="25.0" />
+               </GridPane.margin>
+            </HBox>
+         </children>
+         <columnConstraints>
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+         </rowConstraints>
+      </GridPane>
+      <RadioButton layoutX="319.0" layoutY="129.0" mnemonicParsing="false" selected="true" text="Customer">
+         <font>
+            <Font name="Aganè 55" size="15.0" />
+         </font>
+         <toggleGroup>
+            <ToggleGroup fx:id="AccountType" />
+         </toggleGroup>
+      </RadioButton>
+      <RadioButton layoutX="450.0" layoutY="129.0" mnemonicParsing="false" text="Supplier" toggleGroup="$AccountType">
+         <font>
+            <Font name="Aganè 55" size="15.0" />
+         </font>
+      </RadioButton>
+      <Label layoutX="179.0" layoutY="129.0" text="Account type:">
+         <font>
+            <Font name="Aganè 65" size="15.0" />
+         </font>
+      </Label>
+      <Button layoutX="522.0" layoutY="494.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="233.0" style="-fx-background-color: #4678c8; -fx-background-radius: 100PX; -fx-text-fill: #f5f5f2;" text="Sign Up">
+         <font>
+            <Font name="Aganè 65" size="15.0" />
+         </font>
+      </Button>
+      <Text layoutX="309.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #4678c8;" text="Sign In!" underline="true">
+         <font>
+            <Font name="Aganè 65" size="16.0" />
+         </font>
+      </Text>
+      <Text layoutX="116.0" layoutY="514.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Already have an account?" wrappingWidth="202.6708984375">
+         <font>
+            <Font name="Aganè 55" size="15.0" />
+         </font>
+      </Text>
+   </children>
+</AnchorPane>

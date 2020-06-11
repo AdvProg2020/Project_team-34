@@ -39,11 +39,16 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        CartGMenu menu = new CartGMenu("Cart GMenu", null, stage);
-        stage.setScene(menu.getScene());
-        stage.show();
-//        LoginGMenu menu = new LoginGMenu("login", null);
+//        CartGMenu menu = new CartGMenu("Cart GMenu", null, stage);
+//        stage.setScene(menu.getScene());
+//        stage.show();
+
+//        LoginGMenu menu = new LoginGMenu("login", null, stage);
 //        stage.setScene(menu.createScene());
 //        stage.show();
+
+        AllProductGMenu menu = new AllProductGMenu("All Product GMenu" , null, stage);
+        stage.setScene(menu.getScene());
+        stage.show();
     }
 }

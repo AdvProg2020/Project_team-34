@@ -3,15 +3,15 @@ package gui.allProductMenu;
 import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import product.Product;
 
 import java.io.File;
-import java.util.GregorianCalendar;
+import java.util.ArrayList;
 
 public class AllProductGMenu extends GMenu {
 
@@ -21,7 +21,7 @@ public class AllProductGMenu extends GMenu {
     private final VBox appliedFilter;
     private final VBox price ;
     private final VBox sort;
-    private final GridPane products;
+    private final GridPane productGridPane;
 
 
     public AllProductGMenu(String menuName, GMenu parentMenu, Stage stage) {
@@ -32,14 +32,11 @@ public class AllProductGMenu extends GMenu {
         price = new VBox();
         backgroundLayout = new GridPane();
         mainPane = new GridPane();
-        products = new GridPane();
+        productGridPane = new GridPane();
     }
 
     @Override
     protected Scene createScene() {
-
-
-
         Label label = new Label("Applied Filter");
         appliedFilter.getChildren().add(label);
         appliedFilter.setSpacing(10);
@@ -70,15 +67,25 @@ public class AllProductGMenu extends GMenu {
         price.setSpacing(10);
         price.setPadding(new Insets(10, 10 , 10 , 10));
 
-        Button button = new Button("Apply Filter");
+        Button button = new Button("Apply Filter please");
         button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
         button.getStyleClass().add("button");
 
         filterAndSort.getChildren().addAll(appliedFilter, sort, price, button);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
 
+        button.setOnAction(e -> {
+            System.out.println("hi");
+                ArrayList<Product> products =  controller.getProductController().getFilterAndSort().getProducts();
+        int row =0 ;
+        for (Product product : products) {
+            productGridPane.add(new Label(product.getName()), row, 0);
+            row++;
+        }
+        });
 
-        mainPane.getChildren().addAll(filterAndSort,products );
+
+        mainPane.getChildren().addAll(filterAndSort, productGridPane);
 
         backgroundLayout.getChildren().add(mainPane);
 

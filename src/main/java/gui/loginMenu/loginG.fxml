@@ -27,7 +27,7 @@
          </opaqueInsets></Label>
       <HBox layoutX="78.0" layoutY="174.0" prefHeight="51.0" prefWidth="345.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;">
          <children>
-            <TextField opacity="0.83" prefHeight="51.0" prefWidth="295.0" promptText="Enter your username here!" style="-fx-background-color: transparent;">
+            <TextField fx:id="usernameField" opacity="0.83" prefHeight="51.0" prefWidth="295.0" promptText="Enter your username here!" style="-fx-background-color: transparent;">
                <font>
                   <Font name="Aganè 55" size="16.0" />
                </font>
@@ -42,14 +42,14 @@
             <Insets />
          </opaqueInsets>
          <children>
-            <PasswordField prefHeight="51.0" prefWidth="295.0" promptText="Enter your password here!" style="-fx-background-color: transparent;">
+            <PasswordField fx:id="passwordField" prefHeight="51.0" prefWidth="295.0" promptText="Enter your password here!" style="-fx-background-color: transparent;">
                <font>
                   <Font name="Aganè 55" size="16.0" />
                </font>
             </PasswordField>
          </children>
       </HBox>
-      <Button layoutX="134.0" layoutY="328.0" mnemonicParsing="false" prefHeight="33.0" prefWidth="233.0" style="-fx-background-color: #4678c8; -fx-background-radius: 100PX; -fx-text-fill: #f5f5f2;" text="Sign in">
+      <Button fx:id="singInButton" layoutX="134.0" layoutY="328.0" mnemonicParsing="false" onMousePressed="#singIn" prefHeight="33.0" prefWidth="233.0" style="-fx-background-color: #4678c8; -fx-background-radius: 100PX; -fx-text-fill: #f5f5f2;" text="Sign in">
          <font>
             <Font name="Aganè 65" size="15.0" />
          </font>
@@ -59,7 +59,7 @@
             <Font name="Aganè 55" size="15.0" />
          </font>
       </Text>
-      <Text layoutX="288.0" layoutY="417.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #4678c8;" text="Sign up!" underline="true">
+      <Text fx:id="signUp" layoutX="288.0" layoutY="417.0" onMouseClicked="#goToSignUp" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-fill: #4678c8;" text="Sign up!" underline="true">
          <font>
             <Font name="Aganè 65" size="16.0" />
          </font>

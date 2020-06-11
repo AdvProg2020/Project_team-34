@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.image.*?>
 <?import java.lang.*?>
@@ -41,18 +43,21 @@
             <Font name="Aganè 55" size="15.0" />
          </font>
       </Label>
-      <TabPane layoutY="571.0" prefHeight="229.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutY="495.0" prefHeight="305.0" prefWidth="1200.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Comments">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #f8e8e2;" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: #f8e8e2;">
+                     <children>
+                        <ScrollBar layoutX="1186.0" orientation="VERTICAL" prefHeight="268.0" prefWidth="18.0" />
+                     </children></AnchorPane>
             </content>
           </Tab>
           <Tab text="Details">
             <content>
               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" style="-fx-background-color: f8e8e2;">
                      <children>
-                        <ScrollBar layoutX="1186.0" orientation="VERTICAL" prefHeight="191.0" prefWidth="18.0" />
+                        <ScrollBar layoutX="1186.0" orientation="VERTICAL" prefHeight="266.0" prefWidth="18.0" />
                      </children>
                   </AnchorPane>
             </content>
@@ -65,6 +70,57 @@
             <Font name="Aganè 65" size="15.0" />
          </font>
       </Label>
-      <TextFlow layoutX="476.0" layoutY="62.0" prefHeight="200.0" prefWidth="208.0" />
+      <Text layoutX="476.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="description sits here!" wrappingWidth="220.0">
+         <font>
+            <Font name="Aganè 55" size="15.0" />
+         </font>
+      </Text>
+      <VBox alignment="TOP_CENTER" layoutX="767.0" prefHeight="497.0" prefWidth="433.0" style="-fx-background-color: #9cbfe3;">
+         <children>
+            <Label text="Order now!">
+               <VBox.margin>
+                  <Insets top="15.0" />
+               </VBox.margin>
+               <font>
+                  <Font name="Aganè 65" size="29.0" />
+               </font>
+            </Label>
+            <HBox prefHeight="51.0" prefWidth="403.0" style="-fx-background-color: white; -fx-border-color: #a2a2a2; -fx-border-width: 0px 0px 2px 0px;" translateY="90.0">
+               <children>
+                  <TextField opacity="0.83" prefHeight="49.0" prefWidth="335.0" promptText="Enter the amount you want!" style="-fx-background-color: transparent;">
+                     <font>
+                        <Font name="Aganè 55" size="16.0" />
+                     </font>
+                  </TextField>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+               <VBox.margin>
+                  <Insets left="30.0" right="50.0" />
+               </VBox.margin>
+            </HBox>
+            <HBox prefHeight="37.0" prefWidth="433.0" translateY="150.0">
+               <children>
+                  <Label text="Choose your supplier:">
+                     <font>
+                        <Font name="Aganè 55" size="15.0" />
+                     </font>
+                     <HBox.margin>
+                        <Insets left="30.0" />
+                     </HBox.margin>
+                  </Label>
+                  <ChoiceBox prefWidth="150.0" translateX="25.0" />
+               </children>
+            </HBox>
+            <Button mnemonicParsing="false" prefHeight="33.0" prefWidth="233.0" style="-fx-background-color: #4678c8; -fx-background-radius: 100PX; -fx-text-fill: #f5f5f2;" text="Add to cart" translateY="280.0">
+               <font>
+                  <Font name="Aganè 65" size="15.0" />
+               </font>
+            </Button>
+         </children>
+         <effect>
+            <DropShadow />
+         </effect></VBox>
    </children>
 </AnchorPane>

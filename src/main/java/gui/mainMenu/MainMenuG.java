@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -98,9 +99,12 @@ public class MainMenuG extends GMenu {
         //loginMenu.setOnAction( e-> {
             //stage.setScene(new LoginGMenu("Login Menu",this,stage).getScene());
         //});
+        GridPane background = new GridPane();
+        background.setAlignment(Pos.CENTER);
+        background.getChildren().add(anchorPane0);
 
 
 
-        return new Scene(anchorPane0);
+        return new Scene(background);
     }
 }

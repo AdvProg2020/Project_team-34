@@ -44,6 +44,7 @@
             </VBox>
             <VBox alignment="CENTER" prefHeight="104.0" prefWidth="102.0">
                <children>
+                  <Label text="Lowe" />
                   <Slider />
                </children>
             </VBox>

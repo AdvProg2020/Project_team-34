@@ -10,6 +10,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import menu.menuAbstract.Menu;
 
@@ -17,35 +18,6 @@ import java.io.IOException;
 
 public class LoginGMenu extends GMenu {
 
-    @FXML
-    private TextField usernameField;
-
-    @FXML
-    private PasswordField passwordField;
-
-    @FXML
-    private Button singInButton;
-
-    @FXML
-    private Text signUp;
-
-    @FXML
-    void singIn(ActionEvent event) {
-        String userName = usernameField.getText();
-        String passWord = passwordField.getText();
-        try {
-            controller.getAccountController().controlLogin(userName, passWord);
-            System.out.println("Welcome");
-        }catch (ExceptionalMassage ex){
-            System.out.println("slm!");
-        }
-
-    }
-
-    @FXML
-    void goToSignUp(ActionEvent event) {
-
-    }
 
     public LoginGMenu(String menuName, Menu parentMenu) {
         super(menuName, parentMenu);
@@ -55,11 +27,13 @@ public class LoginGMenu extends GMenu {
     public Scene createScene() {
         Parent pane = null;
         try {
-            pane = FXMLLoader.load(getClass().getResource("loginG.fxml"));
+            pane = FXMLLoader.load(getClass().getResource("/org/example/fxml/loginG.fxml"));
         } catch (IOException ex){
+            System.out.println("error khordam");
             System.out.println(ex.getMessage());
         }
-        Scene scene = new Scene( pane );
+        Scene scene = new Scene( new Pane());
+        scene.setRoot(pane);
         return scene;
     }
 }

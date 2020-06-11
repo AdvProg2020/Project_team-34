@@ -1,13 +1,8 @@
-import account.Account;
-import account.Customer;
-import account.Supplier;
+package main;
+
 import database.DataBase;
-import exceptionalMassage.ExceptionalMassage;
-import gui.GMenu;
 import gui.loginMenu.LoginGMenu;
-import gui.profile.ProfileGMenu;
 import javafx.application.Application;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import menu.mainMenu.MainMenu;
 

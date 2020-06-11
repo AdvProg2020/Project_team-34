@@ -1,6 +1,7 @@
 package main;
 
 import database.DataBase;
+import gui.allProductMenu.AllProductGMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -25,9 +26,6 @@ public class Main extends Application {
     }
 
     private static void run() {
-
-
-
         MainMenu mainMenu = new MainMenu();
         mainMenu.show();
         mainMenu.execute();
@@ -39,8 +37,12 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        LoginGMenu menu = new LoginGMenu("login", null);
-        stage.setScene(menu.createScene());
+
+        AllProductGMenu menu = new AllProductGMenu("all Prodcut", null, stage);
+        stage.setScene(menu.getScene());
         stage.show();
+//        LoginGMenu menu = new LoginGMenu("login", null);
+//        stage.setScene(menu.createScene());
+//        stage.show();
     }
 }

@@ -2,11 +2,12 @@ package gui.loginMenu;
 
 import gui.GMenu;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 import menu.menuAbstract.Menu;
 
 public class RegisterGMenu extends GMenu {
-    public RegisterGMenu(String menuName, Menu parentMenu) {
-        super(menuName, parentMenu);
+    public RegisterGMenu(String menuName, GMenu parentMenu, Stage stage) {
+        super(menuName, parentMenu, stage);
     }
 
     @Override

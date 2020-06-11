@@ -12,6 +12,7 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import menu.menuAbstract.Menu;
 
 import java.io.IOException;
@@ -19,8 +20,8 @@ import java.io.IOException;
 public class LoginGMenu extends GMenu {
 
 
-    public LoginGMenu(String menuName, Menu parentMenu) {
-        super(menuName, parentMenu);
+    public LoginGMenu(String menuName, GMenu parentMenu, Stage stage) {
+        super(menuName, parentMenu, stage);
     }
 
     @Override

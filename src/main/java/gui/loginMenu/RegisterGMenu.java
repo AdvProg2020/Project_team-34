@@ -261,7 +261,13 @@ public class RegisterGMenu extends GMenu {
 
         customerButton.setToggleGroup(accountType);
         supplierButton.setToggleGroup(accountType);
-
+        if(((RadioButton)accountType.getSelectedToggle()).getText().equals("Customer")){
+            companyNameField.setDisable(true);
+            creditField.setDisable(false);
+        } else {
+            companyNameField.setDisable(false);
+            creditField.setDisable(true);
+        }
 
         customerButton.setOnMouseClicked(e ->{
             companyNameField.setDisable(true);
@@ -273,38 +279,42 @@ public class RegisterGMenu extends GMenu {
             creditField.setDisable(true);
         });
         // Adding Controller
-        if(((RadioButton)accountType.getSelectedToggle()).getText().equals("Customer")){
-            String firstName = firstNameField.getText();
-            String lastName = lastNameField.getText();
-            String email = emailField.getText();
-            String phoneNum = phoneNumber.getText();
-            String userName = usernameField.getText();
-            String password = passwordField.getText();
-            String companyName = companyNameField.getText();
-            try{
-                int credit = Integer.parseInt(creditField.getText());
+        signUpButton.setOnAction(e -> {
+            if(((RadioButton)accountType.getSelectedToggle()).getText().equals("Customer")){
+                String firstName = firstNameField.getText();
+                String lastName = lastNameField.getText();
+                String email = emailField.getText();
+                String phoneNum = phoneNumber.getText();
+                String userName = usernameField.getText();
+                String password = passwordField.getText();
+                String companyName = companyNameField.getText();
                 try{
-                    controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,credit,companyName);
+                    int credit = Integer.parseInt(creditField.getText());
+                    try{
+                        controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,credit,companyName);
+                    }catch (ExceptionalMassage ex){
+                        System.out.println(ex.getMessage());
+                    }
+                } catch (NumberFormatException ex){
+                    System.out.println(ex.getMessage());
+                }
+            } else {
+                String firstName = firstNameField.getText();
+                String lastName = lastNameField.getText();
+                String email = emailField.getText();
+                String phoneNum = phoneNumber.getText();
+                String userName = usernameField.getText();
+                String password = passwordField.getText();
+                String companyName = companyNameField.getText();
+                try{
+                    controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,0,companyName);
                 }catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }
-            } catch (NumberFormatException ex){
-                System.out.println(ex.getMessage());
             }
-        } else {
-            String firstName = firstNameField.getText();
-            String lastName = lastNameField.getText();
-            String email = emailField.getText();
-            String phoneNum = phoneNumber.getText();
-            String userName = usernameField.getText();
-            String password = passwordField.getText();
-            String companyName = companyNameField.getText();
-            try{
-                controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,0,companyName);
-            }catch (ExceptionalMassage ex){
-                System.out.println(ex.getMessage());
-            }
-        }
+
+        });
+
 
         singInText.setOnMouseClicked(e -> {
             stage.setScene(new LoginGMenu("Login menu", this , stage).getScene());

@@ -16,14 +16,14 @@ public class Main extends Application {
     private static final long WEEK = 7*24*3600*1000;
 
     public static void main(String[] args)  {
-        launch(args);
+
         DataBase.createNewTablesToStart();
         DataBase.importAllData();
         timeProgramWasOpened = System.currentTimeMillis();
         if(timeProgramWasOpened - timeBeginning > timesDiscountCodeGenerated * WEEK ){
             generateRandomCodes();
         }
-
+        launch(args);
         run();
     }
 

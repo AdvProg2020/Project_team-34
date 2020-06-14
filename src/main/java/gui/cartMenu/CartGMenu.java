@@ -87,6 +87,8 @@ public class CartGMenu extends GMenu {
 
         backgroundLayout.getChildren().add(mainAnchorPain);
 
+        System.out.println(controller.getAccountController().controlViewCart().getBill());
+
         Scene scene = new Scene(backgroundLayout);
         return scene;
     }

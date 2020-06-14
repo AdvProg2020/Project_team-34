@@ -8,7 +8,7 @@ import javafx.stage.Stage;
 import menu.menuAbstract.Menu;
 
 public abstract class GMenu {
-    public static final Node HEADER = createHeader();
+    public final Node HEADER = createHeader();
     protected final GMenu parentMenu;
     protected final String menuName;
     protected final Stage stage;
@@ -27,7 +27,7 @@ public abstract class GMenu {
 
     protected abstract Scene createScene();
 
-    private static Node createHeader() {
+    private  Node createHeader() {
         return null;
     }
 }

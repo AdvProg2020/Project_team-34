@@ -144,10 +144,11 @@ public class LoginGMenu extends GMenu {
             stage.setScene(new RegisterGMenu("Register Menu",this,stage).getScene());
         });
 
-        String username = usernameField.getText();
-        String password = passwordField.getText();
+
 
         signIn.setOnAction(e -> {
+            String username = usernameField.getText();
+            String password = passwordField.getText();
             try {
                 controller.getAccountController().controlLogin(username, password);
             } catch (ExceptionalMassage ex){
@@ -156,6 +157,6 @@ public class LoginGMenu extends GMenu {
         });
 
 
-        return new Scene(anchorPane0);
+        return new Scene(background);
     }
 }

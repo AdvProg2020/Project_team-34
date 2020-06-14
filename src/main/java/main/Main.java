@@ -4,6 +4,7 @@ import database.DataBase;
 import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
+import gui.mainMenu.MainMenuG;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import menu.mainMenu.MainMenu;
@@ -50,6 +51,7 @@ public class Main extends Application {
 //        AllProductGMenu menu = new AllProductGMenu("All Product GMenu" , null, stage);
 //        stage.setScene(menu.getScene());
 //        stage.show();
+
 
         MainMenuG menu = new MainMenuG("All Product GMenu" , null, stage);
         stage.setScene(menu.getScene());

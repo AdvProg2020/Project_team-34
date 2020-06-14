@@ -39,9 +39,9 @@ public class Main extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        CartGMenu menu = new CartGMenu("Cart GMenu", null, stage);
-        stage.setScene(menu.getScene());
-        stage.show();
+//        CartGMenu menu = new CartGMenu("Cart GMenu", null, stage);
+//        stage.setScene(menu.getScene());
+//        stage.show();
 
 //        LoginGMenu menu = new LoginGMenu("login", null, stage);
 //        stage.setScene(menu.createScene());

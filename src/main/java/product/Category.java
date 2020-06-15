@@ -120,6 +120,10 @@ public class Category {
         return specialFields;
     }
 
+    public static ArrayList<Category> getAllCategories() {
+        return allCategories;
+    }
+
     //Setters:
     private void setParentCategoryName(String name) {
         this.parentCategoryName = name;
@@ -346,5 +350,13 @@ public class Category {
             return availableFilters;
         }
         //check
+    }
+
+    public static ArrayList<String> getAllCategoriesName() {
+        ArrayList<String> allCategoriesToString = new ArrayList<>();
+        for (Category category : allCategories) {
+            allCategoriesToString.add(category.getName());
+        }
+        return allCategoriesToString;
     }
 }

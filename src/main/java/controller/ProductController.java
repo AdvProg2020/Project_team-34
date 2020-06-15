@@ -462,4 +462,8 @@ public class ProductController {
     public String controlCurrentFilters(){
         return filterAndSort.toString();
     }
+
+    public ArrayList<String> controlGetAllCategoriesName() {
+        return Category.getAllCategoriesName();
+    }
 }

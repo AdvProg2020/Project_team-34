@@ -30,6 +30,8 @@ public class PurchaseMenuG extends GMenu {
         hBox1.setPrefHeight(102.0);
         hBox1.setPrefWidth(1000.0);
         hBox1.setStyle("-fx-background-color: #4477c8;");
+        HBox header = createHeader();
+        hBox1.getChildren().add(header);
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
@@ -154,14 +156,14 @@ public class PurchaseMenuG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(gridPane4);
-        CheckBox checkBox17 = new CheckBox();
-        checkBox17.setLayoutX(527.0);
-        checkBox17.setLayoutY(130.0);
-        checkBox17.setText("Apply discount code!");
-        checkBox17.setMnemonicParsing(false);
+        CheckBox discountCodeCheckBox = new CheckBox();
+        discountCodeCheckBox.setLayoutX(527.0);
+        discountCodeCheckBox.setLayoutY(130.0);
+        discountCodeCheckBox.setText("Apply discount code!");
+        discountCodeCheckBox.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(checkBox17);
+        anchorPane0.getChildren().add(discountCodeCheckBox);
         HBox hBox18 = new HBox();
         hBox18.setPrefHeight(51.0);
         hBox18.setPrefWidth(356.0);
@@ -180,30 +182,53 @@ public class PurchaseMenuG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox18);
-        Text text20 = new Text();
-        text20.setStrokeWidth(0.0);
-        text20.setStrokeType(OUTSIDE);
-        text20.setLayoutX(517.0);
-        text20.setLayoutY(260.0);
-        text20.setText("Cart Info sits here!");
-        text20.setWrappingWidth(356.0);
+        Text cartInfo = new Text();
+        cartInfo.setStrokeWidth(0.0);
+        cartInfo.setStrokeType(OUTSIDE);
+        cartInfo.setLayoutX(517.0);
+        cartInfo.setLayoutY(260.0);
+        cartInfo.setText("Cart Info sits here!");
+        cartInfo.setWrappingWidth(356.0);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(text20);
-        Button button21 = new Button();
-        button21.setPrefHeight(33.0);
-        button21.setPrefWidth(233.0);
-        button21.setLayoutX(579.0);
-        button21.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button21.setLayoutY(511.0);
-        button21.setText("Purchase");
-        button21.setMnemonicParsing(false);
+        anchorPane0.getChildren().add(cartInfo);
+        Button purchaseButton = new Button();
+        purchaseButton.setPrefHeight(33.0);
+        purchaseButton.setPrefWidth(233.0);
+        purchaseButton.setLayoutX(579.0);
+        purchaseButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        purchaseButton.setLayoutY(511.0);
+        purchaseButton.setText("Purchase");
+        purchaseButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(button21);
+        anchorPane0.getChildren().add(purchaseButton);
         gridPane4.setVgap(15);
 
         //Adding controller!
+        if(!discountCodeCheckBox.isSelected()){
+            discountCodeField.setDisable(true);
+        }
+
+        discountCodeCheckBox.setOnAction( e -> {
+            if(discountCodeCheckBox.isSelected()){
+                discountCodeField.setDisable(false);
+            } else {
+                discountCodeField.setDisable(true);
+            }
+        });
+
+        cartInfo.setText(controller.getAccountController().controlViewCart().toString());
+
+        purchaseButton.setOnAction( e -> {
+
+
+
+        });
+
+
+
+
 
 
 

@@ -16,7 +16,7 @@ import menu.menuAbstract.Menu;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class RegisterGMenu extends GMenu {
-    public RegisterGMenu(String menuName, GMenu parentMenu, Stage stage, Controller controller) {
+    public RegisterGMenu( GMenu parentMenu, Stage stage, Controller controller) {
         super("Register Menu", parentMenu, stage, controller);
     }
 

@@ -20,7 +20,7 @@ import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class MainMenuG extends GMenu {
-    public MainMenuG(String menuName, GMenu parentMenu, Stage stage, Controller controller) {
+    public MainMenuG( GMenu parentMenu, Stage stage, Controller controller) {
         super("Main Menu", parentMenu, stage, controller);
     }
 

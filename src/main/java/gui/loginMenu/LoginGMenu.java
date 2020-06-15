@@ -149,7 +149,7 @@ public class LoginGMenu extends GMenu {
         // Adding controller!
 
         signUp.setOnMouseClicked(e ->{
-            stage.setScene(new RegisterGMenu("Register Menu",this,stage).getScene());
+            stage.setScene(new RegisterGMenu(this,stage,controller).getScene());
         });
 
 

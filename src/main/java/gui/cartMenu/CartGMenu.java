@@ -73,10 +73,10 @@ public class CartGMenu extends GMenu {
 
         placeOrder.setOnMouseClicked(e->{
             if(controller.getAccountController().hasSomeOneLoggedIn()){
-                stage.setScene(new PurchaseMenuG("Purchase Menu", this, stage).getScene());
+                stage.setScene(new PurchaseMenuG(this, stage,controller).getScene());
             }
             else {
-                stage.setScene(new LoginGMenu("Login Menu", this, stage).getScene());
+                stage.setScene(new LoginGMenu( this, stage,controller).getScene());
             }
 
         });

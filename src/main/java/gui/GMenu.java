@@ -68,7 +68,7 @@ public abstract class GMenu {
         MenuItem ViewPersonalInfo = new MenuItem("View Personal Info");
 
         logoView.setOnMouseClicked(e ->
-                stage.setScene(new MainMenuG("Main Menu", this, stage).getScene()));
+                stage.setScene(new MainMenuG( this, stage,controller).getScene()));
         backView.setOnMouseClicked(e -> {
             if (parentMenu == null) {
                 stage.close();
@@ -78,11 +78,11 @@ public abstract class GMenu {
             }
         });
         signIn.setOnAction(e -> {
-            stage.setScene(new LoginGMenu("Sign In / Sign Up", this, stage).getScene());
+            stage.setScene(new LoginGMenu( this, stage, controller).getScene());
         });
-        allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu("All Products", this,
-                stage).getScene()));
-        cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu("Cart", this, stage).getScene()));
+        allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu( this,
+                stage,controller).getScene()));
+        cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu( this, stage, controller).getScene()));
 
         userMenuBar.getMenus().addAll(user);
 

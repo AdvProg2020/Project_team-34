@@ -1,5 +1,6 @@
 package gui.profile;
 
+import controller.Controller;
 import gui.GMenu;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -11,8 +12,8 @@ import javafx.stage.Stage;
 
 public class ManageProductsSupplierGMenu extends GMenu {
 
-    public ManageProductsSupplierGMenu(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public ManageProductsSupplierGMenu(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Manage Products, Supplier", parentMenu, stage, controller);
     }
 
     @Override

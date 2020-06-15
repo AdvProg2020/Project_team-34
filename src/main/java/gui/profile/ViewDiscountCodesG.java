@@ -1,5 +1,6 @@
 package gui.profile;
 
+import controller.Controller;
 import discount.CodedDiscount;
 import gui.GMenu;
 import javafx.scene.Scene;
@@ -10,8 +11,8 @@ import javafx.stage.Stage;
 
 public class ViewDiscountCodesG extends GMenu {
 
-    public ViewDiscountCodesG(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public ViewDiscountCodesG(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Discounts", parentMenu, stage, controller);
     }
 
     @Override

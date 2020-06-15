@@ -22,7 +22,7 @@ public class SupplierProfileGMenu extends GMenu {
         VBox viewPane = new VBox();
 
 
-
+        mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()));
         backgroundLayout.add(createHeader(), 0,0);
         backgroundLayout.add(mainPane, 0, 1);
         backgroundLayout.setAlignment(Pos.CENTER);

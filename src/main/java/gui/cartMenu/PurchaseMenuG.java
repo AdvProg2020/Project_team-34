@@ -205,6 +205,9 @@ public class PurchaseMenuG extends GMenu {
 
         //Adding controller!
 
+
+
+
         return new Scene(anchorPane0);
     }
 }

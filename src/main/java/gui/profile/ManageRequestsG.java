@@ -1,5 +1,6 @@
 package gui.profile;
 
+import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import javafx.collections.ObservableList;
@@ -13,8 +14,8 @@ import javafx.stage.Stage;
 
 public class ManageRequestsG extends GMenu {
 
-    public ManageRequestsG(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public ManageRequestsG(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Manage Requests", parentMenu, stage, controller);
     }
 
     @Override

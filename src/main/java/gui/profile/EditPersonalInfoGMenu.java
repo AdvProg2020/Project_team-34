@@ -2,6 +2,7 @@ package gui.profile;
 
 import account.Supervisor;
 import account.Supplier;
+import controller.Controller;
 import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -13,34 +14,25 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class ViewPersonalInfoGMenu extends GMenu {
-    private final TextField usernameField;
-    private final TextField nameField;
-    private final TextField familyNameField;
-    private final TextField emailField;
-    private final TextField phoneNumberField;
-    private final PasswordField passwordField;
-    private final TextField nameOfCompanyField;
-    private final TextField creditField;
-    private final Button cancelButton;
-    private final Button applyButton;
+public class EditPersonalInfoGMenu extends GMenu {
 
-    public ViewPersonalInfoGMenu(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
-        this.usernameField = new TextField();
-        this.nameField = new TextField();
-        this.familyNameField = new TextField();
-        this.emailField = new TextField();
-        this.phoneNumberField = new TextField();
-        this.passwordField = new PasswordField();
-        this.nameOfCompanyField = new TextField();
-        this.creditField = new TextField();
-        this.applyButton = new Button("Apply");
-        this.cancelButton = new Button("Cancel");
+    public EditPersonalInfoGMenu(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Edit Personal Info", parentMenu, stage, controller);
     }
 
     @Override
     protected Scene createScene() {
+        TextField usernameField = new TextField();
+        TextField nameField = new TextField();
+        TextField familyNameField = new TextField();
+        TextField emailField = new TextField();
+        TextField phoneNumberField = new TextField();
+        PasswordField passwordField = new PasswordField();
+        TextField nameOfCompanyField = new TextField();
+        TextField creditField = new TextField();
+        Button cancelButton = new Button("Cancel");
+        Button applyButton = new Button("Apply");
+
         int row = 0;
 
         Label usernameLabel = new Label("Username");
@@ -68,32 +60,32 @@ public class ViewPersonalInfoGMenu extends GMenu {
         row++;
 
         nameField.setText(controller.getAccountController().getAccountName());
-        nameField.setOnKeyTyped(e -> buttonCheck(nameField));
+        nameField.setOnKeyTyped(e -> buttonCheck(nameField, applyButton));
         layoutPane.add(nameLabel, 0, row);
         layoutPane.add(nameField, 1, row);
         row++;
 
         familyNameField.setText(controller.getAccountController().getAccountFamilyName());
-        familyNameField.setOnKeyTyped(e -> buttonCheck(familyNameField));
+        familyNameField.setOnKeyTyped(e -> buttonCheck(familyNameField, applyButton));
         layoutPane.add(familyNameLabel, 0, row);
         layoutPane.add(familyNameField, 1, row);
         row++;
 
         emailField.setText(controller.getAccountController().getAccountEmail());
-        emailField.setOnKeyTyped(e -> buttonCheck(emailField));
+        emailField.setOnKeyTyped(e -> buttonCheck(emailField, applyButton));
         layoutPane.add(emailLabel, 0, row);
         layoutPane.add(emailField, 1, row);
         row++;
 
         phoneNumberField.setText(controller.getAccountController().getAccountPhoneNumber());
-        phoneNumberField.setOnKeyTyped(e -> buttonCheckInt(phoneNumberField));
+        phoneNumberField.setOnKeyTyped(e -> buttonCheckInt(phoneNumberField, applyButton));
         layoutPane.add(phoneNumberLabel, 0, row);
         layoutPane.add(phoneNumberField, 1, row);
         row++;
 
         if (!(controller.getAccount() instanceof Supervisor)) {
             creditField.setText(String.valueOf(controller.getAccountController().getAccountCredit()));
-            creditLabel.setOnKeyTyped(e -> buttonCheckInt(creditField));
+            creditLabel.setOnKeyTyped(e -> buttonCheckInt(creditField, applyButton));
             layoutPane.add(creditLabel, 0, row);
             layoutPane.add(creditField, 1, row);
             row++;
@@ -104,7 +96,7 @@ public class ViewPersonalInfoGMenu extends GMenu {
 
         if (controller.getAccount() instanceof Supplier) {
             nameOfCompanyField.setText(controller.getAccountController().getAccountNameOfCompany());
-            nameOfCompanyField.setOnKeyTyped(e -> buttonCheck(nameOfCompanyField));
+            nameOfCompanyField.setOnKeyTyped(e -> buttonCheck(nameOfCompanyField, applyButton));
             layoutPane.add(nameOfCompanyLabel, 0, row);
             layoutPane.add(nameOfCompanyField, 1, row);
             row++;
@@ -134,13 +126,13 @@ public class ViewPersonalInfoGMenu extends GMenu {
         return scene;
     }
 
-    private void buttonCheck(TextField textField) {
+    private void buttonCheck(TextField textField, Button applyButton) {
         applyButton.setDisable(textField.getText() == null || textField.getText().trim().length() == 0);
     }
 
-    private void buttonCheckInt(TextField textField) {
+    private void buttonCheckInt(TextField textField, Button applyButton) {
         if (textField.getText().matches("\\d+")) {
-            buttonCheck(textField);
+            buttonCheck(textField, applyButton);
         } else {
             applyButton.setDisable(true);
         }

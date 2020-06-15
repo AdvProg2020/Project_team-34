@@ -1,5 +1,6 @@
 package gui.profile;
 
+import controller.Controller;
 import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -8,8 +9,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ViewLogsForCustomerGMenu extends GMenu {
-    public ViewLogsForCustomerGMenu(GMenu parentMenu, Stage stage) {
-        super("Customer Log", parentMenu, stage);
+    public ViewLogsForCustomerGMenu(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Logs, Customer", parentMenu, stage, controller);
     }
 
     @Override

@@ -2,6 +2,9 @@ package gui.cartMenu;
 
 import cart.Cart;
 import cart.ProductInCart;
+import controller.Controller;
+import cart.ProductInCart;
+import controller.Controller;
 import gui.GMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Pos;
@@ -9,11 +12,9 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.scene.control.skin.LabeledSkinBase;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import product.Product;
 
@@ -24,8 +25,8 @@ import static javafx.scene.control.ContentDisplay.CENTER;
 
 public class CartGMenu extends GMenu {
 
-    public CartGMenu(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public CartGMenu(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Cart Menu", parentMenu, stage, controller);
     }
 
     @Override
@@ -78,10 +79,10 @@ public class CartGMenu extends GMenu {
 
         placeOrder.setOnMouseClicked(e->{
             if(controller.getAccountController().hasSomeOneLoggedIn()){
-                stage.setScene(new PurchaseMenuG("Purchase Menu", this, stage).getScene());
+                stage.setScene(new PurchaseMenuG(this, stage,controller).getScene());
             }
             else {
-                stage.setScene(new LoginGMenu("Login Menu", this, stage).getScene());
+                stage.setScene(new LoginGMenu( this, stage,controller).getScene());
             }
 
         });

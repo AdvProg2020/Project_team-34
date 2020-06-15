@@ -1,6 +1,7 @@
 package main;
 
 import account.Customer;
+import controller.Controller;
 import database.DataBase;
 import gui.mainMenu.MainMenuG;
 import javafx.application.Application;
@@ -63,7 +64,7 @@ public class Main extends Application {
 //        stage.show();
 
 
-        MainMenuG menu = new MainMenuG("All Product GMenu" , null, stage);
+        MainMenuG menu = new MainMenuG( null, stage, new Controller());
 
         stage.setScene(new Scene(menu.createHeader()));
         stage.show();

@@ -1,5 +1,6 @@
 package gui.profile;
 
+import controller.Controller;
 import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -12,8 +13,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ViewLogsForSupervisorGMenu extends GMenu {
-    public ViewLogsForSupervisorGMenu(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public ViewLogsForSupervisorGMenu(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Logs, Supervisor", parentMenu, stage, controller);
     }
 
     @Override

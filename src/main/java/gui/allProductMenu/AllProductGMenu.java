@@ -1,5 +1,6 @@
 package gui.allProductMenu;
 
+import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import javafx.geometry.Insets;
@@ -20,8 +21,8 @@ public class AllProductGMenu extends GMenu {
 
 
 
-    public AllProductGMenu(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public AllProductGMenu(GMenu parentMenu, Stage stage, Controller controller) {
+        super("All products Menu", parentMenu, stage, controller);
     }
 
     @Override

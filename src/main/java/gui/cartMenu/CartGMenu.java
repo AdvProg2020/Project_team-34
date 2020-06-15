@@ -17,17 +17,14 @@ import static javafx.scene.control.ContentDisplay.CENTER;
 
 public class CartGMenu extends GMenu {
 
-    private final GridPane backgroundLayout;
-    private final GridPane mainPane;
-
     public CartGMenu(String menuName, GMenu parentMenu, Stage stage) {
         super(menuName, parentMenu, stage);
-        backgroundLayout = new GridPane();
-        mainPane = new GridPane();
     }
 
     @Override
     protected Scene createScene() {
+        GridPane backgroundLayout = new GridPane();
+        GridPane mainPane = new GridPane();
         AnchorPane mainAnchorPain = new AnchorPane();
         mainAnchorPain.setPrefHeight(513.0);
         mainAnchorPain.setPrefWidth(657.0);

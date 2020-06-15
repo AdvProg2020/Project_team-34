@@ -1,6 +1,5 @@
 package gui.profile;
 
-import account.Supplier;
 import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

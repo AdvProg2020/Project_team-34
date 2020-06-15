@@ -8,8 +8,6 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import log.CustomerLog;
-import log.SupplierLog;
 
 public class ViewLogsForSupervisorGMenu extends GMenu {
     public ViewLogsForSupervisorGMenu(String menuName, GMenu parentMenu, Stage stage) {

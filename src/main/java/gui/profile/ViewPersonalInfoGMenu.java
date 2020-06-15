@@ -1,6 +1,5 @@
 package gui.profile;
 
-import account.Account;
 import account.Supervisor;
 import account.Supplier;
 import gui.GMenu;
@@ -14,7 +13,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
-public class ProfileGMenu extends GMenu {
+public class ViewPersonalInfoGMenu extends GMenu {
     private final TextField usernameField;
     private final TextField nameField;
     private final TextField familyNameField;
@@ -26,7 +25,7 @@ public class ProfileGMenu extends GMenu {
     private final Button cancelButton;
     private final Button applyButton;
 
-    public ProfileGMenu(String menuName, GMenu parentMenu, Stage stage) {
+    public ViewPersonalInfoGMenu(String menuName, GMenu parentMenu, Stage stage) {
         super(menuName, parentMenu, stage);
         this.usernameField = new TextField();
         this.nameField = new TextField();

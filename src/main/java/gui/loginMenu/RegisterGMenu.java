@@ -28,6 +28,8 @@ public class RegisterGMenu extends GMenu {
         hBox1.setPrefHeight(102.0);
         hBox1.setPrefWidth(883.0);
         hBox1.setStyle("-fx-background-color: #4477c8;");
+        HBox header = createHeader();
+        hBox1.getChildren().add(header);
 
 
 

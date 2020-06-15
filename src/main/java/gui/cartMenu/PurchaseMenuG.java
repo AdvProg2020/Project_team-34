@@ -57,15 +57,15 @@ public class PurchaseMenuG extends GMenu {
         hBox5.setPrefHeight(60.0);
         hBox5.setPrefWidth(316.0);
         hBox5.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        TextField textField6 = new TextField();
-        textField6.setPrefHeight(51.0);
-        textField6.setPrefWidth(295.0);
-        textField6.setStyle("-fx-background-color: transparent;");
-        textField6.setOpacity(0.83);
-        textField6.setPromptText("First name");
+        TextField firstNameField = new TextField();
+        firstNameField.setPrefHeight(51.0);
+        firstNameField.setPrefWidth(295.0);
+        firstNameField.setStyle("-fx-background-color: transparent;");
+        firstNameField.setOpacity(0.83);
+        firstNameField.setPromptText("First name");
 
         // Adding child to parent
-        hBox5.getChildren().add(textField6);
+        hBox5.getChildren().add(firstNameField);
 
         // Adding child to parent
         gridPane4.add(hBox5,0,0);
@@ -73,15 +73,15 @@ public class PurchaseMenuG extends GMenu {
         hBox7.setPrefHeight(51.0);
         hBox7.setPrefWidth(345.0);
         hBox7.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        TextField textField8 = new TextField();
-        textField8.setPrefHeight(51.0);
-        textField8.setPrefWidth(295.0);
-        textField8.setStyle("-fx-background-color: transparent;");
-        textField8.setOpacity(0.83);
-        textField8.setPromptText("Last name");
+        TextField cityNameField = new TextField();
+        cityNameField.setPrefHeight(51.0);
+        cityNameField.setPrefWidth(295.0);
+        cityNameField.setStyle("-fx-background-color: transparent;");
+        cityNameField.setOpacity(0.83);
+        cityNameField.setPromptText("Last name");
 
         // Adding child to parent
-        hBox7.getChildren().add(textField8);
+        hBox7.getChildren().add(cityNameField);
 
         // Adding child to parent
         gridPane4.add(hBox7,0,1);
@@ -105,15 +105,15 @@ public class PurchaseMenuG extends GMenu {
         hBox11.setPrefHeight(51.0);
         hBox11.setPrefWidth(345.0);
         hBox11.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        TextField textField12 = new TextField();
-        textField12.setPrefHeight(51.0);
-        textField12.setPrefWidth(295.0);
-        textField12.setStyle("-fx-background-color: transparent;");
-        textField12.setOpacity(0.83);
-        textField12.setPromptText("Address");
+        TextField addressField = new TextField();
+        addressField.setPrefHeight(51.0);
+        addressField.setPrefWidth(295.0);
+        addressField.setStyle("-fx-background-color: transparent;");
+        addressField.setOpacity(0.83);
+        addressField.setPromptText("Address");
 
         // Adding child to parent
-        hBox11.getChildren().add(textField12);
+        hBox11.getChildren().add(addressField);
 
         // Adding child to parent
 
@@ -122,15 +122,15 @@ public class PurchaseMenuG extends GMenu {
         hBox13.setPrefHeight(51.0);
         hBox13.setPrefWidth(356.0);
         hBox13.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        TextField textField14 = new TextField();
-        textField14.setPrefHeight(51.0);
-        textField14.setPrefWidth(295.0);
-        textField14.setStyle("-fx-background-color: transparent;");
-        textField14.setOpacity(0.83);
-        textField14.setPromptText("Postal code");
+        TextField postalCodeField = new TextField();
+        postalCodeField.setPrefHeight(51.0);
+        postalCodeField.setPrefWidth(295.0);
+        postalCodeField.setStyle("-fx-background-color: transparent;");
+        postalCodeField.setOpacity(0.83);
+        postalCodeField.setPromptText("Postal code");
 
         // Adding child to parent
-        hBox13.getChildren().add(textField14);
+        hBox13.getChildren().add(postalCodeField);
 
         // Adding child to parent
         gridPane4.add(hBox13,0,4);
@@ -138,15 +138,15 @@ public class PurchaseMenuG extends GMenu {
         hBox15.setPrefHeight(51.0);
         hBox15.setPrefWidth(345.0);
         hBox15.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        TextField textField16 = new TextField();
-        textField16.setPrefHeight(51.0);
-        textField16.setPrefWidth(295.0);
-        textField16.setStyle("-fx-background-color: transparent;");
-        textField16.setOpacity(0.83);
-        textField16.setPromptText("Phone number");
+        TextField phoneNumberField = new TextField();
+        phoneNumberField.setPrefHeight(51.0);
+        phoneNumberField.setPrefWidth(295.0);
+        phoneNumberField.setStyle("-fx-background-color: transparent;");
+        phoneNumberField.setOpacity(0.83);
+        phoneNumberField.setPromptText("Phone number");
 
         // Adding child to parent
-        hBox15.getChildren().add(textField16);
+        hBox15.getChildren().add(phoneNumberField);
 
         // Adding child to parent
 
@@ -168,15 +168,15 @@ public class PurchaseMenuG extends GMenu {
         hBox18.setLayoutX(517.0);
         hBox18.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox18.setLayoutY(186.0);
-        TextField textField19 = new TextField();
-        textField19.setPrefHeight(51.0);
-        textField19.setPrefWidth(295.0);
-        textField19.setStyle("-fx-background-color: transparent;");
-        textField19.setOpacity(0.83);
-        textField19.setPromptText("Discount code");
+        TextField discountCodeField = new TextField();
+        discountCodeField.setPrefHeight(51.0);
+        discountCodeField.setPrefWidth(295.0);
+        discountCodeField.setStyle("-fx-background-color: transparent;");
+        discountCodeField.setOpacity(0.83);
+        discountCodeField.setPromptText("Discount code");
 
         // Adding child to parent
-        hBox18.getChildren().add(textField19);
+        hBox18.getChildren().add(discountCodeField);
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox18);

@@ -1,5 +1,6 @@
 package gui.alerts;
 
+import controller.Controller;
 import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -14,8 +15,8 @@ public class AlertBox extends GMenu {
     protected String alert;
     protected String buttonText;
 
-    public AlertBox(GMenu parentMenu, Stage stage, String alert, String buttonText) {
-        super("Alert!", parentMenu, stage);
+    public AlertBox(GMenu parentMenu, Stage stage, String alert, String buttonText, Controller controller) {
+        super("Alert!", parentMenu, stage, controller);
         this.alert = alert;
         this.buttonText = buttonText;
     }

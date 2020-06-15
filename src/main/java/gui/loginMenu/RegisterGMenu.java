@@ -1,5 +1,6 @@
 package gui.loginMenu;
 
+import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import javafx.geometry.Pos;
@@ -15,8 +16,8 @@ import menu.menuAbstract.Menu;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class RegisterGMenu extends GMenu {
-    public RegisterGMenu(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public RegisterGMenu(String menuName, GMenu parentMenu, Stage stage, Controller controller) {
+        super("Register Menu", parentMenu, stage, controller);
     }
 
     @Override
@@ -320,7 +321,7 @@ public class RegisterGMenu extends GMenu {
 
 
         singInText.setOnMouseClicked(e -> {
-            stage.setScene(new LoginGMenu("Login menu", this , stage).getScene());
+            stage.setScene(new LoginGMenu( this , stage, controller).getScene());
         });
 
         anchorPane0.getChildren().add(text29);

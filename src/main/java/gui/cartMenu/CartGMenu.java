@@ -1,5 +1,6 @@
 package gui.cartMenu;
 
+import controller.Controller;
 import gui.GMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Pos;
@@ -18,8 +19,8 @@ import static javafx.scene.control.ContentDisplay.CENTER;
 
 public class CartGMenu extends GMenu {
 
-    public CartGMenu(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public CartGMenu(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Cart Menu", parentMenu, stage, controller);
     }
 
     @Override

@@ -1,5 +1,7 @@
 package gui.loginMenu;
 
+import com.google.gson.internal.$Gson$Preconditions;
+import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.mainMenu.MainMenuG;
@@ -29,8 +31,8 @@ import static javafx.scene.shape.StrokeType.OUTSIDE;
 public class LoginGMenu extends GMenu {
 
 
-    public LoginGMenu(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public LoginGMenu(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Login Menu", parentMenu, stage, controller);
     }
 
     @Override

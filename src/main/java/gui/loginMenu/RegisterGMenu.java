@@ -2,6 +2,7 @@ package gui.loginMenu;
 
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
@@ -323,7 +324,10 @@ public class RegisterGMenu extends GMenu {
         });
 
         anchorPane0.getChildren().add(text29);
+        GridPane background = new GridPane();
+        background.setAlignment(Pos.CENTER);
+        background.getChildren().add(anchorPane0);
 
-        return new Scene(anchorPane0);
+        return new Scene(background);
     }
 }

@@ -1,6 +1,5 @@
 package main;
 
-import account.Customer;
 import controller.Controller;
 import database.DataBase;
 import gui.mainMenu.MainMenuG;
@@ -27,6 +26,7 @@ public class Main extends Application {
         if(timeProgramWasOpened - timeBeginning > timesDiscountCodeGenerated * WEEK ){
             generateRandomCodes();
         }
+        run();
         launch(args);
 
     }

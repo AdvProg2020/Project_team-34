@@ -311,7 +311,7 @@ public class RegisterGMenu extends GMenu {
                 String password = passwordField.getText();
                 String companyName = companyNameField.getText();
                 try{
-                    controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,0,companyName);
+                    controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,0,companyName);
                 }catch (ExceptionalMassage ex){
                     System.out.println(ex.getMessage());
                 }

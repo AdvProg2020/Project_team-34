@@ -44,11 +44,11 @@ public abstract class GMenu {
     public HBox createHeader() {
         HBox hBox = new HBox();
 
-        ImageView logoView = GMenu.getImageView("./src/main/resources/header/Logo.png", 120, 120);
-        ImageView backView = GMenu.getImageView("./src/main/resources/header/Back.png", 50, 50);
-        ImageView cartView = GMenu.getImageView("./src/main/resources/header/CartIcon.png", 50, 50);
-        ImageView userView = GMenu.getImageView("./src/main/resources/header/User.png", 50, 50);
-        ImageView allProducts = GMenu.getImageView("./src/main/resources/header/Menu.png", 50, 50);
+        ImageView logoView = GMenu.getImageView("./src/main/resources/header/Logo.png", 100, 100);
+        ImageView backView = GMenu.getImageView("./src/main/resources/header/Back.png", 45, 45);
+        ImageView cartView = GMenu.getImageView("./src/main/resources/header/CartIcon.png", 45, 45);
+        ImageView userView = GMenu.getImageView("./src/main/resources/header/User.png", 45, 45);
+        ImageView allProducts = GMenu.getImageView("./src/main/resources/header/Menu.png", 45, 45);
 
         MenuBar userMenuBar = new MenuBar();
         Menu user = new Menu();
@@ -93,8 +93,8 @@ public abstract class GMenu {
             user.getItems().addAll(EditPersonalInfo, signOut);
         }
 
-        hBox.setMinWidth(500);
-        hBox.setPadding(new Insets(10, 10, 10, 10));
+        hBox.setMinWidth(450);
+        hBox.setPadding(new Insets(5, 5, 5, 5));
         hBox.setStyle("-fx-background-color: transparent");
         return hBox;
     }

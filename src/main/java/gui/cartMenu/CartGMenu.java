@@ -43,6 +43,7 @@ public class CartGMenu extends GMenu {
         tableView.setLayoutY(121.0);
 
 
+        mainAnchorPain.getChildren().add(createHeader());
         mainAnchorPain.getChildren().add(tableView);
         Label label = new Label();
         label.setPrefHeight(21.0);

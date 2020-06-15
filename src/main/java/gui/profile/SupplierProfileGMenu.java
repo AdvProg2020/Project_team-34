@@ -2,7 +2,11 @@ package gui.profile;
 
 import controller.Controller;
 import gui.GMenu;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class SupplierProfileGMenu extends GMenu {
@@ -12,6 +16,17 @@ public class SupplierProfileGMenu extends GMenu {
 
     @Override
     protected Scene createScene() {
-        return null;
+        GridPane backgroundLayout = new GridPane();
+        HBox mainPane = new HBox();
+        VBox buttonPane = new VBox();
+        VBox viewPane = new VBox();
+
+
+
+        backgroundLayout.add(createHeader(), 0,0);
+        backgroundLayout.add(mainPane, 0, 1);
+        backgroundLayout.setAlignment(Pos.CENTER);
+        Scene scene = new Scene(backgroundLayout);
+        return scene;
     }
 }

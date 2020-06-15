@@ -26,7 +26,7 @@ public class Main extends Application {
         if(timeProgramWasOpened - timeBeginning > timesDiscountCodeGenerated * WEEK ){
             generateRandomCodes();
         }
-        run();
+//        run();
         launch(args);
 
     }

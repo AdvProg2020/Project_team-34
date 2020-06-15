@@ -4,8 +4,10 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import controller.Controller;
+import gui.allProductMenu.AllProductGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 import javafx.scene.Scene;
@@ -42,11 +44,11 @@ public abstract class GMenu {
     public HBox createHeader() {
         HBox hBox = new HBox();
 
-        ImageView logoView = GMenu.getImageView("./src/main/resources/header/Logo.png", 150, 150);
-        ImageView backView = GMenu.getImageView("./src/main/resources/header/Back.png", 60, 60);
-        ImageView cartView = GMenu.getImageView("./src/main/resources/header/CartIcon.png", 60, 60);
-        ImageView userView = GMenu.getImageView("./src/main/resources/header/User.png", 60, 60);
-        ImageView allProducts = GMenu.getImageView("./src/main/resources/header/Menu.png", 60, 60);
+        ImageView logoView = GMenu.getImageView("./src/main/resources/header/Logo.png", 120, 120);
+        ImageView backView = GMenu.getImageView("./src/main/resources/header/Back.png", 50, 50);
+        ImageView cartView = GMenu.getImageView("./src/main/resources/header/CartIcon.png", 50, 50);
+        ImageView userView = GMenu.getImageView("./src/main/resources/header/User.png", 50, 50);
+        ImageView allProducts = GMenu.getImageView("./src/main/resources/header/Menu.png", 50, 50);
 
         MenuBar userMenuBar = new MenuBar();
         Menu user = new Menu();
@@ -69,6 +71,7 @@ public abstract class GMenu {
         signIn.setOnAction(e -> {
             stage.setScene(new LoginGMenu("Sign In / Sign Up", this, stage).getScene());
         });
+        allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu("All Products", this, stage).getScene()));
 
         userMenuBar.getMenus().addAll(user);
 
@@ -90,7 +93,8 @@ public abstract class GMenu {
             user.getItems().addAll(EditPersonalInfo, signOut);
         }
 
-        hBox.setMinWidth(600);
+        hBox.setMinWidth(500);
+        hBox.setPadding(new Insets(10, 10, 10, 10));
         hBox.setStyle("-fx-background-color: transparent");
         return hBox;
     }

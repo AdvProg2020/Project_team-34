@@ -60,7 +60,7 @@ public class CustomerProfileGMenu extends GMenu {
 
         viewPane.getChildren().addAll(balanceLabel);
 
-        mainPane.getChildren().addAll( buttonPane, viewPane, GMenu.createViewPersonalInfo(controller.getAccount()));
+        mainPane.getChildren().addAll( buttonPane, viewPane, GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()));
         mainPane.setSpacing(10);
         mainPane.setPadding(new Insets(10, 10 , 10 , 10));
 

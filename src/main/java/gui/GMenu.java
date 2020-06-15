@@ -4,11 +4,11 @@ import controller.Controller;
 import javafx.scene.Node;
 
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
-import menu.menuAbstract.Menu;
 
 public abstract class GMenu {
-    public final Node HEADER = createHeader();
     protected final GMenu parentMenu;
     protected final String menuName;
     protected final Stage stage;
@@ -27,7 +27,9 @@ public abstract class GMenu {
 
     protected abstract Scene createScene();
 
-    private  Node createHeader() {
+    public Node createHeader() {
+        Image logoImage = new Image("main/resources/header/Logo.png");
+        ImageView logo = new ImageView(logoImage);
         return null;
     }
 }

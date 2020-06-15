@@ -19,6 +19,7 @@ public class Main extends Application {
     private static final long WEEK = 7*24*3600*1000;
 
     public static void main(String[] args)  {
+
         DataBase.createNewTablesToStart();
         DataBase.importAllData();
         timeProgramWasOpened = System.currentTimeMillis();
@@ -26,7 +27,6 @@ public class Main extends Application {
             generateRandomCodes();
         }
         launch(args);
-        run();
 
     }
 
@@ -71,5 +71,7 @@ public class Main extends Application {
 //        CustomerProfileGMenu menu = new CustomerProfileGMenu("All Product GMenu" , null, stage);
 //        stage.setScene(menu.getScene());
 //        stage.show();
+
+
     }
 }

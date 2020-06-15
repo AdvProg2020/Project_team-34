@@ -1,5 +1,7 @@
 package gui;
 
+
+import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
@@ -12,11 +14,13 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
 import javafx.scene.control.MenuBar;
 import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -134,5 +138,44 @@ public abstract class GMenu {
         vBox.setStyle("-fx-border-color: #4678c8");
         vBox.setPadding(new Insets(10, 10, 10, 10));
         return vBox;
+    }
+
+    public static GridPane createViewPersonalInfo(Account account){
+        GridPane showingInfoPane = new GridPane();
+        int row = 0;
+
+        Label usernameLabel = new Label("Username");
+        Label usernameValue = new Label(account.getUserName());
+        showingInfoPane.add(usernameLabel, row, 0);
+        showingInfoPane.add(usernameValue, row , 1);
+
+        Label nameLabel = new Label("First Name");
+        Label nameValue = new Label(account.getName());
+        showingInfoPane.add(nameLabel, row, 0);
+        showingInfoPane.add(nameValue, row , 1);
+
+        Label familyNameLabel = new Label("Last Name");
+        Label familyNameValue = new Label(account.getFamilyName());
+        showingInfoPane.add(familyNameLabel, row, 0);
+        showingInfoPane.add(familyNameValue, row , 1);
+
+        Label emailLabel = new Label("Email");
+        Label emailLabelValue = new Label(account.getEmail());
+        showingInfoPane.add(emailLabel, row, 0);
+        showingInfoPane.add(emailLabelValue, row , 1);
+
+        Label phoneNumberLabel = new Label("Phone Number");
+        Label phoneNumberValue = new Label(account.getPhoneNumber());
+        showingInfoPane.add(phoneNumberLabel, row, 0);
+        showingInfoPane.add(phoneNumberValue, row , 1);
+
+        if(account instanceof Supplier) {
+            Label nameOfCompanyLabel = new Label("Name of Company");
+            Label nameOfCompanyValue = new Label();
+            showingInfoPane.add(nameOfCompanyLabel, row, 0);
+            showingInfoPane.add(nameOfCompanyValue, row , 1);
+        }
+
+        return showingInfoPane;
     }
 }

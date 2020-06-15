@@ -1,11 +1,13 @@
 package gui;
 
+
 import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import controller.Controller;
 import gui.allProductMenu.AllProductGMenu;
+import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
 import javafx.geometry.Insets;
@@ -20,12 +22,15 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 
 public abstract class GMenu {
+    public final static SimpleDateFormat FORMAT = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
     protected final GMenu parentMenu;
     protected final String menuName;
     protected final Stage stage;
@@ -47,11 +52,11 @@ public abstract class GMenu {
     public HBox createHeader() {
         HBox hBox = new HBox();
 
-        ImageView logoView = GMenu.getImageView("./src/main/resources/header/Logo.png", 120, 120);
-        ImageView backView = GMenu.getImageView("./src/main/resources/header/Back.png", 50, 50);
-        ImageView cartView = GMenu.getImageView("./src/main/resources/header/CartIcon.png", 50, 50);
-        ImageView userView = GMenu.getImageView("./src/main/resources/header/User.png", 50, 50);
-        ImageView allProducts = GMenu.getImageView("./src/main/resources/header/Menu.png", 50, 50);
+        ImageView logoView = GMenu.getImageView("./src/main/resources/header/Logo.png", 100, 100);
+        ImageView backView = GMenu.getImageView("./src/main/resources/header/Back.png", 45, 45);
+        ImageView cartView = GMenu.getImageView("./src/main/resources/header/CartIcon.png", 45, 45);
+        ImageView userView = GMenu.getImageView("./src/main/resources/header/User.png", 45, 45);
+        ImageView allProducts = GMenu.getImageView("./src/main/resources/header/Menu.png", 45, 45);
 
         MenuBar userMenuBar = new MenuBar();
         Menu user = new Menu();
@@ -59,7 +64,7 @@ public abstract class GMenu {
         user.setGraphic(userView);
         MenuItem signIn = new MenuItem("Sign In / Sign Up");
         MenuItem signOut = new MenuItem("Sign out");
-        MenuItem EditPersonalInfo = new MenuItem("Edit Personal Info");
+        MenuItem ViewPersonalInfo = new MenuItem("View Personal Info");
 
         logoView.setOnMouseClicked(e ->
                 stage.setScene(new MainMenuG("Main Menu", this, stage).getScene()));
@@ -74,7 +79,9 @@ public abstract class GMenu {
         signIn.setOnAction(e -> {
             stage.setScene(new LoginGMenu("Sign In / Sign Up", this, stage).getScene());
         });
-        allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu("All Products", this, stage).getScene()));
+        allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu("All Products", this,
+                stage).getScene()));
+        cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu("Cart", this, stage).getScene()));
 
         userMenuBar.getMenus().addAll(user);
 
@@ -89,15 +96,24 @@ public abstract class GMenu {
         if (!controller.getAccountController().hasSomeOneLoggedIn()) {
             user.getItems().add(signIn);
         } else if (controller.getAccountController().getAccount() instanceof Customer) {
-            user.getItems().addAll(EditPersonalInfo, signOut);
+            user.getItems().addAll(ViewPersonalInfo, signOut);
+            ViewPersonalInfo.setOnAction(e -> {
+
+            });
         } else if (controller.getAccountController().getAccount() instanceof Supervisor) {
-            user.getItems().addAll(EditPersonalInfo, signOut);
+            user.getItems().addAll(ViewPersonalInfo, signOut);
+            ViewPersonalInfo.setOnAction(e -> {
+
+            });
         } else if (controller.getAccountController().getAccount() instanceof Supplier) {
-            user.getItems().addAll(EditPersonalInfo, signOut);
+            user.getItems().addAll(ViewPersonalInfo, signOut);
+            ViewPersonalInfo.setOnAction(e -> {
+
+            });
         }
 
-        hBox.setMinWidth(500);
-        hBox.setPadding(new Insets(10, 10, 10, 10));
+        hBox.setMinWidth(450);
+        hBox.setPadding(new Insets(5, 5, 5, 5));
         hBox.setStyle("-fx-background-color: transparent");
         return hBox;
     }
@@ -113,6 +129,15 @@ public abstract class GMenu {
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
         return imageView;
+    }
+
+    public static VBox getLogBox() {
+        VBox vBox = new VBox();
+        vBox.setStyle("-fx-border-width: 2");
+        vBox.setStyle("-fx-border-radius: 15");
+        vBox.setStyle("-fx-border-color: #4678c8");
+        vBox.setPadding(new Insets(10, 10, 10, 10));
+        return vBox;
     }
 
     public static GridPane createViewPersonalInfo(Account account){

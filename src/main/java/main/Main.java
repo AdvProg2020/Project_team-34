@@ -1,15 +1,8 @@
 package main;
 
 import database.DataBase;
-import gui.GMenu;
-import gui.allProductMenu.AllProductGMenu;
-import gui.cartMenu.CartGMenu;
-import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
-import gui.profile.CustomerProfileGMenu;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -25,13 +18,13 @@ public class Main extends Application {
     private static final long WEEK = 7*24*3600*1000;
 
     public static void main(String[] args)  {
+
         DataBase.createNewTablesToStart();
         DataBase.importAllData();
         timeProgramWasOpened = System.currentTimeMillis();
         if(timeProgramWasOpened - timeBeginning > timesDiscountCodeGenerated * WEEK ){
             generateRandomCodes();
         }
-        run();
         launch(args);
 
     }
@@ -70,6 +63,7 @@ public class Main extends Application {
 
 
         MainMenuG menu = new MainMenuG("All Product GMenu" , null, stage);
+
         stage.setScene(new Scene(menu.createHeader()));
         stage.show();
 
@@ -79,5 +73,4 @@ public class Main extends Application {
 
 
     }
-
 }

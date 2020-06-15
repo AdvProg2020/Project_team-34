@@ -1,5 +1,7 @@
 package gui.cartMenu;
 
+import com.google.gson.internal.$Gson$Preconditions;
+import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import javafx.scene.Scene;
@@ -17,8 +19,8 @@ import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class PurchaseMenuG extends GMenu {
 
-    public PurchaseMenuG(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public PurchaseMenuG(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Purchase Menu", parentMenu, stage, controller);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package gui.alerts;
 
+import controller.Controller;
 import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -18,8 +19,8 @@ public class ChoiceBox extends GMenu {
     private String denyButton;
     public Boolean answer;
 
-    public ChoiceBox(GMenu parentMenu, Stage stage, String question, String acceptButton, String denyButton) {
-        super("Choose ...", parentMenu, stage);
+    public ChoiceBox(GMenu parentMenu, Stage stage, String question, String acceptButton, String denyButton, Controller controller) {
+        super("Choose ...", parentMenu, stage, controller);
         this.question = question;
         this.acceptButton = acceptButton;
         this.denyButton = denyButton;

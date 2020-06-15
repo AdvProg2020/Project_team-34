@@ -1,5 +1,6 @@
 package gui.mainMenu;
 
+import controller.Controller;
 import gui.GMenu;
 import gui.allProductMenu.AllProductGMenu;
 import gui.loginMenu.LoginGMenu;
@@ -19,8 +20,8 @@ import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class MainMenuG extends GMenu {
-    public MainMenuG(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public MainMenuG( GMenu parentMenu, Stage stage, Controller controller) {
+        super("Main Menu", parentMenu, stage, controller);
     }
 
     @Override
@@ -90,12 +91,12 @@ public class MainMenuG extends GMenu {
         // Adding controller
 
         loginMenu.setOnAction( e-> {
-            stage.setScene(new LoginGMenu("Login Menu",this,stage).getScene());
+            stage.setScene(new LoginGMenu(this,stage,controller).getScene());
         });
 
         products.setOnAction( e-> {
             stage.setTitle(menuName);
-            stage.setScene(new AllProductGMenu("Product Menu",this,stage).getScene());
+            stage.setScene(new AllProductGMenu(this,stage,controller).getScene());
         });
 
         //loginMenu.setOnAction( e-> {

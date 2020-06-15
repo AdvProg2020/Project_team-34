@@ -1,5 +1,6 @@
 package gui.productMenu;
 
+import controller.Controller;
 import gui.GMenu;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -18,8 +19,8 @@ import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class ProductMenuG extends GMenu {
     private Product product;
-    public ProductMenuG(String menuName, GMenu parentMenu, Stage stage,Product product) {
-        super(menuName, parentMenu, stage);
+    public ProductMenuG(GMenu parentMenu, Stage stage, Product product, Controller controller) {
+        super("Product Menu", parentMenu, stage, controller);
         this.product = product;
     }
     @Override

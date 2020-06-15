@@ -10,6 +10,9 @@ import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
+import gui.profile.CustomerProfileGMenu;
+import gui.profile.SupervisorProfileGMenu;
+import gui.profile.SupplierProfileGMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
@@ -98,19 +101,13 @@ public abstract class GMenu {
             user.getItems().add(signIn);
         } else if (controller.getAccountController().getAccount() instanceof Customer) {
             user.getItems().addAll(ViewPersonalInfo, signOut);
-            ViewPersonalInfo.setOnAction(e -> {
-
-            });
+            ViewPersonalInfo.setOnAction(e -> stage.setScene(new CustomerProfileGMenu(this, stage, controller).getScene()));
         } else if (controller.getAccountController().getAccount() instanceof Supervisor) {
             user.getItems().addAll(ViewPersonalInfo, signOut);
-            ViewPersonalInfo.setOnAction(e -> {
-
-            });
+            ViewPersonalInfo.setOnAction(e -> stage.setScene(new SupervisorProfileGMenu(this, stage, controller).getScene()));
         } else if (controller.getAccountController().getAccount() instanceof Supplier) {
             user.getItems().addAll(ViewPersonalInfo, signOut);
-            ViewPersonalInfo.setOnAction(e -> {
-
-            });
+            ViewPersonalInfo.setOnAction(e -> stage.setScene(new SupplierProfileGMenu(this, stage, controller).getScene()));
         }
 
         hBox.setMinWidth(450);

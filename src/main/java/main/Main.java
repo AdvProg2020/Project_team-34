@@ -54,6 +54,7 @@ public class Main extends Application {
 
 
         MainMenuG menu = new MainMenuG("All Product GMenu" , null, stage);
+        menu.createHeader();
         stage.setScene(menu.getScene());
         stage.show();
     }

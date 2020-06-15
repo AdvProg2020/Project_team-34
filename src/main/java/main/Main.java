@@ -1,6 +1,5 @@
 package main;
 
-import account.Customer;
 import database.DataBase;
 import gui.mainMenu.MainMenuG;
 import javafx.application.Application;

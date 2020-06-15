@@ -1,5 +1,7 @@
 package gui.cartMenu;
 
+import cart.Cart;
+import cart.ProductInCart;
 import gui.GMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Pos;
@@ -7,12 +9,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
+import javafx.scene.control.skin.LabeledSkinBase;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import product.Product;
 
 import java.io.File;
+import java.util.ArrayList;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
 
@@ -96,12 +102,38 @@ public class CartGMenu extends GMenu {
 
         backgroundLayout.getChildren().add(mainAnchorPain);
 
-        System.out.println(controller.getAccountController().controlViewCart().getBill());
-
+        ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
+        for (ProductInCart productInCart : productInCarts) {
+           mainAnchorPain.getChildren().add(createHBox(productInCart));
+            System.out.println("hi");
+        }
         Scene scene = new Scene(backgroundLayout);
         return scene;
     }
 
-//    private static Pane create
+    private static GridPane createHBox(ProductInCart productInCart){
+        GridPane gridPane = new GridPane();
+        Product product = productInCart.getProduct();
+        Label IdLabel = new Label(product.getProductId());
+        Label nameLabel = new Label(product.getName());
+        Label priceLabel = new Label(String.valueOf(product.getPrice(productInCart.getSupplier())));
+//        Label CountLabel = new Label()
+
+        Button increment = new Button("+");
+        Button decrement = new Button("-");
+
+        int column = 0;
+        gridPane.add(IdLabel , 1, column );
+        column ++;
+        gridPane.add(nameLabel, 1, column);
+        column ++;
+        gridPane.add(priceLabel, 1, column);
+        column ++;
+        gridPane.add(increment, 0, column);
+        column ++;
+        gridPane.add(decrement, 2, column);
+
+        return gridPane;
+    }
 
 }

@@ -1,7 +1,13 @@
 package gui.profile;
 
+import account.Supplier;
 import gui.GMenu;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 public class ViewLogsForSupplierGMenu extends GMenu {
@@ -11,6 +17,32 @@ public class ViewLogsForSupplierGMenu extends GMenu {
 
     @Override
     protected Scene createScene() {
-        return null;
+        VBox logsBox = new VBox();
+        VBox mainLayout = new VBox();
+        GridPane background = new GridPane();
+        Scene scene = new Scene(background);
+
+        logsBox.setPadding(new Insets(10, 10, 10, 10));
+        logsBox.setSpacing(10);
+        for (String log : controller.getAccountController().getSupplierLogs()) {
+            logsBox.getChildren().add(SupplierLogBox(log));
+        }
+
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.getChildren().addAll(createHeader(), logsBox);
+
+        background.getChildren().add(mainLayout);
+        background.setAlignment(Pos.CENTER);
+
+        return scene;
+    }
+
+    public VBox SupplierLogBox(String supplierLog) {
+        VBox vBox = getLogBox();
+        Text log = new Text(supplierLog);
+        vBox.getChildren().add(log);
+        vBox.setPrefWidth(600);
+        vBox.setPadding(new Insets(10, 10, 10, 10));
+        return vBox;
     }
 }

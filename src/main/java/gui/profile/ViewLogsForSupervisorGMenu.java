@@ -1,7 +1,10 @@
 package gui.profile;
 
 import gui.GMenu;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -15,12 +18,32 @@ public class ViewLogsForSupervisorGMenu extends GMenu {
 
     @Override
     protected Scene createScene() {
-        return null;
+        VBox logsBox = new VBox();
+        VBox mainLayout = new VBox();
+        GridPane background = new GridPane();
+        Scene scene = new Scene(background);
+
+        logsBox.setPadding(new Insets(10, 10, 10, 10));
+        logsBox.setSpacing(10);
+        for (String log : controller.getAccountController().getSupervisorLogs()) {
+            logsBox.getChildren().add(SupervisorLogBox(log));
+        }
+
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.getChildren().addAll(createHeader(), logsBox);
+
+        background.getChildren().add(mainLayout);
+        background.setAlignment(Pos.CENTER);
+
+        return scene;
     }
 
-    public VBox SupervisorLogBox(String supplierLogID) {
+    public VBox SupervisorLogBox(String supervisorLog) {
         VBox vBox = getLogBox();
-        vBox.getChildren().add(new Text(SupplierLog.getSupplierLogById(supplierLogID).toString()));
+        Text log = new Text(supervisorLog);
+        vBox.getChildren().add(log);
+        vBox.setPrefWidth(600);
+        vBox.setPadding(new Insets(10, 10, 10, 10));
         return vBox;
     }
 }

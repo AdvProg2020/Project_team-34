@@ -6,7 +6,9 @@ import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
+import gui.profile.CustomerProfileGMenu;
 import javafx.application.Application;
+import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -71,5 +73,11 @@ public class Main extends Application {
 
         stage.setScene(new Scene(menu.createHeader()));
         stage.show();
+
+//        CustomerProfileGMenu menu = new CustomerProfileGMenu("All Product GMenu" , null, stage);
+//        stage.setScene(menu.getScene());
+//        stage.show();
+
+
     }
 }

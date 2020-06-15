@@ -40,9 +40,13 @@ public class CustomerProfileGMenu extends GMenu {
         viewDiscountCodesButton.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
         viewDiscountCodesButton.getStyleClass().add("button");
 
+
+        mainPane.setAlignment(Pos.CENTER);
         mainPane.setSpacing(10);
         mainPane.setPadding(new Insets(10, 10 , 10 , 10));
         mainPane.getChildren().addAll(viewCartButton, viewOrdersButton, viewBalanceButton, viewDiscountCodesButton);
+
+        mainPane.setStyle("-fx-background-color : #f8e8e2");
 
         backgroundLayout.getChildren().add(mainPane);
         backgroundLayout.setAlignment(Pos.CENTER);

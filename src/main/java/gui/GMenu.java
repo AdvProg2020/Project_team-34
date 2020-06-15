@@ -8,6 +8,10 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FilterInputStream;
+
 public abstract class GMenu {
     protected final GMenu parentMenu;
     protected final String menuName;
@@ -28,7 +32,12 @@ public abstract class GMenu {
     protected abstract Scene createScene();
 
     public Node createHeader() {
-        Image logoImage = new Image("main/resources/header/Logo.png");
+        Image logoImage = null;
+        try {
+            logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
         ImageView logo = new ImageView(logoImage);
         return null;
     }

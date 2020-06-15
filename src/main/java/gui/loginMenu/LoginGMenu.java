@@ -2,6 +2,7 @@ package gui.loginMenu;
 
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.mainMenu.MainMenuG;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -151,6 +152,7 @@ public class LoginGMenu extends GMenu {
             String password = passwordField.getText();
             try {
                 controller.getAccountController().controlLogin(username, password);
+                stage.setScene(new MainMenuG("Main Menu",this, stage).getScene());
             } catch (ExceptionalMassage ex){
                 System.out.println(ex.getMessage());
             }

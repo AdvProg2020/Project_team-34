@@ -1,13 +1,20 @@
 package main;
 
 import database.DataBase;
+import gui.GMenu;
 import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
 import javafx.application.Application;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import menu.mainMenu.MainMenu;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class Main extends Application {
     private static long timeBeginning;
@@ -24,7 +31,7 @@ public class Main extends Application {
             generateRandomCodes();
         }
         launch(args);
-        run();
+        //run();
     }
 
     private static void run() {
@@ -39,6 +46,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
+        Image logoImage = null;
+        try {
+            logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
+        } catch (FileNotFoundException e) {
+        }
+        stage.setTitle("Team 34 Online retail store");
+        stage.getIcons().add(logoImage);
 
 //        CartGMenu menu = new CartGMenu("Cart GMenu", null, stage);
 //        stage.setScene(menu.getScene());
@@ -54,8 +68,8 @@ public class Main extends Application {
 
 
         MainMenuG menu = new MainMenuG("All Product GMenu" , null, stage);
-        menu.createHeader();
-        stage.setScene(menu.getScene());
+
+        stage.setScene(new Scene(menu.createHeader()));
         stage.show();
     }
 }

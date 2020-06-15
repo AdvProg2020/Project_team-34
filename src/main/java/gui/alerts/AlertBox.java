@@ -1,6 +1,7 @@
 package gui.alerts;
 
 import gui.GMenu;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -22,6 +23,8 @@ public class AlertBox extends GMenu {
     @Override
     protected Scene createScene() {
         HBox hBox = new HBox();
+        hBox.setSpacing(20);
+        hBox.setPadding(new Insets(10, 10, 10, 10));
         Label alertLabel = new Label(alert);
         Button okButton = new Button(buttonText);
         hBox.getChildren().addAll(alertLabel, okButton);
@@ -29,6 +32,9 @@ public class AlertBox extends GMenu {
         GridPane background = new GridPane();
         background.setAlignment(Pos.CENTER);
         background.getChildren().addAll(hBox);
+        okButton.setOnAction(e -> {
+
+        });
         Scene scene = new Scene(background);
         return scene;
     }

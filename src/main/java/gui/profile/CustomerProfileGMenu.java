@@ -15,21 +15,20 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class CustomerProfileGMenu extends GMenu {
-    private final GridPane backgroundLayout;
-    private final HBox mainPane;
-    private final VBox buttonPane;
-    private final VBox viewPane;
+
 
     public CustomerProfileGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Profile", parentMenu, stage, controller);
-        this.backgroundLayout = new GridPane();
-        this.mainPane = new HBox();
-        this.buttonPane = new VBox();
-        this.viewPane = new VBox();
+
     }
 
     @Override
     protected Scene createScene() {
+
+        GridPane backgroundLayout = new GridPane();
+        HBox mainPane = new HBox();
+        VBox buttonPane = new VBox();
+        VBox viewPane = new VBox();
 
         Button viewCartButton = new Button("View cart");
         viewCartButton.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
@@ -56,13 +55,14 @@ public class CustomerProfileGMenu extends GMenu {
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
         //int balance = controller.getAccountController().getAccountCredit();
-        Label balanceLabel = new Label(String.valueOf(450));
+        Label balanceLabel = new Label(String.valueOf(controller.getAccountController().getAccount().getCredit()));
 
         viewPane.getChildren().addAll(balanceLabel);
 
-        mainPane.getChildren().addAll( buttonPane, viewPane, GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()));
+        mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()), buttonPane);
         mainPane.setSpacing(10);
         mainPane.setPadding(new Insets(10, 10 , 10 , 10));
+        mainPane.setAlignment(Pos.CENTER);
 
         backgroundLayout.add(createHeader(), 0,0);
         backgroundLayout.add(mainPane, 0, 1);

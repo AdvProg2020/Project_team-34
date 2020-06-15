@@ -131,5 +131,7 @@ public class AllProductGMenu extends GMenu {
             productGridPane.add(new Label(product.getName()), row, 0);
             row++;
         }
+
+
     }
 }

@@ -120,9 +120,7 @@ public class AllProductGMenu extends GMenu {
         mainPane.getChildren().addAll(filterAndSort);
 
         backgroundLayout.getChildren().add(mainPane);
-
         backgroundLayout.setAlignment(Pos.CENTER);
-
         Scene scene = new Scene(backgroundLayout);
         return scene;
     }

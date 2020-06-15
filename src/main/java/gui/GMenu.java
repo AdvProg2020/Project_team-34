@@ -36,12 +36,11 @@ public abstract class GMenu {
     protected final Stage stage;
     public final Controller controller;
 
-    public GMenu(String menuName, GMenu parentMenu, Stage stage) {
+    public GMenu(String menuName, GMenu parentMenu, Stage stage, Controller controller) {
         this.menuName = menuName;
         this.parentMenu = parentMenu;
-        this.controller = new Controller();
+        this.controller = controller;
         this.stage = stage;
-
         stage.setTitle(menuName);
     }
 

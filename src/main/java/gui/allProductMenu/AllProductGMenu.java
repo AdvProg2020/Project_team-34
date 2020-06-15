@@ -1,6 +1,5 @@
 package gui.allProductMenu;
 
-import controller.SortType;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import javafx.geometry.Insets;
@@ -18,30 +17,23 @@ import java.util.ArrayList;
 
 public class AllProductGMenu extends GMenu {
 
-    private final GridPane backgroundLayout;
-    private final GridPane mainPane;
-    private final VBox filterAndSort;
-    private final VBox appliedFilter;
-    private final VBox price ;
-    private final VBox sort;
-    private final VBox availability ;
-    private final GridPane productGridPane;
+
 
 
     public AllProductGMenu(String menuName, GMenu parentMenu, Stage stage) {
         super(menuName, parentMenu, stage);
-        appliedFilter = new VBox();
-        sort = new VBox();
-        filterAndSort = new VBox();
-        price = new VBox();
-        backgroundLayout = new GridPane();
-        mainPane = new GridPane();
-        availability = new VBox();
-        productGridPane = new GridPane();
     }
 
     @Override
     protected Scene createScene() {
+        GridPane backgroundLayout = new GridPane();
+        GridPane mainPane = new GridPane();
+        VBox filterAndSort = new VBox();
+        VBox appliedFilter = new VBox();
+        VBox price = new VBox();
+        VBox sort = new VBox();
+        VBox availability = new VBox();
+        GridPane productGridPane = new GridPane();
         RangeSlider rangeSlider = new RangeSlider(0, 100, 10, 90);
         Label label = new Label("Applied Filter");
         appliedFilter.getChildren().add(label);
@@ -64,7 +56,7 @@ public class AllProductGMenu extends GMenu {
 
         numberOfViews.setOnMouseReleased(e->{
             controller.getProductController().controlFilterSetSortType("by number of views");
-            putNewProductsInProductGridPane();
+            putNewProductsInProductGridPane(productGridPane);
         });
 
 
@@ -93,7 +85,7 @@ public class AllProductGMenu extends GMenu {
             } catch (ExceptionalMassage exceptionalMassage) {
                 exceptionalMassage.printStackTrace();
             }
-            putNewProductsInProductGridPane();
+            putNewProductsInProductGridPane(productGridPane);
         });
 
         upperBound.setOnMouseClicked(e->{
@@ -102,7 +94,7 @@ public class AllProductGMenu extends GMenu {
             } catch (ExceptionalMassage exceptionalMassage) {
                 exceptionalMassage.printStackTrace();
             }
-            putNewProductsInProductGridPane();
+            putNewProductsInProductGridPane(productGridPane);
         });
 
 
@@ -128,7 +120,7 @@ public class AllProductGMenu extends GMenu {
         return scene;
     }
 
-    private void putNewProductsInProductGridPane(){
+    private void putNewProductsInProductGridPane(GridPane productGridPane){
         System.out.println("oomadam toosh");
         ArrayList<Product> products =  controller.getProductController().getFilterAndSort().getProducts();
         System.out.println(products.size());

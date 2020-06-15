@@ -147,7 +147,7 @@ public class LoginGMenu extends GMenu {
         // Adding controller!
 
         signUp.setOnMouseClicked(e ->{
-            stage.setScene(new RegisterGMenu("Register Menu",this,stage).getScene());
+            stage.setScene(parentMenu.getScene());
         });
 
 
@@ -157,7 +157,7 @@ public class LoginGMenu extends GMenu {
             String password = passwordField.getText();
             try {
                 controller.getAccountController().controlLogin(username, password);
-                stage.setScene(new MainMenuG("Main Menu",this, stage).getScene());
+                stage.setScene(parentMenu.getScene());
             } catch (ExceptionalMassage ex){
                 System.out.println(ex.getMessage());
             }

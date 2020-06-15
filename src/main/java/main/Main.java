@@ -1,15 +1,8 @@
 package main;
 
 import database.DataBase;
-import gui.GMenu;
-import gui.allProductMenu.AllProductGMenu;
-import gui.cartMenu.CartGMenu;
-import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
-import gui.profile.CustomerProfileGMenu;
 import javafx.application.Application;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -19,21 +12,22 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class Main extends Application {
+    public static String[] aa;
     private static long timeBeginning;
     private static long timeProgramWasOpened;
     private static int timesDiscountCodeGenerated;
     private static final long WEEK = 7*24*3600*1000;
 
     public static void main(String[] args)  {
-
+        aa = args;
         DataBase.createNewTablesToStart();
         DataBase.importAllData();
         timeProgramWasOpened = System.currentTimeMillis();
         if(timeProgramWasOpened - timeBeginning > timesDiscountCodeGenerated * WEEK ){
             generateRandomCodes();
         }
+        run();
         launch(args);
-        //run();
     }
 
     private static void run() {

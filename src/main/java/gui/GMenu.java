@@ -17,12 +17,15 @@ import javafx.scene.control.MenuItem;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
 
 public abstract class GMenu {
+    public final static SimpleDateFormat FORMAT = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
     protected final GMenu parentMenu;
     protected final String menuName;
     protected final Stage stage;
@@ -110,5 +113,14 @@ public abstract class GMenu {
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
         return imageView;
+    }
+
+    public static VBox getLogBox() {
+        VBox vBox = new VBox();
+        vBox.setStyle("-fx-border-width: 2");
+        vBox.setStyle("-fx-border-radius: 15");
+        vBox.setStyle("-fx-border-color: #4678c8");
+        vBox.setPadding(new Insets(10, 10, 10, 10));
+        return vBox;
     }
 }

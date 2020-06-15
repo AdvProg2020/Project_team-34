@@ -9,6 +9,7 @@ import cart.ProductInCart;
 import cart.ShippingInfo;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
+import log.LogStatus;
 import log.SupplierLog;
 import product.Product;
 
@@ -378,5 +379,26 @@ public class AccountController {
             toStringLogs.add(customerLog.toString());
         }
         return toStringLogs;
+    }
+
+    public String getCustomerLogById(String id) {
+        return CustomerLog.getCustomerLogById(id).toString();
+    }
+
+    public String getSupplierLogById(String id) {
+        return SupplierLog.getSupplierLogById(id).toString();
+    }
+
+    public boolean proceedCustomerLog(String id) {
+        try {
+            CustomerLog.getCustomerLogById(id).proceedToNextStep();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isLogProcessable(String id) {
+        return CustomerLog.getCustomerLogById(id).getDeliveryStatus() != LogStatus.DELIVERED;
     }
 }

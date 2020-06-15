@@ -1,6 +1,8 @@
 package gui.profile;
 
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -39,14 +41,14 @@ public class ManageRequestsG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox2);
-        ListView listView3 = new ListView();
-        listView3.setPrefHeight(398.0);
-        listView3.setPrefWidth(350.0);
-        listView3.setLayoutX(50.0);
-        listView3.setLayoutY(154.0);
+        ListView requests = new ListView();
+        requests.setPrefHeight(398.0);
+        requests.setPrefWidth(350.0);
+        requests.setLayoutX(50.0);
+        requests.setLayoutY(154.0);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(listView3);
+        anchorPane0.getChildren().add(requests);
         Label label4 = new Label();
         label4.setLayoutX(50.0);
         label4.setLayoutY(120.0);
@@ -54,39 +56,74 @@ public class ManageRequestsG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(label4);
-        Button button5 = new Button();
-        button5.setPrefHeight(33.0);
-        button5.setPrefWidth(233.0);
-        button5.setLayoutX(505.0);
-        button5.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button5.setLayoutY(334.0);
-        button5.setText("View details");
-        button5.setMnemonicParsing(false);
+        Button detailsButton = new Button();
+        detailsButton.setPrefHeight(33.0);
+        detailsButton.setPrefWidth(233.0);
+        detailsButton.setLayoutX(505.0);
+        detailsButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        detailsButton.setLayoutY(334.0);
+        detailsButton.setText("View details");
+        detailsButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(button5);
-        Button button7 = new Button();
-        button7.setPrefHeight(33.0);
-        button7.setPrefWidth(233.0);
-        button7.setLayoutX(505.0);
-        button7.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button7.setLayoutY(519.0);
-        button7.setText("Accept");
-        button7.setMnemonicParsing(false);
+        anchorPane0.getChildren().add(detailsButton);
+        Button acceptButton = new Button();
+        acceptButton.setPrefHeight(33.0);
+        acceptButton.setPrefWidth(233.0);
+        acceptButton.setLayoutX(505.0);
+        acceptButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        acceptButton.setLayoutY(519.0);
+        acceptButton.setText("Accept");
+        acceptButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(button7);
-        Button button8 = new Button();
-        button8.setPrefHeight(33.0);
-        button8.setPrefWidth(233.0);
-        button8.setLayoutX(505.0);
-        button8.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button8.setLayoutY(457.0);
-        button8.setText("Reject");
-        button8.setMnemonicParsing(false);
+        anchorPane0.getChildren().add(acceptButton);
+        Button rejectButton = new Button();
+        rejectButton.setPrefHeight(33.0);
+        rejectButton.setPrefWidth(233.0);
+        rejectButton.setLayoutX(505.0);
+        rejectButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        rejectButton.setLayoutY(457.0);
+        rejectButton.setText("Reject");
+        rejectButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(button8);
+        anchorPane0.getChildren().add(rejectButton);
+
+        // Adding controller
+        for (String s : controller.getProductController().controlGetArrayOfRequestId()) {
+            requests.getItems().add(s);
+        }
+
+        acceptButton.setOnAction( e -> {
+            ObservableList<String> ids = requests.getItems();
+            for (String id : ids) {
+                try {
+                    controller.getProductController().controlAcceptOrDeclineRequest(id, true);
+                } catch (ExceptionalMassage ex){
+                    //
+                }
+            }
+
+        });
+
+        rejectButton.setOnAction( e -> {
+            ObservableList<String> ids = requests.getItems();
+            for (String id : ids) {
+                try {
+                    controller.getProductController().controlAcceptOrDeclineRequest(id, false);
+                } catch (ExceptionalMassage ex){
+                    //
+                }
+            }
+
+        });
+
+        detailsButton.setOnAction( e -> {
+            //show details of requests!
+        });
+
+
 
         return new Scene(anchorPane0);
 

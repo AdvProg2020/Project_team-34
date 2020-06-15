@@ -328,6 +328,13 @@ public class ProductController {
         return result.toString();
     }
 
+    public ArrayList<String> controlGetArrayOfRequestId(){
+        ArrayList<String> allRequests = new ArrayList<>();
+        allRequests.addAll(Product.getAllProductRequestId());
+        allRequests.addAll(Sale.getAllSaleRequestId());
+        return allRequests;
+    }
+
     public String controlShowDetailForRequest(String requestId) throws ExceptionalMassage{
         if(requestId.charAt(3) == 'P'){
             return Product.getDetailsForProductRequest(requestId);

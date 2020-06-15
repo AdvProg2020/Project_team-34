@@ -1,5 +1,6 @@
 package gui.cartMenu;
 
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -75,15 +76,15 @@ public class PurchaseMenuG extends GMenu {
         hBox7.setPrefHeight(51.0);
         hBox7.setPrefWidth(345.0);
         hBox7.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        TextField cityNameField = new TextField();
-        cityNameField.setPrefHeight(51.0);
-        cityNameField.setPrefWidth(295.0);
-        cityNameField.setStyle("-fx-background-color: transparent;");
-        cityNameField.setOpacity(0.83);
-        cityNameField.setPromptText("Last name");
+        TextField lastNameField = new TextField();
+        lastNameField.setPrefHeight(51.0);
+        lastNameField.setPrefWidth(295.0);
+        lastNameField.setStyle("-fx-background-color: transparent;");
+        lastNameField.setOpacity(0.83);
+        lastNameField.setPromptText("Last name");
 
         // Adding child to parent
-        hBox7.getChildren().add(cityNameField);
+        hBox7.getChildren().add(lastNameField);
 
         // Adding child to parent
         gridPane4.add(hBox7,0,1);
@@ -91,15 +92,15 @@ public class PurchaseMenuG extends GMenu {
         hBox9.setPrefHeight(51.0);
         hBox9.setPrefWidth(345.0);
         hBox9.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        TextField textField10 = new TextField();
-        textField10.setPrefHeight(51.0);
-        textField10.setPrefWidth(295.0);
-        textField10.setStyle("-fx-background-color: transparent;");
-        textField10.setOpacity(0.83);
-        textField10.setPromptText("City name");
+        TextField cityNameField = new TextField();
+        cityNameField.setPrefHeight(51.0);
+        cityNameField.setPrefWidth(295.0);
+        cityNameField.setStyle("-fx-background-color: transparent;");
+        cityNameField.setOpacity(0.83);
+        cityNameField.setPromptText("City name");
 
         // Adding child to parent
-        hBox9.getChildren().add(textField10);
+        hBox9.getChildren().add(cityNameField);
 
         // Adding child to parent
         gridPane4.add(hBox9,0,2);
@@ -221,6 +222,35 @@ public class PurchaseMenuG extends GMenu {
         cartInfo.setText(controller.getAccountController().controlViewCart().toString());
 
         purchaseButton.setOnAction( e -> {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String cityName = cityNameField.getText();
+            String address = addressField.getText();
+            String postalCode = postalCodeField.getText();
+            String phoneNumber = phoneNumberField.getText();
+
+            try{
+                controller.getAccountController().controlSubmitShippingInfo(firstName,lastName,cityName,address,postalCode,phoneNumber);
+            } catch (ExceptionalMassage ex){
+                //
+            }
+
+            if(discountCodeCheckBox.isSelected()) {
+                try {
+                    controller.getAccountController().controlSubmitDiscountCode(discountCodeField.getText());
+                    //
+                } catch (ExceptionalMassage ex) {
+
+                }
+            }
+            try{
+                controller.getAccountController().finalizeOrder();
+                //
+            } catch (ExceptionalMassage ex){
+                //
+            }
+
+
 
 
 

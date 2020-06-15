@@ -1,6 +1,7 @@
 package gui.mainMenu;
 
 import gui.GMenu;
+import gui.allProductMenu.AllProductGMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -92,8 +93,9 @@ public class MainMenuG extends GMenu {
             stage.setScene(new LoginGMenu("Login Menu",this,stage).getScene());
         });
 
-        loginMenu.setOnAction( e-> {
-            stage.setScene(new LoginGMenu("Login Menu",this,stage).getScene());
+        products.setOnAction( e-> {
+            stage.setTitle(menuName);
+            stage.setScene(new AllProductGMenu("Product Menu",this,stage).getScene());
         });
 
         //loginMenu.setOnAction( e-> {

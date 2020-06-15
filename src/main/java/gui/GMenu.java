@@ -41,6 +41,8 @@ public abstract class GMenu {
         this.parentMenu = parentMenu;
         this.controller = new Controller();
         this.stage = stage;
+
+        stage.setTitle(menuName);
     }
 
     public Scene getScene() {

@@ -1,6 +1,7 @@
 package gui.cartMenu;
 
 import gui.GMenu;
+import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -70,6 +71,16 @@ public class CartGMenu extends GMenu {
         placeOrder.setMnemonicParsing(false);
         placeOrder.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
         placeOrder.getStyleClass().add("button");
+
+        placeOrder.setOnMouseClicked(e->{
+            if(controller.getAccountController().hasSomeOneLoggedIn()){
+                stage.setScene(new PurchaseMenuG("Purchase Menu", this, stage).getScene());
+            }
+            else {
+                stage.setScene(new LoginGMenu("Login Menu", this, stage).getScene());
+            }
+
+        });
 
         mainAnchorPain.getChildren().add(placeOrder);
         Button updateCart = new Button();

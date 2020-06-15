@@ -325,6 +325,13 @@ public class Cart {
         return null;
     }
 
+    public int getCountOfProductInCart(ProductInCart productInCart) throws ExceptionalMassage {
+        if (!productInCount.containsKey(productInCart)) {
+            throw new ExceptionalMassage("Not found");
+        }
+        return productInCount.get(productInCart);
+    }
+
     @Override
     public String toString() {
         update();

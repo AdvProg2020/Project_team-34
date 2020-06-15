@@ -5,10 +5,8 @@ import javafx.scene.Node;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import menu.menuAbstract.Menu;
 
 public abstract class GMenu {
-    public final Node HEADER = createHeader();
     protected final GMenu parentMenu;
     protected final String menuName;
     protected final Stage stage;

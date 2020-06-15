@@ -97,6 +97,10 @@ public class CustomerLog {
         return allCustomerLogCreatedCount;
     }
 
+    public static ArrayList<CustomerLog> getAllCustomerLogs() {
+        return allCustomerLogs;
+    }
+
     //Setters:
     public void setDeliveryStatus(LogStatus deliveryStatus) {
         this.deliveryStatus = deliveryStatus;

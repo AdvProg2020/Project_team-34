@@ -180,4 +180,21 @@ public abstract class GMenu {
 
         return showingInfoPane;
     }
+
+    public Scene createLogScene(VBox logsBox) {
+        VBox mainLayout = new VBox();
+        GridPane background = new GridPane();
+        Scene scene = new Scene(background);
+
+        logsBox.setPadding(new Insets(10, 10, 10, 10));
+        logsBox.setSpacing(10);
+
+        mainLayout.setAlignment(Pos.CENTER);
+        mainLayout.getChildren().addAll(createHeader(), logsBox);
+
+        background.getChildren().add(mainLayout);
+        background.setAlignment(Pos.CENTER);
+
+        return scene;
+    }
 }

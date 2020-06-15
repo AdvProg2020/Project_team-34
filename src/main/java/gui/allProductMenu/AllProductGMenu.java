@@ -11,6 +11,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import product.Product;
+import org.controlsfx.control.RangeSlider;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -41,6 +42,7 @@ public class AllProductGMenu extends GMenu {
 
     @Override
     protected Scene createScene() {
+        RangeSlider rangeSlider = new RangeSlider(0, 100, 10, 90);
         Label label = new Label("Applied Filter");
         appliedFilter.getChildren().add(label);
         appliedFilter.setSpacing(10);
@@ -75,13 +77,13 @@ public class AllProductGMenu extends GMenu {
             controller.getProductController().getFilterAndSort().setAvailabilityFilter(availabilityCheck.isSelected());
         });
 
-
         Label lowerBoundLabel = new Label("Lower Bound");
         Slider lowerBound = new Slider();
         Label upperBoundLabel = new Label("Upper Bound");
         Slider upperBound = new Slider();
         upperBound.setValue(100);
-        price.getChildren().addAll(lowerBoundLabel, lowerBound,upperBoundLabel, upperBound);
+//        lowerBoundLabel, lowerBound,upperBoundLabel, upperBound
+        price.getChildren().addAll(rangeSlider);
         price.setSpacing(10);
         price.setPadding(new Insets(10, 10 , 10 , 10));
 
@@ -117,7 +119,8 @@ public class AllProductGMenu extends GMenu {
         });
 
 
-        mainPane.getChildren().addAll(filterAndSort);
+        mainPane.add(createHeader(),0, 0 );
+        mainPane.add(filterAndSort, 0, 1);
 
         backgroundLayout.getChildren().add(mainPane);
         backgroundLayout.setAlignment(Pos.CENTER);
@@ -126,6 +129,7 @@ public class AllProductGMenu extends GMenu {
     }
 
     private void putNewProductsInProductGridPane(){
+        System.out.println("oomadam toosh");
         ArrayList<Product> products =  controller.getProductController().getFilterAndSort().getProducts();
         System.out.println(products.size());
         int row =0 ;

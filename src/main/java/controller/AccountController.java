@@ -9,6 +9,8 @@ import cart.ProductInCart;
 import cart.ShippingInfo;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
+import log.LogStatus;
+import log.SupplierLog;
 import product.Product;
 
 import java.util.ArrayList;
@@ -350,5 +352,53 @@ public class AccountController {
 
     public String getAccountNameOfCompany() {
         return ((Supplier) getAccount()).getNameOfCompany();
+    }
+
+    public ArrayList<String> getCustomerLogs() {
+        ArrayList<CustomerLog> customerLogs = CustomerLog.getCustomerCustomerLogs((Customer) getAccount());
+        ArrayList<String> toStringLogs = new ArrayList<>();
+        for (CustomerLog customerLog : customerLogs) {
+            toStringLogs.add(customerLog.toString());
+        }
+        return toStringLogs;
+    }
+
+    public ArrayList<String> getSupplierLogs() {
+        ArrayList<SupplierLog> supplierLogs = SupplierLog.getSupplierSupplierLog((Supplier) getAccount());
+        ArrayList<String> toStringLogs = new ArrayList<>();
+        for (SupplierLog supplierLog : supplierLogs) {
+            toStringLogs.add(supplierLog.toString());
+        }
+        return toStringLogs;
+    }
+
+    public ArrayList<String> getSupervisorLogs() {
+        ArrayList<CustomerLog> supervisorLogs = CustomerLog.getAllCustomerLogs();
+        ArrayList<String> toStringLogs = new ArrayList<>();
+        for (CustomerLog customerLog : supervisorLogs) {
+            toStringLogs.add(customerLog.toString());
+        }
+        return toStringLogs;
+    }
+
+    public String getCustomerLogById(String id) {
+        return CustomerLog.getCustomerLogById(id).toString();
+    }
+
+    public String getSupplierLogById(String id) {
+        return SupplierLog.getSupplierLogById(id).toString();
+    }
+
+    public boolean proceedCustomerLog(String id) {
+        try {
+            CustomerLog.getCustomerLogById(id).proceedToNextStep();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isLogProcessable(String id) {
+        return CustomerLog.getCustomerLogById(id).getDeliveryStatus() != LogStatus.DELIVERED;
     }
 }

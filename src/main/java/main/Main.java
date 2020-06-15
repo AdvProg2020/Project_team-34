@@ -69,14 +69,14 @@ public class Main extends Application {
 //        stage.show();
 
 
-        MainMenuG menu = new MainMenuG("All Product GMenu" , null, stage);
-
-        stage.setScene(new Scene(menu.createHeader()));
-        stage.show();
-
-//        CustomerProfileGMenu menu = new CustomerProfileGMenu("All Product GMenu" , null, stage);
-//        stage.setScene(menu.getScene());
+//        MainMenuG menu = new MainMenuG("All Product GMenu" , null, stage);
+//
+//        stage.setScene(new Scene(menu.createHeader()));
 //        stage.show();
+
+        CustomerProfileGMenu menu = new CustomerProfileGMenu("All Product GMenu" , null, stage);
+        stage.setScene(menu.getScene());
+        stage.show();
 
 
     }

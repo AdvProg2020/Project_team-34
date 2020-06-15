@@ -1,5 +1,6 @@
 package gui.profile;
 
+import controller.Controller;
 import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,9 +20,8 @@ public class CustomerProfileGMenu extends GMenu {
     private final VBox buttonPane;
     private final VBox viewPane;
 
-
-    public CustomerProfileGMenu(String menuName, GMenu parentMenu, Stage stage) {
-        super(menuName, parentMenu, stage);
+    public CustomerProfileGMenu(GMenu parentMenu, Stage stage, Controller controller) {
+        super("Profile", parentMenu, stage, controller);
         this.backgroundLayout = new GridPane();
         this.mainPane = new HBox();
         this.buttonPane = new VBox();

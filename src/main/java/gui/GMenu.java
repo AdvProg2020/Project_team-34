@@ -5,6 +5,7 @@ import account.Supervisor;
 import account.Supplier;
 import controller.Controller;
 import gui.allProductMenu.AllProductGMenu;
+import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
 import javafx.geometry.Insets;
@@ -59,7 +60,7 @@ public abstract class GMenu {
         user.setGraphic(userView);
         MenuItem signIn = new MenuItem("Sign In / Sign Up");
         MenuItem signOut = new MenuItem("Sign out");
-        MenuItem EditPersonalInfo = new MenuItem("Edit Personal Info");
+        MenuItem ViewPersonalInfo = new MenuItem("View Personal Info");
 
         logoView.setOnMouseClicked(e ->
                 stage.setScene(new MainMenuG("Main Menu", this, stage).getScene()));
@@ -74,7 +75,9 @@ public abstract class GMenu {
         signIn.setOnAction(e -> {
             stage.setScene(new LoginGMenu("Sign In / Sign Up", this, stage).getScene());
         });
-        allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu("All Products", this, stage).getScene()));
+        allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu("All Products", this,
+                stage).getScene()));
+        cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu("Cart", this, stage).getScene()));
 
         userMenuBar.getMenus().addAll(user);
 
@@ -89,11 +92,20 @@ public abstract class GMenu {
         if (!controller.getAccountController().hasSomeOneLoggedIn()) {
             user.getItems().add(signIn);
         } else if (controller.getAccountController().getAccount() instanceof Customer) {
-            user.getItems().addAll(EditPersonalInfo, signOut);
+            user.getItems().addAll(ViewPersonalInfo, signOut);
+            ViewPersonalInfo.setOnAction(e -> {
+
+            });
         } else if (controller.getAccountController().getAccount() instanceof Supervisor) {
-            user.getItems().addAll(EditPersonalInfo, signOut);
+            user.getItems().addAll(ViewPersonalInfo, signOut);
+            ViewPersonalInfo.setOnAction(e -> {
+
+            });
         } else if (controller.getAccountController().getAccount() instanceof Supplier) {
-            user.getItems().addAll(EditPersonalInfo, signOut);
+            user.getItems().addAll(ViewPersonalInfo, signOut);
+            ViewPersonalInfo.setOnAction(e -> {
+
+            });
         }
 
         hBox.setMinWidth(450);

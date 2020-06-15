@@ -59,11 +59,12 @@ public class CustomerProfileGMenu extends GMenu {
 
         viewPane.getChildren().addAll(balanceLabel);
 
-        mainPane.getChildren().addAll(buttonPane, viewPane);
+        mainPane.getChildren().addAll( buttonPane, viewPane);
         mainPane.setSpacing(10);
         mainPane.setPadding(new Insets(10, 10 , 10 , 10));
 
-        backgroundLayout.getChildren().add(mainPane);
+        backgroundLayout.add(createHeader(), 0,0);
+        backgroundLayout.add(mainPane, 0, 1);
         backgroundLayout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(backgroundLayout);
         return scene;

@@ -35,6 +35,8 @@ public class LoginGMenu extends GMenu {
 
     @Override
     public Scene createScene() {
+
+
         AnchorPane anchorPane0 = new AnchorPane();
         anchorPane0.setPrefHeight(600.0);
         anchorPane0.setPrefWidth(500.0);
@@ -44,6 +46,9 @@ public class LoginGMenu extends GMenu {
         hBox1.setPrefWidth(500.0);
         hBox1.setStyle("-fx-background-color: #4677c8");
         hBox1.setLayoutY(-1.0);
+
+        HBox header = createHeader();
+        hBox1.getChildren().add(header);
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);

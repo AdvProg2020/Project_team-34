@@ -49,19 +49,4 @@ public class AlertBox extends GMenu {
         okButton.setOnAction(e -> stage.close());
         return new Scene(background);
     }
-
-    public void showAndWait() {
-        stage.initModality(Modality.APPLICATION_MODAL);
-        Image logoImage = null;
-        try {
-            logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
-        } catch (FileNotFoundException e) {
-        }
-        stage.getIcons().add(logoImage);
-        stage.setScene(createScene());
-        stage.setOnCloseRequest(Event::consume);
-        stage.setResizable(false);
-        stage.showAndWait();
-    }
-
 }

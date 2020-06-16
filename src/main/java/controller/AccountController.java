@@ -168,8 +168,8 @@ public class AccountController {
 
     }
 
-    public void editAllFieldsSupplier(String name, String familyName, String email, String phoneNumber, String password,
-                                      int credit, String nameOfCompany) {
+    public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,
+                              int credit, String nameOfCompany) {
         if (password == null || password.trim().length() == 0) {
             password = getAccount().getPassword();
         }

@@ -158,5 +158,6 @@ public abstract class Account {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.credit = credit;
+        AccountDataBase.update(this);
     }
 }

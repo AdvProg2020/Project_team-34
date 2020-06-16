@@ -10,10 +10,8 @@ import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
-import gui.profile.CustomerProfileGMenu;
-import gui.profile.ManageCategoriesGMenu;
-import gui.profile.SupervisorProfileGMenu;
-import gui.profile.SupplierProfileGMenu;
+import gui.profile.*;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
@@ -27,6 +25,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.FileInputStream;
@@ -71,6 +70,7 @@ public abstract class GMenu {
         MenuItem signOut = new MenuItem("Sign out");
         MenuItem viewPersonalInfo = new MenuItem("View Personal Info");
         MenuItem manageCategories = new MenuItem("Manage Categories");
+        MenuItem logs = new MenuItem("View Logs");
 
         logoView.setOnMouseClicked(e ->
                 stage.setScene(new MainMenuG( this, stage,controller).getScene()));
@@ -99,18 +99,26 @@ public abstract class GMenu {
             hBox.getChildren().addAll(cartView);
         }
 
+        signOut.setOnAction(e -> {
+            controller.getAccountController().controlLogout();
+            stage.setScene(new MainMenuG(this, stage, controller).getScene());
+        });
+
         if (!controller.getAccountController().hasSomeOneLoggedIn()) {
             user.getItems().add(signIn);
         } else if (controller.getAccountController().getAccount() instanceof Customer) {
-            user.getItems().addAll(viewPersonalInfo, signOut);
+            user.getItems().addAll(viewPersonalInfo, logs, signOut);
             viewPersonalInfo.setOnAction(e -> stage.setScene(new CustomerProfileGMenu(this, stage, controller).getScene()));
+            logs.setOnAction(e -> stage.setScene(new ViewLogsForCustomerGMenu(this, stage, controller).getScene()));
         } else if (controller.getAccountController().getAccount() instanceof Supervisor) {
-            user.getItems().addAll(viewPersonalInfo, manageCategories, signOut);
+            user.getItems().addAll(viewPersonalInfo, logs, manageCategories, signOut);
             viewPersonalInfo.setOnAction(e -> stage.setScene(new SupervisorProfileGMenu(this, stage, controller).getScene()));
             manageCategories.setOnAction(e -> stage.setScene(new ManageCategoriesGMenu(this, stage, controller).getScene()));
+            logs.setOnAction(e -> stage.setScene(new ViewLogsForSupervisorGMenu(this, stage, controller).getScene()));
         } else if (controller.getAccountController().getAccount() instanceof Supplier) {
-            user.getItems().addAll(viewPersonalInfo, signOut);
+            user.getItems().addAll(viewPersonalInfo, logs, signOut);
             viewPersonalInfo.setOnAction(e -> stage.setScene(new SupplierProfileGMenu(this, stage, controller).getScene()));
+            logs.setOnAction(e -> stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).getScene()));
         }
 
         hBox.setMinWidth(450);
@@ -208,5 +216,19 @@ public abstract class GMenu {
         background.setAlignment(Pos.CENTER);
 
         return scene;
+    }
+
+    public void showAndWait() {
+        stage.initModality(Modality.APPLICATION_MODAL);
+        Image logoImage = null;
+        try {
+            logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
+        } catch (FileNotFoundException e) {
+        }
+        stage.getIcons().add(logoImage);
+        stage.setScene(createScene());
+        stage.setOnCloseRequest(Event::consume);
+        stage.setResizable(false);
+        stage.showAndWait();
     }
 }

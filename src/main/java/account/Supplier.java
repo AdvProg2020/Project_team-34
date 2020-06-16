@@ -59,5 +59,6 @@ public class Supplier extends Account{
         this.password = password;
         this.credit = credit;
         this.nameOfCompany = nameOfCompany;
+        AccountDataBase.update(this);
     }
 }

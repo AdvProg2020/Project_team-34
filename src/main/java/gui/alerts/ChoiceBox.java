@@ -2,16 +2,22 @@ package gui.alerts;
 
 import controller.Controller;
 import gui.GMenu;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import menu.menuAbstract.Menu;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 
 public class ChoiceBox extends GMenu {
     private String question;
@@ -19,8 +25,8 @@ public class ChoiceBox extends GMenu {
     private String denyButton;
     public Boolean answer;
 
-    public ChoiceBox(GMenu parentMenu, Stage stage, String question, String acceptButton, String denyButton, Controller controller) {
-        super("Choose ...", parentMenu, stage, controller);
+    public ChoiceBox(GMenu parentMenu, String question, String acceptButton, String denyButton, Controller controller) {
+        super("Choose ...", parentMenu, new Stage(), controller);
         this.question = question;
         this.acceptButton = acceptButton;
         this.denyButton = denyButton;
@@ -49,5 +55,9 @@ public class ChoiceBox extends GMenu {
         });
         background.setAlignment(Pos.CENTER);
         return new Scene(background);
+    }
+
+    public Boolean getAnswer() {
+        return answer;
     }
 }

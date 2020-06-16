@@ -18,9 +18,6 @@ import java.util.ArrayList;
 
 public class AllProductGMenu extends GMenu {
 
-
-
-
     public AllProductGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("All products Menu", parentMenu, stage, controller);
     }
@@ -61,8 +58,10 @@ public class AllProductGMenu extends GMenu {
         });
 
 
+        RadioButton saleCheck = new RadioButton("Only Products In Sale");
+
         RadioButton availabilityCheck = new RadioButton("Only Available Products");
-        availability.getChildren().add(availabilityCheck);
+        availability.getChildren().addAll(availabilityCheck, saleCheck);
         availability.setSpacing(10);
         availability.setPadding(new Insets(10, 10 , 10 , 10));
 
@@ -106,10 +105,10 @@ public class AllProductGMenu extends GMenu {
         filterAndSort.getChildren().addAll(appliedFilter, sort,availability, price, button);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
 
-        button.setOnAction(e -> {
-            System.out.println(Product.getProductById("T34P000000000000001").getName());
-
-        });
+//        button.setOnAction(e -> {
+//            System.out.println(Product.getProductById("T34P000000000000001").getName());
+//
+//        });
 
 
         mainPane.add(createHeader(),0, 0 );

@@ -159,4 +159,12 @@ public abstract class Account {
         this.password = password;
         this.credit = credit;
     }
+
+    public String getAccountType(){
+        if(this instanceof Customer)
+            return "Customer";
+        if(this instanceof Supervisor)
+            return "Supervisor";
+        return "Supplier";
+    }
 }

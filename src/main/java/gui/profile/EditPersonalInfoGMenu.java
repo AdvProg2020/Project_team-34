@@ -114,8 +114,9 @@ public class EditPersonalInfoGMenu extends GMenu {
             String password = passwordField.getText();
             String nameOfCompany = nameOfCompanyField.getText();
             int credit = Integer.parseInt(creditField.getText());
-            controller.getAccountController().editAllFieldsSupplier(name, familyName, email, phoneNumber, password,
+            controller.getAccountController().editAllFields(name, familyName, email, phoneNumber, password,
                     credit, nameOfCompany);
+            stage.setScene(createScene());
         });
 
         cancelButton.setOnAction(e -> stage.setScene(parentMenu.getScene()));

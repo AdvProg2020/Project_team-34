@@ -1,6 +1,8 @@
 package account;
 
 import database.AccountDataBase;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 
@@ -21,7 +23,7 @@ public abstract class Account {
         this.name = name;
         this.familyName = familyName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+       this.phoneNumber = phoneNumber;
         this.password = password;
         this.credit = credit;
         this.isAvailable = isAvailable;
@@ -104,6 +106,15 @@ public abstract class Account {
         AccountDataBase.update(this);
     }
 
+    public static boolean isUsernameAvailable(String userName) {
+        for (Account account : allAccounts) {
+            if (account.getUserName().equals(userName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static Account getAccountByUsername(String userName) {
         ArrayList<Account> availableAccounts = getAllAvailableAccounts();
         if( availableAccounts.size() != 0) {
@@ -158,6 +169,7 @@ public abstract class Account {
         this.phoneNumber = phoneNumber;
         this.password = password;
         this.credit = credit;
+        AccountDataBase.update(this);
     }
 
     public String getAccountType(){
@@ -166,5 +178,35 @@ public abstract class Account {
         if(this instanceof Supervisor)
             return "Supervisor";
         return "Supplier";
+    }
+
+    public static ObservableList<Supervisor> getSupervisorsObservableList() {
+        ObservableList<Supervisor> allSupervisors = FXCollections.observableArrayList();
+        for (Account account: allAccounts) {
+            if (account instanceof Supervisor && account.isAvailable) {
+                allSupervisors.add((Supervisor) account);
+            }
+        }
+        return allSupervisors;
+    }
+
+    public static ObservableList<Supplier> getSuppliersObservableList() {
+        ObservableList<Supplier> allSuppliers = FXCollections.observableArrayList();
+        for (Account account: allAccounts) {
+            if (account instanceof Supplier && account.isAvailable) {
+                allSuppliers.add((Supplier) account);
+            }
+        }
+        return allSuppliers;
+    }
+
+    public static ObservableList<Customer> getCustomersObservableList() {
+        ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+        for (Account account: allAccounts) {
+            if (account instanceof Customer && account.isAvailable) {
+                allCustomers.add((Customer) account);
+            }
+        }
+        return allCustomers;
     }
 }

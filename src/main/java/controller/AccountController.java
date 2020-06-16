@@ -52,11 +52,11 @@ public class AccountController {
         if (email.trim().length() == 0) throw new ExceptionalMassage("email can't be empty");
         if (phoneNumber.trim().length() == 0) throw new ExceptionalMassage("phone number can't be empty");
         if (password.trim().length() == 0) throw new ExceptionalMassage("password can't be empty");
-        if (credit == 0) throw new ExceptionalMassage("credit cannot be 0");
 
         if (!Account.isUsernameAvailable(username))
             throw new ExceptionalMassage("Duplicate username");
         if (type.equals("customer")) {
+            if (credit == 0) throw new ExceptionalMassage("credit cannot be 0");
             controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
             controlLogin(username, password);
         }
@@ -411,5 +411,13 @@ public class AccountController {
 
     public boolean isLogProcessable(String id) {
         return CustomerLog.getCustomerLogById(id).getDeliveryStatus() != LogStatus.DELIVERED;
+    }
+
+    public int numberOfProductInCart(ProductInCart productInCart){
+        try {
+            return mainController.getCart().getCountOfProductInCart(productInCart);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return 0;
+        }
     }
 }

@@ -14,7 +14,7 @@ public class Controller {
     public Controller() {
         account = null;
         cart = new Cart(null);
-        isFirstSupervisorCreated = false;
+        isFirstSupervisorCreated = Account.isFirstSupervisorCreated();
         accountController = new AccountController(this);
         productController = new ProductController(this);
         offController = new OffController(this);
@@ -56,18 +56,3 @@ public class Controller {
         isFirstSupervisorCreated = firstSupervisorCreated;
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

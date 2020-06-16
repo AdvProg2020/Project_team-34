@@ -21,8 +21,12 @@ import menu.menuAbstract.Menu;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class RegisterGMenu extends GMenu {
-    public RegisterGMenu( GMenu parentMenu, Stage stage, Controller controller) {
-        super("Register Menu", parentMenu, stage, controller);
+    private Stage parentStage;
+
+    public RegisterGMenu( GMenu parentMenu, Stage parentStage, Controller controller) {
+        super("Register Menu", parentMenu, new Stage(), controller);
+        this.parentStage = parentStage;
+        stage.setTitle("Register Menu");
     }
 
     @Override
@@ -309,7 +313,8 @@ public class RegisterGMenu extends GMenu {
                     int credit = Integer.parseInt(creditField.getText());
                     try{
                         controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,credit,companyName);
-                        stage.setScene(new MainMenuG(null, stage, controller).getScene());
+                        stage.close();
+                        parentStage.setScene(new MainMenuG(null, stage, controller).getScene());
                     }catch (ExceptionalMassage ex){
                         new AlertBox(this, ex, controller).showAndWait();
                     }
@@ -326,7 +331,8 @@ public class RegisterGMenu extends GMenu {
                 String companyName = companyNameField.getText();
                 try{
                     controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,1,companyName);
-                    stage.setScene(new MainMenuG(null, stage, controller).getScene());
+                    stage.close();
+                    parentStage.setScene(new MainMenuG(null, stage, controller).getScene());
                 }catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();
                 }
@@ -337,7 +343,7 @@ public class RegisterGMenu extends GMenu {
 
 
         singInText.setOnMouseClicked(e -> {
-            stage.setScene(new LoginGMenu( this , stage, controller).getScene());
+            new LoginGMenu( this , stage, controller).showAndWait();
         });
 
 

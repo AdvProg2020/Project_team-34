@@ -209,4 +209,13 @@ public abstract class Account {
         }
         return allCustomers;
     }
+
+    public static boolean isFirstSupervisorCreated() {
+        for (Account account : allAccounts) {
+            if (account.isAvailable && account instanceof Supervisor) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

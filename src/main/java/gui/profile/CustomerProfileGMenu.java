@@ -1,25 +1,31 @@
 package gui.profile;
 
 import controller.Controller;
+import discount.CodedDiscount;
 import gui.GMenu;
+import gui.cartMenu.CartGMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.skin.LabeledSkinBase;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 
 public class CustomerProfileGMenu extends GMenu {
 
 
     public CustomerProfileGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Profile", parentMenu, stage, controller);
-
     }
 
     @Override
@@ -32,21 +38,25 @@ public class CustomerProfileGMenu extends GMenu {
 
         Button viewCartButton = new Button("View cart");
         GMenu.addStyleToButton(viewCartButton);
+        viewCartButton.setOnMouseClicked(e->{
+            stage.setScene(new CartGMenu(this, stage, controller).getScene());
+        });
 
         Button viewOrdersButton = new Button("View Orders");
         GMenu.addStyleToButton(viewOrdersButton);
-
-//        Button viewBalanceButton = new Button("View Balance");
-//        viewBalanceButton.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-//        viewBalanceButton.getStyleClass().add("button");
+        viewOrdersButton.setOnMouseClicked(e->{
+            stage.setScene(new ViewLogsForCustomerGMenu(this, stage, controller).getScene());
+        });
 
         Button viewDiscountCodesButton = new Button("View Discount Codes");
         GMenu.addStyleToButton(viewDiscountCodesButton);
+        viewDiscountCodesButton.setOnMouseClicked(e->{
+            stage.setScene(new ViewDiscountCodesForCustomerGMenu(this, stage, controller).getScene());
+        });
 
 
         Button editPersonalInfoButton = new Button("Edit Personal Info");
         GMenu.addStyleToButton(editPersonalInfoButton);
-
         editPersonalInfoButton.setOnMouseClicked(e->{
             stage.setScene(new EditPersonalInfoGMenu(this, stage, controller).createScene());
         });
@@ -59,12 +69,9 @@ public class CustomerProfileGMenu extends GMenu {
 
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
-        //int balance = controller.getAccountController().getAccountCredit();
-        Label balanceLabel = new Label(String.valueOf(controller.getAccountController().getAccount().getCredit()));
 
-        viewPane.getChildren().addAll(balanceLabel);
 
-        mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()), buttonPane);
+        mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()), buttonPane, viewPane);
         mainPane.setSpacing(10);
         mainPane.setPadding(new Insets(10, 10 , 10 , 10));
         mainPane.setAlignment(Pos.CENTER);
@@ -74,5 +81,19 @@ public class CustomerProfileGMenu extends GMenu {
         backgroundLayout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(backgroundLayout);
         return scene;
+
+
+    }
+
+    private Label createCodedDiscountLabel (CodedDiscount codedDiscount, Label resultLabel){
+        Label codedDiscountLabel = new Label("Discount Code: \t\t\t\t\t\t" + codedDiscount.getDiscountCode());
+        codedDiscountLabel.setPrefWidth(500);
+        codedDiscountLabel.setOnMouseClicked(e->{
+        });
+        codedDiscountLabel.setStyle("-fx-border-color: orange");
+        codedDiscountLabel.setOnMouseClicked(e->{
+            resultLabel.setText("Start Date : " + codedDiscount.getStart() + " ,  End Date :" + codedDiscount.getEnd());
+        });
+        return codedDiscountLabel;
     }
 }

@@ -1,7 +1,9 @@
 package gui.profile;
 
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,8 +19,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EditCategoryGMenu extends GMenu {
-    private final String editingCatName;
-    private final HashMap<String, ArrayList<String>> fields;
+    private String editingCatName;
+    private HashMap<String, ArrayList<String>> fields;
 
     public EditCategoryGMenu(GMenu parentMenu, Stage stage, Controller controller, String editingCatName) {
         super("Edit Category", parentMenu, stage, controller);
@@ -29,12 +31,31 @@ public class EditCategoryGMenu extends GMenu {
     @Override
     protected Scene createScene() {
         Label nameLabel = new Label("Name");
-        TextField nameField = new TextField(new String(editingCatName));
+        TextField nameField = new TextField(editingCatName);
         Button changeNameButton = new Button("Change name");
         HBox editNameBox = new HBox();
         VBox mainLayout = new VBox();
         GridPane backgroundLayout = new GridPane();
         Scene scene = new Scene(backgroundLayout);
+
+        nameField.setOnKeyTyped(e -> changeNameButton.setDisable(nameField.getText().equals(editingCatName)));
+
+        changeNameButton.setDisable(true);
+        changeNameButton.setOnAction(e -> {
+            try {
+                String newName = nameField.getText();
+                controller.getProductController().controlChangeCategoryName(editingCatName, newName);
+                editingCatName = newName;
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller);
+            }
+            stage.setScene(createScene());
+        });
+
+        editNameBox.setSpacing(20);
+        editNameBox.setPadding(new Insets(5, 5, 5, 5));
+        editNameBox.setAlignment(Pos.CENTER);
+        editNameBox.getChildren().addAll(nameLabel, nameField, changeNameButton);
 
         HBox addRemoveFieldBox = new HBox();
         TextField key = new TextField();
@@ -42,19 +63,42 @@ public class EditCategoryGMenu extends GMenu {
         Button add = new Button("Add");
         Button remove = new Button("Remove");
 
-        nameField.setOnKeyTyped(e -> {
-            changeNameButton.setDisable(nameField.getText().equals(editingCatName));
+        key.setAlignment(Pos.CENTER);
+        key.setPromptText("Key");
+
+        value.setAlignment(Pos.CENTER);
+        value.setPromptText("Value");
+
+        add.setOnAction(e -> {
+            try {
+                controller.getProductController().
+                        controlAddSpecialFieldToCategory(editingCatName, key.getText(), value.getText());
+                this.fields = controller.getProductController().controlGetCategorySpecialFields(editingCatName);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
+            stage.setScene(createScene());
         });
 
-        changeNameButton.setDisable(true);
-        changeNameButton.setOnAction(e -> {
-
+        remove.setOnAction(e -> {
+            try {
+                controller.getProductController().
+                        controlRemoveSpecialFieldFromCategory(editingCatName, key.getText(), value.getText());
+                this.fields = controller.getProductController().controlGetCategorySpecialFields(editingCatName);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
+            stage.setScene(createScene());
         });
 
-        editNameBox.setSpacing(20);
-        editNameBox.setPadding(new Insets(5, 5, 5, 5));
+        addRemoveFieldBox.getChildren().addAll(key, value, add, remove);
+        addRemoveFieldBox.setSpacing(10);
+        addRemoveFieldBox.setPadding(new Insets(10, 10, 10, 10));
 
-        mainLayout.getChildren().addAll(createHeader(), editNameBox, addRemoveFieldBox, categoryFields());
+        mainLayout.getChildren().addAll(createHeader(), editNameBox);
+        if (!controller.getProductController().isThisCategoryClassifier(editingCatName)) {
+            mainLayout.getChildren().addAll(addRemoveFieldBox, categoryFields());
+        }
 
         backgroundLayout.setAlignment(Pos.CENTER);
         backgroundLayout.getChildren().add(mainLayout);

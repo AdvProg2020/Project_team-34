@@ -8,14 +8,12 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import menu.menuAbstract.Menu;
 
+import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
@@ -27,14 +25,17 @@ public class MainMenuG extends GMenu {
     @Override
     protected Scene createScene() {
         AnchorPane anchorPane0 = new AnchorPane();
-        anchorPane0.setPrefHeight(600.0);
+        anchorPane0.setPrefHeight(700.0);
         anchorPane0.setPrefWidth(750.0);
         anchorPane0.setStyle("-fx-background-color: #4677c8;");
         VBox vBox1 = new VBox();
-        vBox1.setPrefHeight(640.0);
+        vBox1.setPrefHeight(700.0);
         vBox1.setPrefWidth(375.0);
         vBox1.setLayoutX(373.0);
         vBox1.setStyle("-fx-background-color: #f8e8e2;");
+
+        HBox header = createHeader();
+
 
         // Adding child to parent
         anchorPane0.getChildren().add(vBox1);
@@ -44,6 +45,7 @@ public class MainMenuG extends GMenu {
         stackPane2.setLayoutX(173.0);
         stackPane2.setStyle("-fx-background-color: #9cbfe3;");
         stackPane2.setLayoutY(71.0);
+        stackPane2.setTranslateY(80);
         stackPane2.setEffect(new DropShadow());
         Button products = new Button();
         products.setPrefHeight(33.0);
@@ -75,24 +77,30 @@ public class MainMenuG extends GMenu {
 
         // Adding child to parent
         stackPane2.getChildren().add(salesMenu);
-        Text text6 = new Text();
-        text6.setStrokeWidth(0.0);
-        text6.setStrokeType(OUTSIDE);
-        text6.setText("Welcome to T34 Store");
-        stackPane2.setAlignment(text6, TOP_CENTER);
-        text6.setStyle("-fx-end-margin: 15px;");
 
-        // Adding child to parent
-        stackPane2.getChildren().add(text6);
 
         // Adding child to parent
         anchorPane0.getChildren().add(stackPane2);
 
-        // Adding controller
 
-        loginMenu.setOnAction( e-> {
-            stage.setScene(new LoginGMenu(this,stage,controller).getScene());
-        });
+        header.setStyle("-fx-end-margin: 15px;");
+        header.setTranslateX(135);
+        anchorPane0.getChildren().add(header);
+
+        // Adding controller
+        if(controller.getAccountController().hasSomeOneLoggedIn()){
+            loginMenu.setText("Sign out");
+            loginMenu.setOnAction( e -> {
+                controller.getAccountController().controlLogout();
+                stage.setScene((new MainMenuG(null, stage,controller)).getScene());
+            });
+        } else {
+            loginMenu.setOnAction( e-> {
+                stage.setScene(new LoginGMenu(this,stage,controller).getScene());
+            });
+        }
+
+
 
         products.setOnAction( e-> {
             stage.setTitle(menuName);

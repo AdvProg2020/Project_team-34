@@ -55,7 +55,7 @@ public class ManageUsersGMenu extends GMenu {
         deleteUserBox.getChildren().addAll(deletingUsername, deleteButton);
 
         mainLayout.setSpacing(10);
-        mainLayout.getChildren().addAll(createHeader(), createSupervisorBox(), deleteUserBox, new Label("Supervisors:"),
+        mainLayout.getChildren().addAll(createHeader(), createSupervisorBox(this), deleteUserBox, new Label("Supervisors:"),
                 supervisorTableView, new Label("Suppliers:"), supplierTableView, new Label("Customers"),
                 customerTableView);
 
@@ -123,45 +123,5 @@ public class ManageUsersGMenu extends GMenu {
         customerTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber, credit);
         customerTableView.setPrefWidth(800);
         return customerTableView;
-    }
-
-    private GridPane createSupervisorBox() {
-        GridPane mainLayout = new GridPane();
-        TextField usernameField = new TextField();
-        usernameField.setPromptText("Username");
-        PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("Password");
-        TextField firstName = new TextField();
-        firstName.setPromptText("First Name");
-        TextField lastName = new TextField();
-        lastName.setPromptText("Last Name");
-        TextField email = new TextField();
-        email.setPromptText("Email");
-        TextField phoneNumber = new TextField();
-        phoneNumber.setPromptText("Phone number");
-        Button done = new Button("Create");
-
-        done.setOnAction(e -> {
-            try {
-                controller.getAccountController().controlCreateAccount(usernameField.getText(), "supervisor",
-                        firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
-                        passwordField.getText(), 0, null);
-            } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage, controller).showAndWait();
-            }
-            stage.setScene(createScene());
-        });
-
-        mainLayout.setHgap(10);
-        mainLayout.setVgap(10);
-        mainLayout.add(usernameField, 0, 0);
-        mainLayout.add(passwordField, 1, 0);
-        mainLayout.add(firstName, 2, 0);
-        mainLayout.add(lastName, 3, 0);
-        mainLayout.add(email, 0, 1);
-        mainLayout.add(phoneNumber, 1, 1);
-        mainLayout.add(done, 3, 1);
-        mainLayout.setAlignment(Pos.CENTER);
-        return mainLayout;
     }
 }

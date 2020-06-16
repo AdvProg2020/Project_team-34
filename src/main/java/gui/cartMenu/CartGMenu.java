@@ -1,6 +1,7 @@
 package gui.cartMenu;
 
 import account.Supplier;
+import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import com.google.gson.internal.$Gson$Preconditions;

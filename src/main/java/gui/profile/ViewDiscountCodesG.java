@@ -1,13 +1,27 @@
 package gui.profile;
 
+import account.Account;
+import account.Customer;
 import controller.Controller;
 import discount.CodedDiscount;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
+import javafx.animation.ScaleTransition;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.time.LocalDate;
+import java.time.ZoneId;
+import java.util.Date;
+import java.util.HashMap;
+
+import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class ViewDiscountCodesG extends GMenu {
 
@@ -25,6 +39,9 @@ public class ViewDiscountCodesG extends GMenu {
         hBox1.setPrefHeight(102.0);
         hBox1.setPrefWidth(850.0);
         hBox1.setStyle("-fx-background-color: #4477c8;");
+
+        HBox header = createHeader();
+        hBox1.getChildren().add(header);
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
@@ -86,6 +103,53 @@ public class ViewDiscountCodesG extends GMenu {
         anchorPane0.getChildren().add(editButton);
 
         // Adding controller
+        // Adding controller
+        for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+            listView3.getItems().add(codedDiscount.getDiscountCode());
+        }
+
+        detailsButton.setOnAction( e -> {
+            ObservableList<String> codes = listView3.getSelectionModel().getSelectedItems();
+            for (String code : codes) {
+                Stage newStage = new Stage();
+                newStage.setScene(createDetails(code));
+                newStage.showAndWait();
+            }
+            listView3.getItems().clear();
+            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                listView3.getItems().add(codedDiscount.getDiscountCode());
+            }
+        });
+
+        editButton.setOnAction( e -> {
+            ObservableList<String> codes = listView3.getSelectionModel().getSelectedItems();
+            for (String code : codes) {
+                try {
+                    Stage newStage = new Stage();
+                    newStage.setScene(createEditMenu(controller.getOffController().controlGetDiscountByCode(code)));
+                    newStage.showAndWait();
+
+                }catch (ExceptionalMassage ex){
+                    new AlertBox(this, ex, controller).showAndWait();
+                }
+            }
+            listView3.getItems().clear();
+            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                listView3.getItems().add(codedDiscount.getDiscountCode());
+            }
+        });
+
+        createButton.setOnAction(e -> {
+            Stage newStage = new Stage();
+            newStage.setScene(createCreateMenu());
+            newStage.showAndWait();
+            listView3.getItems().clear();
+            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                listView3.getItems().add(codedDiscount.getDiscountCode());
+            }
+        });
+
+
 
 
         return new Scene(anchorPane0);
@@ -102,6 +166,7 @@ public class ViewDiscountCodesG extends GMenu {
         hBox1.setStyle("-fx-background-color: #4677c8;");
         hBox1.setLayoutY(486.0);
 
+
 // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
         HBox hBox2 = new HBox();
@@ -117,14 +182,14 @@ public class ViewDiscountCodesG extends GMenu {
         hBox3.setLayoutX(52.0);
         hBox3.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox3.setLayoutY(156.0);
-        DatePicker datePicker4 = new DatePicker();
-        datePicker4.setPrefHeight(49.0);
-        datePicker4.setPrefWidth(352.0);
-        datePicker4.setStyle("-fx-background-color: transparent;");
-        datePicker4.setPromptText("Start Date");
+        DatePicker startDatePicker = new DatePicker();
+        startDatePicker.setPrefHeight(49.0);
+        startDatePicker.setPrefWidth(352.0);
+        startDatePicker.setStyle("-fx-background-color: transparent;");
+        startDatePicker.setPromptText("Start Date");
 
 // Adding child to parent
-        hBox3.getChildren().add(datePicker4);
+        hBox3.getChildren().add(startDatePicker);
 
 // Adding child to parent
         anchorPane0.getChildren().add(hBox3);
@@ -134,21 +199,21 @@ public class ViewDiscountCodesG extends GMenu {
         hBox5.setLayoutX(52.0);
         hBox5.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox5.setLayoutY(229.0);
-        DatePicker datePicker6 = new DatePicker();
-        datePicker6.setPrefHeight(49.0);
-        datePicker6.setPrefWidth(352.0);
-        datePicker6.setStyle("-fx-background-color: transparent;");
-        datePicker6.setPromptText("End Date");
+        DatePicker endDatePicker = new DatePicker();
+        endDatePicker.setPrefHeight(49.0);
+        endDatePicker.setPrefWidth(352.0);
+        endDatePicker.setStyle("-fx-background-color: transparent;");
+        endDatePicker.setPromptText("End Date");
 
 // Adding child to parent
-        hBox5.getChildren().add(datePicker6);
+        hBox5.getChildren().add(endDatePicker);
 
 // Adding child to parent
         anchorPane0.getChildren().add(hBox5);
         Label label7 = new Label();
         label7.setLayoutX(52.0);
         label7.setLayoutY(121.0);
-        label7.setText("Create Discount code");
+        label7.setText("Edit discount code");
 
 // Adding child to parent
         anchorPane0.getChildren().add(label7);
@@ -158,15 +223,15 @@ public class ViewDiscountCodesG extends GMenu {
         hBox8.setLayoutX(52.0);
         hBox8.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox8.setLayoutY(306.0);
-        TextField textField9 = new TextField();
-        textField9.setPrefHeight(51.0);
-        textField9.setPrefWidth(295.0);
-        textField9.setStyle("-fx-background-color: transparent;");
-        textField9.setOpacity(0.83);
-        textField9.setPromptText("Enter Discount Code");
+        TextField discountPercentField = new TextField();
+        discountPercentField.setPrefHeight(51.0);
+        discountPercentField.setPrefWidth(295.0);
+        discountPercentField.setStyle("-fx-background-color: transparent;");
+        discountPercentField.setOpacity(0.83);
+        discountPercentField.setPromptText("Enter Discount Percent");
 
 // Adding child to parent
-        hBox8.getChildren().add(textField9);
+        hBox8.getChildren().add(discountPercentField);
 
 // Adding child to parent
         anchorPane0.getChildren().add(hBox8);
@@ -176,29 +241,58 @@ public class ViewDiscountCodesG extends GMenu {
         hBox10.setLayoutX(52.0);
         hBox10.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox10.setLayoutY(381.0);
-        TextField textField11 = new TextField();
-        textField11.setPrefHeight(51.0);
-        textField11.setPrefWidth(295.0);
-        textField11.setStyle("-fx-background-color: transparent;");
-        textField11.setOpacity(0.83);
-        textField11.setPromptText("Enter Maximum discount amount");
+        TextField maxAmountField = new TextField();
+        maxAmountField.setPrefHeight(51.0);
+        maxAmountField.setPrefWidth(295.0);
+        maxAmountField.setStyle("-fx-background-color: transparent;");
+        maxAmountField.setOpacity(0.83);
+        maxAmountField.setPromptText("Enter Maximum discount amount");
 
 // Adding child to parent
-        hBox10.getChildren().add(textField11);
+        hBox10.getChildren().add(maxAmountField);
 
 // Adding child to parent
         anchorPane0.getChildren().add(hBox10);
-        Button button12 = new Button();
-        button12.setPrefHeight(70.0);
-        button12.setPrefWidth(201.0);
-        button12.setLayoutX(501.0);
-        button12.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button12.setLayoutY(259.0);
-        button12.setText("Edit Discount Code");
-        button12.setMnemonicParsing(false);
+        Button editButton = new Button();
+        editButton.setPrefHeight(70.0);
+        editButton.setPrefWidth(201.0);
+        editButton.setLayoutX(501.0);
+        editButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        editButton.setLayoutY(259.0);
+        editButton.setText("Edit Discount Code");
+        editButton.setMnemonicParsing(false);
 
 // Adding child to parent
-        anchorPane0.getChildren().add(button12);
+        anchorPane0.getChildren().add(editButton);
+
+        //Adding controller
+
+        startDatePicker.setValue(codedDiscount.getStart().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+        endDatePicker.setValue(codedDiscount.getEnd().toInstant().atZone(ZoneId.systemDefault()).toLocalDate());
+
+        discountPercentField.setText(String.valueOf(codedDiscount.getPercent()));
+
+        maxAmountField.setText(String.valueOf(codedDiscount.getMaxDiscountAmount()));
+
+        editButton.setOnAction( e -> {
+            Date newStart = Date.from(startDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date newEnd = Date.from(endDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            try {
+                int newPercent = Integer.parseInt(discountPercentField.getText());
+                int newMaxAmount = Integer.parseInt(maxAmountField.getText());
+                try {
+                    controller.getOffController().controlEditDiscountByCode(codedDiscount.getDiscountCode(), newStart, newEnd, newPercent, newMaxAmount);
+                } catch (ExceptionalMassage ex) {
+                    new AlertBox(this, ex, controller).showAndWait();
+                }
+
+            }
+            catch(NumberFormatException ex){
+                new AlertBox(this, "Enter number for percent or maximum amount, please","OK",controller).showAndWait();
+            }
+
+        });
 
         return new Scene(anchorPane0);
     }
@@ -214,6 +308,7 @@ public class ViewDiscountCodesG extends GMenu {
         hBox1.setStyle("-fx-background-color: #4677c8;");
         hBox1.setLayoutY(548.0);
 
+
 // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
         HBox hBox2 = new HBox();
@@ -229,14 +324,14 @@ public class ViewDiscountCodesG extends GMenu {
         hBox3.setLayoutX(52.0);
         hBox3.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox3.setLayoutY(156.0);
-        DatePicker datePicker4 = new DatePicker();
-        datePicker4.setPrefHeight(49.0);
-        datePicker4.setPrefWidth(352.0);
-        datePicker4.setStyle("-fx-background-color: transparent;");
-        datePicker4.setPromptText("Start Date");
+        DatePicker startDatePicker = new DatePicker();
+        startDatePicker.setPrefHeight(49.0);
+        startDatePicker.setPrefWidth(352.0);
+        startDatePicker.setStyle("-fx-background-color: transparent;");
+        startDatePicker.setPromptText("Start Date");
 
 // Adding child to parent
-        hBox3.getChildren().add(datePicker4);
+        hBox3.getChildren().add(startDatePicker);
 
 // Adding child to parent
         anchorPane0.getChildren().add(hBox3);
@@ -246,25 +341,25 @@ public class ViewDiscountCodesG extends GMenu {
         hBox5.setLayoutX(52.0);
         hBox5.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox5.setLayoutY(229.0);
-        DatePicker datePicker6 = new DatePicker();
-        datePicker6.setPrefHeight(49.0);
-        datePicker6.setPrefWidth(352.0);
-        datePicker6.setStyle("-fx-background-color: transparent;");
-        datePicker6.setPromptText("End Date");
+        DatePicker endDatePicker = new DatePicker();
+        endDatePicker.setPrefHeight(49.0);
+        endDatePicker.setPrefWidth(352.0);
+        endDatePicker.setStyle("-fx-background-color: transparent;");
+        endDatePicker.setPromptText("End Date");
 
 // Adding child to parent
-        hBox5.getChildren().add(datePicker6);
+        hBox5.getChildren().add(endDatePicker);
 
 // Adding child to parent
         anchorPane0.getChildren().add(hBox5);
-        ListView listView7 = new ListView();
-        listView7.setPrefHeight(138.0);
-        listView7.setPrefWidth(370.0);
-        listView7.setLayoutX(438.0);
-        listView7.setLayoutY(156.0);
+        ListView customers = new ListView();
+        customers.setPrefHeight(138.0);
+        customers.setPrefWidth(370.0);
+        customers.setLayoutX(438.0);
+        customers.setLayoutY(156.0);
 
 // Adding child to parent
-        anchorPane0.getChildren().add(listView7);
+        anchorPane0.getChildren().add(customers);
         Label label8 = new Label();
         label8.setLayoutX(438.0);
         label8.setLayoutY(121.0);
@@ -285,15 +380,15 @@ public class ViewDiscountCodesG extends GMenu {
         hBox10.setLayoutX(52.0);
         hBox10.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox10.setLayoutY(306.0);
-        TextField textField11 = new TextField();
-        textField11.setPrefHeight(51.0);
-        textField11.setPrefWidth(295.0);
-        textField11.setStyle("-fx-background-color: transparent;");
-        textField11.setOpacity(0.83);
-        textField11.setPromptText("Enter DIscount Code");
+        TextField discountPercentField = new TextField();
+        discountPercentField.setPrefHeight(51.0);
+        discountPercentField.setPrefWidth(295.0);
+        discountPercentField.setStyle("-fx-background-color: transparent;");
+        discountPercentField.setOpacity(0.83);
+        discountPercentField.setPromptText("Enter Discount Code Percent");
 
 // Adding child to parent
-        hBox10.getChildren().add(textField11);
+        hBox10.getChildren().add(discountPercentField);
 
 // Adding child to parent
         anchorPane0.getChildren().add(hBox10);
@@ -303,15 +398,15 @@ public class ViewDiscountCodesG extends GMenu {
         hBox12.setLayoutX(52.0);
         hBox12.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox12.setLayoutY(381.0);
-        TextField textField13 = new TextField();
-        textField13.setPrefHeight(51.0);
-        textField13.setPrefWidth(295.0);
-        textField13.setStyle("-fx-background-color: transparent;");
-        textField13.setOpacity(0.83);
-        textField13.setPromptText("Enter Maximum discount amount");
+        TextField maximumAmountField = new TextField();
+        maximumAmountField.setPrefHeight(51.0);
+        maximumAmountField.setPrefWidth(295.0);
+        maximumAmountField.setStyle("-fx-background-color: transparent;");
+        maximumAmountField.setOpacity(0.83);
+        maximumAmountField.setPromptText("Enter Maximum discount amount");
 
 // Adding child to parent
-        hBox12.getChildren().add(textField13);
+        hBox12.getChildren().add(maximumAmountField);
 
 // Adding child to parent
         anchorPane0.getChildren().add(hBox12);
@@ -321,29 +416,130 @@ public class ViewDiscountCodesG extends GMenu {
         hBox14.setLayoutX(52.0);
         hBox14.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox14.setLayoutY(455.0);
-        TextField textField15 = new TextField();
-        textField15.setPrefHeight(51.0);
-        textField15.setPrefWidth(295.0);
-        textField15.setStyle("-fx-background-color: transparent;");
-        textField15.setOpacity(0.83);
-        textField15.setPromptText("Enter Maximum number of usage");
+        TextField maxNumberOfUsageField = new TextField();
+        maxNumberOfUsageField.setPrefHeight(51.0);
+        maxNumberOfUsageField.setPrefWidth(295.0);
+        maxNumberOfUsageField.setStyle("-fx-background-color: transparent;");
+        maxNumberOfUsageField.setOpacity(0.83);
+        maxNumberOfUsageField.setPromptText("Enter Maximum number of usage");
 
 // Adding child to parent
-        hBox14.getChildren().add(textField15);
+        hBox14.getChildren().add(maxNumberOfUsageField);
 
-// Adding child to parent
         anchorPane0.getChildren().add(hBox14);
-        Button button16 = new Button();
-        button16.setPrefHeight(70.0);
-        button16.setPrefWidth(201.0);
-        button16.setLayoutX(523.0);
-        button16.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button16.setLayoutY(372.0);
-        button16.setText("Create Discount Code");
-        button16.setMnemonicParsing(false);
+
+        //
+        HBox hbox155 = new HBox();
+        hbox155.setPrefHeight(51.0);
+        hbox155.setPrefWidth(345.0);
+        hbox155.setLayoutX(425.0);
+        hbox155.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
+        hbox155.setLayoutY(381.0);
+        TextField codeField = new TextField();
+        codeField.setPrefHeight(51.0);
+        codeField.setPrefWidth(295.0);
+        codeField.setStyle("-fx-background-color: transparent;");
+        codeField.setOpacity(0.83);
+        codeField.setPromptText("Enter code here");
+
+        hbox155.getChildren().add(codeField);
 
 // Adding child to parent
-        anchorPane0.getChildren().add(button16);
+        anchorPane0.getChildren().add(hbox155);
+        Button createButton = new Button();
+        createButton.setPrefHeight(70.0);
+        createButton.setPrefWidth(201.0);
+        createButton.setLayoutX(523.0);
+        createButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        createButton.setLayoutY(446.0);
+        createButton.setText("Create Discount Code");
+        createButton.setMnemonicParsing(false);
+
+// Adding child to parent
+        anchorPane0.getChildren().add(createButton);
+        customers.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
+        //Adding controller
+        for (String username : controller.getAccountController().controlGetListOfAccountUserNames()) {
+            if(Account.getAccountByUsername(username) instanceof Customer) {
+                customers.getItems().add(username);
+            }
+        }
+
+        createButton.setDisable(true);
+
+        createButton.setOnAction( e -> {
+            Date startDate = Date.from(startDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            Date  endDate = Date.from(endDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+            String code = codeField.getText();
+            try{
+                int percent = Integer.parseInt(discountPercentField.getText());
+                int maxAmount = Integer.parseInt(maximumAmountField.getText());
+                int maxNumber = Integer.parseInt(maxNumberOfUsageField.getText());
+                HashMap<Customer, Integer> maxNumberOfUsage = new HashMap<>();
+                try {
+                    ObservableList<String> userNames = customers.getSelectionModel().getSelectedItems();
+                    for (String userName : userNames) {
+                        maxNumberOfUsage.put((Customer)Customer.getAccountByUsername(userName),maxNumber);
+                    }
+                    controller.getOffController().controlCreateCodedDiscount(code, startDate, endDate, percent, maxAmount,maxNumberOfUsage);
+                } catch(ExceptionalMassage ex ){
+                    new AlertBox(this, ex, controller).showAndWait();
+                }
+            }catch (NumberFormatException ex){
+                new AlertBox(this, "Enter number for percent or maximum amount or maximum number, please","OK",controller).showAndWait();
+            }
+        });
+
+        anchorPane0.onKeyReleasedProperty().set( e -> {
+            boolean isDisable = (discountPercentField.getText().trim().equals("") || maximumAmountField.getText().trim().equals("") || maxNumberOfUsageField.getText().trim().equals("") ||
+                    codeField.getText().trim().equals("") || startDatePicker.getValue().toString().trim().equals("") || endDatePicker.getValue().toString().trim().equals(""));
+            createButton.setDisable(isDisable);
+        });
+
+
+        return new Scene(anchorPane0);
+    }
+
+    private Scene createDetails(String discountCode){
+        AnchorPane anchorPane0 = new AnchorPane();
+
+        anchorPane0.setPrefHeight(550.0);
+
+
+        anchorPane0.setPrefWidth(700.0);
+        anchorPane0.setStyle("-fx-background-color: #f5f5f2;");
+        HBox hBox1 = new HBox();
+        hBox1.setPrefHeight(102.0);
+        hBox1.setPrefWidth(700.0);
+        hBox1.setStyle("-fx-background-color: #4477c8;");
+
+        // Adding child to parent
+        anchorPane0.getChildren().add(hBox1);
+        HBox hBox2 = new HBox();
+        hBox2.setPrefHeight(102.0);
+        hBox2.setPrefWidth(700.0);
+        hBox2.setStyle("-fx-background-color: #4477c8;");
+        hBox2.setLayoutY(448.0);
+
+        // Adding child to parent
+        anchorPane0.getChildren().add(hBox2);
+        Text text3 = new Text();
+        text3.setStrokeWidth(0.0);
+        text3.setStrokeType(OUTSIDE);
+        text3.setLayoutX(111.0);
+        text3.setLayoutY(160.0);
+        text3.setText("Tabrik!");
+
+        text3.setWrappingWidth(477.6708984375);
+
+        // Adding child to parent
+        anchorPane0.getChildren().add(text3);
+        try {
+            text3.setText(controller.getOffController().controlGetDiscountByCode(discountCode).toString());
+        } catch (ExceptionalMassage ex){
+            new AlertBox(this, ex, controller).showAndWait();
+        }
 
         return new Scene(anchorPane0);
     }

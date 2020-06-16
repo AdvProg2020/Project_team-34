@@ -96,7 +96,7 @@ public class MainMenuG extends GMenu {
             });
         } else {
             loginMenu.setOnAction( e-> {
-                stage.setScene(new LoginGMenu(this,stage,controller).getScene());
+                new LoginGMenu(this,stage,controller).showAndWait();
             });
         }
 
@@ -108,13 +108,11 @@ public class MainMenuG extends GMenu {
         });
 
         //loginMenu.setOnAction( e-> {
-            //stage.setScene(new LoginGMenu("Login Menu",this,stage).getScene());
+        //stage.setScene(new LoginGMenu("Login Menu",this,stage).getScene());
         //});
         GridPane background = new GridPane();
         background.setAlignment(Pos.CENTER);
         background.getChildren().add(anchorPane0);
-
-
 
         return new Scene(background);
     }

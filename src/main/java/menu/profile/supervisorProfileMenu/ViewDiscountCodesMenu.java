@@ -27,11 +27,15 @@ public class ViewDiscountCodesMenu extends Menu {
                 String regex = "^view discount code (\\w+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                    if(controller.getOffController().controlGetDiscountByCode(matcher.group(1)) == null){
-                        System.out.println("no such code");
-                    } else {
+                    try {
+                        controller.getOffController().controlGetDiscountByCode(matcher.group(1));
                         System.out.println(controller.getOffController().controlGetDiscountByCode(matcher.group(1)));
+                    } catch (ExceptionalMassage ex) {
+                        System.out.println(ex.getMessage());
                     }
+
+
+
                 }
                 parentMenu.show();
                 parentMenu.execute();

@@ -6,12 +6,15 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
+import gui.alerts.AlertBox;
 import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
 import gui.profile.*;
 import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
@@ -24,6 +27,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import org.w3c.dom.events.MouseEvent;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -42,10 +46,10 @@ public abstract class GMenu {
         this.parentMenu = parentMenu;
         this.controller = controller;
         this.stage = stage;
-        stage.setTitle(menuName);
     }
 
     public Scene getScene() {
+        stage.setTitle(menuName);
         return createScene();
     }
 
@@ -55,10 +59,11 @@ public abstract class GMenu {
         HBox hBox = new HBox();
 
         ImageView logoView = GMenu.getImageView("./src/main/resources/header/Logo.png", 100, 100);
-        ImageView backView = GMenu.getImageView("./src/main/resources/header/Back.png", 45, 45);
+        ImageView backView = GMenu.getImageView("./src/main/resources/header/Back.png", 25, 25);
         ImageView cartView = GMenu.getImageView("./src/main/resources/header/CartIcon.png", 45, 45);
         ImageView userView = GMenu.getImageView("./src/main/resources/header/User.png", 45, 45);
         ImageView allProducts = GMenu.getImageView("./src/main/resources/header/Menu.png", 45, 45);
+        ImageView saleView = GMenu.getImageView("./src/main/resources/header/Sales.png", 45, 45);
 
         MenuBar userMenuBar = new MenuBar();
         Menu user = new Menu();
@@ -82,7 +87,7 @@ public abstract class GMenu {
             }
         });
         signIn.setOnAction(e -> {
-            stage.setScene(new LoginGMenu( this, stage, controller).getScene());
+            new LoginGMenu( this, stage, controller).showAndWait();
         });
         allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu( this,
                 stage,controller).getScene()));
@@ -92,7 +97,7 @@ public abstract class GMenu {
         userMenuBar.getMenus().addAll(user);
 
         hBox.setSpacing(20);
-        hBox.getChildren().addAll(logoView, allProducts, backView, userMenuBar);
+        hBox.getChildren().addAll(backView, logoView, allProducts, saleView, userMenuBar);
         hBox.setAlignment(Pos.CENTER);
         if (!controller.getAccountController().hasSomeOneLoggedIn() ||
                 (controller.getAccountController().getAccount() instanceof Customer)) {
@@ -121,7 +126,7 @@ public abstract class GMenu {
             logs.setOnAction(e -> stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).getScene()));
         }
 
-        hBox.setMinWidth(450);
+        hBox.setMinWidth(500);
         hBox.setPadding(new Insets(5, 5, 5, 5));
         hBox.setStyle("-fx-background-color: transparent");
         return hBox;
@@ -240,8 +245,47 @@ public abstract class GMenu {
         }
         stage.getIcons().add(logoImage);
         stage.setScene(createScene());
-        stage.setOnCloseRequest(Event::consume);
         stage.setResizable(false);
         stage.showAndWait();
+    }
+
+    protected GridPane createSupervisorBox(GMenu gMenu) {
+        GridPane mainLayout = new GridPane();
+        TextField usernameField = new TextField();
+        usernameField.setPromptText("Username");
+        PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Password");
+        TextField firstName = new TextField();
+        firstName.setPromptText("First Name");
+        TextField lastName = new TextField();
+        lastName.setPromptText("Last Name");
+        TextField email = new TextField();
+        email.setPromptText("Email");
+        TextField phoneNumber = new TextField();
+        phoneNumber.setPromptText("Phone number");
+        Button done = new Button("Create");
+
+        done.setOnAction(e -> {
+            try {
+                controller.getAccountController().controlCreateAccount(usernameField.getText(), "supervisor",
+                        firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
+                        passwordField.getText(), 0, null);
+                stage.setScene(gMenu.createScene());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
+        });
+
+        mainLayout.setHgap(10);
+        mainLayout.setVgap(10);
+        mainLayout.add(usernameField, 0, 0);
+        mainLayout.add(passwordField, 1, 0);
+        mainLayout.add(firstName, 2, 0);
+        mainLayout.add(lastName, 3, 0);
+        mainLayout.add(email, 0, 1);
+        mainLayout.add(phoneNumber, 1, 1);
+        mainLayout.add(done, 3, 1);
+        mainLayout.setAlignment(Pos.CENTER);
+        return mainLayout;
     }
 }

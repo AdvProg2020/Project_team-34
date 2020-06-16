@@ -43,19 +43,25 @@ public class AccountController {
         return mainController.getAccount();
     }
 
-    private boolean doesAccountExist(String username) {
-        return Account.getAccountByUsername(username) != null;
-    }
-
     public void controlCreateAccount(String username, String type, String name, String familyName, String email,
-                                     String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
-        if (this.doesAccountExist(username))
+                                     String phoneNumber, String password, int credit, String nameOfCompany)
+            throws ExceptionalMassage {
+        if (username.trim().length() == 0) throw new ExceptionalMassage("username can't be empty");
+        if (name.trim().length() == 0) throw new ExceptionalMassage("name can't be empty");
+        if (familyName.trim().length() == 0) throw new ExceptionalMassage("family name can't be empty");
+        if (email.trim().length() == 0) throw new ExceptionalMassage("email can't be empty");
+        if (phoneNumber.trim().length() == 0) throw new ExceptionalMassage("phone number can't be empty");
+        if (password.trim().length() == 0) throw new ExceptionalMassage("password can't be empty");
+        if (credit == 0) throw new ExceptionalMassage("credit cannot be 0");
+
+        if (!Account.isUsernameAvailable(username))
             throw new ExceptionalMassage("Duplicate username");
         if (type.equals("customer")) {
             controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
             controlLogin(username, password);
         }
         if (type.equals("supplier")) {
+            if (nameOfCompany.trim().length() == 0) throw new ExceptionalMassage("credit cannot be 0");
             controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
             controlLogin(username, password);
         }
@@ -202,7 +208,7 @@ public class AccountController {
         Account accountGotByUsername = Account.getAccountByUsername(username);
         if (accountGotByUsername == null)
             throw new ExceptionalMassage("Account not found.");
-        if(accountGotByUsername.equals(mainController.getAccount().getUserName()))
+        if(username.equals(getAccount().getUserName()))
             throw new ExceptionalMassage("You cannot delete Your self");
         accountGotByUsername.removeAccount();
     }

@@ -69,6 +69,7 @@ public abstract class GMenu {
         MenuItem viewPersonalInfo = new MenuItem("View Personal Info");
         MenuItem manageCategories = new MenuItem("Manage Categories");
         MenuItem logs = new MenuItem("View Logs");
+        MenuItem manageUsers = new MenuItem("Manage Users");
 
         logoView.setOnMouseClicked(e ->
                 stage.setScene(new MainMenuG( this, stage,controller).getScene()));
@@ -86,6 +87,7 @@ public abstract class GMenu {
         allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu( this,
                 stage,controller).getScene()));
         cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu( this, stage, controller).getScene()));
+        manageUsers.setOnAction(e -> stage.setScene(new ManageUsersGMenu(this, stage, controller).getScene()));
 
         userMenuBar.getMenus().addAll(user);
 
@@ -109,7 +111,7 @@ public abstract class GMenu {
             viewPersonalInfo.setOnAction(e -> stage.setScene(new CustomerProfileGMenu(this, stage, controller).getScene()));
             logs.setOnAction(e -> stage.setScene(new ViewLogsForCustomerGMenu(this, stage, controller).getScene()));
         } else if (controller.getAccountController().getAccount() instanceof Supervisor) {
-            user.getItems().addAll(viewPersonalInfo, logs, manageCategories, signOut);
+            user.getItems().addAll(viewPersonalInfo, logs, manageCategories, manageUsers, signOut);
             viewPersonalInfo.setOnAction(e -> stage.setScene(new SupervisorProfileGMenu(this, stage, controller).getScene()));
             manageCategories.setOnAction(e -> stage.setScene(new ManageCategoriesGMenu(this, stage, controller).getScene()));
             logs.setOnAction(e -> stage.setScene(new ViewLogsForSupervisorGMenu(this, stage, controller).getScene()));

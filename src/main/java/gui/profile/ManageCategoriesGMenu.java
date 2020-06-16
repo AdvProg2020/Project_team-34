@@ -39,7 +39,7 @@ public class ManageCategoriesGMenu extends GMenu {
             try {
                 controller.getProductController().controlAddCategory(nameField.getText(), isClassifier.isSelected(), parentCategory.getValue());
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, new Stage(), exceptionalMassage, controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
             stage.setScene(getScene());
         });
@@ -80,7 +80,12 @@ public class ManageCategoriesGMenu extends GMenu {
         Button edit = new Button("Edit");
 
         remove.setOnAction(e -> {
-
+            try {
+                controller.getProductController().controlRemoveCategory(categoryName);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
+            stage.setScene(createScene());
         });
 
         edit.setOnAction(e -> {
@@ -98,7 +103,11 @@ public class ManageCategoriesGMenu extends GMenu {
         spacer.getStyleClass().add("h-box");
         HBox.setHgrow(spacer, Priority.SOMETIMES);
 
-        box.getChildren().addAll(label, spacer, remove, edit);
+        if (categoryName.equals("All Products")) {
+            box.getChildren().addAll(label);
+        } else {
+            box.getChildren().addAll(label, spacer, remove, edit);
+        }
 
         return box;
     }

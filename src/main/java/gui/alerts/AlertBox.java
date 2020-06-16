@@ -22,14 +22,14 @@ public class AlertBox extends GMenu {
     protected String alert;
     protected String buttonText;
 
-    public AlertBox(GMenu parentMenu, Stage stage, String alert, String buttonText, Controller controller) {
-        super("Alert!", parentMenu, stage, controller);
+    public AlertBox(GMenu parentMenu, String alert, String buttonText, Controller controller) {
+        super("Alert!", parentMenu, new Stage(), controller);
         this.alert = alert;
         this.buttonText = buttonText;
     }
 
-    public AlertBox(GMenu parentMenu, Stage stage, ExceptionalMassage exceptionalMassage, Controller controller) {
-        super("Alert!", parentMenu, stage, controller);
+    public AlertBox(GMenu parentMenu, ExceptionalMassage exceptionalMassage, Controller controller) {
+        super("Alert!", parentMenu, new Stage(), controller);
         this.alert = exceptionalMassage.getMessage();
         this.buttonText = "OK";
     }
@@ -52,7 +52,6 @@ public class AlertBox extends GMenu {
 
     public void showAndWait() {
         stage.initModality(Modality.APPLICATION_MODAL);
-        stage.setTitle("Game Finish Menu");
         Image logoImage = null;
         try {
             logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
@@ -61,6 +60,7 @@ public class AlertBox extends GMenu {
         stage.getIcons().add(logoImage);
         stage.setScene(createScene());
         stage.setOnCloseRequest(Event::consume);
+        stage.setResizable(false);
         stage.showAndWait();
     }
 

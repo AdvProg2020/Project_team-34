@@ -77,6 +77,8 @@ public class Category {
             throw new ExceptionalMassage("Parent category not found.");
         if (!parentCategory.isCategoryClassifier())
             throw new ExceptionalMassage("Category " + parentCategoryName + " is a product classifier.");
+        if (name.trim().equals(""))
+            throw new ExceptionalMassage("Invalid name for a category");
         Category addingCategory = new Category(name, isParentCategory, parentCategoryName);
         parentCategory.addToSubCategoryList(addingCategory);
         if (parentCategory != superCategory)
@@ -218,7 +220,9 @@ public class Category {
             throw new ExceptionalMassage("This subcategory is not in this category. <Category.removeSubCategory>");
         Category.allCategories.remove(getCategoryByName(removingCategoryName));
         this.allCategoriesInName.remove(removingCategoryName);
-        CategoryDataBase.update(this);
+        if (!name.equals("All Products")) {
+            CategoryDataBase.update(this);
+        }
     }
 
     public static void removeCategory(String removingCategoryName) throws ExceptionalMassage {

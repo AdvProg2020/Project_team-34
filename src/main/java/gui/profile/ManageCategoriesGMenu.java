@@ -89,7 +89,7 @@ public class ManageCategoriesGMenu extends GMenu {
         });
 
         edit.setOnAction(e -> {
-
+            stage.setScene(new EditCategoryGMenu(this, stage, controller, categoryName).getScene());
         });
 
         box.setStyle("-fx-border-width: 2");

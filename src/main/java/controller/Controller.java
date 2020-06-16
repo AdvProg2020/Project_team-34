@@ -7,9 +7,9 @@ public class Controller {
     private Account account;
     private Cart cart;
     private boolean isFirstSupervisorCreated;
-    private AccountController accountController;
-    private ProductController productController;
-    private OffController offController;
+    private final AccountController accountController;
+    private final ProductController productController;
+    private final OffController offController;
 
     public Controller() {
         account = null;

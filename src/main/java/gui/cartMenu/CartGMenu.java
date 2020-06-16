@@ -1,10 +1,13 @@
 package gui.cartMenu;
 
+import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
+import com.google.gson.internal.$Gson$Preconditions;
 import controller.Controller;
 import cart.ProductInCart;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Pos;
@@ -12,14 +15,15 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableView;
-import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import product.Product;
 
 import java.io.File;
+import java.io.PushbackInputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.concurrent.Callable;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
 
@@ -32,110 +36,142 @@ public class CartGMenu extends GMenu {
     @Override
     protected Scene createScene() {
         GridPane backgroundLayout = new GridPane();
-        GridPane mainPane = new GridPane();
-        AnchorPane mainAnchorPain = new AnchorPane();
-        mainAnchorPain.setPrefHeight(513.0);
-        mainAnchorPain.setPrefWidth(657.0);
-        TableView tableView = new TableView();
-        tableView.setPrefHeight(272.0);
-        tableView.setPrefWidth(450.0);
-        tableView.setLayoutX(97.0);
-        tableView.setLayoutY(121.0);
+        VBox productsInCartPane ;
+        GridPane buttonPane = new GridPane();
+//        mainPane.setPrefHeight(513.0);
+//        mainPane.setPrefWidth(657.0);
+//        TableView tableView = new TableView();
+//        tableView.setPrefHeight(272.0);
+//        tableView.setPrefWidth(450.0);
+//        tableView.setLayoutX(97.0);
+//        tableView.setLayoutY(121.0);
 
 
-        mainAnchorPain.getChildren().add(createHeader());
-        mainAnchorPain.getChildren().add(tableView);
-        Label label = new Label();
-        label.setPrefHeight(21.0);
-        label.setPrefWidth(450.0);
-        label.setLayoutX(97.0);
-        label.setStyle("-fx-background-color: #9cbfe3;");
-        label.setContentDisplay(CENTER);
-        label.setLayoutY(100.0);
-        label.setText("Products On Your Shopping Cart");
-        label.setAlignment(Pos.CENTER);
 
-        mainAnchorPain.getChildren().add(label);
+        buttonPane.setHgap(100);
+
+
         Button clearCart = new Button();
-        clearCart.setPrefHeight(26.0);
-
-        clearCart.setPrefWidth(109.0);
-        clearCart.setLayoutX(139.0);
-        clearCart.setLayoutY(432.0);
         clearCart.setText("Clear Cart");
-        clearCart.setMnemonicParsing(false);
-        clearCart.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        clearCart.getStyleClass().add("button");
+        GMenu.addStyleToButton(clearCart);
+        buttonPane.add(clearCart, 0, 3);
 
-        mainAnchorPain.getChildren().add(clearCart);
         Button placeOrder = new Button();
-        placeOrder.setPrefHeight(26.0);
-        placeOrder.setPrefWidth(110.0);
-        placeOrder.setLayoutX(419.0);
-        placeOrder.setLayoutY(432.0);
         placeOrder.setText("Place Order");
-        placeOrder.setMnemonicParsing(false);
-        placeOrder.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        placeOrder.getStyleClass().add("button");
+        GMenu.addStyleToButton(placeOrder);
+        buttonPane.add(placeOrder, 1, 3);
 
-        placeOrder.setOnMouseClicked(e->{
-            if(controller.getAccountController().hasSomeOneLoggedIn()){
-                stage.setScene(new PurchaseMenuG(this, stage,controller).getScene());
-            }
-            else {
-                stage.setScene(new LoginGMenu( this, stage,controller).getScene());
+        placeOrder.setOnMouseClicked(e -> {
+            if (controller.getAccountController().hasSomeOneLoggedIn()) {
+                stage.setScene(new PurchaseMenuG(this, stage, controller).getScene());
+            } else {
+                stage.setScene(new LoginGMenu(this, stage, controller).getScene());
             }
 
         });
 
-        mainAnchorPain.getChildren().add(placeOrder);
+
         Button updateCart = new Button();
-        updateCart.setPrefHeight(26.0);
-
-        updateCart.setPrefWidth(110.0);
-        updateCart.setLayoutX(273.0);
-        updateCart.setLayoutY(432.0);
+//        updateCart.setPrefHeight(26.0);
+//        updateCart.setPrefWidth(110.0);
+//        updateCart.setLayoutX(273.0);
+//        updateCart.setLayoutY(432.0);
         updateCart.setText("Update Cart");
-        updateCart.setMnemonicParsing(false);
-        updateCart.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        updateCart.getStyleClass().add("button");
+//        updateCart.setMnemonicParsing(false);
+        GMenu.addStyleToButton(updateCart);
 
-        mainAnchorPain.getChildren().add(updateCart);
+        buttonPane.add(updateCart, 2, 3);
 
-        backgroundLayout.getChildren().add(mainAnchorPain);
+        productsInCartPane = createProductsInCartPane(controller);
 
-        ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
-        for (ProductInCart productInCart : productInCarts) {
-           mainAnchorPain.getChildren().add(createHBox(productInCart));
-            System.out.println("hi");
-        }
+
+        backgroundLayout.add( createHeader(), 0,0);
+        backgroundLayout.add( productsInCartPane, 0, 1);
+        backgroundLayout.add(buttonPane, 0, 2);
         Scene scene = new Scene(backgroundLayout);
         return scene;
     }
 
-    private static GridPane createHBox(ProductInCart productInCart){
+    private static VBox createProductsInCartPane ( Controller controller){
+        VBox productsInCartPane = new VBox();
+        Label label = new Label();
+        label.setStyle("-fx-background-color: #9cbfe3;");
+        label.setContentDisplay(CENTER);
+        label.setPrefWidth(400);
+        label.setText("Products On Your Shopping Cart");
+        label.setAlignment(Pos.CENTER);
+
+        productsInCartPane.getChildren().add(label);
+
+        productsInCartPane.getChildren().add(createTableHeader());
+
+        ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
+        Supplier supplier = new Supplier("i", "i", "i", "i", "ij", "kj", 6, "hdi");
+        Product product = new Product(supplier, "laptop", "Asus", 499, 5, "good", null, null, new HashMap<>());
+        ProductInCart newProductInCart = new ProductInCart(product, supplier);
+        productInCarts.add(newProductInCart);
+        for (ProductInCart productInCart : productInCarts) {
+            productsInCartPane.getChildren().add(createHBox(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller));
+        }
+        return productsInCartPane;
+    }
+
+    private static GridPane createHBox(ProductInCart productInCart, int count, Controller controller) {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
         Label IdLabel = new Label(product.getProductId());
         Label nameLabel = new Label(product.getName());
         Label priceLabel = new Label(String.valueOf(product.getPrice(productInCart.getSupplier())));
-//        Label CountLabel = new Label()
+        Label countLabel = new Label(String.valueOf(count));
 
         Button increment = new Button("+");
         Button decrement = new Button("-");
 
         int column = 0;
-        gridPane.add(IdLabel , 1, column );
-        column ++;
-        gridPane.add(nameLabel, 1, column);
-        column ++;
-        gridPane.add(priceLabel, 1, column);
-        column ++;
-        gridPane.add(increment, 0, column);
-        column ++;
-        gridPane.add(decrement, 2, column);
+        gridPane.add(IdLabel, column, 1);
+        column++;
+        gridPane.add(nameLabel, column, 1);
+        column++;
+        gridPane.add(priceLabel, column, 1);
+        column++;
+        gridPane.add(countLabel, column, 1);
+        column++;
+        gridPane.add(increment, column, 0);
+        gridPane.add(decrement, column, 2);
 
+        increment.setOnMouseClicked(e->{
+            try {
+                controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
+        });
+
+        decrement.setOnMouseClicked(e->{
+            try {
+                controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
+        });
+
+        gridPane.setHgap(70);
+        gridPane.setVgap(0);
+        gridPane.setStyle("-fx-border-color: orange");
         return gridPane;
+    }
+
+    private static HBox createTableHeader(){
+        HBox hBox = new HBox();
+        Label idLabel = new Label("Product Id");
+        Label nameLabel = new Label("Product Name");
+        Label priceLabel = new Label("Price");
+        Label countLabel = new Label("Count");
+
+        hBox.getChildren().addAll(idLabel, nameLabel, priceLabel, countLabel);
+        hBox.setSpacing(70);
+
+        return hBox;
     }
 
 }

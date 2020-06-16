@@ -407,4 +407,12 @@ public class AccountController {
     public boolean isLogProcessable(String id) {
         return CustomerLog.getCustomerLogById(id).getDeliveryStatus() != LogStatus.DELIVERED;
     }
+
+    public int numberOfProductInCart(ProductInCart productInCart){
+        try {
+            return mainController.getCart().getCountOfProductInCart(productInCart);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return 0;
+        }
+    }
 }

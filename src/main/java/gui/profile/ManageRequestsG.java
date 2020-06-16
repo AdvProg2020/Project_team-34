@@ -3,6 +3,7 @@ package gui.profile;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,7 +11,10 @@ import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class ManageRequestsG extends GMenu {
 
@@ -128,5 +132,48 @@ public class ManageRequestsG extends GMenu {
 
         return new Scene(anchorPane0);
 
+    }
+
+    private Scene createDetails(String requestsId){
+        AnchorPane anchorPane0 = new AnchorPane();
+
+        anchorPane0.setPrefHeight(550.0);
+
+
+        anchorPane0.setPrefWidth(700.0);
+        anchorPane0.setStyle("-fx-background-color: #f5f5f2;");
+        HBox hBox1 = new HBox();
+        hBox1.setPrefHeight(102.0);
+        hBox1.setPrefWidth(700.0);
+        hBox1.setStyle("-fx-background-color: #4477c8;");
+
+        // Adding child to parent
+        anchorPane0.getChildren().add(hBox1);
+        HBox hBox2 = new HBox();
+        hBox2.setPrefHeight(102.0);
+        hBox2.setPrefWidth(700.0);
+        hBox2.setStyle("-fx-background-color: #4477c8;");
+        hBox2.setLayoutY(448.0);
+
+        // Adding child to parent
+        anchorPane0.getChildren().add(hBox2);
+        Text text3 = new Text();
+        text3.setStrokeWidth(0.0);
+        text3.setStrokeType(OUTSIDE);
+        text3.setLayoutX(111.0);
+        text3.setLayoutY(160.0);
+        text3.setText("Tabrik!");
+
+        text3.setWrappingWidth(477.6708984375);
+
+        // Adding child to parent
+        anchorPane0.getChildren().add(text3);
+        try {
+            text3.setText(controller.getProductController().controlShowDetailForRequest(requestsId));
+        } catch (ExceptionalMassage ex){
+            new AlertBox(this, ex, controller).showAndWait();
+        }
+
+        return new Scene(anchorPane0);
     }
 }

@@ -25,13 +25,13 @@ public class OffController {
         return CodedDiscount.getCodedDiscounts();
     }
 
-    public CodedDiscount controlGetDiscountByCode(String code) {
+    public CodedDiscount controlGetDiscountByCode(String code) throws ExceptionalMassage{
         for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
             if(codedDiscount.getDiscountCode().equals(code)){
                 return codedDiscount;
             }
         }
-        return null;
+        throw new ExceptionalMassage("No such code");
     }
 
     public void controlEditDiscountByCode (String code, Date newStartDate, Date newEndDate, int newPercent, int newMaxDiscount) throws ExceptionalMassage{
@@ -49,6 +49,9 @@ public class OffController {
             if(codedDiscount.getDiscountCode().equals(code)){
                 throw new ExceptionalMassage("Code already exists!");
             }
+        }
+        if (maxNumberOfUsage.size() == 0){
+            throw new ExceptionalMassage("Select at Least one customer, please!");
         }
         new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount, maxNumberOfUsage);
     }

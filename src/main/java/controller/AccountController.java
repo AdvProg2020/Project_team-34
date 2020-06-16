@@ -197,6 +197,11 @@ public class AccountController {
         return result.toString();
     }
 
+    public ArrayList<String> controlGetListOfAccountUserNames(){
+        ArrayList<String> allUsername = Account.getAllUsername();
+        return allUsername;
+    }
+
     public String controlViewUserInfo(String username) throws ExceptionalMassage {
         Account account = Account.getAccountByUsername(username);
         if (account == null)

@@ -5,6 +5,7 @@ import database.DataBase;
 import gui.GMenu;
 import gui.loginMenu.FirstSupervisorMenu;
 import gui.mainMenu.MainMenuG;
+import gui.profile.ManageRequestsG;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -53,12 +54,28 @@ public class Main extends Application {
         stage.setTitle("Team 34 Online retail store");
         stage.getIcons().add(logoImage);
 
-        Controller controller = new Controller();
+//        CartGMenu menu = new CartGMenu("Cart GMenu", null, stage);
+//        stage.setScene(menu.getScene());
+//        stage.show();
+
+//        LoginGMenu menu = new LoginGMenu("login", null, stage);
+//        stage.setScene(menu.createScene());
+//        stage.show();
+//
+//        AllProductGMenu menu = new AllProductGMenu("All Product GMenu" , null, stage);
+//        stage.setScene(menu.getScene());
+//        stage.show();
 
         GMenu mainMenu = new MainMenuG( null, stage, controller);
         GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
 
         stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
         stage.show();
+
+//        CustomerProfileGMenu menu = new CustomerProfileGMenu("All Product GMenu" , null, stage);
+//        stage.setScene(menu.getScene());
+//        stage.show();
+
+
     }
 }

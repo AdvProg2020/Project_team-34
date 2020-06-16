@@ -49,6 +49,7 @@ public class CodedDiscount extends Discount{
         this.maximumNumberOfUsagePerCustomer = maximumNumberOfUsagePerCustomer;
         customers = new ArrayList<>();
         customers.addAll(maximumNumberOfUsagePerCustomer.keySet());
+        codedDiscounts.add(this);
     }
 
     public static String codeGenerator(){

@@ -1,10 +1,13 @@
 package gui.profile;
 
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -17,7 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EditCategoryGMenu extends GMenu {
-    private final String editingCatName;
+    private String editingCatName;
     private final HashMap<String, ArrayList<String>> fields;
 
     public EditCategoryGMenu(GMenu parentMenu, Stage stage, Controller controller, String editingCatName) {
@@ -48,13 +51,25 @@ public class EditCategoryGMenu extends GMenu {
 
         changeNameButton.setDisable(true);
         changeNameButton.setOnAction(e -> {
-
+            try {
+                String newName = nameField.getText();
+                controller.getProductController().controlChangeCategoryName(editingCatName, newName);
+                editingCatName = newName;
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller);
+            }
+            stage.setScene(createScene());
         });
 
         editNameBox.setSpacing(20);
         editNameBox.setPadding(new Insets(5, 5, 5, 5));
+        editNameBox.setAlignment(Pos.CENTER);
+        editNameBox.getChildren().addAll(nameLabel, nameField, changeNameButton);
 
-        mainLayout.getChildren().addAll(createHeader(), editNameBox, addRemoveFieldBox, categoryFields());
+        mainLayout.getChildren().addAll(createHeader(), editNameBox);
+        if (!controller.getProductController().isThisCategoryClassifier(editingCatName)) {
+            mainLayout.getChildren().addAll(addRemoveFieldBox, categoryFields());
+        }
 
         backgroundLayout.setAlignment(Pos.CENTER);
         backgroundLayout.getChildren().add(mainLayout);

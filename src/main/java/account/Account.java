@@ -23,7 +23,7 @@ public abstract class Account {
         this.name = name;
         this.familyName = familyName;
         this.email = email;
-        this.phoneNumber = phoneNumber;
+       this.phoneNumber = phoneNumber;
         this.password = password;
         this.credit = credit;
         this.isAvailable = isAvailable;
@@ -106,6 +106,15 @@ public abstract class Account {
         AccountDataBase.update(this);
     }
 
+    public static boolean isUsernameAvailable(String userName) {
+        for (Account account : allAccounts) {
+            if (account.getUserName().equals(userName)) {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static Account getAccountByUsername(String userName) {
         ArrayList<Account> availableAccounts = getAllAvailableAccounts();
         if( availableAccounts.size() != 0) {
@@ -174,7 +183,7 @@ public abstract class Account {
     public static ObservableList<Supervisor> getSupervisorsObservableList() {
         ObservableList<Supervisor> allSupervisors = FXCollections.observableArrayList();
         for (Account account: allAccounts) {
-            if (account instanceof Supervisor) {
+            if (account instanceof Supervisor && account.isAvailable) {
                 allSupervisors.add((Supervisor) account);
             }
         }
@@ -184,7 +193,7 @@ public abstract class Account {
     public static ObservableList<Supplier> getSuppliersObservableList() {
         ObservableList<Supplier> allSuppliers = FXCollections.observableArrayList();
         for (Account account: allAccounts) {
-            if (account instanceof Supplier) {
+            if (account instanceof Supplier && account.isAvailable) {
                 allSuppliers.add((Supplier) account);
             }
         }
@@ -194,7 +203,7 @@ public abstract class Account {
     public static ObservableList<Customer> getCustomersObservableList() {
         ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
         for (Account account: allAccounts) {
-            if (account instanceof Customer) {
+            if (account instanceof Customer && account.isAvailable) {
                 allCustomers.add((Customer) account);
             }
         }

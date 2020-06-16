@@ -33,6 +33,8 @@ public class ManageUsersGMenu extends GMenu {
         HBox deleteUserBox = new HBox();
         TextField deletingUsername = new TextField();
         Button deleteButton = new Button("Delete");
+        GridPane backLayout = new GridPane();
+        Scene scene = new Scene(backgroundLayout);
 
         deletingUsername.setPromptText("Delete username");
         deletingUsername.setAlignment(Pos.CENTER);
@@ -43,11 +45,13 @@ public class ManageUsersGMenu extends GMenu {
                 try {
                     controller.getAccountController().controlDeleteUser(deletingUsername.getText());
                 } catch (ExceptionalMassage exceptionalMassage) {
-                    new AlertBox(this, exceptionalMassage, controller);
+                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
                 }
             }
+            stage.setScene(createScene());
         });
         deleteUserBox.setSpacing(10);
+        deleteUserBox.setAlignment(Pos.CENTER);
         deleteUserBox.getChildren().addAll(deletingUsername, deleteButton);
 
         mainLayout.setSpacing(10);
@@ -55,19 +59,22 @@ public class ManageUsersGMenu extends GMenu {
                 supervisorTableView, new Label("Suppliers:"), supplierTableView, new Label("Customers"),
                 customerTableView);
 
-        return null;
+        backgroundLayout.getChildren().add(mainLayout);
+        backgroundLayout.setAlignment(Pos.CENTER);
+
+        return scene;
     }
 
     private TableView<Supervisor> supervisorTable() {
-        TableColumn<Supervisor, String> username = new TableColumn<>();
+        TableColumn<Supervisor, String> username = new TableColumn<>("Username");
         username.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        TableColumn<Supervisor, String> firstName = new TableColumn<>();
+        TableColumn<Supervisor, String> firstName = new TableColumn<>("First Name");
         firstName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<Supervisor, String> lastName = new TableColumn<>();
+        TableColumn<Supervisor, String> lastName = new TableColumn<>("Last Name");
         lastName.setCellValueFactory(new PropertyValueFactory<>("familyName"));
-        TableColumn<Supervisor, String> email = new TableColumn<>();
+        TableColumn<Supervisor, String> email = new TableColumn<>("Email");
         email.setCellValueFactory(new PropertyValueFactory<>("email"));
-        TableColumn<Supervisor, String> phoneNumber = new TableColumn<>();
+        TableColumn<Supervisor, String> phoneNumber = new TableColumn<>("Phone Number");
         phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         TableView<Supervisor> supervisorTableView = new TableView<>();
         supervisorTableView.setItems(Account.getSupervisorsObservableList());
@@ -77,20 +84,20 @@ public class ManageUsersGMenu extends GMenu {
     }
 
     private TableView<Supplier> supplierTable() {
-        TableColumn<Supplier, String> username = new TableColumn<>();
+        TableColumn<Supplier, String> username = new TableColumn<>("Username");
         username.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        TableColumn<Supplier, String> firstName = new TableColumn<>();
+        TableColumn<Supplier, String> firstName = new TableColumn<>("First Name");
         firstName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<Supplier, String> lastName = new TableColumn<>();
+        TableColumn<Supplier, String> lastName = new TableColumn<>("Last Name");
         lastName.setCellValueFactory(new PropertyValueFactory<>("familyName"));
-        TableColumn<Supplier, String> email = new TableColumn<>();
+        TableColumn<Supplier, String> email = new TableColumn<>("Email");
         email.setCellValueFactory(new PropertyValueFactory<>("email"));
-        TableColumn<Supplier, String> phoneNumber = new TableColumn<>();
+        TableColumn<Supplier, String> phoneNumber = new TableColumn<>("Phone Number");
         phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        TableColumn<Supplier, String> nameOfCompany = new TableColumn<>();
-        phoneNumber.setCellValueFactory(new PropertyValueFactory<>("nameOfCompany"));
-        TableColumn<Supplier, Integer> credit = new TableColumn<>();
-        phoneNumber.setCellValueFactory(new PropertyValueFactory<>("credit"));
+        TableColumn<Supplier, String> nameOfCompany = new TableColumn<>("Name Of Company");
+        nameOfCompany.setCellValueFactory(new PropertyValueFactory<>("nameOfCompany"));
+        TableColumn<Supplier, Integer> credit = new TableColumn<>("Credit");
+        credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
         TableView<Supplier> supplierTableView = new TableView<>();
         supplierTableView.setItems(Account.getSuppliersObservableList());
         supplierTableView.setPrefWidth(800);
@@ -99,36 +106,40 @@ public class ManageUsersGMenu extends GMenu {
     }
 
     private TableView<Customer> customerTable() {
-        TableColumn<Customer, String> username = new TableColumn<>();
+        TableColumn<Customer, String> username = new TableColumn<>("Username");
         username.setCellValueFactory(new PropertyValueFactory<>("userName"));
-        TableColumn<Customer, String> firstName = new TableColumn<>();
+        TableColumn<Customer, String> firstName = new TableColumn<>("First Name");
         firstName.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn<Customer, String> lastName = new TableColumn<>();
+        TableColumn<Customer, String> lastName = new TableColumn<>("Last Name");
         lastName.setCellValueFactory(new PropertyValueFactory<>("familyName"));
-        TableColumn<Customer, String> email = new TableColumn<>();
+        TableColumn<Customer, String> email = new TableColumn<>("Email");
         email.setCellValueFactory(new PropertyValueFactory<>("email"));
-        TableColumn<Customer, String> phoneNumber = new TableColumn<>();
+        TableColumn<Customer, String> phoneNumber = new TableColumn<>("Phone number");
         phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        TableColumn<Customer, Integer> credit = new TableColumn<>("Credit");
+        credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
         TableView<Customer> customerTableView = new TableView<>();
-        TableColumn<Customer, Integer> credit = new TableColumn<>();
-        phoneNumber.setCellValueFactory(new PropertyValueFactory<>("credit"));
         customerTableView.setItems(Account.getCustomersObservableList());
         customerTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber, credit);
         customerTableView.setPrefWidth(800);
         return customerTableView;
     }
 
-    private VBox createSupervisorBox() {
-        VBox mainLayout = new VBox();
+    private GridPane createSupervisorBox() {
+        GridPane mainLayout = new GridPane();
         TextField usernameField = new TextField();
+        usernameField.setPromptText("Username");
         PasswordField passwordField = new PasswordField();
+        passwordField.setPromptText("Password");
         TextField firstName = new TextField();
+        firstName.setPromptText("First Name");
         TextField lastName = new TextField();
+        lastName.setPromptText("Last Name");
         TextField email = new TextField();
+        email.setPromptText("Email");
         TextField phoneNumber = new TextField();
+        phoneNumber.setPromptText("Phone number");
         Button done = new Button("Create");
-
-        done.setDisable(true);
 
         done.setOnAction(e -> {
             try {
@@ -136,21 +147,21 @@ public class ManageUsersGMenu extends GMenu {
                         firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
                         passwordField.getText(), 0, null);
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage, controller);
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
+            stage.setScene(createScene());
         });
 
-        mainLayout.setOnKeyTyped(e -> {
-            if (usernameField.getText().trim().length() != 0 && firstName.getText().trim().length() != 0 &&
-                    lastName.getText().trim().length() != 0 && passwordField.getText().trim().length() != 0 &&
-                    email.getText().trim().length() != 0 && phoneNumber.getText().trim().length() != 0) {
-                done.setDisable(false);
-            } else {
-                done.setDisable(true);
-            }
-        });
-
-        mainLayout.getChildren().addAll(usernameField, passwordField, firstName, lastName, email, phoneNumber, done);
+        mainLayout.setHgap(10);
+        mainLayout.setVgap(10);
+        mainLayout.add(usernameField, 0, 0);
+        mainLayout.add(passwordField, 1, 0);
+        mainLayout.add(firstName, 2, 0);
+        mainLayout.add(lastName, 3, 0);
+        mainLayout.add(email, 0, 1);
+        mainLayout.add(phoneNumber, 1, 1);
+        mainLayout.add(done, 3, 1);
+        mainLayout.setAlignment(Pos.CENTER);
         return mainLayout;
     }
 }

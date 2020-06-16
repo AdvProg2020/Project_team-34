@@ -111,7 +111,7 @@ public abstract class GMenu {
             viewPersonalInfo.setOnAction(e -> stage.setScene(new CustomerProfileGMenu(this, stage, controller).getScene()));
             logs.setOnAction(e -> stage.setScene(new ViewLogsForCustomerGMenu(this, stage, controller).getScene()));
         } else if (controller.getAccountController().getAccount() instanceof Supervisor) {
-            user.getItems().addAll(viewPersonalInfo, logs, manageCategories, signOut);
+            user.getItems().addAll(viewPersonalInfo, logs, manageCategories, manageUsers, signOut);
             viewPersonalInfo.setOnAction(e -> stage.setScene(new SupervisorProfileGMenu(this, stage, controller).getScene()));
             manageCategories.setOnAction(e -> stage.setScene(new ManageCategoriesGMenu(this, stage, controller).getScene()));
             logs.setOnAction(e -> stage.setScene(new ViewLogsForSupervisorGMenu(this, stage, controller).getScene()));

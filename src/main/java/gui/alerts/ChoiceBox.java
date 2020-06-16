@@ -49,9 +49,11 @@ public class ChoiceBox extends GMenu {
         background.getChildren().addAll(mainLayout);
         accept.setOnAction(e -> {
             answer = true;
+            stage.close();
         });
         deny.setOnAction(e -> {
             answer = false;
+            stage.close();
         });
         background.setAlignment(Pos.CENTER);
         return new Scene(background);

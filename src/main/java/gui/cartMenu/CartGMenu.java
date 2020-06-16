@@ -83,7 +83,7 @@ public class CartGMenu extends GMenu {
                 stage.setScene(new PurchaseMenuG(this, stage,controller).getScene());
             }
             else {
-                stage.setScene(new LoginGMenu( this, stage,controller).getScene());
+                new LoginGMenu( this, stage,controller).showAndWait();
             }
 
         });

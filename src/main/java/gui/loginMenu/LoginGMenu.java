@@ -33,16 +33,17 @@ import static javafx.scene.control.ContentDisplay.CENTER;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class LoginGMenu extends GMenu {
+    private Stage parentStage;
 
-
-    public LoginGMenu(GMenu parentMenu, Stage stage, Controller controller) {
-        super("Login Menu", parentMenu, stage, controller);
+    public LoginGMenu(GMenu parentMenu, Stage parentStage, Controller controller) {
+        super("Login Menu", parentMenu, new Stage(), controller);
+        this.parentStage = parentStage;
+        stage.setTitle("Login Menu");
     }
 
     @Override
     public Scene createScene() {
-
-
+        stage.setResizable(false);
         AnchorPane anchorPane0 = new AnchorPane();
         anchorPane0.setPrefHeight(600.0);
         anchorPane0.setPrefWidth(500.0);
@@ -52,9 +53,6 @@ public class LoginGMenu extends GMenu {
         hBox1.setPrefWidth(500.0);
         hBox1.setStyle("-fx-background-color: #4677c8");
         hBox1.setLayoutY(-1.0);
-
-        HBox header = createHeader();
-        hBox1.getChildren().add(header);
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
@@ -153,7 +151,8 @@ public class LoginGMenu extends GMenu {
         // Adding controller!
 
         signUp.setOnMouseClicked(e ->{
-            stage.setScene(new RegisterGMenu(this,stage,controller).getScene());
+            stage.close();
+            new RegisterGMenu(this,stage,controller).showAndWait();
         });
 
 
@@ -164,9 +163,11 @@ public class LoginGMenu extends GMenu {
             try {
                 controller.getAccountController().controlLogin(username, password);
                 if((controller.getAccount() instanceof Supplier || controller.getAccount() instanceof Supervisor) && parentMenu instanceof CartGMenu) {
-                    stage.setScene(new MainMenuG(null, stage, controller).getScene());
+                    stage.close();
+                    parentStage.setScene(new MainMenuG(null, stage, controller).getScene());
                 } else {
-                    stage.setScene(parentMenu.getScene());
+                    stage.close();
+                    parentStage.setScene(parentMenu.getScene());
                 }
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();

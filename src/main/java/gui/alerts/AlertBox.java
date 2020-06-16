@@ -3,6 +3,7 @@ package gui.alerts;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -45,11 +46,8 @@ public class AlertBox extends GMenu {
         GridPane background = new GridPane();
         background.setAlignment(Pos.CENTER);
         background.getChildren().addAll(hBox);
-        okButton.setOnAction(e -> {
-            stage.close();
-        });
-        Scene scene = new Scene(background);
-        return scene;
+        okButton.setOnAction(e -> stage.close());
+        return new Scene(background);
     }
 
     public void showAndWait() {
@@ -62,9 +60,7 @@ public class AlertBox extends GMenu {
         }
         stage.getIcons().add(logoImage);
         stage.setScene(createScene());
-        stage.setOnCloseRequest(e -> {
-            e.consume();
-        });
+        stage.setOnCloseRequest(Event::consume);
         stage.showAndWait();
     }
 

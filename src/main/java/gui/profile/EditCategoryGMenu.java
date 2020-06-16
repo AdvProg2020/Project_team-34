@@ -7,7 +7,6 @@ import gui.alerts.AlertBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -32,16 +31,14 @@ public class EditCategoryGMenu extends GMenu {
     @Override
     protected Scene createScene() {
         Label nameLabel = new Label("Name");
-        TextField nameField = new TextField(new String(editingCatName));
+        TextField nameField = new TextField(editingCatName);
         Button changeNameButton = new Button("Change name");
         HBox editNameBox = new HBox();
         VBox mainLayout = new VBox();
         GridPane backgroundLayout = new GridPane();
         Scene scene = new Scene(backgroundLayout);
 
-        nameField.setOnKeyTyped(e -> {
-            changeNameButton.setDisable(nameField.getText().equals(editingCatName));
-        });
+        nameField.setOnKeyTyped(e -> changeNameButton.setDisable(nameField.getText().equals(editingCatName)));
 
         changeNameButton.setDisable(true);
         changeNameButton.setOnAction(e -> {

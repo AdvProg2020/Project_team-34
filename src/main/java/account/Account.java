@@ -160,4 +160,12 @@ public abstract class Account {
         this.credit = credit;
         AccountDataBase.update(this);
     }
+
+    public String getAccountType(){
+        if(this instanceof Customer)
+            return "Customer";
+        if(this instanceof Supervisor)
+            return "Supervisor";
+        return "Supplier";
+    }
 }

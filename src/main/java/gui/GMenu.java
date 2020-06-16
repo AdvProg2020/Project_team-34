@@ -153,6 +153,12 @@ public abstract class GMenu {
         GridPane showingInfoPane = new GridPane();
         int row = 0;
 
+        Label accountTypeLabel  = new Label("Account Type");
+        Label accountTypeValue = new Label(account.getAccountType());
+        showingInfoPane.add(accountTypeLabel, 0, row);
+        showingInfoPane.add(accountTypeValue,1, row);
+        row++;
+
         Label usernameLabel = new Label("Username");
         Label usernameValue = new Label(account.getUserName());
         showingInfoPane.add(usernameLabel, 0, row);

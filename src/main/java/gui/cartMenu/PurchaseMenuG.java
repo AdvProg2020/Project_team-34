@@ -4,6 +4,7 @@ import com.google.gson.internal.$Gson$Preconditions;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -169,10 +170,20 @@ public class PurchaseMenuG extends GMenu {
         anchorPane0.getChildren().add(discountCodeCheckBox);
         HBox hBox18 = new HBox();
         hBox18.setPrefHeight(51.0);
-        hBox18.setPrefWidth(356.0);
+        hBox18.setPrefWidth(300.0);
         hBox18.setLayoutX(517.0);
         hBox18.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox18.setLayoutY(186.0);
+
+        Button submitDiscountCode = new Button();
+        submitDiscountCode.setPrefHeight(33.0);
+        submitDiscountCode.setPrefWidth(134.0);
+        submitDiscountCode.setLayoutX(840.0);
+        submitDiscountCode.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        submitDiscountCode.setLayoutY(188.0);
+        submitDiscountCode.setText("Submit");
+        submitDiscountCode.setMnemonicParsing(false);
+
         TextField discountCodeField = new TextField();
         discountCodeField.setPrefHeight(51.0);
         discountCodeField.setPrefWidth(295.0);
@@ -182,6 +193,7 @@ public class PurchaseMenuG extends GMenu {
 
         // Adding child to parent
         hBox18.getChildren().add(discountCodeField);
+        anchorPane0.getChildren().add(submitDiscountCode);
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox18);
@@ -208,22 +220,48 @@ public class PurchaseMenuG extends GMenu {
         anchorPane0.getChildren().add(purchaseButton);
         gridPane4.setVgap(15);
 
+        Button submitShippingInfo = new Button();
+        submitShippingInfo.setPrefHeight(33.0);
+        submitShippingInfo.setPrefWidth(233.0);
+        submitShippingInfo.setLayoutX(579.0);
+        submitShippingInfo.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        submitShippingInfo.setLayoutY(464.0);
+        submitShippingInfo.setText("Submit shipping info");
+        submitShippingInfo.setMnemonicParsing(false);
+
+        anchorPane0.getChildren().add(submitShippingInfo);
         //Adding controller!
         if(!discountCodeCheckBox.isSelected()){
             discountCodeField.setDisable(true);
         }
 
+        submitDiscountCode.setDisable(true);
+
         discountCodeCheckBox.setOnAction( e -> {
             if(discountCodeCheckBox.isSelected()){
                 discountCodeField.setDisable(false);
+                submitDiscountCode.setDisable(false);
             } else {
                 discountCodeField.setDisable(true);
+                submitDiscountCode.setDisable(true);
             }
         });
 
         cartInfo.setText(controller.getAccountController().controlViewCart().toString());
 
-        purchaseButton.setOnAction( e -> {
+        submitDiscountCode.setOnAction( e -> {
+            try{
+                controller.getAccountController().controlSubmitDiscountCode(discountCodeField.getText());
+                cartInfo.setText(controller.getAccountController().controlViewCart().toString());
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
+            }
+        });
+
+        purchaseButton.setDisable(true);
+
+
+        submitShippingInfo.setOnAction( e -> {
             String firstName = firstNameField.getText();
             String lastName = lastNameField.getText();
             String cityName = cityNameField.getText();
@@ -233,37 +271,27 @@ public class PurchaseMenuG extends GMenu {
 
             try{
                 controller.getAccountController().controlSubmitShippingInfo(firstName,lastName,cityName,address,postalCode,phoneNumber);
+                purchaseButton.setDisable(false);
+                cartInfo.setText(controller.getAccountController().controlViewCart().toString());
             } catch (ExceptionalMassage ex){
-                //
+                new AlertBox(this, ex, controller).showAndWait();
             }
-
-            if(discountCodeCheckBox.isSelected()) {
-                try {
-                    controller.getAccountController().controlSubmitDiscountCode(discountCodeField.getText());
-                    //
-                } catch (ExceptionalMassage ex) {
-
-                }
-            }
-            try{
-                controller.getAccountController().finalizeOrder();
-                //
-            } catch (ExceptionalMassage ex){
-                //
-            }
-
-
-
-
-
         });
 
+        purchaseButton.setOnAction( e -> {
+            try{
+                controller.getAccountController().finalizeOrder();
 
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
+            }
+        });
 
-
-
-
-
+        anchorPane0.onKeyReleasedProperty().set( e -> {
+            boolean isDisable = (firstNameField.getText().trim().equals("") || lastNameField.getText().trim().equals("") || phoneNumberField.getText().trim().equals("") ||
+                    cityNameField.getText().trim().equals("") || addressField.getText().trim().equals("") || postalCodeField.getText().trim().equals(""));
+            submitShippingInfo.setDisable(isDisable);
+        });
 
         return new Scene(anchorPane0);
     }

@@ -47,10 +47,19 @@ public class CustomerProfileGMenu extends GMenu {
         viewDiscountCodesButton.getStyleClass().add("button");
 
 
+        Button editPersonalInfoButton = new Button("Edit Personal Info");
+        editPersonalInfoButton.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+        editPersonalInfoButton.getStyleClass().add("button");
+
+        editPersonalInfoButton.setOnMouseClicked(e->{
+            stage.setScene(new EditPersonalInfoGMenu(this, stage, controller).createScene());
+        });
+
+
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setSpacing(10);
         buttonPane.setPadding(new Insets(10, 10 , 10 , 10));
-        buttonPane.getChildren().addAll(viewCartButton, viewOrdersButton, viewDiscountCodesButton);
+        buttonPane.getChildren().addAll(viewCartButton, viewOrdersButton, viewDiscountCodesButton,editPersonalInfoButton );
 
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 

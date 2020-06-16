@@ -32,6 +32,9 @@ public class SupervisorProfileGMenu extends GMenu {
 
         Button manageAccountButton = new Button("Manage Accounts");
         GMenu.addStyleToButton(manageAccountButton);
+        manageAccountButton.setOnMouseClicked(e->{
+            stage.setScene(new ManageUsersGMenu(this, stage, controller).createScene());
+        });
 
         Button manageCategoryButton = new Button("Manage Category");
         GMenu.addStyleToButton(manageCategoryButton);
@@ -39,17 +42,28 @@ public class SupervisorProfileGMenu extends GMenu {
             stage.setScene(new ManageCategoriesGMenu(this, stage, controller).createScene());
         });
 
+        Button manageRequestButton = new Button("Manage Request");
+        GMenu.addStyleToButton(manageRequestButton);
+        manageRequestButton.setOnMouseClicked(e->{
+            stage.setScene(new ManageRequestsG(this, stage, controller).getScene());
+        });
+
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setSpacing(10);
         buttonPane.setPadding(new Insets(10, 10 , 10 , 10));
-        buttonPane.getChildren().addAll(manageCodedDiscountButton, manageAccountButton, manageCategoryButton);
+        buttonPane.getChildren().addAll(manageCodedDiscountButton, manageAccountButton, manageCategoryButton, manageRequestButton);
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
         mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()), buttonPane);
+        mainPane.setAlignment(Pos.CENTER);
 
-        backgroundLayout.add(createHeader(), 0,0);
+        VBox headerBackground = new VBox();
+        headerBackground.setStyle("-fx-background-color: #4677c8");
+        headerBackground.getChildren().add(createHeader());
+        backgroundLayout.add(headerBackground, 0,0);
         backgroundLayout.add(mainPane, 0, 1);
         backgroundLayout.setAlignment(Pos.CENTER);
+
 
         Scene scene = new Scene(backgroundLayout);
         return scene;

@@ -76,7 +76,10 @@ public class CustomerProfileGMenu extends GMenu {
         mainPane.setPadding(new Insets(10, 10 , 10 , 10));
         mainPane.setAlignment(Pos.CENTER);
 
-        backgroundLayout.add(createHeader(), 0,0);
+        VBox headerBackground = new VBox();
+        headerBackground.setStyle("-fx-background-color: #4677c8");
+        headerBackground.getChildren().add(createHeader());
+        backgroundLayout.add(headerBackground, 0,0);
         backgroundLayout.add(mainPane, 0, 1);
         backgroundLayout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(backgroundLayout);

@@ -5,6 +5,7 @@ import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -23,15 +24,37 @@ public class SupplierProfileGMenu extends GMenu {
         VBox viewPane = new VBox();
 
 
+        Button viewProductsForThisSupplier = new Button("View My Products");
+        GMenu.addStyleToButton(viewProductsForThisSupplier);
+        viewProductsForThisSupplier.setOnMouseClicked(e->{
+//            stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).createScene());
+        });
+
+        Button viewLogButton = new Button("View Log");
+        GMenu.addStyleToButton(viewLogButton);
+        viewLogButton.setOnMouseClicked(e->{
+            stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).createScene());
+        });
+
+        Button editPersonalInfoButton = new Button("Edit Personal Info");
+        GMenu.addStyleToButton(editPersonalInfoButton);
+        editPersonalInfoButton.setOnMouseClicked(e->{
+            stage.setScene(new EditPersonalInfoGMenu(this, stage, controller).createScene());
+        });
+
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setSpacing(10);
         buttonPane.setPadding(new Insets(10, 10 , 10 , 10));
-        buttonPane.getChildren().addAll();
+        buttonPane.getChildren().addAll(viewProductsForThisSupplier,viewLogButton, editPersonalInfoButton);
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
         mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()), buttonPane);
+        mainPane.setAlignment(Pos.CENTER);
 
-        backgroundLayout.add(createHeader(), 0,0);
+        VBox headerBackground = new VBox();
+        headerBackground.setStyle("-fx-background-color: #4677c8");
+        headerBackground.getChildren().add(createHeader());
+        backgroundLayout.add(headerBackground, 0,0);
         backgroundLayout.add(mainPane, 0, 1);
         backgroundLayout.setAlignment(Pos.CENTER);
 

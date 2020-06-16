@@ -31,25 +31,21 @@ public class CustomerProfileGMenu extends GMenu {
         VBox viewPane = new VBox();
 
         Button viewCartButton = new Button("View cart");
-        viewCartButton.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        viewCartButton.getStyleClass().add("button");
+        GMenu.addStyleToButton(viewCartButton);
 
         Button viewOrdersButton = new Button("View Orders");
-        viewOrdersButton.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        viewOrdersButton.getStyleClass().add("button");
+        GMenu.addStyleToButton(viewOrdersButton);
 
 //        Button viewBalanceButton = new Button("View Balance");
 //        viewBalanceButton.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
 //        viewBalanceButton.getStyleClass().add("button");
 
         Button viewDiscountCodesButton = new Button("View Discount Codes");
-        viewDiscountCodesButton.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        viewDiscountCodesButton.getStyleClass().add("button");
+        GMenu.addStyleToButton(viewDiscountCodesButton);
 
 
         Button editPersonalInfoButton = new Button("Edit Personal Info");
-        editPersonalInfoButton.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        editPersonalInfoButton.getStyleClass().add("button");
+        GMenu.addStyleToButton(editPersonalInfoButton);
 
         editPersonalInfoButton.setOnMouseClicked(e->{
             stage.setScene(new EditPersonalInfoGMenu(this, stage, controller).createScene());

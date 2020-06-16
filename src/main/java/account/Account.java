@@ -1,6 +1,8 @@
 package account;
 
 import database.AccountDataBase;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 
@@ -167,5 +169,35 @@ public abstract class Account {
         if(this instanceof Supervisor)
             return "Supervisor";
         return "Supplier";
+    }
+
+    public static ObservableList<Supervisor> getSupervisorsObservableList() {
+        ObservableList<Supervisor> allSupervisors = FXCollections.observableArrayList();
+        for (Account account: allAccounts) {
+            if (account instanceof Supervisor) {
+                allSupervisors.add((Supervisor) account);
+            }
+        }
+        return allSupervisors;
+    }
+
+    public static ObservableList<Supplier> getSuppliersObservableList() {
+        ObservableList<Supplier> allSuppliers = FXCollections.observableArrayList();
+        for (Account account: allAccounts) {
+            if (account instanceof Supplier) {
+                allSuppliers.add((Supplier) account);
+            }
+        }
+        return allSuppliers;
+    }
+
+    public static ObservableList<Customer> getCustomersObservableList() {
+        ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+        for (Account account: allAccounts) {
+            if (account instanceof Customer) {
+                allCustomers.add((Customer) account);
+            }
+        }
+        return allCustomers;
     }
 }

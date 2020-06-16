@@ -1,9 +1,13 @@
 package gui.loginMenu;
 
+import account.Supervisor;
+import account.Supplier;
 import com.google.gson.internal.$Gson$Preconditions;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
+import gui.cartMenu.CartGMenu;
 import gui.mainMenu.MainMenuG;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -159,10 +163,15 @@ public class LoginGMenu extends GMenu {
             String password = passwordField.getText();
             try {
                 controller.getAccountController().controlLogin(username, password);
-                stage.setScene(parentMenu.getScene());
+                if((controller.getAccount() instanceof Supplier || controller.getAccount() instanceof Supervisor) && parentMenu instanceof CartGMenu) {
+                    stage.setScene(new MainMenuG(null, stage, controller).getScene());
+                } else {
+                    stage.setScene(parentMenu.getScene());
+                }
             } catch (ExceptionalMassage ex){
-                System.out.println(ex.getMessage());
+                new AlertBox(this, ex, controller).showAndWait();
             }
+            passwordField.clear();
         });
 
 

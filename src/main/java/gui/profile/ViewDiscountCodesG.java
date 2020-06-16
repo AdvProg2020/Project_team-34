@@ -9,13 +9,18 @@ import gui.GMenu;
 import gui.alerts.AlertBox;
 import javafx.animation.ScaleTransition;
 import javafx.collections.ObservableList;
+import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
@@ -125,8 +130,18 @@ public class ViewDiscountCodesG extends GMenu {
             ObservableList<String> codes = listView3.getSelectionModel().getSelectedItems();
             for (String code : codes) {
                 try {
+
+                    Image logoImage = null;
+                    try {
+                        logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
+                    } catch (FileNotFoundException exc) {
+                    }
+
                     Stage newStage = new Stage();
+                    newStage.initModality(Modality.APPLICATION_MODAL);
                     newStage.setScene(createEditMenu(controller.getOffController().controlGetDiscountByCode(code)));
+                    newStage.getIcons().add(logoImage);
+                    newStage.setTitle("Edit discount code");
                     newStage.showAndWait();
 
                 }catch (ExceptionalMassage ex){
@@ -140,9 +155,19 @@ public class ViewDiscountCodesG extends GMenu {
         });
 
         createButton.setOnAction(e -> {
+            Image logoImage = null;
+            try {
+                logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
+            } catch (FileNotFoundException exc) {
+            }
+
             Stage newStage = new Stage();
+            newStage.initModality(Modality.APPLICATION_MODAL);
             newStage.setScene(createCreateMenu());
+            newStage.getIcons().add(logoImage);
+            newStage.setTitle("Create coded discount");
             newStage.showAndWait();
+
             listView3.getItems().clear();
             for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
                 listView3.getItems().add(codedDiscount.getDiscountCode());

@@ -63,7 +63,10 @@ public class OffController {
         CodedDiscount.removeCodeFromList(controlGetDiscountByCode(code));
     }
 
-    public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products){
+    public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products) throws ExceptionalMassage{
+        if (products.size() == 0){
+            throw new ExceptionalMassage("Select at least one product!");
+        }
         Sale newSale = new Sale((Supplier)mainController.getAccount(),startDate,endDate,percent,null);
         for (Product product : products) {
             newSale.addProductToSale(product);

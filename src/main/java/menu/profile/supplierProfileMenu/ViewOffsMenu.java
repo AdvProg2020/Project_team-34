@@ -160,7 +160,11 @@ public class ViewOffsMenu extends Menu {
                     }
                     System.out.println("Enter the adding products IDs :");
                 }
-                controller.getOffController().controlCreateSale(startDate, endDate, percent, addingProduct);
+                try {
+                    controller.getOffController().controlCreateSale(startDate, endDate, percent, addingProduct);
+                } catch (ExceptionalMassage ex){
+                    System.out.println(ex.getMessage());
+                }
                 parentMenu.show();
                 parentMenu.execute();
             }

@@ -39,6 +39,11 @@ public class RegisterGMenu extends GMenu {
         hBox1.setPrefHeight(102.0);
         hBox1.setPrefWidth(883.0);
         hBox1.setStyle("-fx-background-color: #4477c8;");
+        HBox header = createHeader();
+        hBox1.getChildren().add(header);
+
+
+
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
@@ -325,7 +330,7 @@ public class RegisterGMenu extends GMenu {
                 String password = passwordField.getText();
                 String companyName = companyNameField.getText();
                 try{
-                    controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,0,companyName);
+                    controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,1,companyName);
                     stage.close();
                     parentStage.setScene(new MainMenuG(null, stage, controller).getScene());
                 }catch (ExceptionalMassage ex){

@@ -325,7 +325,7 @@ public class RegisterGMenu extends GMenu {
                 String password = passwordField.getText();
                 String companyName = companyNameField.getText();
                 try{
-                    controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,0,companyName);
+                    controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,1,companyName);
                     stage.setScene(new MainMenuG(null, stage, controller).getScene());
                 }catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();

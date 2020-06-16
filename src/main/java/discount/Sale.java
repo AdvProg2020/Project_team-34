@@ -44,6 +44,7 @@ public class Sale extends Discount{
         this.offId = offId;
         this.products = products;
         this.state = state;
+        sales.add(this);
     }
 
     private String generateOffId(){
@@ -245,10 +246,13 @@ public class Sale extends Discount{
 
     @Override
     public String toString() {
-        return "offId=" + offId + "\n" +
-                ", products=" + products +
+        String returning = "offId=" + offId + "\n" +
                 ", state=" + state +
                 ", percent=" + percent +
                 '}';
+        for (Product product : products) {
+            returning += product.getName() + '\n';
+        }
+        return returning;
     }
 }

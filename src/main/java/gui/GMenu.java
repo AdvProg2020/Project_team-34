@@ -16,10 +16,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuBar;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
@@ -28,6 +25,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
@@ -225,6 +223,13 @@ public abstract class GMenu {
 
         return scene;
     }
+
+
+    public static void addStyleToButton(Button button){
+        button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+        button.getStyleClass().add("button");
+    }
+
 
     public void showAndWait() {
         stage.initModality(Modality.APPLICATION_MODAL);

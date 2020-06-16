@@ -370,16 +370,19 @@ public class Product {
 
     @Override
     public String toString() {
-        return "Product{" +
+        String returning =  "Product{" +
                 "numberOfViews=" + numberOfViews +
                 ", productId='" + productId + '\'' +
                 ", name='" + name + '\'' +
                 ", nameOfCompany='" + nameOfCompany + '\'' +
                 ", priceForEachSupplier=" + priceForEachSupplier +
-                ", listOfSuppliers=" + listOfSuppliers +
                 ", remainedNumberForEachSupplier=" + remainedNumberForEachSupplier +
                 ", description='" + description + '\'' +
                 ", specification=" + specification +
-                '}';
+                '}' + '\'';
+        for (Supplier listOfSupplier : listOfSuppliers) {
+            returning += listOfSupplier.getUserName() + '\n';
+        }
+        return returning;
     }
 }

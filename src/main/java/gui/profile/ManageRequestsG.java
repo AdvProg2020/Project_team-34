@@ -36,6 +36,9 @@ public class ManageRequestsG extends GMenu {
         hBox1.setPrefWidth(850.0);
         hBox1.setStyle("-fx-background-color: #4477c8;");
 
+        HBox hbox = createHeader();
+        hBox1.getChildren().add(hbox);
+
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
         HBox hBox2 = new HBox();
@@ -101,31 +104,38 @@ public class ManageRequestsG extends GMenu {
         }
 
         acceptButton.setOnAction( e -> {
-            ObservableList<String> ids = requests.getItems();
+            ObservableList<String> ids = requests.getSelectionModel().getSelectedItems();
             for (String id : ids) {
                 try {
                     controller.getProductController().controlAcceptOrDeclineRequest(id, true);
+                    stage.setScene(new ManageRequestsG(parentMenu, stage, controller).getScene());
                 } catch (ExceptionalMassage ex){
-                    //
+                    new AlertBox(this, ex, controller).showAndWait();
                 }
             }
-
         });
 
         rejectButton.setOnAction( e -> {
-            ObservableList<String> ids = requests.getItems();
+            ObservableList<String> ids = requests.getSelectionModel().getSelectedItems();
             for (String id : ids) {
                 try {
                     controller.getProductController().controlAcceptOrDeclineRequest(id, false);
+                    stage.setScene(new ManageRequestsG(parentMenu, stage, controller).getScene());
                 } catch (ExceptionalMassage ex){
-                    //
+                    new AlertBox(this, ex, controller).showAndWait();
                 }
             }
 
         });
 
         detailsButton.setOnAction( e -> {
-            //show details of requests!
+            ObservableList<String> ids = requests.getSelectionModel().getSelectedItems();
+            for (String id : ids) {
+                Stage newStage = new Stage();
+                newStage.setScene(createDetails(id));
+                newStage.showAndWait();
+            }
+
         });
 
 

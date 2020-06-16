@@ -3,6 +3,7 @@ package main;
 import controller.Controller;
 import database.DataBase;
 import gui.mainMenu.MainMenuG;
+import gui.profile.ManageRequestsG;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -63,10 +64,10 @@ public class Main extends Application {
 //        stage.setScene(menu.getScene());
 //        stage.show();
 
-
+        ManageRequestsG menu1 = new ManageRequestsG(null, stage, new Controller());
         MainMenuG menu = new MainMenuG( null, stage, new Controller());
 
-        stage.setScene(new Scene(menu.createHeader()));
+        stage.setScene(menu.getScene());
         stage.show();
 
 //        CustomerProfileGMenu menu = new CustomerProfileGMenu("All Product GMenu" , null, stage);

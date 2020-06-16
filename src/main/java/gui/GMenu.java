@@ -11,6 +11,7 @@ import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
 import gui.profile.CustomerProfileGMenu;
+import gui.profile.ManageCategoriesGMenu;
 import gui.profile.SupervisorProfileGMenu;
 import gui.profile.SupplierProfileGMenu;
 import javafx.geometry.Insets;
@@ -68,7 +69,8 @@ public abstract class GMenu {
         user.setGraphic(userView);
         MenuItem signIn = new MenuItem("Sign In / Sign Up");
         MenuItem signOut = new MenuItem("Sign out");
-        MenuItem ViewPersonalInfo = new MenuItem("View Personal Info");
+        MenuItem viewPersonalInfo = new MenuItem("View Personal Info");
+        MenuItem manageCategories = new MenuItem("Manage Categories");
 
         logoView.setOnMouseClicked(e ->
                 stage.setScene(new MainMenuG( this, stage,controller).getScene()));
@@ -100,14 +102,15 @@ public abstract class GMenu {
         if (!controller.getAccountController().hasSomeOneLoggedIn()) {
             user.getItems().add(signIn);
         } else if (controller.getAccountController().getAccount() instanceof Customer) {
-            user.getItems().addAll(ViewPersonalInfo, signOut);
-            ViewPersonalInfo.setOnAction(e -> stage.setScene(new CustomerProfileGMenu(this, stage, controller).getScene()));
+            user.getItems().addAll(viewPersonalInfo, signOut);
+            viewPersonalInfo.setOnAction(e -> stage.setScene(new CustomerProfileGMenu(this, stage, controller).getScene()));
         } else if (controller.getAccountController().getAccount() instanceof Supervisor) {
-            user.getItems().addAll(ViewPersonalInfo, signOut);
-            ViewPersonalInfo.setOnAction(e -> stage.setScene(new SupervisorProfileGMenu(this, stage, controller).getScene()));
+            user.getItems().addAll(viewPersonalInfo, manageCategories, signOut);
+            viewPersonalInfo.setOnAction(e -> stage.setScene(new SupervisorProfileGMenu(this, stage, controller).getScene()));
+            manageCategories.setOnAction(e -> stage.setScene(new ManageCategoriesGMenu(this, stage, controller).getScene()));
         } else if (controller.getAccountController().getAccount() instanceof Supplier) {
-            user.getItems().addAll(ViewPersonalInfo, signOut);
-            ViewPersonalInfo.setOnAction(e -> stage.setScene(new SupplierProfileGMenu(this, stage, controller).getScene()));
+            user.getItems().addAll(viewPersonalInfo, signOut);
+            viewPersonalInfo.setOnAction(e -> stage.setScene(new SupplierProfileGMenu(this, stage, controller).getScene()));
         }
 
         hBox.setMinWidth(450);

@@ -466,4 +466,16 @@ public class ProductController {
     public ArrayList<String> controlGetAllCategoriesName() {
         return Category.getAllCategoriesName();
     }
+
+    public String controlGetCategoryParentName(String name) {
+        return Category.getCategoryByName(name).getParentCategoryName();
+    }
+
+    public boolean isThisCategoryClassifier(String name) {
+        return Category.getCategoryByName(name).isCategoryClassifier();
+    }
+
+    public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) {
+        return Category.getCategoryByName(name).getSpecialFields();
+    }
 }

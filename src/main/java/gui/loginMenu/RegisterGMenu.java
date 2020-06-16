@@ -3,6 +3,10 @@ package gui.loginMenu;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
+import gui.mainMenu.MainMenuG;
+import javafx.beans.binding.Bindings;
+import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -11,6 +15,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import main.Main;
 import menu.menuAbstract.Menu;
 
 import static javafx.scene.shape.StrokeType.OUTSIDE;
@@ -276,13 +281,21 @@ public class RegisterGMenu extends GMenu {
         customerButton.setOnMouseClicked(e ->{
             companyNameField.setDisable(true);
             creditField.setDisable(false);
+            companyNameField.clear();
+            creditField.clear();
         });
 
         supplierButton.setOnMouseClicked(e ->{
             companyNameField.setDisable(false);
             creditField.setDisable(true);
+            companyNameField.clear();
+            creditField.clear();
         });
         // Adding Controller
+
+        signUpButton.setDisable(true);
+
+
         signUpButton.setOnAction(e -> {
             if(((RadioButton)accountType.getSelectedToggle()).getText().equals("Customer")){
                 String firstName = firstNameField.getText();
@@ -296,11 +309,12 @@ public class RegisterGMenu extends GMenu {
                     int credit = Integer.parseInt(creditField.getText());
                     try{
                         controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,credit,companyName);
+                        stage.setScene(new MainMenuG(null, stage, controller).getScene());
                     }catch (ExceptionalMassage ex){
-                        System.out.println(ex.getMessage());
+                        new AlertBox(this, ex, controller).showAndWait();
                     }
                 } catch (NumberFormatException ex){
-                    System.out.println(ex.getMessage());
+                    new AlertBox(this, "Enter number for credit, please","OK",controller).showAndWait();
                 }
             } else {
                 String firstName = firstNameField.getText();
@@ -312,10 +326,12 @@ public class RegisterGMenu extends GMenu {
                 String companyName = companyNameField.getText();
                 try{
                     controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,0,companyName);
+                    stage.setScene(new MainMenuG(null, stage, controller).getScene());
                 }catch (ExceptionalMassage ex){
-                    System.out.println(ex.getMessage());
+                    new AlertBox(this, ex, controller).showAndWait();
                 }
             }
+            passwordField.clear();
 
         });
 
@@ -324,7 +340,17 @@ public class RegisterGMenu extends GMenu {
             stage.setScene(new LoginGMenu( this , stage, controller).getScene());
         });
 
+
         anchorPane0.getChildren().add(text29);
+        anchorPane0.onKeyReleasedProperty().set( e -> {
+            boolean isDisable = (firstNameField.getText().trim().equals("") || lastNameField.getText().trim().equals("") || phoneNumber.getText().trim().equals("") ||
+                    emailField.getText().trim().equals("") || usernameField.getText().trim().equals("") || passwordField.getText().trim().equals("") ||
+                     (!creditField.isDisable() && creditField.getText().trim().equals("")) || (!companyNameField.isDisable() && companyNameField.getText().trim().equals("")));
+            signUpButton.setDisable(isDisable);
+        });
+
+
+
         GridPane background = new GridPane();
         background.setAlignment(Pos.CENTER);
         background.getChildren().add(anchorPane0);

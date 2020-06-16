@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.control.SelectionMode;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
@@ -97,6 +98,8 @@ public class ManageRequestsG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(rejectButton);
+
+        requests.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         // Adding controller
         for (String s : controller.getProductController().controlGetArrayOfRequestId()) {

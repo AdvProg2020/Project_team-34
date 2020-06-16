@@ -1,13 +1,22 @@
 package gui.profile;
 
 import controller.Controller;
+import discount.CodedDiscount;
 import discount.Sale;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
+
+import java.util.ArrayList;
+
+import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class ViewOffsGMenu extends GMenu {
 
@@ -51,42 +60,46 @@ public class ViewOffsGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(label4);
-        Button button5 = new Button();
-        button5.setPrefHeight(33.0);
-        button5.setPrefWidth(233.0);
-        button5.setLayoutX(505.0);
-        button5.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button5.setLayoutY(394.0);
-        button5.setText("View details");
-        button5.setMnemonicParsing(false);
+        Button detailsButton = new Button();
+        detailsButton.setPrefHeight(33.0);
+        detailsButton.setPrefWidth(233.0);
+        detailsButton.setLayoutX(505.0);
+        detailsButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        detailsButton.setLayoutY(394.0);
+        detailsButton.setText("View details");
+        detailsButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(button5);
-        Button button6 = new Button();
-        button6.setPrefHeight(33.0);
-        button6.setPrefWidth(233.0);
-        button6.setLayoutX(505.0);
-        button6.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button6.setLayoutY(519.0);
-        button6.setText("Create");
-        button6.setMnemonicParsing(false);
+        anchorPane0.getChildren().add(detailsButton);
+        Button createButton = new Button();
+        createButton.setPrefHeight(33.0);
+        createButton.setPrefWidth(233.0);
+        createButton.setLayoutX(505.0);
+        createButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        createButton.setLayoutY(519.0);
+        createButton.setText("Create");
+        createButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(button6);
-        Button button7 = new Button();
-        button7.setPrefHeight(33.0);
-        button7.setPrefWidth(233.0);
-        button7.setLayoutX(505.0);
-        button7.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button7.setLayoutY(457.0);
-        button7.setText("Edit");
-        button7.setMnemonicParsing(false);
+        anchorPane0.getChildren().add(createButton);
+        Button editButton = new Button();
+        editButton.setPrefHeight(33.0);
+        editButton.setPrefWidth(233.0);
+        editButton.setLayoutX(505.0);
+        editButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        editButton.setLayoutY(457.0);
+        editButton.setText("Edit");
+        editButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(button7);
+        anchorPane0.getChildren().add(editButton);
+
+
 
         return new Scene(anchorPane0);
     }
+
+
 
     private Scene createEdit(Sale sale){
         AnchorPane anchorPane0 = new AnchorPane();

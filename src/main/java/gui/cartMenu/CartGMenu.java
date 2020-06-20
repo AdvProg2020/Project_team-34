@@ -1,30 +1,20 @@
 package gui.cartMenu;
 
 import account.Supplier;
-import account.Supplier;
-import cart.Cart;
-import cart.ProductInCart;
-import com.google.gson.internal.$Gson$Preconditions;
-import controller.Controller;
 import cart.ProductInCart;
 import controller.Controller;
-import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import product.Product;
 
-import java.io.File;
-import java.io.PushbackInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.Callable;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
 
@@ -122,12 +112,12 @@ public class CartGMenu extends GMenu {
         ProductInCart newProductInCart = new ProductInCart(product, supplier);
         productInCarts.add(newProductInCart);
         for (ProductInCart productInCart : productInCarts) {
-            productsInCartPane.getChildren().add(createHBox(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane));
+            productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane));
         }
         return productsInCartPane;
     }
 
-    private static GridPane createHBox(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
+    private static GridPane createProductGridPane(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
         Label IdLabel = new Label(product.getProductId());

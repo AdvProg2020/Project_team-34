@@ -420,4 +420,8 @@ public class AccountController {
             return 0;
         }
     }
+
+    public void controlClearCart(){
+//        mainController.getCart().;
+    }
 }

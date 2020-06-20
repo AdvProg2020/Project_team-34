@@ -316,12 +316,11 @@ public class ManageProductsSupplierGMenu extends GMenu {
         hBox13.setPrefHeight(51.0);
         hBox13.setPrefWidth(356.0);
         hBox13.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        TextField categoryField = new TextField();
+        ComboBox<String> categoryField = allProductClassifierCategoriesChoiceBox();
         categoryField.setPrefHeight(51.0);
-        categoryField.setPrefWidth(295.0);
-        categoryField.setStyle("-fx-background-color: transparent;");
+        categoryField.setPrefWidth(356.0);
+        //categoryField.setStyle("-fx-background-color: transparent;");
         categoryField.setOpacity(0.83);
-        categoryField.setPromptText("Category name");
 
         // Adding child to parent
         hBox13.getChildren().add(categoryField);
@@ -489,7 +488,7 @@ public class ManageProductsSupplierGMenu extends GMenu {
         createButton.setOnAction( e -> {
             String name = nameField.getText();
             String companyName = nameOfCompanyField.getText();
-            String categoryName = categoryField.getText();
+            String categoryName = categoryField.getValue();
             String description = descriptionField.getText();
             try{
                 int price = Integer.parseInt(priceField.getText());
@@ -507,5 +506,12 @@ public class ManageProductsSupplierGMenu extends GMenu {
 
         return new Scene(anchorPane0);
 
+    }
+
+    private ComboBox<String> allProductClassifierCategoriesChoiceBox() {
+        ComboBox<String> choiceBox = new ComboBox<>();
+        choiceBox.getItems().addAll(controller.getProductController().controlGetAllProductCategoriesName());
+        choiceBox.setPromptText("Choose Category");
+        return choiceBox;
     }
 }

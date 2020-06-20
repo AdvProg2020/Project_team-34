@@ -35,8 +35,6 @@ public class RegisterGMenu extends GMenu {
         hBox1.setPrefHeight(102.0);
         hBox1.setPrefWidth(883.0);
         hBox1.setStyle("-fx-background-color: #4477c8;");
-        HBox header = createHeader();
-        hBox1.getChildren().add(header);
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
@@ -236,24 +234,6 @@ public class RegisterGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(signUpButton);
-        Text singInText = new Text();
-        singInText.setStrokeWidth(0.0);
-        singInText.setStrokeType(OUTSIDE);
-        singInText.setUnderline(true);
-        singInText.setLayoutX(309.0);
-        singInText.setStyle("-fx-fill: #4678c8;");
-        singInText.setLayoutY(514.0);
-        singInText.setText("Sign In!");
-
-        // Adding child to parent
-        anchorPane0.getChildren().add(singInText);
-        Text text29 = new Text();
-        text29.setStrokeWidth(0.0);
-        text29.setStrokeType(OUTSIDE);
-        text29.setLayoutX(116.0);
-        text29.setLayoutY(514.0);
-        text29.setText("Already have an account?");
-        text29.setWrappingWidth(202.6708984375);
 
         // Adding child to parent
         gridPane6.setVgap(10);
@@ -327,12 +307,8 @@ public class RegisterGMenu extends GMenu {
         });
 
 
-        singInText.setOnMouseClicked(e -> {
-            stage.setScene(new LoginGMenu(parentMenu, popUpCallerStage, controller).getScene());
-        });
 
 
-        anchorPane0.getChildren().add(text29);
         anchorPane0.onKeyReleasedProperty().set( e -> {
             boolean isDisable = (firstNameField.getText().trim().equals("") || lastNameField.getText().trim().equals("") || phoneNumber.getText().trim().equals("") ||
                     emailField.getText().trim().equals("") || usernameField.getText().trim().equals("") || passwordField.getText().trim().equals("") ||

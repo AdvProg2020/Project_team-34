@@ -18,6 +18,11 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.2
+ */
+
 public class EditCategoryGMenu extends GMenu {
     private String editingCatName;
     private HashMap<String, ArrayList<String>> fields;

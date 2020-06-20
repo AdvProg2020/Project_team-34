@@ -12,6 +12,11 @@ import javafx.stage.Stage;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.2
+ */
+
 public class ViewLogsForSupervisorGMenu extends GMenu {
     public ViewLogsForSupervisorGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Logs, Supervisor", parentMenu, stage, controller);

@@ -2,22 +2,20 @@ package gui.alerts;
 
 import controller.Controller;
 import gui.GMenu;
-import javafx.event.Event;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import menu.menuAbstract.Menu;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.2
+ */
 
 public class ChoiceBox extends GMenu {
     private String question;

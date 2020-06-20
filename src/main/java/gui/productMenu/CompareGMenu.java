@@ -62,8 +62,8 @@ public class CompareGMenu extends GMenu {
         mainLayout.setAlignment(Pos.CENTER);
         mainLayout.getChildren().addAll(createHeader(), compareTable);
 
-        backgroundLayout.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
-        backgroundLayout.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+//        backgroundLayout.setVbarPolicy(ScrollPane.ScrollBarPolicy.AS_NEEDED);
+//        backgroundLayout.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         backgroundLayout.setContent(mainLayout);
 
         return scene;

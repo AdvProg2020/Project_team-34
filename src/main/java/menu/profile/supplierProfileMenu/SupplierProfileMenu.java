@@ -54,6 +54,7 @@ public class SupplierProfileMenu extends ProfileMenu {
         menusIn.put("^manage products$", new ManageProductsMenu(this));
         menuForShow.add("Manage Products");
 
+
         Menu AddProduct = new Menu("Add Product", this) {
             @Override
             public void show() {
@@ -87,11 +88,12 @@ public class SupplierProfileMenu extends ProfileMenu {
                 try {
                     price = Integer.parseInt(priceIO);
                     numbers = Integer.parseInt(numberIO);
+                    /*
                     try {
                         controller.getProductController().controlAddProduct(productName, nameOfCompany, price, numbers, categoryName, description, specifications);
                     } catch (ExceptionalMassage ex){
                         System.out.println(ex.getMessage());
-                    }
+                    } */
                 } catch (NumberFormatException e) {
                     System.out.println("you must enter integer for values of price and remained number.");
                 }

@@ -422,6 +422,6 @@ public class AccountController {
     }
 
     public void controlClearCart(){
-//        mainController.getCart().;
+        mainController.getCart().clear();
     }
 }

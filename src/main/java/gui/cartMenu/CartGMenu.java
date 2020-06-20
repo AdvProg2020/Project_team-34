@@ -70,6 +70,7 @@ public class CartGMenu extends GMenu {
         buttonPane.add(placeOrder, 1, 3);
 
         placeOrder.setOnMouseClicked(e -> {
+            controller.getAccountController().controlViewCart().update();
             if (controller.getAccountController().hasSomeOneLoggedIn()) {
                 stage.setScene(new PurchaseMenuG(this, stage, controller).getScene());
             } else {
@@ -86,6 +87,8 @@ public class CartGMenu extends GMenu {
         updateCart.setText("Update Cart");
 //        updateCart.setMnemonicParsing(false);
         GMenu.addStyleToButton(updateCart);
+
+
 
         buttonPane.add(updateCart, 2, 3);
 

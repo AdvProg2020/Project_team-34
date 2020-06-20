@@ -8,7 +8,6 @@ import gui.mainMenu.MainMenuG;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
-import menu.mainMenu.MainMenu;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -20,22 +19,13 @@ public class Main extends Application {
     private static final long WEEK = 7*24*3600*1000;
 
     public static void main(String[] args)  {
-
         DataBase.createNewTablesToStart();
         DataBase.importAllData();
         timeProgramWasOpened = System.currentTimeMillis();
         if(timeProgramWasOpened - timeBeginning > timesDiscountCodeGenerated * WEEK ){
             generateRandomCodes();
         }
-        //run();
         launch(args);
-
-    }
-
-    private static void run() {
-        MainMenu mainMenu = new MainMenu();
-        mainMenu.show();
-        mainMenu.execute();
     }
 
     private static void generateRandomCodes(){

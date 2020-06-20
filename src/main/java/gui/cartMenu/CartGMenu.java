@@ -52,10 +52,17 @@ public class CartGMenu extends GMenu {
         buttonPane.setHgap(100);
 
 
+
+        productsInCartPane = createProductsInCartPane(controller);
+
         Button clearCart = new Button();
         clearCart.setText("Clear Cart");
         GMenu.addStyleToButton(clearCart);
         buttonPane.add(clearCart, 0, 3);
+        clearCart.setOnMouseClicked(e->{
+            productsInCartPane.getChildren().clear();
+            controller.getAccountController().controlClearCart();
+        });
 
         Button placeOrder = new Button();
         placeOrder.setText("Place Order");
@@ -68,7 +75,6 @@ public class CartGMenu extends GMenu {
             } else {
                 stage.setScene(new LoginGMenu(this, stage, controller).getScene());
             }
-
         });
 
 
@@ -83,7 +89,6 @@ public class CartGMenu extends GMenu {
 
         buttonPane.add(updateCart, 2, 3);
 
-        productsInCartPane = createProductsInCartPane(controller);
 
 
         backgroundLayout.add( createHeader(), 0,0);
@@ -103,6 +108,8 @@ public class CartGMenu extends GMenu {
         label.setAlignment(Pos.CENTER);
 
         productsInCartPane.getChildren().add(label);
+        productsInCartPane.setSpacing(20);
+        productsInCartPane.setAlignment(Pos.CENTER);
 
         productsInCartPane.getChildren().add(createTableHeader());
 
@@ -112,12 +119,12 @@ public class CartGMenu extends GMenu {
         ProductInCart newProductInCart = new ProductInCart(product, supplier);
         productInCarts.add(newProductInCart);
         for (ProductInCart productInCart : productInCarts) {
-            productsInCartPane.getChildren().add(createHBox(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller));
+            productsInCartPane.getChildren().add(createHBox(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane));
         }
         return productsInCartPane;
     }
 
-    private static GridPane createHBox(ProductInCart productInCart, int count, Controller controller) {
+    private static GridPane createHBox(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
         Label IdLabel = new Label(product.getProductId());
@@ -141,19 +148,26 @@ public class CartGMenu extends GMenu {
         gridPane.add(decrement, column, 2);
 
         increment.setOnMouseClicked(e->{
-            try {
-                controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
-            } catch (ExceptionalMassage exceptionalMassage) {
-                exceptionalMassage.printStackTrace();
-            }
+//            try {
+//                controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
+                countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) + 1));
+                if(countLabel.getText().equals("0"))
+                    productInCartPane.getChildren().remove(gridPane);
+
+//            } catch (ExceptionalMassage exceptionalMassage) {
+//                exceptionalMassage.printStackTrace();
+//            }
         });
 
         decrement.setOnMouseClicked(e->{
-            try {
-                controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
-            } catch (ExceptionalMassage exceptionalMassage) {
-                exceptionalMassage.printStackTrace();
-            }
+//            try {
+//                controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
+                    countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
+                    if(countLabel.getText().equals("0"))
+                        productInCartPane.getChildren().remove(gridPane);
+//            } catch (ExceptionalMassage exceptionalMassage) {
+//                exceptionalMassage.printStackTrace();
+//            }
         });
 
         gridPane.setHgap(70);
@@ -164,7 +178,7 @@ public class CartGMenu extends GMenu {
 
     private static HBox createTableHeader(){
         HBox hBox = new HBox();
-        Label idLabel = new Label("Product Id");
+        Label idLabel = new Label("      Product Id");
         Label nameLabel = new Label("Product Name");
         Label priceLabel = new Label("Price");
         Label countLabel = new Label("Count");

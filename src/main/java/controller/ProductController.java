@@ -448,6 +448,16 @@ public class ProductController {
         return Category.getAllCategoriesName();
     }
 
+    public ArrayList<String> controlGetAllProductCategoriesName() {
+        ArrayList<String> allProductCategoriesName = new ArrayList<>();
+        for (String categoryName : Category.getAllCategoriesName()) {
+            if (!Category.getCategoryByName(categoryName).isCategoryClassifier()) {
+                allProductCategoriesName.add(categoryName);
+            }
+        }
+        return allProductCategoriesName;
+    }
+
     public String controlGetCategoryParentName(String name) {
         return Category.getCategoryByName(name).getParentCategoryName();
     }

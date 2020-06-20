@@ -44,6 +44,9 @@ public class ManageProductsSupplierGMenu extends GMenu {
         hBox1.setPrefWidth(850.0);
         hBox1.setStyle("-fx-background-color: #4477c8;");
 
+        HBox header = createHeader();
+        hBox1.getChildren().add(header);
+
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
         HBox hBox2 = new HBox();
@@ -491,11 +494,11 @@ public class ManageProductsSupplierGMenu extends GMenu {
             try{
                 int price = Integer.parseInt(priceField.getText());
                 int remainedNumber = Integer.parseInt(remainedNumberField.getText());
-                //try{
-
-                //}  catch (ExceptionalMassage ex){
-
-                //}
+                try{
+                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,selectedImage[0].getAbsolutePath());
+                }  catch (ExceptionalMassage ex){
+                    new AlertBox(this, ex, controller).showAndWait();
+                }
             } catch (NumberFormatException ex){
                 new AlertBox(this, "Enter number for price or remained number, please","OK",controller).showAndWait();
 

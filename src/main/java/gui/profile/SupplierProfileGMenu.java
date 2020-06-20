@@ -27,7 +27,7 @@ public class SupplierProfileGMenu extends GMenu {
         Button viewProductsForThisSupplier = new Button("View My Products");
         GMenu.addStyleToButton(viewProductsForThisSupplier);
         viewProductsForThisSupplier.setOnMouseClicked(e->{
-//            stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).createScene());
+            stage.setScene(new ManageProductsSupplierGMenu(this, stage, controller).createScene());
         });
 
         Button viewLogButton = new Button("View Log");

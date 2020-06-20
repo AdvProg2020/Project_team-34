@@ -13,6 +13,11 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.2
+ */
+
 public class ManageCategoriesGMenu extends GMenu {
     public ManageCategoriesGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Manage Categories", parentMenu, stage, controller);

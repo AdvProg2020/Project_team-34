@@ -37,6 +37,9 @@ public class AllProductGMenu extends GMenu {
         VBox sort = new VBox();
         VBox availability = new VBox();
         GridPane productGridPane = new GridPane();
+        ScrollPane productScrollPane = new ScrollPane();
+
+        mainPane.setMinWidth(1200);
 
         Label label = new Label("Applied Filter");
         appliedFilter.getChildren().add(label);
@@ -47,10 +50,12 @@ public class AllProductGMenu extends GMenu {
         RadioButton numberOfViews = new RadioButton("Number Of Views");
         RadioButton score = new RadioButton("Score");
         RadioButton time = new RadioButton("Time");
+        numberOfViews.setSelected(true);
 
         numberOfViews.setToggleGroup(toggleGroup);
         score.setToggleGroup(toggleGroup);
         time.setToggleGroup(toggleGroup);
+
 
         sort.getChildren().addAll(numberOfViews, score, time);
         sort.setSpacing(10);
@@ -63,9 +68,9 @@ public class AllProductGMenu extends GMenu {
         });
 
 
-        RadioButton saleCheck = new RadioButton("Only Products In Sale");
+        CheckBox saleCheck = new CheckBox("Only Products In Sale");
 
-        RadioButton availabilityCheck = new RadioButton("Only Available Products");
+        CheckBox availabilityCheck = new CheckBox("Only Available Products");
         availability.getChildren().addAll(availabilityCheck, saleCheck);
         availability.setSpacing(10);
         availability.setPadding(new Insets(10, 10 , 10 , 10));
@@ -81,7 +86,9 @@ public class AllProductGMenu extends GMenu {
 //        upperBound.setValue(100);
 ////        lowerBoundLabel, lowerBound,upperBoundLabel, upperBound
 
-        RangeSlider rangeSlider = new RangeSlider(0, 100, 10, 90);
+        RangeSlider rangeSlider = new RangeSlider(0, 10000, 0, 10000);
+        rangeSlider.setMajorTickUnit(1000);
+        rangeSlider.setShowTickLabels(true);
         rangeSlider.setOnMouseClicked(e->{
             putNewProductsInProductGridPane(productGridPane);
         });
@@ -120,15 +127,21 @@ public class AllProductGMenu extends GMenu {
 //
 //        });
 
+        productScrollPane.setContent(productGridPane);
+//        productScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+//        productScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
 
         VBox headerBackground = new VBox();
         headerBackground.setStyle("-fx-background-color: #4677c8");
         headerBackground.getChildren().add(createHeader());
-        mainPane.add(headerBackground,0, 0 );
+//        headerBackground.setMaxWidth(Double.MAX_VALUE);
+//        mainPane.setFillWidth(headerBackground, true);
+//        mainPane.add(headerBackground,0, 0 );
         mainPane.add(filterAndSort, 0, 1);
-        mainPane.add(productGridPane, 1,1);
+        mainPane.add(productScrollPane, 1,1);
 
-        backgroundLayout.getChildren().add(mainPane);
+        backgroundLayout.add(headerBackground, 0, 0);
+        backgroundLayout.add(mainPane, 0, 1);
         backgroundLayout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(backgroundLayout);
         return scene;
@@ -137,6 +150,8 @@ public class AllProductGMenu extends GMenu {
     private void putNewProductsInProductGridPane(GridPane productGridPane){
         System.out.println("oomadam toosh");
         ArrayList<Product> products =  controller.getProductController().getFilterAndSort().getProducts();
+//        products.add(Product.getProductById("T34P000000000000003"));
+//        products.add(Product.getProductById("T34P000000000000009"));
         System.out.println(products.size());
         int row =0 ;
         for (Product product : products) {
@@ -148,7 +163,9 @@ public class AllProductGMenu extends GMenu {
                 e.printStackTrace();
             }
             ImageView imageView = new ImageView(image);
-            productGridPane.add(imageView, 0, row);
+            imageView.setFitHeight(400);
+            imageView.setFitWidth(400);
+            productGridPane.add(imageView, row, row);
             row++;
         }
     }

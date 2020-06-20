@@ -56,7 +56,7 @@ public class EditPersonalInfoGMenu extends GMenu {
         layoutPane.setVgap(10);
         layoutPane.setHgap(10);
         GridPane backgroundPane = new GridPane();
-        Scene scene = new Scene(layoutPane);
+        Scene scene = new Scene(backgroundPane);
 
         usernameField.setText(controller.getAccountController().getAccountUsername());
         usernameField.setDisable(true);
@@ -128,6 +128,11 @@ public class EditPersonalInfoGMenu extends GMenu {
 
         layoutPane.add(cancelButton, 0, row);
         layoutPane.add(applyButton, 1, row);
+        layoutPane.setAlignment(Pos.CENTER);
+
+        backgroundPane.add(createHeader(), 0, 0);
+        backgroundPane.add(layoutPane, 0, 1);
+        backgroundPane.setAlignment(Pos.CENTER);
 
         return scene;
     }

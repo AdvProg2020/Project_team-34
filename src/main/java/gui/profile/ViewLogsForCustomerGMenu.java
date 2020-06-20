@@ -8,6 +8,11 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.2
+ */
+
 public class ViewLogsForCustomerGMenu extends GMenu {
     public ViewLogsForCustomerGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Logs, Customer", parentMenu, stage, controller);

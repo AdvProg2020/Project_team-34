@@ -35,7 +35,7 @@ public class ProductMenu extends Menu {
         menusIn.put("^attributes$", attributes);
         menuForShow.add("Attributes");
 
-        Menu compare = new Menu("Compare" , this) {
+        Menu compare = new Menu("CompareGMenu" , this) {
             @Override
             public void show() {
                 String regex = "^compare ([^\\s]+)";
@@ -56,7 +56,7 @@ public class ProductMenu extends Menu {
             }
         };
         menusIn.put("^compare ([^\\s]+)", compare);
-        menuForShow.add("Compare [productID]");
+        menuForShow.add("CompareGMenu [productID]");
 
         menusIn.put("^Comments$", new CommentMenu(this, currentProduct));
         menuForShow.add("Comments");

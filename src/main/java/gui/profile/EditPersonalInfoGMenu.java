@@ -14,6 +14,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.2
+ */
+
 public class EditPersonalInfoGMenu extends GMenu {
 
     public EditPersonalInfoGMenu(GMenu parentMenu, Stage stage, Controller controller) {

@@ -18,6 +18,11 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.2
+ */
+
 public class ManageUsersGMenu extends GMenu {
     public ManageUsersGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Manage Users", parentMenu, stage, controller);
@@ -33,7 +38,6 @@ public class ManageUsersGMenu extends GMenu {
         HBox deleteUserBox = new HBox();
         TextField deletingUsername = new TextField();
         Button deleteButton = new Button("Delete");
-        GridPane backLayout = new GridPane();
         Scene scene = new Scene(backgroundLayout);
 
         deletingUsername.setPromptText("Delete username");

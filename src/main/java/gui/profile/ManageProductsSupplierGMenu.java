@@ -23,6 +23,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
+import static javafx.scene.shape.StrokeType.OUTSIDE;
+
 public class ManageProductsSupplierGMenu extends GMenu {
 
     public ManageProductsSupplierGMenu(GMenu parentMenu, Stage stage, Controller controller) {
@@ -72,17 +74,17 @@ public class ManageProductsSupplierGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(label4);
-        Button button5 = new Button();
-        button5.setPrefHeight(33.0);
-        button5.setPrefWidth(233.0);
-        button5.setLayoutX(505.0);
-        button5.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button5.setLayoutY(238.0);
-        button5.setText("View details");
-        button5.setMnemonicParsing(false);
+        Button detailButton = new Button();
+        detailButton.setPrefHeight(33.0);
+        detailButton.setPrefWidth(233.0);
+        detailButton.setLayoutX(505.0);
+        detailButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        detailButton.setLayoutY(238.0);
+        detailButton.setText("View details");
+        detailButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(button5);
+        anchorPane0.getChildren().add(detailButton);
         Button createButton = new Button();
         createButton.setPrefHeight(33.0);
         createButton.setPrefWidth(233.0);
@@ -105,17 +107,17 @@ public class ManageProductsSupplierGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(editButton);
-        Button button8 = new Button();
-        button8.setPrefHeight(33.0);
-        button8.setPrefWidth(233.0);
-        button8.setLayoutX(505.0);
-        button8.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button8.setLayoutY(473.0);
-        button8.setText("Remove");
-        button8.setMnemonicParsing(false);
+        Button removeButton = new Button();
+        removeButton.setPrefHeight(33.0);
+        removeButton.setPrefWidth(233.0);
+        removeButton.setLayoutX(505.0);
+        removeButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        removeButton.setLayoutY(473.0);
+        removeButton.setText("Remove");
+        removeButton.setMnemonicParsing(false);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(button8);
+        anchorPane0.getChildren().add(removeButton);
 
         // Adding controller
 
@@ -138,6 +140,38 @@ public class ManageProductsSupplierGMenu extends GMenu {
                 newStage.showAndWait();
             }
 
+        });
+
+        removeButton.setOnAction( e -> {
+            ObservableList<String> selectedProduct = products.getSelectionModel().getSelectedItems();
+            for (String productId : selectedProduct) {
+                try{
+                    controller.getProductController().controlRemoveProductById(productId);
+                } catch (ExceptionalMassage ex){
+                    new AlertBox(this, ex, controller);
+                }
+            }
+            products.getItems().clear();
+            for (Product product : Product.getProductForSupplier((Supplier) controller.getAccount())) {
+                products.getItems().add(product.getProductId());
+            }
+
+        });
+
+        detailButton.setOnAction( e -> {
+            ObservableList<String> ids = products.getSelectionModel().getSelectedItems();
+            for (String id : ids) {
+                Image logoImage = null;
+                try {
+                    logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
+                } catch (FileNotFoundException exc) {
+                }
+                Stage newStage = new Stage();
+                newStage.getIcons().add(logoImage);
+                newStage.setTitle("Product details");
+                newStage.setScene(createDetails(id));
+                newStage.showAndWait();
+            }
         });
 
 
@@ -178,39 +212,81 @@ public class ManageProductsSupplierGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox2);
-        ChoiceBox choiceBox3 = new ChoiceBox();
-        choiceBox3.setPrefHeight(31.0);
-        choiceBox3.setPrefWidth(268.0);
-        choiceBox3.setLayoutX(40.0);
-        choiceBox3.setLayoutY(189.0);
+        ComboBox<String> availableField = new ComboBox<>();
+        availableField.setPrefHeight(31.0);
+        availableField.setPrefWidth(268.0);
+        availableField.setLayoutX(40.0);
+        availableField.setLayoutY(189.0);
+        availableField.setPromptText("Choose field!");
 
         // Adding child to parent
-        anchorPane0.getChildren().add(choiceBox3);
+        anchorPane0.getChildren().add(availableField);
         HBox hBox4 = new HBox();
         hBox4.setPrefHeight(51.0);
         hBox4.setPrefWidth(316.0);
         hBox4.setLayoutX(340.0);
         hBox4.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         hBox4.setLayoutY(179.0);
-        TextField textField5 = new TextField();
-        textField5.setPrefHeight(51.0);
-        textField5.setPrefWidth(295.0);
-        textField5.setStyle("-fx-background-color: transparent;");
-        textField5.setOpacity(0.83);
-        textField5.setPromptText("Enter new Value");
+        TextField valueField = new TextField();
+        valueField.setPrefHeight(51.0);
+        valueField.setPrefWidth(295.0);
+        valueField.setStyle("-fx-background-color: transparent;");
+        valueField.setOpacity(0.83);
+        valueField.setPromptText("Enter new Value");
 
         // Adding child to parent
-        hBox4.getChildren().add(textField5);
+        hBox4.getChildren().add(valueField);
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox4);
-        Label label6 = new Label();
-        label6.setLayoutX(40.0);
-        label6.setLayoutY(158.0);
-        label6.setText("Choose your field:");
+
+        // Adding controller
+        availableField.getItems().addAll("name","nameOfCompany","description");
+        availableField.getItems().addAll(editing.getSpecification().keySet());
+
+        Button addToListButton = new Button();
+        addToListButton.setPrefHeight(37.0);
+        addToListButton.setPrefWidth(154);
+        addToListButton.setLayoutX(600.0);
+        addToListButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        addToListButton.setLayoutY(238);
+        addToListButton.setLayoutX(80);
+        addToListButton.setText("Add to list");
+        addToListButton.setMnemonicParsing(false);
+
+        Button editButton = new Button();
+        editButton.setPrefHeight(37.0);
+        editButton.setPrefWidth(154);
+        editButton.setLayoutX(600.0);
+        editButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        editButton.setLayoutY(238);
+        editButton.setLayoutX(415);
+        editButton.setText("Edit");
+        editButton.setMnemonicParsing(false);
+
+        anchorPane0.getChildren().addAll(editButton, addToListButton);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(label6);
+
+
+        HashMap<String , String> editRequest = new HashMap<>();
+
+        addToListButton.setOnAction( e -> {
+            String key = availableField.getValue();
+            String value = valueField.getText();
+            editRequest.put(key, value);
+            availableField.setPromptText("Choose field!");
+            valueField.clear();
+        });
+
+        editButton.setOnAction( e -> {
+            try{
+                controller.getProductController().controlEditProductById(editing.getProductId(),editRequest);
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
+            }
+
+        });
 
         return new Scene(anchorPane0);
     }
@@ -490,11 +566,12 @@ public class ManageProductsSupplierGMenu extends GMenu {
             String companyName = nameOfCompanyField.getText();
             String categoryName = categoryField.getValue();
             String description = descriptionField.getText();
+            String imgURL = selectedImage[0].getAbsolutePath();
             try{
                 int price = Integer.parseInt(priceField.getText());
                 int remainedNumber = Integer.parseInt(remainedNumberField.getText());
                 try{
-                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,selectedImage[0].getAbsolutePath());
+                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL);
                 }  catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();
                 }
@@ -513,5 +590,45 @@ public class ManageProductsSupplierGMenu extends GMenu {
         choiceBox.getItems().addAll(controller.getProductController().controlGetAllProductCategoriesName());
         choiceBox.setPromptText("Choose Category");
         return choiceBox;
+    }
+
+    private Scene createDetails(String productId){
+        AnchorPane anchorPane0 = new AnchorPane();
+
+        anchorPane0.setPrefHeight(550.0);
+
+
+        anchorPane0.setPrefWidth(700.0);
+        anchorPane0.setStyle("-fx-background-color: #f5f5f2;");
+        HBox hBox1 = new HBox();
+        hBox1.setPrefHeight(102.0);
+        hBox1.setPrefWidth(700.0);
+        hBox1.setStyle("-fx-background-color: #4477c8;");
+
+        // Adding child to parent
+        anchorPane0.getChildren().add(hBox1);
+        HBox hBox2 = new HBox();
+        hBox2.setPrefHeight(102.0);
+        hBox2.setPrefWidth(700.0);
+        hBox2.setStyle("-fx-background-color: #4477c8;");
+        hBox2.setLayoutY(448.0);
+
+        // Adding child to parent
+        anchorPane0.getChildren().add(hBox2);
+        Text text3 = new Text();
+        text3.setStrokeWidth(0.0);
+        text3.setStrokeType(OUTSIDE);
+        text3.setLayoutX(111.0);
+        text3.setLayoutY(160.0);
+        text3.setText("Tabrik!");
+
+        text3.setWrappingWidth(477.6708984375);
+
+        // Adding child to parent
+        anchorPane0.getChildren().add(text3);
+        text3.setText(Product.getProductById(productId).toString());
+
+
+        return new Scene(anchorPane0);
     }
 }

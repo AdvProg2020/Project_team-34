@@ -7,13 +7,18 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import product.Product;
 import org.controlsfx.control.RangeSlider;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 public class AllProductGMenu extends GMenu {
@@ -28,11 +33,11 @@ public class AllProductGMenu extends GMenu {
         GridPane mainPane = new GridPane();
         VBox filterAndSort = new VBox();
         VBox appliedFilter = new VBox();
-        VBox price = new VBox();
+        HBox price = new HBox();
         VBox sort = new VBox();
         VBox availability = new VBox();
         GridPane productGridPane = new GridPane();
-        RangeSlider rangeSlider = new RangeSlider(0, 100, 10, 90);
+
         Label label = new Label("Applied Filter");
         appliedFilter.getChildren().add(label);
         appliedFilter.setSpacing(10);
@@ -69,38 +74,43 @@ public class AllProductGMenu extends GMenu {
             controller.getProductController().getFilterAndSort().setAvailabilityFilter(availabilityCheck.isSelected());
         });
 
-        Label lowerBoundLabel = new Label("Lower Bound");
-        Slider lowerBound = new Slider();
-        Label upperBoundLabel = new Label("Upper Bound");
-        Slider upperBound = new Slider();
-        upperBound.setValue(100);
-//        lowerBoundLabel, lowerBound,upperBoundLabel, upperBound
-        price.getChildren().addAll(rangeSlider);
+//        Label lowerBoundLabel = new Label("Lower Bound");
+//        Slider lowerBound = new Slider();
+//        Label upperBoundLabel = new Label("Upper Bound");
+//        Slider upperBound = new Slider();
+//        upperBound.setValue(100);
+////        lowerBoundLabel, lowerBound,upperBoundLabel, upperBound
+
+        RangeSlider rangeSlider = new RangeSlider(0, 100, 10, 90);
+        rangeSlider.setOnMouseClicked(e->{
+            putNewProductsInProductGridPane(productGridPane);
+        });
+        Label priceLabel  = new Label("Price");
+        price.getChildren().addAll(priceLabel, rangeSlider);
         price.setSpacing(10);
         price.setPadding(new Insets(10, 10 , 10 , 10));
 
-        lowerBound.setOnMouseReleased(e->{
-            try {
-                controller.getProductController().getFilterAndSort().setPriceLowerBound((int) lowerBound.getValue());
-            } catch (ExceptionalMassage exceptionalMassage) {
-                exceptionalMassage.printStackTrace();
-            }
-            putNewProductsInProductGridPane(productGridPane);
-        });
-
-        upperBound.setOnMouseClicked(e->{
-            try {
-                controller.getProductController().getFilterAndSort().setPriceUpperBound((int) upperBound.getValue());
-            } catch (ExceptionalMassage exceptionalMassage) {
-                exceptionalMassage.printStackTrace();
-            }
-            putNewProductsInProductGridPane(productGridPane);
-        });
+//        lowerBound.setOnMouseReleased(e->{
+//            try {
+//                controller.getProductController().getFilterAndSort().setPriceLowerBound((int) lowerBound.getValue());
+//            } catch (ExceptionalMassage exceptionalMassage) {
+//                exceptionalMassage.printStackTrace();
+//            }
+//            putNewProductsInProductGridPane(productGridPane);
+//        });
+//
+//        upperBound.setOnMouseClicked(e->{
+//            try {
+//                controller.getProductController().getFilterAndSort().setPriceUpperBound((int) upperBound.getValue());
+//            } catch (ExceptionalMassage exceptionalMassage) {
+//                exceptionalMassage.printStackTrace();
+//            }
+//            putNewProductsInProductGridPane(productGridPane);
+//        });
 
 
         Button button = new Button("Apply Filter please");
-        button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        button.getStyleClass().add("button");
+        GMenu.addStyleToButton(button);
 
         filterAndSort.getChildren().addAll(appliedFilter, sort,availability, price, button);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
@@ -116,6 +126,7 @@ public class AllProductGMenu extends GMenu {
         headerBackground.getChildren().add(createHeader());
         mainPane.add(headerBackground,0, 0 );
         mainPane.add(filterAndSort, 0, 1);
+        mainPane.add(productGridPane, 1,1);
 
         backgroundLayout.getChildren().add(mainPane);
         backgroundLayout.setAlignment(Pos.CENTER);
@@ -130,7 +141,14 @@ public class AllProductGMenu extends GMenu {
         int row =0 ;
         for (Product product : products) {
             System.out.println(product.getName());
-            productGridPane.add(new Label(product.getName()), row, 0);
+            Image image = null;
+            try {
+                image = new Image(new FileInputStream(product.getImageUrl()));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            ImageView imageView = new ImageView(image);
+            productGridPane.add(imageView, 0, row);
             row++;
         }
     }

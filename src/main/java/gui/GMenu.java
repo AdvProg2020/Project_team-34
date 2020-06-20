@@ -288,4 +288,11 @@ public abstract class GMenu {
         mainLayout.setAlignment(Pos.CENTER);
         return mainLayout;
     }
+
+    private ChoiceBox<String> allProductClassifierCategoriesChoiceBox() {
+        ChoiceBox<String> choiceBox = new ChoiceBox<>();
+        choiceBox.getItems().addAll(controller.getProductController().controlGetAllProductCategoriesName());
+        choiceBox.setValue("All Products");
+        return choiceBox;
+    }
 }

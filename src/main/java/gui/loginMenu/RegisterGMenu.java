@@ -5,8 +5,6 @@ import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.mainMenu.MainMenuG;
-import javafx.beans.binding.Bindings;
-import javafx.beans.binding.BooleanBinding;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -15,17 +13,15 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import main.Main;
-import menu.menuAbstract.Menu;
 
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class RegisterGMenu extends GMenu {
-    private Stage parentStage;
+    private Stage popUpCallerStage;
 
-    public RegisterGMenu( GMenu parentMenu, Stage parentStage, Controller controller) {
-        super("Register Menu", parentMenu, new Stage(), controller);
-        this.parentStage = parentStage;
+    public RegisterGMenu(GMenu parentMenu, Stage stage, Stage popUpCallerStage, Controller controller) {
+        super("Register Menu", parentMenu, stage, controller);
+        this.popUpCallerStage = popUpCallerStage;
         stage.setTitle("Register Menu");
     }
 
@@ -41,9 +37,6 @@ public class RegisterGMenu extends GMenu {
         hBox1.setStyle("-fx-background-color: #4477c8;");
         HBox header = createHeader();
         hBox1.getChildren().add(header);
-
-
-
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
@@ -301,20 +294,20 @@ public class RegisterGMenu extends GMenu {
 
 
         signUpButton.setOnAction(e -> {
+            String firstName = firstNameField.getText();
+            String lastName = lastNameField.getText();
+            String email = emailField.getText();
+            String phoneNum = phoneNumber.getText();
+            String userName = usernameField.getText();
+            String password = passwordField.getText();
+            String companyName = companyNameField.getText();
             if(((RadioButton)accountType.getSelectedToggle()).getText().equals("Customer")){
-                String firstName = firstNameField.getText();
-                String lastName = lastNameField.getText();
-                String email = emailField.getText();
-                String phoneNum = phoneNumber.getText();
-                String userName = usernameField.getText();
-                String password = passwordField.getText();
-                String companyName = companyNameField.getText();
                 try{
                     int credit = Integer.parseInt(creditField.getText());
                     try{
                         controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,credit,companyName);
                         stage.close();
-                        parentStage.setScene(new MainMenuG(null, stage, controller).getScene());
+                        popUpCallerStage.setScene(parentMenu.getScene());
                     }catch (ExceptionalMassage ex){
                         new AlertBox(this, ex, controller).showAndWait();
                     }
@@ -322,28 +315,20 @@ public class RegisterGMenu extends GMenu {
                     new AlertBox(this, "Enter number for credit, please","OK",controller).showAndWait();
                 }
             } else {
-                String firstName = firstNameField.getText();
-                String lastName = lastNameField.getText();
-                String email = emailField.getText();
-                String phoneNum = phoneNumber.getText();
-                String userName = usernameField.getText();
-                String password = passwordField.getText();
-                String companyName = companyNameField.getText();
                 try{
                     controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,1,companyName);
                     stage.close();
-                    parentStage.setScene(new MainMenuG(null, stage, controller).getScene());
+                    popUpCallerStage.setScene(new MainMenuG(null, stage, controller).getScene());
                 }catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();
                 }
             }
             passwordField.clear();
-
         });
 
 
         singInText.setOnMouseClicked(e -> {
-            new LoginGMenu( this , stage, controller).showAndWait();
+            stage.setScene(new LoginGMenu(parentMenu, popUpCallerStage, controller).getScene());
         });
 
 

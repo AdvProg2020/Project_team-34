@@ -87,11 +87,11 @@ public abstract class GMenu {
             }
         });
         signIn.setOnAction(e -> {
-            new LoginGMenu( this, stage, controller).showAndWait();
+            new LoginGMenu(this, stage, controller).showAndWait();
         });
-        allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu( this,
+        allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this,
                 stage,controller).getScene()));
-        cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu( this, stage, controller).getScene()));
+        cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu(this, stage, controller).getScene()));
         manageUsers.setOnAction(e -> stage.setScene(new ManageUsersGMenu(this, stage, controller).getScene()));
 
         userMenuBar.getMenus().addAll(user);

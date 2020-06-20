@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="513.0" prefWidth="657.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="gui.cartMenu.CartGMenu">
+  <children>
+    <TableView layoutX="97.0" layoutY="121.0" prefHeight="272.0" prefWidth="450.0">
+      <columns>
+        <TableColumn prefWidth="75.0" text="Serial" />
+        <TableColumn prefWidth="92.20001220703125" text="Name" />
+        <TableColumn prefWidth="77.40003967285156" text="Price" />
+        <TableColumn prefWidth="87.39996337890625" text="Quantity" />
+        <TableColumn prefWidth="116.20001220703125" text="Amount" />
+      </columns>
+    </TableView>
+    <Label alignment="CENTER" contentDisplay="CENTER" layoutX="97.0" layoutY="100.0" prefHeight="21.0" prefWidth="450.0" style="-fx-background-color: #9cbfe3;" text="Products On Your Shopping Cart" />
+    <Button layoutX="139.0" layoutY="432.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="109.0" stylesheets="@../../../css/Style.css" text="Clear Cart" />
+    <Button layoutX="419.0" layoutY="432.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="110.0" stylesheets="@../../../css/Style.css" text="Place Order" />
+      <Button layoutX="273.0" layoutY="432.0" mnemonicParsing="false" prefHeight="26.0" prefWidth="110.0" stylesheets="@../../../css/Style.css" text="Update Cart" />
+  </children>
+</AnchorPane>

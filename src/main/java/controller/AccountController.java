@@ -9,6 +9,8 @@ import cart.ProductInCart;
 import cart.ShippingInfo;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
+import log.LogStatus;
+import log.SupplierLog;
 import product.Product;
 
 import java.util.ArrayList;
@@ -41,19 +43,25 @@ public class AccountController {
         return mainController.getAccount();
     }
 
-    private boolean doesAccountExist(String username) {
-        return Account.getAccountByUsername(username) != null;
-    }
-
     public void controlCreateAccount(String username, String type, String name, String familyName, String email,
-                                     String phoneNumber, String password, int credit, String nameOfCompany) throws ExceptionalMassage {
-        if (this.doesAccountExist(username))
+                                     String phoneNumber, String password, int credit, String nameOfCompany)
+            throws ExceptionalMassage {
+        if (username.trim().length() == 0) throw new ExceptionalMassage("username can't be empty");
+        if (name.trim().length() == 0) throw new ExceptionalMassage("name can't be empty");
+        if (familyName.trim().length() == 0) throw new ExceptionalMassage("family name can't be empty");
+        if (email.trim().length() == 0) throw new ExceptionalMassage("email can't be empty");
+        if (phoneNumber.trim().length() == 0) throw new ExceptionalMassage("phone number can't be empty");
+        if (password.trim().length() == 0) throw new ExceptionalMassage("password can't be empty");
+
+        if (!Account.isUsernameAvailable(username))
             throw new ExceptionalMassage("Duplicate username");
         if (type.equals("customer")) {
+            if (credit == 0) throw new ExceptionalMassage("credit cannot be 0");
             controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
             controlLogin(username, password);
         }
         if (type.equals("supplier")) {
+            if (nameOfCompany.trim().length() == 0) throw new ExceptionalMassage("credit cannot be 0");
             controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
             controlLogin(username, password);
         }
@@ -166,6 +174,20 @@ public class AccountController {
 
     }
 
+    public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,
+                              int credit, String nameOfCompany) {
+        if (password == null || password.trim().length() == 0) {
+            password = getAccount().getPassword();
+        }
+        if (getAccount() instanceof Customer) {
+            ((Customer) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, credit);
+        } else if (getAccount() instanceof Supplier) {
+            ((Supplier) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
+        } else if (getAccount() instanceof Supervisor) {
+            ((Supervisor) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, credit);
+        }
+    }
+
     public String controlGetListOfAccounts() {
         ArrayList<String> allUsername = Account.getAllUsername();
         StringBuilder result = new StringBuilder();
@@ -173,6 +195,11 @@ public class AccountController {
             result.append(username).append('\n');
         }
         return result.toString();
+    }
+
+    public ArrayList<String> controlGetListOfAccountUserNames(){
+        ArrayList<String> allUsername = Account.getAllUsername();
+        return allUsername;
     }
 
     public String controlViewUserInfo(String username) throws ExceptionalMassage {
@@ -186,7 +213,7 @@ public class AccountController {
         Account accountGotByUsername = Account.getAccountByUsername(username);
         if (accountGotByUsername == null)
             throw new ExceptionalMassage("Account not found.");
-        if(accountGotByUsername.equals(mainController.getAccount().getUserName()))
+        if(username.equals(getAccount().getUserName()))
             throw new ExceptionalMassage("You cannot delete Your self");
         accountGotByUsername.removeAccount();
     }
@@ -308,5 +335,93 @@ public class AccountController {
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);
         //customer credit decrease
+    }
+
+    public String getAccountUsername() {
+        return getAccount().getUserName();
+    }
+
+    public String getAccountName() {
+        return getAccount().getName();
+    }
+
+    public String getAccountFamilyName() {
+        return getAccount().getFamilyName();
+    }
+
+    public String getAccountEmail() {
+        return getAccount().getEmail();
+    }
+
+    public String getAccountPhoneNumber() {
+        return getAccount().getPhoneNumber();
+    }
+
+    public int getAccountCredit() {
+        return getAccount().getCredit();
+    }
+
+    public String getAccountNameOfCompany() {
+        return ((Supplier) getAccount()).getNameOfCompany();
+    }
+
+    public ArrayList<String> getCustomerLogs() {
+        ArrayList<CustomerLog> customerLogs = CustomerLog.getCustomerCustomerLogs((Customer) getAccount());
+        ArrayList<String> toStringLogs = new ArrayList<>();
+        for (CustomerLog customerLog : customerLogs) {
+            toStringLogs.add(customerLog.toString());
+        }
+        return toStringLogs;
+    }
+
+    public ArrayList<String> getSupplierLogs() {
+        ArrayList<SupplierLog> supplierLogs = SupplierLog.getSupplierSupplierLog((Supplier) getAccount());
+        ArrayList<String> toStringLogs = new ArrayList<>();
+        for (SupplierLog supplierLog : supplierLogs) {
+            toStringLogs.add(supplierLog.toString());
+        }
+        return toStringLogs;
+    }
+
+    public ArrayList<String> getSupervisorLogs() {
+        ArrayList<CustomerLog> supervisorLogs = CustomerLog.getAllCustomerLogs();
+        ArrayList<String> toStringLogs = new ArrayList<>();
+        for (CustomerLog customerLog : supervisorLogs) {
+            toStringLogs.add(customerLog.toString());
+        }
+        return toStringLogs;
+    }
+
+    public String getCustomerLogById(String id) {
+        return CustomerLog.getCustomerLogById(id).toString();
+    }
+
+    public String getSupplierLogById(String id) {
+        return SupplierLog.getSupplierLogById(id).toString();
+    }
+
+    public boolean proceedCustomerLog(String id) {
+        try {
+            CustomerLog.getCustomerLogById(id).proceedToNextStep();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return false;
+        }
+        return true;
+    }
+
+    public boolean isLogProcessable(String id) {
+        return CustomerLog.getCustomerLogById(id).getDeliveryStatus() != LogStatus.DELIVERED;
+    }
+
+    public int numberOfProductInCart(ProductInCart productInCart){
+        try {
+            return mainController.getCart().getCountOfProductInCart(productInCart);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return 0;
+        }
+    }
+
+    public void controlClearCart(){
+        mainController.getCart().clear();
     }
 }

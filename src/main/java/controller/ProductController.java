@@ -9,6 +9,7 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
+import log.CustomerLog;
 import product.Category;
 import product.Product;
 
@@ -29,60 +30,55 @@ public class ProductController {
         return filterAndSort;
     }
 
-
-    public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers,
-                                  String category, String description,HashMap<String, String> specifications) throws ExceptionalMassage {
+    public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers, String category,
+                                  String description, HashMap<String, String> specifications, String imageURL) throws ExceptionalMassage {
         if (mainController.getAccount() == null)
             throw new ExceptionalMassage("Sing in first.");
-        if(!(mainController.getAccount() instanceof Supplier))
+        if (!(mainController.getAccount() instanceof Supplier))
             throw new ExceptionalMassage("Sign in as a Supplier");
         Supplier supplier = (Supplier) mainController.getAccount();
-        Product  product;
+        Product product;
         product = Product.getProductByName(name);
         if (Category.getCategoryByName(category) == null) {
             throw new ExceptionalMassage("Category not found.");
         }
         if (product == null)
-            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications);
+            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications, imageURL);
         else {
-            product.addNewSupplierForProduct(supplier,price,remainedNumbers);
+            product.addNewSupplierForProduct(supplier, price, remainedNumbers);
         }
     }
 
-    public void  controlRemoveProductById(String productId) throws ExceptionalMassage {
+    public void controlRemoveProductById(String productId) throws ExceptionalMassage {
         Product product = Product.getProductById(productId);
         if (product == null) {
             throw new ExceptionalMassage("Invalid Id");
-        }
-        else {
+        } else {
             product.removeProduct();
         }
     }
 
-    public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage{
+    public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage {
         Product productGotById = Product.getProductById(product.getProductId());
         if (productGotById == null) {
             throw new ExceptionalMassage("Invalid Id");
-        }
-        else {
-            StringBuilder result = new StringBuilder();
-            result.append("description= ").append(product.getDescription()).append("\n");
-            result.append("listOfSuppliers= " ).append(product.getListOfSuppliers()).append("\n");
-            result.append("priceForEachSupplier= ").append(product.getPriceForEachSupplier()).append("\n");
-            result.append("category= ").append(Category.getProductCategory(product)).append("\n");
-            result.append("Score= ").append(Score.getAverageScoreForProduct(product)).append("\n");
+        } else {
             // !!
             //needs sale for all
+            String result = "description= " + product.getDescription() + "\n" +
+                    "listOfSuppliers= " + product.getListOfSuppliers() + "\n" +
+                    "priceForEachSupplier= " + product.getPriceForEachSupplier() + "\n" +
+                    "category= " + Category.getProductCategory(product) + "\n" +
+                    "Score= " + Score.getAverageScoreForProduct(product) + "\n";
             return String.valueOf(result);
         }
     }
 
-    public String controlGetAttributesOfProduct(String productId) throws ExceptionalMassage{
+    public String controlGetAttributesOfProduct(String productId) throws ExceptionalMassage {
         Product product = Product.getProductById(productId);
-        if (product== null) {
+        if (product == null) {
             throw new ExceptionalMassage("Invalid Id");
-        }
-        else {
+        } else {
             StringBuilder result = new StringBuilder();
             result.append("name= ").append(product.getName()).append("\n");
             result.append("numberOfViews= ").append(product.getNumberOfViews()).append("\n");
@@ -99,13 +95,12 @@ public class ProductController {
         }
     }
 
-    public String controlCompare(String firstProductId , String secondProductId) throws ExceptionalMassage{
+    public String controlCompare(String firstProductId, String secondProductId) throws ExceptionalMassage {
         Product firstProduct = Product.getProductById(firstProductId);
         Product secondProduct = Product.getProductById(secondProductId);
-        if (firstProduct== null || secondProduct== null) {
+        if (firstProduct == null || secondProduct == null) {
             throw new ExceptionalMassage("Invalid Id");
-        }
-        else if(! (Category.getProductCategory(firstProduct).equals(Category.getProductCategory(secondProduct))))
+        } else if (!(Category.getProductCategory(firstProduct).equals(Category.getProductCategory(secondProduct))))
             throw new ExceptionalMassage("You can not compare products in different categories");
         else {
             StringBuilder result = new StringBuilder();
@@ -120,15 +115,13 @@ public class ProductController {
             }
             return String.valueOf(result);
         }
-
     }
 
     public void controlEditProductById(String productId, HashMap<String, String> fieldsToChange) throws ExceptionalMassage {
         Product product = Product.getProductById(productId);
-        if (product== null) {
+        if (product == null) {
             throw new ExceptionalMassage("Invalid Id");
-        }
-        else {
+        } else {
             Product newProduct = new Product(product);
             String value;
             for (String field : fieldsToChange.keySet()) {
@@ -140,34 +133,32 @@ public class ProductController {
                     case "nameOfCompany":
                         newProduct.setNameOfCompany(value);
                         break;
-                    case  "description":
+                    case "description":
                         newProduct.setDescription(value);
                         break;
                     default:
-                        newProduct.editSpecialField(field,value);
+                        newProduct.editSpecialField(field, value);
                 }
             }
         }
     }
 
-
-    public ArrayList<Supplier> controlGetAllSuppliersForAProduct(Product product){
+    public ArrayList<Supplier> controlGetAllSuppliersForAProduct(Product product) {
         return product.getListOfSuppliers();
     }
 
-    public ArrayList<String> controlViewBuyersOfProduct(String productId) throws ExceptionalMassage{
-        return null;
+    public ArrayList<Customer> controlViewBuyersOfProduct(String productId) {
+        return CustomerLog.getAllCustomersBoughtProduct(Product.getProductById(productId));
     }
 
-    public boolean doesThisSupplierSellThisProduct(Supplier seller,Product product) throws ExceptionalMassage {
+    public boolean doesThisSupplierSellThisProduct(Supplier seller, Product product) throws ExceptionalMassage {
         if (mainController.getAccount() == null)
             throw new ExceptionalMassage("Sing in first.");
         return product.doesSupplierSellThisProduct(seller);
     }
 
     //related to Category:
-    public void controlAddCategory(String name, boolean isParentCategory, String parentCategoryName)
-            throws ExceptionalMassage {
+    public void controlAddCategory(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
         Account account = mainController.getAccount();
         if (account == null)
             throw new ExceptionalMassage("Login First. <Controller.controlAddCategory>");
@@ -201,8 +192,7 @@ public class ProductController {
         //check
     }
 
-    public void controlRemoveProductFromCategory(String categoryName, String productIdentifier)
-            throws ExceptionalMassage {
+    public void controlRemoveProductFromCategory(String categoryName, String productIdentifier) throws ExceptionalMassage {
         Account account = mainController.getAccount();
         //can modify
         if (account == null)
@@ -257,7 +247,7 @@ public class ProductController {
         category.removeField(filterKey, filterValue);
     }
 
-    public String controlGetAllCategories(){
+    public String controlGetAllCategories() {
         String allCategories = "";
         for (Category category : Category.allCategories) {
             String categoryDescription = "";
@@ -274,46 +264,42 @@ public class ProductController {
         return allCategories;
     }
 
-
-
     //related to feedback:
-
-    public void controlAddCommentToProduct(String title,String content,Product product){
+    public void controlAddCommentToProduct(String title, String content, Product product) {
         //Need modification!
-        new Comment((Customer) mainController.getAccount(), product,title, content, false);
+        new Comment((Customer) mainController.getAccount(), product, title, content, false);
     }
 
-    public ArrayList<Comment> controlGetCommentsOfAProduct(Product product){
+    public ArrayList<Comment> controlGetCommentsOfAProduct(Product product) {
         ArrayList<Comment> productComment = new ArrayList<>();
         for (Comment comment : Comment.getComments()) {
-            if(comment.getProduct() == product){
+            if (comment.getProduct() == product) {
                 productComment.add(comment);
             }
         }
         return productComment;
     }
 
-    public void controlRateProductById(String id, float score) throws ExceptionalMassage{
-        if(Product.getProductById(id) == null){
+    public void controlRateProductById(String id, float score) throws ExceptionalMassage {
+        if (Product.getProductById(id) == null) {
             throw new ExceptionalMassage("No such product with id!");
         }
-        new Score(score, (Customer)(mainController.getAccount()), Product.getProductById(id));
+        new Score(score, (Customer) (mainController.getAccount()), Product.getProductById(id));
     }
 
-    public float controlGetAverageScoreByProduct(Product product){
-        return  Score.getAverageScoreForProduct(product);
+    public float controlGetAverageScoreByProduct(Product product) {
+        return Score.getAverageScoreForProduct(product);
     }
 
-    public ArrayList<Comment> controlGetConfirmedComments(){
+    public ArrayList<Comment> controlGetConfirmedComments() {
         ArrayList<Comment> confirmedComments = new ArrayList<>();
         for (Comment comment : Comment.getComments()) {
-            if(comment.getState() == CommentState.CONFIRMED){
+            if (comment.getState() == CommentState.CONFIRMED) {
                 confirmedComments.add(comment);
             }
         }
         return confirmedComments;
     }
-
 
     //related to request:
     public String controlGetListOfRequestId() {
@@ -328,26 +314,28 @@ public class ProductController {
         return result.toString();
     }
 
-    public String controlShowDetailForRequest(String requestId) throws ExceptionalMassage{
-        if(requestId.charAt(3) == 'P'){
+    public ArrayList<String> controlGetArrayOfRequestId() {
+        ArrayList<String> allRequests = new ArrayList<>();
+        allRequests.addAll(Product.getAllProductRequestId());
+        allRequests.addAll(Sale.getAllSaleRequestId());
+        return allRequests;
+    }
+
+    public String controlShowDetailForRequest(String requestId) throws ExceptionalMassage {
+        if (requestId.charAt(3) == 'P') {
             return Product.getDetailsForProductRequest(requestId);
-        }
-        else {
+        } else {
             return Sale.getDetailsForSaleRequest(requestId);
         }
     }
 
     public void controlAcceptOrDeclineRequest(String requestId, boolean isAccepted) throws ExceptionalMassage {
-        if(requestId.charAt(3) == 'P'){
+        if (requestId.charAt(3) == 'P') {
             Product.acceptOrDeclineRequest(requestId, isAccepted);
-        }
-        else {
+        } else {
             Sale.acceptOrDeclineRequest(requestId, isAccepted);
         }
     }
-
-
-
 
     //Filter and sort:
     public boolean controlFilterGetAvailabilityFilter() {
@@ -448,11 +436,37 @@ public class ProductController {
         return filterAndSort.getProducts();
     }
 
-    public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters(){
+    public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters() {
         return filterAndSort.getCategory().getAvailableSpecialFilters();
     }
 
-    public String controlCurrentFilters(){
+    public String controlCurrentFilters() {
         return filterAndSort.toString();
+    }
+
+    public ArrayList<String> controlGetAllCategoriesName() {
+        return Category.getAllCategoriesName();
+    }
+
+    public ArrayList<String> controlGetAllProductCategoriesName() {
+        ArrayList<String> allProductCategoriesName = new ArrayList<>();
+        for (String categoryName : Category.getAllCategoriesName()) {
+            if (!Category.getCategoryByName(categoryName).isCategoryClassifier()) {
+                allProductCategoriesName.add(categoryName);
+            }
+        }
+        return allProductCategoriesName;
+    }
+
+    public String controlGetCategoryParentName(String name) {
+        return Category.getCategoryByName(name).getParentCategoryName();
+    }
+
+    public boolean isThisCategoryClassifier(String name) {
+        return Category.getCategoryByName(name).isCategoryClassifier();
+    }
+
+    public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) {
+        return Category.getCategoryByName(name).getSpecialFields();
     }
 }

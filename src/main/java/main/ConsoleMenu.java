@@ -1,10 +1,9 @@
-import account.Customer;
-import account.Supplier;
+package main;
+
 import database.DataBase;
-import exceptionalMassage.ExceptionalMassage;
 import menu.mainMenu.MainMenu;
 
-public class Main {
+public class ConsoleMenu {
     private static long timeBeginning;
     private static long timeProgramWasOpened;
     private static int timesDiscountCodeGenerated;
@@ -17,12 +16,10 @@ public class Main {
         if(timeProgramWasOpened - timeBeginning > timesDiscountCodeGenerated * WEEK ){
             generateRandomCodes();
         }
-        System.out.println("Project_team-34");
         run();
     }
 
     private static void run() {
-
         MainMenu mainMenu = new MainMenu();
         mainMenu.show();
         mainMenu.execute();

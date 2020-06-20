@@ -5,7 +5,6 @@ import account.Customer;
 import feedback.Score;
 import product.Product;
 
-import javax.xml.crypto.Data;
 import java.sql.*;
 import java.util.HashMap;
 

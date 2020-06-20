@@ -107,8 +107,8 @@ public class Product {
         this.specification = specification;
         allCreatedProductNum ++;
         allProduct.add(this);
-        ProductDataBase.add(this);
         this.imageUrl = imageUrl;
+        ProductDataBase.add(this);
     }
 
     public Product(String name, String nameOfCompany, HashMap<Supplier,Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
@@ -127,8 +127,8 @@ public class Product {
         this.futureCategoryName = futureCategoryName;
         this.specification = specification;
         allCreatedProductNum ++;
-        allProduct.add(this);
         this.imageUrl = imageUrl;
+        allProduct.add(this);
     }
 
     public Product(Product product, String imageUrl) {
@@ -146,8 +146,8 @@ public class Product {
         this.futureCategoryName = product.getFutureCategoryName();
         allCreatedProductNum ++;
         allProduct.add(this);
-        ProductDataBase.add(this);
         this.imageUrl = imageUrl;
+        ProductDataBase.add(this);
     }
 
     private String generateIdentifier(){

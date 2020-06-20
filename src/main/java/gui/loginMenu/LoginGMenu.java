@@ -2,18 +2,13 @@ package gui.loginMenu;
 
 import account.Supervisor;
 import account.Supplier;
-import com.google.gson.internal.$Gson$Preconditions;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.cartMenu.CartGMenu;
 import gui.mainMenu.MainMenuG;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,22 +17,18 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import menu.menuAbstract.Menu;
-
-import java.io.IOException;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class LoginGMenu extends GMenu {
-    private Stage parentStage;
+    private Stage popUpCallerStage;
 
-    public LoginGMenu(GMenu parentMenu, Stage parentStage, Controller controller) {
+    public LoginGMenu(GMenu parentMenu, Stage popUpCallerStage, Controller controller) {
         super("Login Menu", parentMenu, new Stage(), controller);
-        this.parentStage = parentStage;
+        this.popUpCallerStage = popUpCallerStage;
         stage.setTitle("Login Menu");
     }
 
@@ -151,11 +142,8 @@ public class LoginGMenu extends GMenu {
         // Adding controller!
 
         signUp.setOnMouseClicked(e ->{
-            stage.close();
-            new RegisterGMenu(this,stage,controller).showAndWait();
+            stage.setScene(new RegisterGMenu(parentMenu, stage, popUpCallerStage, controller).getScene());
         });
-
-
 
         signIn.setOnAction(e -> {
             String username = usernameField.getText();
@@ -164,10 +152,10 @@ public class LoginGMenu extends GMenu {
                 controller.getAccountController().controlLogin(username, password);
                 if((controller.getAccount() instanceof Supplier || controller.getAccount() instanceof Supervisor) && parentMenu instanceof CartGMenu) {
                     stage.close();
-                    parentStage.setScene(new MainMenuG(null, stage, controller).getScene());
+                    popUpCallerStage.setScene(new MainMenuG(null, popUpCallerStage, controller).getScene());
                 } else {
                     stage.close();
-                    parentStage.setScene(parentMenu.getScene());
+                    popUpCallerStage.setScene(parentMenu.getScene());
                 }
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();

@@ -120,6 +120,14 @@ public class Cart {
     }
 
     //Modeling methods:
+    public void clear() {
+        this.productsIn.clear();
+        this.productInCount.clear();
+        this.productInSale.clear();
+        this.codedDiscount = null;
+        this.shippingInfo = null;
+    }
+
     public static String generateIdentifier() {
         return "T34CA" + String.format("%015d", countOfCartCreated + 1);
     }

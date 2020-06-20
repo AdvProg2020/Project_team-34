@@ -111,7 +111,10 @@ public class AllProductGMenu extends GMenu {
 //        });
 
 
-        mainPane.add(createHeader(),0, 0 );
+        VBox headerBackground = new VBox();
+        headerBackground.setStyle("-fx-background-color: #4677c8");
+        headerBackground.getChildren().add(createHeader());
+        mainPane.add(headerBackground,0, 0 );
         mainPane.add(filterAndSort, 0, 1);
 
         backgroundLayout.getChildren().add(mainPane);
@@ -130,7 +133,5 @@ public class AllProductGMenu extends GMenu {
             productGridPane.add(new Label(product.getName()), row, 0);
             row++;
         }
-
-
     }
 }

@@ -45,11 +45,7 @@ public class ManageProductsMenu extends Menu {
                 String regex = "^view buyers (\\w+)$";
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
-                   try {
-                       controller.getProductController().controlViewBuyersOfProduct(matcher.group(1));
-                   } catch (ExceptionalMassage ex){
-                       System.out.println(ex.getMessage());
-                   }
+                    controller.getProductController().controlViewBuyersOfProduct(matcher.group(1));
                 }
                 parentMenu.show();
                 parentMenu.execute();

@@ -4,8 +4,10 @@ import account.Supplier;
 import controller.Controller;
 import controller.FilterAndSort;
 import exceptionalMassage.ExceptionalMassage;
+import feedback.Comment;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -45,7 +47,10 @@ public class ProductMenuG extends GMenu {
         imageViewBox.setFitHeight(305.0);
         imageViewBox.setPreserveRatio(true);
         imageViewBox.setLayoutX(76.0);
-        imageViewBox.setLayoutY(60.0);
+        imageViewBox.setLayoutY(100.0);
+        HBox header = createHeader();
+        anchorPane0.getChildren().add(header);
+
 
         // Adding child to parent
         anchorPane0.getChildren().add(imageViewBox);
@@ -71,7 +76,7 @@ public class ProductMenuG extends GMenu {
         // Adding child to parent
         Label priceLabel = new Label();
         priceLabel.setTranslateX(-10);
-        priceLabel.setTranslateY(152);
+        priceLabel.setTranslateY(187);
         priceLabel.setText("price sits here");
 
         // Adding child to parent
@@ -90,14 +95,7 @@ public class ProductMenuG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(scoreText);
-        TabPane tabPane8 = new TabPane();
-        tabPane8.setPrefHeight(305.0);
-        tabPane8.setPrefWidth(1200.0);
-        tabPane8.setLayoutY(495.0);
-        tabPane8.setTabClosingPolicy(UNAVAILABLE);
 
-        // Adding child to parent
-        anchorPane0.getChildren().add(tabPane8);
         Label label9 = new Label();
         label9.setLayoutX(380.0);
         label9.setLayoutY(50.0);
@@ -106,7 +104,7 @@ public class ProductMenuG extends GMenu {
         anchorPane0.getChildren().add(label9);
         Label label10 = new Label();
         label10.setLayoutX(380.0);
-        label10.setLayoutY(62.0);
+        label10.setLayoutY(100);
         label10.setText("Description:");
 
         // Adding child to parent
@@ -115,7 +113,7 @@ public class ProductMenuG extends GMenu {
         descriptionText.setStrokeWidth(0.0);
         descriptionText.setStrokeType(OUTSIDE);
         descriptionText.setLayoutX(476.0);
-        descriptionText.setLayoutY(77.0);
+        descriptionText.setLayoutY(113.0);
         descriptionText.setText("description sits here!");
         descriptionText.setWrappingWidth(220.0);
 
@@ -136,13 +134,9 @@ public class ProductMenuG extends GMenu {
         hBox16.setPrefHeight(37.0);
         hBox16.setPrefWidth(433.0);
         hBox16.setTranslateY(150.0);
-        Label label17 = new Label();
-        label17.setText("Choose your supplier:");
-
-        // Adding child to parent
-        hBox16.getChildren().add(label17);
+        hBox16.setTranslateX(60);
         ComboBox<String> suppliers = new ComboBox<>();
-        suppliers.setPrefWidth(150.0);
+        suppliers.setPrefWidth(200.0);
         suppliers.setTranslateX(25.0);
 
         // Adding child to parent
@@ -160,20 +154,15 @@ public class ProductMenuG extends GMenu {
 
         // Adding tabPane
         TabPane commentAndDetail = new TabPane();
+        commentAndDetail.setPrefHeight(305);
+        commentAndDetail.setPrefWidth(1200);
+        commentAndDetail.setLayoutY(495);
         Tab details = new Tab("Details");
         Tab  comments = new Tab("Comments");
         commentAndDetail.getTabs().addAll(details, comments);
-        ScrollBar scrollBar1 = new ScrollBar();
-        ScrollBar scrollBar2 = new ScrollBar();
-        scrollBar1.setPrefHeight(266);
-        scrollBar1.setPrefWidth(18);
-        scrollBar2.setPrefHeight(266);
-        scrollBar2.setPrefWidth(18);
-        scrollBar1.setLayoutX(1186);
-        scrollBar2.setLayoutX(1186);
-        details.setContent(scrollBar1);
-        comments.setContent(scrollBar2);
 
+
+        anchorPane0.getChildren().add(commentAndDetail);
         // Adding child to parent
         vBox12.getChildren().add(addToCartButton);
 
@@ -183,16 +172,31 @@ public class ProductMenuG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(vBox12);
+        suppliers.setPromptText("Choose your supplier");
+
 
         // Adding Controller
         // adding image!
-        //File file = new File(product.getImageUrl());
-
-        Image productImage = new Image(product.getImageUrl());
+        File file = new File(product.getImageUrl());
+        Image productImage = null;
+        try {
+            productImage = new Image(file.toURI().toURL().toExternalForm());
+        } catch (Exception ex){
+            System.out.println(ex.getMessage());
+        }
         imageViewBox.setImage(productImage);
 
-        details.setContent(createDetails());
-        comments.setContent(createAddComment());
+        ScrollPane detailsScrollPane = new ScrollPane();
+        ScrollPane commentsScrollPane = new ScrollPane();
+        detailsScrollPane.setContent(createDetails());
+        for (Comment comment : controller.getProductController().controlGetCommentsOfAProduct(product)) {
+            //commentsScrollPane.setContent();
+        }
+        commentsScrollPane.setContent(createAddComment());
+        details.setContent(detailsScrollPane);
+        comments.setContent(commentsScrollPane);
+
+
 
         ArrayList<String> suppliersIds = new ArrayList<>();
         for (Supplier supplier : controller.getProductController().controlGetAllSuppliersForAProduct(product)) {
@@ -214,6 +218,11 @@ public class ProductMenuG extends GMenu {
                 new AlertBox(this, ex, controller).showAndWait();
             }
 
+        });
+
+        suppliers.setOnAction( e -> {
+            priceLabel.setText(String.valueOf(product.getPrice(Supplier.getSupplierByCompanyName(suppliers.getValue()))));
+            suppliers.setPromptText("Choose your supplier");
         });
 
 
@@ -255,9 +264,9 @@ public class ProductMenuG extends GMenu {
         label2.setAlignment(Pos.CENTER);
 
 // Adding child to parent
-        TextField textField3 = new TextField();
+        TextField titleField = new TextField();
         gridPane1.add(label2,0,0);
-        gridPane1.add(textField3,1,0);
+        gridPane1.add(titleField,1,0);
 
 // Adding child to parent
         Label label4 = new Label();
@@ -266,17 +275,72 @@ public class ProductMenuG extends GMenu {
 
 
 // Adding child to parent
-        TextArea textArea5 = new TextArea();
-        gridPane1.add(textArea5, 1, 1);
-        textArea5.setPrefHeight(200.0);
-        textArea5.setPrefWidth(200.0);
+        TextArea descriptionArea = new TextArea();
+        gridPane1.add(descriptionArea, 1, 1);
+        descriptionArea.setPrefHeight(200.0);
+        descriptionArea.setPrefWidth(200.0);
+
+        Button comment = new Button("Comment");
+        gridPane1.add(comment,1,2);
+        gridPane1.setVgap(5);
+
+        comment.setDisable(true);
+
+        comment.setOnAction( e -> {
+            String title = titleField.getText();
+            String description = descriptionArea.getText();
+            controller.getProductController().controlAddCommentToProduct(title, description, product);
+        });
 
 
 
 // Adding child to parent
         hBox0.getChildren().add(gridPane1);
+        hBox0.setOnKeyReleased( e -> {
+            boolean isDisable = titleField.getText().equals("") || descriptionArea.getText().equals("");
+            comment.setDisable(isDisable);
+        });
         return hBox0;
 
 
+    }
+
+    protected HBox commentBox(Comment comment) {
+        HBox mainLayout = new HBox();
+        VBox userInfo = new VBox();
+        VBox commentDetail = new VBox();
+
+        String username = "@" + comment.getCustomer().getUserName();
+        ImageView authorized = getImageView("./src/main/resources/icons/boughted.png", 25, 25);
+        boolean isAuthorized = comment.isCustomerBoughtThisProduct();
+
+        HBox authorizedBox = new HBox();
+        authorizedBox.getChildren().addAll(authorized, new Label("Customer comment"));
+        authorizedBox.setSpacing(10);
+
+        if (isAuthorized) {
+            userInfo.getChildren().addAll(authorizedBox);
+        }
+        userInfo.getChildren().addAll(new Label(username));
+        userInfo.setMinWidth(200);
+        userInfo.setMinHeight(200);
+        userInfo.setSpacing(20);
+        userInfo.setPadding(new Insets(10, 10, 10, 10));
+        userInfo.setAlignment(Pos.TOP_LEFT);
+
+        Text commentText = new Text(comment.getContent());
+        Text commentTitle = new Text(comment.getTitle());
+        commentTitle.setStyle("-fx-font-weight: bolder");
+        commentText.setWrappingWidth(380);
+        commentTitle.setWrappingWidth(380);
+        commentDetail.setPadding(new Insets(10, 10, 10, 10));
+        commentDetail.setSpacing(20);
+        commentDetail.getChildren().addAll(commentTitle, commentText);
+
+        mainLayout.setMinWidth(600);
+        mainLayout.setMinHeight(200);
+        mainLayout.getChildren().addAll(userInfo, commentDetail);
+
+        return mainLayout;
     }
 }

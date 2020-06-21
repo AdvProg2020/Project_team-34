@@ -139,7 +139,6 @@ public abstract class GMenu {
         ImageView imageView = new ImageView(logoImage);
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
-        imageView.setPreserveRatio(true);
         return imageView;
     }
 
@@ -213,13 +212,15 @@ public abstract class GMenu {
     public Scene createLogScene(VBox logsBox) {
         VBox mainLayout = new VBox();
         GridPane background = new GridPane();
-        Scene scene = new Scene(background);
+        ScrollPane scrollPane = new ScrollPane(background);
+        Scene scene = new Scene(scrollPane);
 
         logsBox.setPadding(new Insets(10, 10, 10, 10));
         logsBox.setSpacing(10);
 
         mainLayout.setAlignment(Pos.CENTER);
         mainLayout.getChildren().addAll(createHeader(), logsBox);
+
 
         background.getChildren().add(mainLayout);
         background.setAlignment(Pos.CENTER);

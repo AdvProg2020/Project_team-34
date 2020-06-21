@@ -1,17 +1,26 @@
 package gui.productMenu;
 
+import account.Supplier;
 import controller.Controller;
+import controller.FilterAndSort;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import menu.menuAbstract.Menu;
 import product.Product;
+
+import java.io.File;
+import java.util.ArrayList;
 
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.control.TabPane.TabClosingPolicy.UNAVAILABLE;
@@ -29,16 +38,16 @@ public class ProductMenuG extends GMenu {
         anchorPane0.setPrefHeight(800.0);
         anchorPane0.setPrefWidth(1200.0);
         anchorPane0.setStyle("-fx-background-color: #f5f5f2;");
-        ImageView imageView1 = new ImageView();
-        imageView1.setPickOnBounds(true);
-        imageView1.setFitWidth(285.0);
-        imageView1.setFitHeight(305.0);
-        imageView1.setPreserveRatio(true);
-        imageView1.setLayoutX(76.0);
-        imageView1.setLayoutY(60.0);
+        ImageView imageViewBox = new ImageView();
+        imageViewBox.setPickOnBounds(true);
+        imageViewBox.setFitWidth(285.0);
+        imageViewBox.setFitHeight(305.0);
+        imageViewBox.setPreserveRatio(true);
+        imageViewBox.setLayoutX(76.0);
+        imageViewBox.setLayoutY(60.0);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(imageView1);
+        anchorPane0.getChildren().add(imageViewBox);
         Label label2 = new Label();
         label2.setLayoutX(76.0);
         label2.setLayoutY(390.0);
@@ -46,27 +55,26 @@ public class ProductMenuG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(label2);
-        Label label3 = new Label();
-        label3.setLayoutX(191.0);
-        label3.setLayoutY(390.0);
-        label3.setText("name sits here");
+        Label nameText = new Label();
+        nameText.setLayoutX(191.0);
+        nameText.setLayoutY(390.0);
+        nameText.setText("name sits here");
 
         // Adding child to parent
-        anchorPane0.getChildren().add(label3);
+        anchorPane0.getChildren().add(nameText);
         Label label4 = new Label();
-        label4.setLayoutX(76.0);
-        label4.setLayoutY(417.0);
+        label4.setTranslateX(-100);
+        label4.setTranslateY(170.0);
         label4.setText("Price:");
 
         // Adding child to parent
-        anchorPane0.getChildren().add(label4);
-        Label label5 = new Label();
-        label5.setLayoutX(131.0);
-        label5.setLayoutY(417.0);
-        label5.setText("price sits here");
+        Label priceLabel = new Label();
+        priceLabel.setTranslateX(-10);
+        priceLabel.setTranslateY(152);
+        priceLabel.setText("price sits here");
 
         // Adding child to parent
-        anchorPane0.getChildren().add(label5);
+
         Label label6 = new Label();
         label6.setLayoutX(76.0);
         label6.setLayoutY(444.0);
@@ -74,13 +82,13 @@ public class ProductMenuG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(label6);
-        Label label7 = new Label();
-        label7.setLayoutX(131.0);
-        label7.setLayoutY(444.0);
-        label7.setText("Score sits here");
+        Label scoreText = new Label();
+        scoreText.setLayoutX(131.0);
+        scoreText.setLayoutY(444.0);
+        scoreText.setText("Score sits here");
 
         // Adding child to parent
-        anchorPane0.getChildren().add(label7);
+        anchorPane0.getChildren().add(scoreText);
         TabPane tabPane8 = new TabPane();
         tabPane8.setPrefHeight(305.0);
         tabPane8.setPrefWidth(1200.0);
@@ -102,16 +110,16 @@ public class ProductMenuG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(label10);
-        Text text11 = new Text();
-        text11.setStrokeWidth(0.0);
-        text11.setStrokeType(OUTSIDE);
-        text11.setLayoutX(476.0);
-        text11.setLayoutY(77.0);
-        text11.setText("description sits here!");
-        text11.setWrappingWidth(220.0);
+        Text descriptionText = new Text();
+        descriptionText.setStrokeWidth(0.0);
+        descriptionText.setStrokeType(OUTSIDE);
+        descriptionText.setLayoutX(476.0);
+        descriptionText.setLayoutY(77.0);
+        descriptionText.setText("description sits here!");
+        descriptionText.setWrappingWidth(220.0);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(text11);
+        anchorPane0.getChildren().add(descriptionText);
         VBox vBox12 = new VBox();
         vBox12.setPrefHeight(497.0);
         vBox12.setPrefWidth(433.0);
@@ -123,23 +131,6 @@ public class ProductMenuG extends GMenu {
 
         // Adding child to parent
         vBox12.getChildren().add(label13);
-        HBox hBox14 = new HBox();
-        hBox14.setPrefHeight(51.0);
-        hBox14.setPrefWidth(403.0);
-        hBox14.setTranslateY(90.0);
-        hBox14.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        TextField textField15 = new TextField();
-        textField15.setPrefHeight(49.0);
-        textField15.setPrefWidth(335.0);
-        textField15.setStyle("-fx-background-color: transparent;");
-        textField15.setOpacity(0.83);
-        textField15.setPromptText("Enter the amount you want!");
-
-        // Adding child to parent
-        hBox14.getChildren().add(textField15);
-
-        // Adding child to parent
-        vBox12.getChildren().add(hBox14);
         HBox hBox16 = new HBox();
         hBox16.setPrefHeight(37.0);
         hBox16.setPrefWidth(433.0);
@@ -149,31 +140,103 @@ public class ProductMenuG extends GMenu {
 
         // Adding child to parent
         hBox16.getChildren().add(label17);
-        ChoiceBox choiceBox18 = new ChoiceBox();
-        choiceBox18.setPrefWidth(150.0);
-        choiceBox18.setTranslateX(25.0);
+        ComboBox<String> suppliers = new ComboBox<>();
+        suppliers.setPrefWidth(150.0);
+        suppliers.setTranslateX(25.0);
 
         // Adding child to parent
-        hBox16.getChildren().add(choiceBox18);
+        hBox16.getChildren().add(suppliers);
 
         // Adding child to parent
         vBox12.getChildren().add(hBox16);
-        Button button19 = new Button();
-        button19.setPrefHeight(33.0);
-        button19.setPrefWidth(233.0);
-        button19.setTranslateY(280.0);
-        button19.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        button19.setText("Add to cart");
-        button19.setMnemonicParsing(false);
+        Button addToCartButton = new Button();
+        addToCartButton.setPrefHeight(33.0);
+        addToCartButton.setPrefWidth(233.0);
+        addToCartButton.setTranslateY(280.0);
+        addToCartButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        addToCartButton.setText("Add to cart");
+        addToCartButton.setMnemonicParsing(false);
+
+        // Adding tabPane
+        TabPane commentAndDetail = new TabPane();
+        Tab details = new Tab("Details");
+        Tab  comments = new Tab("Comments");
+        commentAndDetail.getTabs().addAll(details, comments);
+        ScrollBar scrollBar1 = new ScrollBar();
+        ScrollBar scrollBar2 = new ScrollBar();
+        scrollBar1.setPrefHeight(266);
+        scrollBar1.setPrefWidth(18);
+        scrollBar2.setPrefHeight(266);
+        scrollBar2.setPrefWidth(18);
+        scrollBar1.setLayoutX(1186);
+        scrollBar2.setLayoutX(1186);
+        details.setContent(scrollBar1);
+        comments.setContent(scrollBar2);
 
         // Adding child to parent
-        vBox12.getChildren().add(button19);
+        vBox12.getChildren().add(addToCartButton);
+
+        // Adding
+        vBox12.getChildren().add(priceLabel);
+        vBox12.getChildren().add(label4);
 
         // Adding child to parent
         anchorPane0.getChildren().add(vBox12);
 
-        //Controller
+        // Adding Controller
+        // adding image!
+        //File file = new File(product.getImageUrl());
+
+        Image productImage = new Image(product.getImageUrl());
+        imageViewBox.setImage(productImage);
+
+        details.setContent(createDetails());
+
+        ArrayList<String> suppliersIds = new ArrayList<>();
+        for (Supplier supplier : controller.getProductController().controlGetAllSuppliersForAProduct(product)) {
+            suppliersIds.add(supplier.getNameOfCompany());
+        }
+        suppliers.getItems().addAll(suppliersIds);
+
+
+        descriptionText.setText(product.getDescription());
+        scoreText.setText( String.valueOf(controller.getProductController().controlGetAverageScoreByProduct(product)));
+        nameText.setText(product.getName());
+
+        addToCartButton.setOnAction( e -> {
+            String productId = product.getProductId();
+            String supplierNameOfCompany = suppliers.getValue();
+            try {
+                controller.getAccountController().controlAddToCart(productId, supplierNameOfCompany);
+            } catch (ExceptionalMassage ex) {
+                new AlertBox(this, ex, controller).showAndWait();
+            }
+
+        });
+
+
+
+
 
         return new Scene(anchorPane0);
+    }
+
+    private VBox createDetails(){
+
+        VBox background = new VBox();
+        GridPane gridPane = new GridPane();
+        gridPane.setVgap(5);
+        gridPane.setHgap(5);
+        gridPane.setGridLinesVisible(true);
+        int i = 0;
+        for (String key : product.getSpecification().keySet()) {
+            gridPane.add(new Label(key), 0, i);
+            gridPane.add(new Label(product.getSpecification().get(key)), 1, i);
+            i++;
+        }
+
+        background.getChildren().add(gridPane);
+        return background;
+
     }
 }

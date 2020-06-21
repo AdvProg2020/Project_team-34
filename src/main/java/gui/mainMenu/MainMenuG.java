@@ -104,7 +104,7 @@ public class MainMenuG extends GMenu {
 
         products.setOnAction( e-> {
             stage.setTitle(menuName);
-            stage.setScene(new AllProductGMenu(this,stage,controller).getScene());
+            stage.setScene(new AllProductGMenu(this,stage,controller, false).getScene());
         });
 
         //loginMenu.setOnAction( e-> {

@@ -61,4 +61,12 @@ public class Supplier extends Account{
         this.nameOfCompany = nameOfCompany;
         AccountDataBase.update(this);
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Supplier)) {
+            return false;
+        }
+        return this.getUserName().equals(((Supplier) o).getUserName());
+    }
 }

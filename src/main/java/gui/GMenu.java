@@ -139,7 +139,7 @@ public abstract class GMenu {
         ImageView imageView = new ImageView(logoImage);
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
-//        imageView.setPreserveRatio(true);
+        imageView.setPreserveRatio(true);
         return imageView;
     }
 
@@ -213,7 +213,8 @@ public abstract class GMenu {
     public Scene createLogScene(VBox logsBox) {
         VBox mainLayout = new VBox();
         GridPane background = new GridPane();
-        Scene scene = new Scene(background);
+        ScrollPane scrollPane = new ScrollPane(background);
+        Scene scene = new Scene(scrollPane);
 
         logsBox.setPadding(new Insets(10, 10, 10, 10));
         logsBox.setSpacing(10);
@@ -320,6 +321,8 @@ public abstract class GMenu {
         mainLayout.setMinWidth(600);
         mainLayout.setMinHeight(200);
         mainLayout.getChildren().addAll(userInfo, commentDetail);
+        mainLayout.setStyle("-fx-border-color: #4678c8");
+        mainLayout.setStyle("-fx-border-width: 2pt");
 
         return mainLayout;
     }

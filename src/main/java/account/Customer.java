@@ -3,6 +3,8 @@ package account;
 import cart.Cart;
 import database.AccountDataBase;
 
+import java.util.Objects;
+
 /**
  * @author rpirayadi
  * @since 0.0.1
@@ -42,5 +44,13 @@ public class Customer extends Account {
                 "phoneNumber=\'" + phoneNumber + "\'" + "\n" +
                 "password=\'" + password + "\'" + "\n" +
                 "credit=\'" + credit + "\'" + "\n";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Customer)) {
+            return false;
+        }
+        return this.getUserName().equals(((Customer) o).getUserName());
     }
 }

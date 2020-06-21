@@ -15,7 +15,7 @@ import java.util.Date;
  * @since 0.01
  */
 
-public class Sale extends Discount{
+public class Sale extends Discount {
     private static ArrayList<Sale> sales = new ArrayList<>();
     private static int allCreatedSalesNum = 0;
     private String offId;
@@ -24,13 +24,13 @@ public class Sale extends Discount{
     private State state;
     private Supplier supplier;
 
-    public Sale(Supplier supplier,Date start, Date end, int percent,String rootSaleId) {
+    public Sale(Supplier supplier, Date start, Date end, int percent, String rootSaleId) {
         super(start, end, percent);
 
         this.offId = generateOffId();
         allCreatedSalesNum++;
         products = new ArrayList<>();
-        if(rootSaleId == null){
+        if (rootSaleId == null) {
             state = State.PREPARING_TO_BUILD;
         } else {
             state = State.PREPARING_TO_EDIT;
@@ -39,7 +39,7 @@ public class Sale extends Discount{
         addSale(this);
     }
 
-    public Sale( Date start, Date end, int percent, String offId, ArrayList<Product> products, State state) {
+    public Sale(Date start, Date end, int percent, String offId, ArrayList<Product> products, State state) {
         super(start, end, percent);
         this.offId = offId;
         this.products = products;
@@ -47,15 +47,15 @@ public class Sale extends Discount{
         sales.add(this);
     }
 
-    private String generateOffId(){
-        return "T34S" + String.format("%015d",allCreatedSalesNum  + 1);
+    private String generateOffId() {
+        return "T34S" + String.format("%015d", allCreatedSalesNum + 1);
     }
 
-    public static void addSale(Sale sale){
+    public static void addSale(Sale sale) {
         sales.add(sale);
     }
 
-    public void addProductToSale(Product product){
+    public void addProductToSale(Product product) {
         products.add(product);
     }
 
@@ -77,7 +77,7 @@ public class Sale extends Discount{
         SaleDataBase.update(this);
     }
 
-    public void removeProductFromSale(Product product){
+    public void removeProductFromSale(Product product) {
         products.remove(product);
         SaleDataBase.update(this);
     }
@@ -86,53 +86,58 @@ public class Sale extends Discount{
         return products;
     }
 
-    public static ArrayList<Sale> getSales(){
+    public static ArrayList<Sale> getSales() {
         return sales;
     }
 
-    public static Sale getSaleById(String id){
+    public static boolean isProductHasAnySale(Product product) {
         for (Sale sale : sales) {
-            if(sale.getOffId().equals(id)){
-                return sale;
-            }
-        }
-        return null;
-    }
-
-    public static void removeSale(Sale sale){
-        sales.remove(sale);
-    }
-
-    public static void importAllData(){
-
-    }
-
-    public Supplier getSupplier() {
-        return supplier;
-    }
-
-    public boolean isProductInSale(Product product){
-        for (Product product1 : products) {
-            if(product1 == product){
+            if (sale.isProductInSale(product)) {
                 return true;
             }
         }
         return false;
     }
 
-    public static ArrayList<Sale> getActiveSales(){
+    public static Sale getSaleById(String id) {
+        for (Sale sale : sales) {
+            if (sale.getOffId().equals(id)) {
+                return sale;
+            }
+        }
+        return null;
+    }
+
+    public static void removeSale(Sale sale) {
+        sales.remove(sale);
+    }
+
+    public Supplier getSupplier() {
+        return supplier;
+    }
+
+    public boolean isProductInSale(Product product) {
+        for (Product product1 : products) {
+            if (product1.getProductId().equals(product.getProductId())) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static ArrayList<Sale> getActiveSales() {
         ArrayList<Sale> activeSales = new ArrayList<>();
         for (Sale sale : sales) {
-            if(sale.isSaleActive()){
+            if (sale.isSaleActive()) {
                 activeSales.add(sale);
             }
         }
         return activeSales;
     }
 
-    public boolean isSaleActive(){
+    public boolean isSaleActive() {
         Date date = new Date(System.currentTimeMillis());
-        if(this.getState() == State.CONFIRMED && (this.start.before(date) && this.end.after(date))){
+        if (this.getState() == State.CONFIRMED && (this.start.before(date) && this.end.after(date))) {
             return true;
         } else {
             return false;
@@ -148,12 +153,11 @@ public class Sale extends Discount{
         return null;
     }
 
-    public static ArrayList<String> getAllSaleRequestId(){
-        ArrayList<String > result = new ArrayList<>();
+    public static ArrayList<String> getAllSaleRequestId() {
+        ArrayList<String> result = new ArrayList<>();
         String id;
-        for (Sale sale : sales)
-        {
-            if(sale.getState() == State.PREPARING_TO_EDIT || sale.getState() == State.PREPARING_TO_BUILD){
+        for (Sale sale : sales) {
+            if (sale.getState() == State.PREPARING_TO_EDIT || sale.getState() == State.PREPARING_TO_BUILD) {
                 result.add(convertSaleIdToRequestId(sale.getOffId()));
             }
         }
@@ -164,13 +168,13 @@ public class Sale extends Discount{
         return rootSaleId;
     }
 
-    public static String getDetailsForSaleRequest(String requestId) throws ExceptionalMassage{
+    public static String getDetailsForSaleRequest(String requestId) throws ExceptionalMassage {
         String result = "";
-        if(Sale.getSaleById(convertRequestIdToSaleId(requestId)) == null){
+        if (Sale.getSaleById(convertRequestIdToSaleId(requestId)) == null) {
             throw new ExceptionalMassage("No such id!");
         }
         Sale sale = Sale.getSaleById(convertRequestIdToSaleId(requestId));
-        if(sale.getState() == State.PREPARING_TO_BUILD){
+        if (sale.getState() == State.PREPARING_TO_BUILD) {
             result += "This Sale wants to be created!\n";
             result += "sale info :\n";
             result += "start date :" + sale.getStart().toString() + "\n";
@@ -197,28 +201,27 @@ public class Sale extends Discount{
         return result;
     }
 
-    private static String convertSaleIdToRequestId(String requestId){
-        return  "T34SR"+requestId.substring(4);
+    private static String convertSaleIdToRequestId(String requestId) {
+        return "T34SR" + requestId.substring(4);
     }
 
-    private static String convertRequestIdToSaleId(String productId){
-        return  "T34S"+productId.substring(5);
+    private static String convertRequestIdToSaleId(String productId) {
+        return "T34S" + productId.substring(5);
     }
 
-    public static void acceptOrDeclineRequest(String requestId, boolean isAccepted) throws  ExceptionalMassage{
+    public static void acceptOrDeclineRequest(String requestId, boolean isAccepted) throws ExceptionalMassage {
         Sale saleRequest = Sale.getSaleById(convertRequestIdToSaleId(requestId));
-        if(saleRequest == null)
+        if (saleRequest == null)
             throw new ExceptionalMassage("Invalid request identifier");
-        if(!isAccepted) {
+        if (!isAccepted) {
             sales.remove(saleRequest);
             ProductDataBase.delete(saleRequest.getOffId());
             return;
         }
-        if(saleRequest.getState() == State.PREPARING_TO_BUILD) {
+        if (saleRequest.getState() == State.PREPARING_TO_BUILD) {
             saleRequest.setState(State.CONFIRMED);
             SaleDataBase.update(saleRequest);
-        }
-        else {
+        } else {
             setRequestValuesInRealSale(saleRequest);
             sales.remove(saleRequest);
             ProductDataBase.delete(saleRequest.getOffId());
@@ -231,7 +234,7 @@ public class Sale extends Discount{
         this.products = products;
     }
 
-    private static void setRequestValuesInRealSale(Sale saleRequest){
+    private static void setRequestValuesInRealSale(Sale saleRequest) {
         Sale realSale = Sale.getSaleById(saleRequest.getRootSaleId());
         realSale.setStart(saleRequest.getStart());
         realSale.setEnd(saleRequest.getEnd());
@@ -239,9 +242,6 @@ public class Sale extends Discount{
         realSale.setProducts(saleRequest.getProducts());
 
     }
-
-
-
 
 
     @Override

@@ -3,6 +3,7 @@ package gui.cartMenu;
 import account.Supplier;
 import cart.ProductInCart;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Pos;
@@ -29,19 +30,8 @@ public class CartGMenu extends GMenu {
         GridPane backgroundLayout = new GridPane();
         VBox productsInCartPane ;
         GridPane buttonPane = new GridPane();
-//        mainPane.setPrefHeight(513.0);
-//        mainPane.setPrefWidth(657.0);
-//        TableView tableView = new TableView();
-//        tableView.setPrefHeight(272.0);
-//        tableView.setPrefWidth(450.0);
-//        tableView.setLayoutX(97.0);
-//        tableView.setLayoutY(121.0);
-
-
 
         buttonPane.setHgap(100);
-
-
 
         productsInCartPane = createProductsInCartPane(controller);
 
@@ -141,26 +131,28 @@ public class CartGMenu extends GMenu {
         gridPane.add(decrement, column, 2);
 
         increment.setOnMouseClicked(e->{
-//            try {
-//                controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
+            try {
+                controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) + 1));
+                controller.getAccountController().controlViewCart().update();
                 if(countLabel.getText().equals("0"))
                     productInCartPane.getChildren().remove(gridPane);
 
-//            } catch (ExceptionalMassage exceptionalMassage) {
-//                exceptionalMassage.printStackTrace();
-//            }
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
         });
 
         decrement.setOnMouseClicked(e->{
-//            try {
-//                controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
+            try {
+                controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                     countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
+                controller.getAccountController().controlViewCart().update();
                     if(countLabel.getText().equals("0"))
                         productInCartPane.getChildren().remove(gridPane);
-//            } catch (ExceptionalMassage exceptionalMassage) {
-//                exceptionalMassage.printStackTrace();
-//            }
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
         });
 
         gridPane.setHgap(70);

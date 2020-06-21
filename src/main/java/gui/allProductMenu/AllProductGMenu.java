@@ -45,7 +45,8 @@ public class AllProductGMenu extends GMenu {
         GridPane productGridPane = new GridPane();
         ScrollPane productScrollPane = new ScrollPane();
 
-        mainPane.setMinWidth(1200);
+        mainPane.setMinWidth(1000);
+        mainPane.setMinHeight(600);
 
         Label label = new Label("Applied Filter");
         appliedFilter.getChildren().add(label);
@@ -91,13 +92,6 @@ public class AllProductGMenu extends GMenu {
             putNewProductsInProductGridPane(productGridPane);
         });
 
-//        Label lowerBoundLabel = new Label("Lower Bound");
-//        Slider lowerBound = new Slider();
-//        Label upperBoundLabel = new Label("Upper Bound");
-//        Slider upperBound = new Slider();
-//        upperBound.setValue(100);
-////        lowerBoundLabel, lowerBound,upperBoundLabel, upperBound
-
         RangeSlider rangeSlider = new RangeSlider(0, 10000, 0, 10000);
         rangeSlider.setMajorTickUnit(1000);
         rangeSlider.setShowTickLabels(true);
@@ -139,34 +133,9 @@ public class AllProductGMenu extends GMenu {
 //
 //        });
 
-        ImageView bottom = null;
-        try {
-            bottom = new ImageView(new Image(new FileInputStream("C:/Users/ASUS/Desktop/Photo/bullet2.png")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        bottom.setFitWidth(150);
-        bottom.setFitHeight(150);
-        ImageView top    = null;
-        try {
-            top = new ImageView(new Image(new FileInputStream("C:/Users/ASUS/Desktop/Photo/so1.png")));
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        top.setFitWidth(150);
-        top.setFitHeight(150);
-        top.setX(300);
-        top.setY(0);
-        top.setBlendMode(BlendMode.DIFFERENCE);
 
-        Group blend = new Group(
-                bottom,
-                top
-        );
-
-        productGridPane.getChildren().addAll(bottom, blend, top);
         productGridPane.setVgap(30);
-        productGridPane.setHgap(10);
+        productGridPane.setHgap(30);
 
 //        productGridPane.add(bottom, 4, 5);
         productScrollPane.setContent(productGridPane);
@@ -190,42 +159,27 @@ public class AllProductGMenu extends GMenu {
     }
 
     private void putNewProductsInProductGridPane(GridPane productGridPane){
+        productGridPane.getChildren().clear();
         ArrayList<Product> products =  controller.getProductController().getFilterAndSort().getProducts();
-//        products.add(Product.getProductById("T34P000000000000003"));
-//        products.add(Product.getProductById("T34P000000000000009"));
         System.out.println(products.size());
         int row =0 ;
-        GridPane vBox ;
-
+        GridPane gridPane;
 
         for (Product product : products) {
-            vBox = new GridPane();
+            VBox mainVBox = new VBox();
+            gridPane = new GridPane();
+            mainVBox.setStyle("-fx-background-color: #9cbfe3");
 
             Label nameLabel = new Label(product.getName());
-//            vBox.getChildren().add(nameLabel);
-            ImageView productImageView = null;
-            try {
-                productImageView = new ImageView(new Image(new FileInputStream(product.getImageUrl())));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-            productImageView.setFitWidth(200);
-            productImageView.setFitHeight(200);
+            nameLabel.setStyle("-fx-font-size: 20");
+
+            ImageView productImageView = GMenu.getImageView(product.getImageUrl(), 200 , 200);
 
             productImageView.setOnMouseClicked(e->{
                 stage.setScene(new ProductMenuG(this,stage,  product, controller).getScene());
             });
 
-            ImageView soldOutImageView    = null;
-            try {
-                soldOutImageView = new ImageView(new Image(new FileInputStream("C:/Users/ASUS/Desktop/Photo/so1.png")));
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            }
-
-            soldOutImageView.setFitWidth(200);
-            soldOutImageView.setFitHeight(200);
-
+            ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png",200, 200);
 
             soldOutImageView.setBlendMode(BlendMode.ADD);
             Group blend = new Group(
@@ -233,10 +187,13 @@ public class AllProductGMenu extends GMenu {
                     soldOutImageView
             );
 
-            vBox.getChildren().addAll(productImageView, blend, soldOutImageView);
+            gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
 
+            mainVBox.getChildren().add(gridPane);
+            mainVBox.getChildren().add(nameLabel);
+            mainVBox.setAlignment(Pos.CENTER);
 
-            productGridPane.add(vBox, 0, row);
+            productGridPane.add(mainVBox, 0, row);
             row++;
         }
     }

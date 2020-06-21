@@ -6,6 +6,7 @@ import controller.FilterAndSort;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -191,6 +192,7 @@ public class ProductMenuG extends GMenu {
         imageViewBox.setImage(productImage);
 
         details.setContent(createDetails());
+        comments.setContent(createAddComment());
 
         ArrayList<String> suppliersIds = new ArrayList<>();
         for (Supplier supplier : controller.getProductController().controlGetAllSuppliersForAProduct(product)) {
@@ -221,9 +223,9 @@ public class ProductMenuG extends GMenu {
         return new Scene(anchorPane0);
     }
 
-    private VBox createDetails(){
+    private HBox createDetails(){
 
-        VBox background = new VBox();
+        HBox background = new HBox();
         GridPane gridPane = new GridPane();
         gridPane.setVgap(5);
         gridPane.setHgap(5);
@@ -237,6 +239,44 @@ public class ProductMenuG extends GMenu {
 
         background.getChildren().add(gridPane);
         return background;
+
+    }
+
+    private HBox createAddComment(){
+        HBox hBox0 = new HBox();
+        hBox0.setPrefHeight(250.0);
+        hBox0.setPrefWidth(300.0);
+        GridPane gridPane1 = new GridPane();
+        gridPane1.setPrefHeight(400.0);
+        gridPane1.setPrefWidth(572.0);
+        gridPane1.setAlignment(Pos.CENTER);
+        Label label2 = new Label();
+        label2.setText("Title:");
+        label2.setAlignment(Pos.CENTER);
+
+// Adding child to parent
+        TextField textField3 = new TextField();
+        gridPane1.add(label2,0,0);
+        gridPane1.add(textField3,1,0);
+
+// Adding child to parent
+        Label label4 = new Label();
+        label4.setText("Description:");
+        gridPane1.add(label4,0,1);
+
+
+// Adding child to parent
+        TextArea textArea5 = new TextArea();
+        gridPane1.add(textArea5, 1, 1);
+        textArea5.setPrefHeight(200.0);
+        textArea5.setPrefWidth(200.0);
+
+
+
+// Adding child to parent
+        hBox0.getChildren().add(gridPane1);
+        return hBox0;
+
 
     }
 }

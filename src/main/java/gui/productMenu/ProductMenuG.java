@@ -188,11 +188,15 @@ public class ProductMenuG extends GMenu {
 
         ScrollPane detailsScrollPane = new ScrollPane();
         ScrollPane commentsScrollPane = new ScrollPane();
+        GridPane commentsGridPane = new GridPane();
         detailsScrollPane.setContent(createDetails());
+        int i = 0;
         for (Comment comment : controller.getProductController().controlGetCommentsOfAProduct(product)) {
-            //commentsScrollPane.setContent();
+            commentsGridPane.add(commentBox(comment),0,i);
+            i++;
         }
-        commentsScrollPane.setContent(createAddComment());
+        commentsGridPane.add(createAddComment(),i,0);
+        commentsScrollPane.setContent(commentsGridPane);
         details.setContent(detailsScrollPane);
         comments.setContent(commentsScrollPane);
 

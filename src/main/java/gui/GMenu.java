@@ -320,6 +320,8 @@ public abstract class GMenu {
         mainLayout.setMinWidth(600);
         mainLayout.setMinHeight(200);
         mainLayout.getChildren().addAll(userInfo, commentDetail);
+        mainLayout.setStyle("-fx-border-color: #4678c8");
+        mainLayout.setStyle("-fx-border-width: 2pt");
 
         return mainLayout;
     }

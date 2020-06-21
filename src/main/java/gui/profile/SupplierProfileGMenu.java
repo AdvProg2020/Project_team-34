@@ -23,7 +23,6 @@ public class SupplierProfileGMenu extends GMenu {
         VBox buttonPane = new VBox();
         VBox viewPane = new VBox();
 
-
         Button viewProductsForThisSupplier = new Button("View My Products");
         GMenu.addStyleToButton(viewProductsForThisSupplier);
         viewProductsForThisSupplier.setOnMouseClicked(e->{

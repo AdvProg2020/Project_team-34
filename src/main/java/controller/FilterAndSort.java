@@ -307,7 +307,7 @@ public class FilterAndSort {
         products = applySpecialFilter(products);
         products = applyNameFilter(products);
         products = applyBrandFilter(products);
-        products = applySaleOnlyFilter(products);
+//        products = applySaleOnlyFilter(products);
         products = sort(products);
         return products;
     }

@@ -36,13 +36,13 @@ public class ViewLogsForSupervisorGMenu extends GMenu {
         VBox vBox = getLogBox();
         Text log = new Text(supervisorLog);
         Button proceed = new Button("Proceed");
-        proceed.setDisable(controller.getAccountController().isLogProcessable(id));
+        proceed.setDisable(!controller.getAccountController().isLogProcessable(id));
         vBox.setPrefWidth(600);
         vBox.setPadding(new Insets(10, 10, 10, 10));
         proceed.setOnAction(e -> {
             controller.getAccountController().proceedCustomerLog(id);
             log.setText(controller.getAccountController().getCustomerLogById(id));
-            proceed.setDisable(controller.getAccountController().isLogProcessable(id));
+            proceed.setDisable(!controller.getAccountController().isLogProcessable(id));
         });
         vBox.getChildren().addAll(log, proceed);
 

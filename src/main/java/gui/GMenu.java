@@ -213,8 +213,7 @@ public abstract class GMenu {
     public Scene createLogScene(VBox logsBox) {
         VBox mainLayout = new VBox();
         GridPane background = new GridPane();
-        ScrollPane scrollPane = new ScrollPane(background);
-        Scene scene = new Scene(scrollPane);
+        Scene scene = new Scene(background);
 
         logsBox.setPadding(new Insets(10, 10, 10, 10));
         logsBox.setSpacing(10);
@@ -286,44 +285,5 @@ public abstract class GMenu {
         return mainLayout;
     }
 
-    protected HBox commentBox(Comment comment) {
-        HBox mainLayout = new HBox();
-        VBox userInfo = new VBox();
-        VBox commentDetail = new VBox();
 
-        String username = "@" + comment.getCustomer().getUserName();
-        ImageView authorized = getImageView("./src/main/resources/icons/boughted.png", 25, 25);
-        boolean isAuthorized = comment.isCustomerBoughtThisProduct();
-
-        HBox authorizedBox = new HBox();
-        authorizedBox.getChildren().addAll(authorized, new Label("Customer comment"));
-        authorizedBox.setSpacing(10);
-
-        if (isAuthorized) {
-            userInfo.getChildren().addAll(authorizedBox);
-        }
-        userInfo.getChildren().addAll(new Label(username));
-        userInfo.setMinWidth(200);
-        userInfo.setMinHeight(200);
-        userInfo.setSpacing(20);
-        userInfo.setPadding(new Insets(10, 10, 10, 10));
-        userInfo.setAlignment(Pos.TOP_LEFT);
-
-        Text commentText = new Text(comment.getContent());
-        Text commentTitle = new Text(comment.getTitle());
-        commentTitle.setStyle("-fx-font-weight: bolder");
-        commentText.setWrappingWidth(380);
-        commentTitle.setWrappingWidth(380);
-        commentDetail.setPadding(new Insets(10, 10, 10, 10));
-        commentDetail.setSpacing(20);
-        commentDetail.getChildren().addAll(commentTitle, commentText);
-
-        mainLayout.setMinWidth(600);
-        mainLayout.setMinHeight(200);
-        mainLayout.getChildren().addAll(userInfo, commentDetail);
-        mainLayout.setStyle("-fx-border-color: #4678c8");
-        mainLayout.setStyle("-fx-border-width: 2pt");
-
-        return mainLayout;
-    }
 }

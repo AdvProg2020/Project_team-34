@@ -97,10 +97,10 @@ public class CartGMenu extends GMenu {
         productsInCartPane.getChildren().add(createTableHeader());
 
         ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
-        Supplier supplier = new Supplier("i", "i", "i", "i", "ij", "kj", 6, "hdi");
-        Product product = new Product(supplier, "laptop", "Asus", 499, 5, "good", null, null, new HashMap<>());
-        ProductInCart newProductInCart = new ProductInCart(product, supplier);
-        productInCarts.add(newProductInCart);
+        //Supplier supplier = new Supplier("i", "i", "i", "i", "ij", "kj", 6, "hdi");
+        //Product product = new Product(supplier, "laptop", "Asus", 499, 5, "good", null, null, new HashMap<>());
+        //ProductInCart newProductInCart = new ProductInCart(product, supplier);
+        //productInCarts.add(newProductInCart);
         for (ProductInCart productInCart : productInCarts) {
             productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane));
         }

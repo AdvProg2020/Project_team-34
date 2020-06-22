@@ -126,6 +126,11 @@ public class Category {
         return allCategories;
     }
 
+    //added by rpiraydi
+    public static Category getSuperCategory() {
+        return superCategory;
+    }
+
     //Setters:
     private void setParentCategoryName(String name) {
         this.parentCategoryName = name;

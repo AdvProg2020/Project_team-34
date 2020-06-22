@@ -3,7 +3,10 @@ package gui.allProductMenu;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import gui.productMenu.ProductMenuG;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Group;
@@ -12,13 +15,16 @@ import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import product.Category;
 import product.Product;
 import org.controlsfx.control.RangeSlider;
 
+import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -97,11 +103,10 @@ public class AllProductGMenu extends GMenu {
         rangeSlider.setMajorTickUnit(1000);
         rangeSlider.setShowTickLabels(true);
         rangeSlider.setOnMouseClicked(e->{
-            putNewProductsInProductGridPane(productGridPane);
-        });
-        rangeSlider.setOnMouseDragReleased(e->{
             try {
+                System.out.println(rangeSlider.getHighValue());
                 controller.getProductController().getFilterAndSort().setPriceUpperBound((int) rangeSlider.getHighValue());
+                System.out.println(controller.getProductController().getFilterAndSort().getPriceUpperBound());
             } catch (ExceptionalMassage exceptionalMassage) {
                 exceptionalMassage.printStackTrace();
             }
@@ -136,6 +141,50 @@ public class AllProductGMenu extends GMenu {
         price.setPadding(new Insets(10, 10 , 10 , 10));
 
         putNewProductsInProductGridPane(productGridPane);
+//
+        TreeItem<String> rootNode = new TreeItem<String>("MyCompany Human Resources");
+        TreeItem<String > baby = new TreeItem<>("baby");
+//        TreeItem<String > grandSon = new TreeItem<>("grand Son");
+//        rootNode.getChildren().add(baby);
+//        baby.getChildren().add(grandSon);
+        TreeItem<Button> treeItem = new TreeItem<>(new Button("hi"));
+
+        Button byeButton = new Button("bye");
+        byeButton.setOnMouseClicked(e->{
+            System.out.println("ah aha");
+        });
+//        TreeItem<Button> treeItemBaby = new TreeItem<>(byeButton);
+//        treeItem.getChildren().add(treeItemBaby);
+
+//        treeItemBaby.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<javafx.scene.input.MouseEvent>() {
+//            @Override
+//            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+//                System.out.println("print");
+//            }
+//
+//        });
+//        treeItem.addEventHandler(TreeItem.branchExpandedEvent(), new EventHandler() {
+//            @Override
+//            public void handle(Event event) {
+//                System.out.println("man");
+//            }
+//        });
+
+
+        TreeView<Button> treeView = new TreeView<>(getTreeItem(controller.getProductController().controlGetAllProductCategory(), controller, productGridPane));
+//        TreeView<String> babyTreeView = new TreeView<>(baby);
+        treeView.setPrefHeight(250);
+
+
+        filterAndSort.getChildren().add(treeView);
+
+//        rootTreeView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<javafx.scene.input.MouseEvent>() {
+//            @Override
+//            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
+//                System.out.println("print");
+//            }
+//
+//        });
 
         filterAndSort.getChildren().addAll(appliedFilter, sort,availability, price);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
@@ -181,21 +230,28 @@ public class AllProductGMenu extends GMenu {
             Label nameLabel = new Label(product.getName());
             nameLabel.setStyle("-fx-font-size: 20");
 
+
+
             ImageView productImageView = GMenu.getImageView(product.getImageUrl(), 200 , 200);
 
             productImageView.setOnMouseClicked(e->{
                 stage.setScene(new ProductMenuG(this,stage,  product, controller).getScene());
             });
 
-            ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png",200, 200);
+            if(!product.isProductAvailableNow()) {
+                ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
-            soldOutImageView.setBlendMode(BlendMode.ADD);
-            Group blend = new Group(
-                    productImageView,
-                    soldOutImageView
-            );
+                soldOutImageView.setBlendMode(BlendMode.ADD);
+                Group blend = new Group(
+                        productImageView,
+                        soldOutImageView
+                );
 
-            gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
+                gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
+            }
+            else {
+                gridPane.getChildren().add(productImageView);
+            }
 
             mainVBox.getChildren().add(gridPane);
             mainVBox.getChildren().add(nameLabel);
@@ -209,5 +265,21 @@ public class AllProductGMenu extends GMenu {
             }
 
         }
+    }
+
+    public TreeItem<Button> getTreeItem(Category rootCategory, Controller controller, GridPane productGridPane){
+        Button rootButton = new Button(rootCategory.getName());
+        rootButton.setOnMouseClicked(e->{
+            controller.getProductController().getFilterAndSort().setCategory(rootCategory);
+            putNewProductsInProductGridPane(productGridPane);
+        });
+        TreeItem<Button> rootTreeItem = new TreeItem<>(rootButton);
+        if(!rootCategory.isCategoryClassifier())
+            return rootTreeItem;
+        ArrayList<Category> allCategoriesIn = controller.getProductController().controlGetAllCategoriesInACategory(rootCategory);
+        for (Category categoryIn : allCategoriesIn) {
+            rootTreeItem.getChildren().add(getTreeItem(categoryIn, controller, productGridPane));
+        }
+        return rootTreeItem;
     }
 }

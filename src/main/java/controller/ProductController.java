@@ -13,6 +13,7 @@ import log.CustomerLog;
 import product.Category;
 import product.Product;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -262,6 +263,15 @@ public class ProductController {
             allCategories += categoryDescription;
         }
         return allCategories;
+    }
+
+    //added by rpirayadi
+    public ArrayList<Category> controlGetAllCategoriesInACategory(Category rootCategory){
+        return rootCategory.getAllCategoriesIn();
+    }
+    //added by rpirayadi
+    public Category controlGetAllProductCategory (){
+        return Category.getSuperCategory();
     }
 
     //related to feedback:

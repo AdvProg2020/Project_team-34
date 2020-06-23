@@ -6,6 +6,7 @@ import product.Category;
 import product.Product;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
@@ -200,7 +201,7 @@ public class FilterAndSort {
     private ArrayList<Product> sort(ArrayList<Product> products) {
         products = new ArrayList<>(products);
         Comparator<Product> sortComparator = sortType.getComparator();
-        products.sort(sortComparator);
+        products.sort(Collections.reverseOrder(sortComparator));
         return products;
     }
 

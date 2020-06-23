@@ -151,47 +151,56 @@ public abstract class GMenu {
         return vBox;
     }
 
-    public static GridPane createViewPersonalInfo(Account account){
+    public static VBox createViewPersonalInfo(Account account){
         GridPane showingInfoPane = new GridPane();
+
+        VBox usernameVBox = new VBox();
+        usernameVBox.setAlignment(Pos.CENTER);
         int row = 0;
 
-        Label accountTypeLabel  = new Label("Account Type");
-        Label accountTypeValue = new Label(account.getAccountType());
-        showingInfoPane.add(accountTypeLabel, 0, row);
-        showingInfoPane.add(accountTypeValue,1, row);
-        row++;
-
-        Label usernameLabel = new Label("Username");
+//        Label usernameLabel = new Label("Username");
         Label usernameValue = new Label(account.getUserName());
-        showingInfoPane.add(usernameLabel, 0, row);
-        showingInfoPane.add(usernameValue,1, row);
-        row++;
+        usernameValue.setStyle("-fx-font-size: 40");
+//        showingInfoPane.add(usernameLabel, 0, row);
+//        showingInfoPane.add(usernameValue,1, row);
+//        row++;
+
+//        Label accountTypeLabel  = new Label("Account Type");
+        Label accountTypeValue = new Label("(" + account.getAccountType() + ")");
+//        showingInfoPane.add(accountTypeLabel, 0, row);
+//        showingInfoPane.add(accountTypeValue,1, row);
+//        row++;
+
+        usernameVBox.getChildren().addAll(usernameValue, accountTypeValue);
+
         Label nameLabel = new Label("First Name");
         Label nameValue = new Label(account.getName());
         showingInfoPane.add(nameLabel,0, row);
-        showingInfoPane.add(nameValue, 1,row);
+        showingInfoPane.add(nameValue, 2,row);
         row++;
         Label familyNameLabel = new Label("Last Name");
         Label familyNameValue = new Label(account.getFamilyName());
         showingInfoPane.add(familyNameLabel, 0, row);
-        showingInfoPane.add(familyNameValue, 1, row);
+        showingInfoPane.add(familyNameValue, 2, row);
         row++;
         Label emailLabel = new Label("Email");
         Label emailLabelValue = new Label(account.getEmail());
         showingInfoPane.add(emailLabel,0 , row);
-        showingInfoPane.add(emailLabelValue,1, row);
+        showingInfoPane.add(emailLabelValue,2, row);
         row++;
         Label phoneNumberLabel = new Label("Phone Number");
         Label phoneNumberValue = new Label(account.getPhoneNumber());
         showingInfoPane.add(phoneNumberLabel, 0, row);
-        showingInfoPane.add(phoneNumberValue,1, row);
+        showingInfoPane.add(phoneNumberValue,2, row);
         row++;
+
+        usernameVBox.getChildren().add(showingInfoPane);
 
         if(account instanceof Supplier) {
             Label nameOfCompanyLabel = new Label("Name of Company");
             Label nameOfCompanyValue = new Label(((Supplier)account).getNameOfCompany());
             showingInfoPane.add(nameOfCompanyLabel,0, row);
-            showingInfoPane.add(nameOfCompanyValue,1, row);
+            showingInfoPane.add(nameOfCompanyValue,2, row);
             row++;
         }
 
@@ -199,14 +208,14 @@ public abstract class GMenu {
             Label creditLabel = new Label("Credit");
             Label creditValue = new Label(String.valueOf(account.getCredit()));
             showingInfoPane.add(creditLabel,0, row);
-            showingInfoPane.add(creditValue,1, row);
+            showingInfoPane.add(creditValue,2, row);
         }
 
         showingInfoPane.setAlignment(Pos.CENTER);
         showingInfoPane.setVgap(30);
         showingInfoPane.setHgap(30);
         showingInfoPane.setPadding(new Insets(10, 10 , 10 , 10));
-        return showingInfoPane;
+        return usernameVBox;
     }
 
     public Scene createLogScene(VBox logsBox) {
@@ -230,6 +239,9 @@ public abstract class GMenu {
     public static void addStyleToButton(Button button){
         button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
         button.getStyleClass().add("button");
+        button.setMinHeight(28);
+        button.setMinWidth(170);
+        button.setPrefWidth(170);
     }
 
     public void showAndWait() {

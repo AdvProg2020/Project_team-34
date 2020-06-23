@@ -213,7 +213,8 @@ public abstract class GMenu {
     public Scene createLogScene(VBox logsBox) {
         VBox mainLayout = new VBox();
         GridPane background = new GridPane();
-        Scene scene = new Scene(background);
+        ScrollPane scrollPane = new ScrollPane(background);
+        Scene scene = new Scene(scrollPane);
 
         logsBox.setPadding(new Insets(10, 10, 10, 10));
         logsBox.setSpacing(10);
@@ -284,6 +285,4 @@ public abstract class GMenu {
         mainLayout.setAlignment(Pos.CENTER);
         return mainLayout;
     }
-
-
 }

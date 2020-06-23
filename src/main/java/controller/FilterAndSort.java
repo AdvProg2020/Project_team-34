@@ -159,29 +159,29 @@ public class FilterAndSort {
     }
 
     private ArrayList<Product> applySaleOnlyFilter(ArrayList<Product> products) {
-        ArrayList<Product> filteredProducts = new ArrayList<>();
-        for (Product product : products) {
-            if (Sale.isProductHasAnySale(product)) {
-                filteredProducts.add(product);
-            }
-        }
-        return filteredProducts;
-    }
-
-    private ArrayList<Product> applyPriceLowerBound(ArrayList<Product> products) {
         if (inSaleOnly) {
-            ArrayList<Product> filteredProducts;
-            if (priceLowerBound != null) {
-                filteredProducts = new ArrayList<>();
-                for (Product product : products)
-                    if (product.isProductProvidedInPriceUpperThan(priceLowerBound))
-                        filteredProducts.add(product);
-            } else {
-                filteredProducts = new ArrayList<>(products);
+            ArrayList<Product> filteredProducts = new ArrayList<>();
+            for (Product product : products) {
+                if (Sale.isProductHasAnySale(product)) {
+                    filteredProducts.add(product);
+                }
             }
             return filteredProducts;
         }
         return new ArrayList<>(products);
+    }
+
+    private ArrayList<Product> applyPriceLowerBound(ArrayList<Product> products) {
+        ArrayList<Product> filteredProducts;
+        if (priceLowerBound != null) {
+            filteredProducts = new ArrayList<>();
+            for (Product product : products)
+                if (product.isProductProvidedInPriceUpperThan(priceLowerBound))
+                    filteredProducts.add(product);
+        } else {
+            filteredProducts = new ArrayList<>(products);
+        }
+        return filteredProducts;
     }
 
     private ArrayList<Product> applyPriceUpperBound(ArrayList<Product> products) {
@@ -307,7 +307,7 @@ public class FilterAndSort {
         products = applySpecialFilter(products);
         products = applyNameFilter(products);
         products = applyBrandFilter(products);
-//        products = applySaleOnlyFilter(products);
+        products = applySaleOnlyFilter(products);
         products = sort(products);
         return products;
     }

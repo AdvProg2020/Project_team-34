@@ -308,6 +308,7 @@ public class ViewDiscountCodesG extends GMenu {
                 int newMaxAmount = Integer.parseInt(maxAmountField.getText());
                 try {
                     controller.getOffController().controlEditDiscountByCode(codedDiscount.getDiscountCode(), newStart, newEnd, newPercent, newMaxAmount);
+                    ((Stage)anchorPane0.getScene().getWindow()).close();
                 } catch (ExceptionalMassage ex) {
                     new AlertBox(this, ex, controller).showAndWait();
                 }
@@ -508,6 +509,7 @@ public class ViewDiscountCodesG extends GMenu {
                         maxNumberOfUsage.put((Customer)Customer.getAccountByUsername(userName),maxNumber);
                     }
                     controller.getOffController().controlCreateCodedDiscount(code, startDate, endDate, percent, maxAmount,maxNumberOfUsage);
+                    ((Stage)anchorPane0.getScene().getWindow()).close();
                 } catch(ExceptionalMassage ex ){
                     new AlertBox(this, ex, controller).showAndWait();
                 }

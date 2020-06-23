@@ -12,8 +12,6 @@ import feedback.Score;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
-
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -275,9 +273,11 @@ public class ProductController {
     }
 
     //related to feedback:
-    public void controlAddCommentToProduct(String title, String content, Product product) {
-        //Need modification!
-        new Comment((Customer) mainController.getAccount(), product, title, content, false);
+    public void controlAddCommentToProduct(String title, String content, Product product) throws ExceptionalMassage{
+        if (!(mainController.getAccount() instanceof Customer)){
+            throw new ExceptionalMassage("Sign in as a customer first!");
+        }
+        new Comment((Customer) mainController.getAccount(), product, title, content, controlHasCustomerBoughtThisProduct((Customer)mainController.getAccount(),product));
     }
 
     public ArrayList<Comment> controlGetCommentsOfAProduct(Product product) {
@@ -293,6 +293,12 @@ public class ProductController {
     public void controlRateProductById(String id, float score) throws ExceptionalMassage {
         if (Product.getProductById(id) == null) {
             throw new ExceptionalMassage("No such product with id!");
+        } else if (!(mainController.getAccount() instanceof Customer)){
+            throw new ExceptionalMassage("Sign in as customer first!");
+        } else if (!controlHasCustomerBoughtThisProduct((Customer)mainController.getAccount(),Product.getProductById(id))) {
+            throw new ExceptionalMassage("You haven't bought this product yet!");
+        } else if (Score.hasCustomerRateThisProduct(Product.getProductById(id),(Customer)mainController.getAccount())){
+            throw new ExceptionalMassage("You can't rate again!");
         }
         new Score(score, (Customer) (mainController.getAccount()), Product.getProductById(id));
     }
@@ -478,5 +484,9 @@ public class ProductController {
 
     public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) {
         return Category.getCategoryByName(name).getSpecialFields();
+    }
+
+    public boolean controlHasCustomerBoughtThisProduct(Customer customer, Product product ){
+        return CustomerLog.getAllCustomersBoughtProduct(product).contains(customer);
     }
 }

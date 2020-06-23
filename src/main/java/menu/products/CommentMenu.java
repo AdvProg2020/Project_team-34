@@ -1,5 +1,6 @@
 package menu.products;
 
+import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import menu.menuAbstract.Menu;
 import product.Product;
@@ -23,7 +24,11 @@ public class CommentMenu extends Menu {
                 title = scanner.nextLine();
                 System.out.println("Enter the content");
                 content = scanner.nextLine();
-                controller.getProductController().controlAddCommentToProduct(title,content,product);
+                try {
+                    controller.getProductController().controlAddCommentToProduct(title, content, product);
+                } catch (ExceptionalMassage ex){
+                    System.out.println(ex.getMessage());
+                }
                 System.out.println("comment added successfully!");
                 parentMenu.show();
                 parentMenu.execute();

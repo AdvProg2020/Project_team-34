@@ -67,6 +67,9 @@ public class Score {
                 counter++;
             }
         }
+        if(total == 0 && counter == 0){
+            return 0;
+        }
         return total/counter;
     }
 

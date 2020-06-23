@@ -1,5 +1,6 @@
 package controller;
 
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Category;
 import product.Product;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 
 public class FilterAndSort {
     private boolean availabilityFilter;
+    private boolean inSaleOnly;
     private Integer priceLowerBound;
     private Integer priceUpperBound;
     private SortType sortType;
@@ -25,6 +27,7 @@ public class FilterAndSort {
 
     public FilterAndSort() {
         this.availabilityFilter = false;
+        this.inSaleOnly = false;
         this.priceLowerBound = null;
         this.priceUpperBound = null;
         this.sortType = SortType.BY_NUMBER_OF_VIEWS;
@@ -36,6 +39,7 @@ public class FilterAndSort {
 
     public void clear() {
         this.availabilityFilter = false;
+        this.inSaleOnly = false;
         this.priceLowerBound = null;
         this.priceUpperBound = null;
         this.sortType = SortType.BY_NUMBER_OF_VIEWS;
@@ -47,6 +51,7 @@ public class FilterAndSort {
 
     public void clearFiltersExceptCategory() {
         this.availabilityFilter = false;
+        this.inSaleOnly = false;
         this.priceLowerBound = null;
         this.priceUpperBound = null;
         this.sortType = SortType.BY_NUMBER_OF_VIEWS;
@@ -57,6 +62,10 @@ public class FilterAndSort {
 
     public boolean getAvailabilityFilter() {
         return availabilityFilter;
+    }
+
+    public boolean isInSaleOnly() {
+        return inSaleOnly;
     }
 
     public Integer getPriceLowerBound() {
@@ -89,6 +98,10 @@ public class FilterAndSort {
 
     public void setAvailabilityFilter(boolean availabilityFilter) {
         this.availabilityFilter = availabilityFilter;
+    }
+
+    public void setInSaleOnly(boolean inSaleOnly) {
+        this.inSaleOnly = inSaleOnly;
     }
 
     public void setPriceLowerBound(Integer priceLowerBound) throws ExceptionalMassage {
@@ -143,6 +156,19 @@ public class FilterAndSort {
             filteredProducts = new ArrayList<>(products);
         }
         return filteredProducts;
+    }
+
+    private ArrayList<Product> applySaleOnlyFilter(ArrayList<Product> products) {
+        if (inSaleOnly) {
+            ArrayList<Product> filteredProducts = new ArrayList<>();
+            for (Product product : products) {
+                if (Sale.isProductHasAnySale(product)) {
+                    filteredProducts.add(product);
+                }
+            }
+            return filteredProducts;
+        }
+        return new ArrayList<>(products);
     }
 
     private ArrayList<Product> applyPriceLowerBound(ArrayList<Product> products) {
@@ -281,6 +307,7 @@ public class FilterAndSort {
         products = applySpecialFilter(products);
         products = applyNameFilter(products);
         products = applyBrandFilter(products);
+        products = applySaleOnlyFilter(products);
         products = sort(products);
         return products;
     }

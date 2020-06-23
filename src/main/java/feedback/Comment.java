@@ -12,18 +12,19 @@ import java.util.ArrayList;
  */
 
 public class Comment {
-    private static ArrayList<Comment> comments = new ArrayList<>();
-    private static int allCommentsNum = 0 ;
-    private String commentId ;
-    private Customer customer;
-    private Product product;
-    private String title;
-    private String content;
-    private CommentState state;
-    private boolean customerBoughtThisProduct;
+    private static final ArrayList<Comment> comments = new ArrayList<>();
+    private static int allCommentsNum = 0;
+    private final String commentId;
+    private final Customer customer;
+    private final Product product;
+    private final String title;
+    private final String content;
+    private final CommentState state;
+    private final boolean customerBoughtThisProduct;
 
 
-    public Comment(Customer customer, Product product, String title, String content, CommentState state , boolean customerBoughtThisProduct, String commentId) {
+    public Comment(Customer customer, Product product, String title, String content, CommentState state,
+                   boolean customerBoughtThisProduct, String commentId) {
         this.title = title;
         this.customer = customer;
         this.product = product;
@@ -31,10 +32,11 @@ public class Comment {
         this.state = state;
         this.customerBoughtThisProduct = customerBoughtThisProduct;
         this.commentId = commentId;
+        allCommentsNum++;
         comments.add(this);
     }
 
-    public Comment(Customer customer, Product product, String title, String content,boolean customerBoughtThisProduct) {
+    public Comment(Customer customer, Product product, String title, String content, boolean customerBoughtThisProduct) {
         this.title = title;
         this.customer = customer;
         this.product = product;
@@ -43,7 +45,7 @@ public class Comment {
         this.customerBoughtThisProduct = customerBoughtThisProduct;
         this.state = CommentState.CONFIRMED;
         comments.add(this);
-        allCommentsNum ++;
+        allCommentsNum++;
         CommentDataBase.add(this);
     }
 
@@ -67,29 +69,15 @@ public class Comment {
         return content;
     }
 
-    public void setContent(String content) {
-        this.content = content;
-    }
-
     public String getTitle() {
         return title;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
-        CommentDataBase.update(this);
-    }
-
-    public boolean hasCustomerBoughtThisProduct(Customer customer){
+    public boolean isCustomerBoughtThisProduct() {
         return customerBoughtThisProduct;
     }
 
-    public void setCustomerBoughtThisProduct(boolean customerBoughtThisProduct) {
-        this.customerBoughtThisProduct = customerBoughtThisProduct;
-        CommentDataBase.update(this);
-    }
-
-    public static ArrayList<Comment> getComments(){
+    public static ArrayList<Comment> getComments() {
         return comments;
     }
 
@@ -97,14 +85,14 @@ public class Comment {
         return product;
     }
 
-    private String generateIdentifier(){
+    private String generateIdentifier() {
         return "T34C" + String.format("%015d", allCommentsNum + 1);
     }
 
     public static ArrayList<Comment> getCommentsForProduct(Product product) {
         ArrayList<Comment> returningComments = new ArrayList<>();
         for (Comment comment : comments) {
-            if(comment.getProduct() == product){
+            if (comment.getProduct() == product) {
                 returningComments.add(comment);
             }
         }
@@ -112,19 +100,14 @@ public class Comment {
     }
 
     //Added by rpirayadi
-    public static Comment getCommentByIdentifier(String commentId){
+    public static Comment getCommentByIdentifier(String commentId) {
         for (Comment eachComment : comments) {
-            if(eachComment.getCommentId().equals(commentId))
+            if (eachComment.getCommentId().equals(commentId))
                 return eachComment;
         }
         return null;
     }
 
-
-    /**
-     *
-     * @return returns the String form of a JSON object for storing in the database.
-     */
     @Override
     public String toString() {
         return "Comment{" +

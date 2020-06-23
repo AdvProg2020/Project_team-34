@@ -1,10 +1,11 @@
 package gui.cartMenu;
 
-import account.Supplier;
 import cart.ProductInCart;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.loginMenu.LoginGMenu;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -13,8 +14,8 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import product.Product;
 
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
 
@@ -29,19 +30,8 @@ public class CartGMenu extends GMenu {
         GridPane backgroundLayout = new GridPane();
         VBox productsInCartPane ;
         GridPane buttonPane = new GridPane();
-//        mainPane.setPrefHeight(513.0);
-//        mainPane.setPrefWidth(657.0);
-//        TableView tableView = new TableView();
-//        tableView.setPrefHeight(272.0);
-//        tableView.setPrefWidth(450.0);
-//        tableView.setLayoutX(97.0);
-//        tableView.setLayoutY(121.0);
-
-
 
         buttonPane.setHgap(100);
-
-
 
         productsInCartPane = createProductsInCartPane(controller);
 
@@ -78,15 +68,16 @@ public class CartGMenu extends GMenu {
 //        updateCart.setMnemonicParsing(false);
         GMenu.addStyleToButton(updateCart);
 
-
-
         buttonPane.add(updateCart, 2, 3);
+        buttonPane.setAlignment(Pos.CENTER);
+        buttonPane.setPadding(new Insets(10, 10, 10, 10));
 
-
-
-        backgroundLayout.add( createHeader(), 0,0);
-        backgroundLayout.add( productsInCartPane, 0, 1);
+        backgroundLayout.setVgap(20);
+        backgroundLayout.add(createHeader(), 0,0);
+        backgroundLayout.add(productsInCartPane, 0, 1);
         backgroundLayout.add(buttonPane, 0, 2);
+        backgroundLayout.setAlignment(Pos.CENTER);
+        backgroundLayout.setPadding(new Insets(10, 10, 10, 10));
         Scene scene = new Scene(backgroundLayout);
         return scene;
     }
@@ -94,7 +85,7 @@ public class CartGMenu extends GMenu {
     private static VBox createProductsInCartPane ( Controller controller){
         VBox productsInCartPane = new VBox();
         Label label = new Label();
-        label.setStyle("-fx-background-color: #9cbfe3;");
+        label.setStyle("-fx-background-color: transparent");
         label.setContentDisplay(CENTER);
         label.setPrefWidth(400);
         label.setText("Products On Your Shopping Cart");
@@ -104,20 +95,21 @@ public class CartGMenu extends GMenu {
         productsInCartPane.setSpacing(20);
         productsInCartPane.setAlignment(Pos.CENTER);
 
-        productsInCartPane.getChildren().add(createTableHeader());
+//        productsInCartPane.getChildren().add(createTableHeader());
 
         ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
-        Supplier supplier = new Supplier("i", "i", "i", "i", "ij", "kj", 6, "hdi");
-        Product product = new Product(supplier, "laptop", "Asus", 499, 5, "good", null, null, new HashMap<>());
-        ProductInCart newProductInCart = new ProductInCart(product, supplier);
-        productInCarts.add(newProductInCart);
+        //Supplier supplier = new Supplier("i", "i", "i", "i", "ij", "kj", 6, "hdi");
+        //Product product = new Product(supplier, "laptop", "Asus", 499, 5, "good", null, null, new HashMap<>());
+        //ProductInCart newProductInCart = new ProductInCart(product, supplier);
+        //productInCarts.add(newProductInCart);
+        productsInCartPane.setAlignment(Pos.CENTER);
         for (ProductInCart productInCart : productInCarts) {
             productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane));
         }
         return productsInCartPane;
     }
 
-    private static GridPane createProductGridPane(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
+    private static HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
         Label IdLabel = new Label(product.getProductId());
@@ -128,6 +120,13 @@ public class CartGMenu extends GMenu {
         Button increment = new Button("+");
         Button decrement = new Button("-");
 
+        HBox countBox = new HBox();
+        countBox.getChildren().addAll(decrement, countLabel, increment);
+        countBox.setMaxHeight(30);
+        countBox.setSpacing(5);
+        countBox.setAlignment(Pos.CENTER);
+        countBox.getStylesheets().add(new File("src/main/java/gui/cartMenu/style.css").toURI().toString());
+
         int column = 0;
         gridPane.add(IdLabel, column, 1);
         column++;
@@ -135,38 +134,42 @@ public class CartGMenu extends GMenu {
         column++;
         gridPane.add(priceLabel, column, 1);
         column++;
-        gridPane.add(countLabel, column, 1);
-        column++;
-        gridPane.add(increment, column, 0);
-        gridPane.add(decrement, column, 2);
+
+        gridPane.add(countBox, column, 1);
 
         increment.setOnMouseClicked(e->{
-//            try {
-//                controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
+            try {
+                controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) + 1));
+                controller.getAccountController().controlViewCart().update();
                 if(countLabel.getText().equals("0"))
                     productInCartPane.getChildren().remove(gridPane);
 
-//            } catch (ExceptionalMassage exceptionalMassage) {
-//                exceptionalMassage.printStackTrace();
-//            }
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
         });
 
         decrement.setOnMouseClicked(e->{
-//            try {
-//                controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
+            try {
+                controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                     countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
+                controller.getAccountController().controlViewCart().update();
                     if(countLabel.getText().equals("0"))
                         productInCartPane.getChildren().remove(gridPane);
-//            } catch (ExceptionalMassage exceptionalMassage) {
-//                exceptionalMassage.printStackTrace();
-//            }
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
         });
 
         gridPane.setHgap(70);
         gridPane.setVgap(0);
-        gridPane.setStyle("-fx-border-color: orange");
-        return gridPane;
+        gridPane.setAlignment(Pos.CENTER);
+        HBox hBox = new HBox();
+        hBox.setStyle("-fx-border-color: orange");
+        hBox.setSpacing(20);
+        hBox.getChildren().addAll(getImageView(product.getImageUrl(), 70, 70), gridPane);
+        return hBox;
     }
 
     private static HBox createTableHeader(){

@@ -13,6 +13,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import menu.menuAbstract.Menu;
 
+import java.io.File;
+
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
@@ -29,6 +31,7 @@ public class MainMenuG extends GMenu {
         anchorPane0.setPrefWidth(750.0);
         anchorPane0.setStyle("-fx-background-color: #4677c8;");
         VBox vBox1 = new VBox();
+        vBox1.setStyle("");
         vBox1.setPrefHeight(700.0);
         vBox1.setPrefWidth(375.0);
         vBox1.setLayoutX(373.0);
@@ -104,7 +107,7 @@ public class MainMenuG extends GMenu {
 
         products.setOnAction( e-> {
             stage.setTitle(menuName);
-            stage.setScene(new AllProductGMenu(this,stage,controller).getScene());
+            stage.setScene(new AllProductGMenu(this,stage,controller, false).getScene());
         });
 
         //loginMenu.setOnAction( e-> {
@@ -114,6 +117,9 @@ public class MainMenuG extends GMenu {
         background.setAlignment(Pos.CENTER);
         background.getChildren().add(anchorPane0);
 
-        return new Scene(background);
+        Scene scene = new Scene(background);
+        scene.getStylesheets().add(new File("src/main/java/gui/mainMenu/style/style.css").toURI().toString());
+
+        return scene;
     }
 }

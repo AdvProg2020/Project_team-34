@@ -1,0 +1,10 @@
+.button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-font-weight: bolder;
+    -fx-color-label-visible: inherit;
+    -fx-font-size: 20pt;
+    -fx-max-height: 20px;
+    -fx-pref-height: 20px;
+    -fx-text-fill: #4678c8;
+}

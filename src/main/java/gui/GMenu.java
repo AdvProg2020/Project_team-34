@@ -1,23 +1,20 @@
 package gui;
 
-
 import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
+import feedback.Comment;
 import gui.alerts.AlertBox;
 import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
 import gui.mainMenu.MainMenuG;
 import gui.profile.*;
-import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
@@ -25,9 +22,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import org.w3c.dom.events.MouseEvent;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -86,13 +83,12 @@ public abstract class GMenu {
                 stage.setScene(parentMenu.getScene());
             }
         });
-        signIn.setOnAction(e -> {
-            new LoginGMenu(this, stage, controller).showAndWait();
-        });
+        signIn.setOnAction(e -> new LoginGMenu(this, stage, controller).showAndWait());
         allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this,
-                stage,controller).getScene()));
+                stage,controller, false).getScene()));
         cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu(this, stage, controller).getScene()));
         manageUsers.setOnAction(e -> stage.setScene(new ManageUsersGMenu(this, stage, controller).getScene()));
+        saleView.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this, stage, controller, true).getScene()));
 
         userMenuBar.getMenus().addAll(user);
 
@@ -142,6 +138,7 @@ public abstract class GMenu {
         ImageView imageView = new ImageView(logoImage);
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
+//        imageView.setPreserveRatio(true);
         return imageView;
     }
 
@@ -215,7 +212,8 @@ public abstract class GMenu {
     public Scene createLogScene(VBox logsBox) {
         VBox mainLayout = new VBox();
         GridPane background = new GridPane();
-        Scene scene = new Scene(background);
+        ScrollPane scrollPane = new ScrollPane(background);
+        Scene scene = new Scene(scrollPane);
 
         logsBox.setPadding(new Insets(10, 10, 10, 10));
         logsBox.setSpacing(10);
@@ -229,12 +227,10 @@ public abstract class GMenu {
         return scene;
     }
 
-
     public static void addStyleToButton(Button button){
         button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
         button.getStyleClass().add("button");
     }
-
 
     public void showAndWait() {
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -288,6 +284,4 @@ public abstract class GMenu {
         mainLayout.setAlignment(Pos.CENTER);
         return mainLayout;
     }
-
-
 }

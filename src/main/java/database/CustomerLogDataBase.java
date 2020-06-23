@@ -64,6 +64,7 @@ public class CustomerLogDataBase {
 
         try (Statement statement = DataBase.getConnection().createStatement();
              ResultSet resultSet = statement.executeQuery(sql)) {
+
             while (resultSet.next()) {
                 String customerLogId = resultSet.getString("identifier");
                 Date date = new Date(resultSet.getLong("date"));
@@ -74,6 +75,7 @@ public class CustomerLogDataBase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
     }
 
     public static ArrayList<CustomerLog> sortCustomerLog(String field , ArrayList<String> whatToShow) throws ExceptionalMassage {

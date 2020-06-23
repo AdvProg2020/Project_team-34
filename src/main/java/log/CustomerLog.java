@@ -47,7 +47,7 @@ public class CustomerLog {
         }
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
-        addSubLogForSuppliers();
+        addSubLogForSuppliersMainConstructorCall();
         CustomerLogDataBase.add(this);
     }
 
@@ -61,7 +61,7 @@ public class CustomerLog {
         this.cart = cart;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
-        addSubLogForSuppliers();
+        addSubLogForSuppliersDataBaseConstructorCall();
     }
 
     //Getters:
@@ -128,9 +128,17 @@ public class CustomerLog {
         return customerLogs;
     }
 
-    public void addSubLogForSuppliers() {
+    public void addSubLogForSuppliersDataBaseConstructorCall() {
         ArrayList<Supplier> allSupplierInThisLog = cart.getAllSupplier();
         for (Supplier supplier : allSupplierInThisLog) {
+            addSubLogForSupplier(supplier);
+        }
+    }
+
+    public void addSubLogForSuppliersMainConstructorCall() {
+        ArrayList<Supplier> allSupplierInThisLog = cart.getAllSupplier();
+        for (Supplier supplier : allSupplierInThisLog) {
+            supplier.setCredit(supplier.getCredit() + getSupplierEarnedMoney(supplier));
             addSubLogForSupplier(supplier);
         }
     }

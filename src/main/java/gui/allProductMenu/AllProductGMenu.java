@@ -174,19 +174,11 @@ public class AllProductGMenu extends GMenu {
         TreeView<Label> treeView = new TreeView<>(getTreeItem(controller.getProductController().controlGetAllProductCategory(), controller, productGridPane , numberOfViews, saleCheck, availabilityCheck, rangeSlider));
 //        TreeView<String> babyTreeView = new TreeView<>(baby);
         treeView.setPrefHeight(250);
-        treeView.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        treeView.getStyleClass().add("my tree");
-        filterAndSort.getChildren().add(treeView);
+        filterAndSort.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+//        treeView.getStyleClass().add("my tree");
 
-//        rootTreeView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<javafx.scene.input.MouseEvent>() {
-//            @Override
-//            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-//                System.out.println("print");
-//            }
-//
-//        });
 
-        filterAndSort.getChildren().addAll(appliedFilter, sort,availability, price);
+        filterAndSort.getChildren().addAll(appliedFilter, sort,availability, price, treeView);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
 
 
@@ -238,7 +230,7 @@ public class AllProductGMenu extends GMenu {
                 stage.setScene(new ProductMenuG(this,stage,  product, controller).getScene());
             });
 
-            if(!product.isProductAvailableNow()) {
+            if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.ADD);
@@ -269,6 +261,7 @@ public class AllProductGMenu extends GMenu {
 
     public TreeItem<Label> getTreeItem(Category rootCategory, Controller controller, GridPane productGridPane, RadioButton numberOfViews, CheckBox saleCheck , CheckBox availabilityCheck, RangeSlider rangeSlider){
         Label rootLabel = new Label(rootCategory.getName());
+        rootLabel.setStyle("-fx-text-fill: #4677c8");
         rootLabel.setOnMouseClicked(e->{
             controller.getProductController().getFilterAndSort().setCategory(rootCategory);
             resetAllFilters(numberOfViews,saleCheck, availabilityCheck, rangeSlider);

@@ -1,6 +1,8 @@
 package feedback;
 
 import account.Customer;
+import database.DataBase;
+import database.ScoreDataBase;
 import product.Product;
 
 import java.util.ArrayList;
@@ -25,6 +27,7 @@ public class Score {
         this.product = product;
         this.identifier = generateIdentifier();
         allCreatedScoreNum ++ ;
+        ScoreDataBase.add(this);
         scores.add(this);
     }
 
@@ -33,6 +36,9 @@ public class Score {
         this.customer = customer;
         this.product = product;
         this.score = score;
+        scores.add(this);
+        allCreatedScoreNum++;
+
     }
     
 
@@ -50,10 +56,6 @@ public class Score {
 
     public String getIdentifier() {
         return identifier;
-    }
-
-    public boolean canCustomerRateThisProduct(Customer customer){
-        return false;
     }
 
     public static float getAverageScoreForProduct(Product product){
@@ -81,6 +83,14 @@ public class Score {
         return null;
     }
 
+    public static boolean hasCustomerRateThisProduct(Product product,Customer customer){
+        for (Score score : scores) {
+            if (score.getCustomer() == customer && score.getProduct() == product){
+                return true;
+            }
+        }
+        return false;
+    }
 
 
 

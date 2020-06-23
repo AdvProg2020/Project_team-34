@@ -3,6 +3,7 @@ package gui.productMenu;
 import account.Supplier;
 import controller.Controller;
 import controller.FilterAndSort;
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import gui.GMenu;
@@ -11,6 +12,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
@@ -20,11 +22,13 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import menu.menuAbstract.Menu;
+import org.controlsfx.control.Rating;
 import product.Product;
 
 import java.io.File;
 import java.util.ArrayList;
 
+import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_CENTER;
 import static javafx.scene.control.TabPane.TabClosingPolicy.UNAVAILABLE;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
@@ -66,6 +70,23 @@ public class ProductMenuG extends GMenu {
         nameText.setLayoutY(390.0);
         nameText.setText("name sits here");
 
+        Label rateHere = new Label();
+        rateHere.setLayoutX(76);
+        rateHere.setLayoutY(420);
+        rateHere.setText("Rate here:");
+
+        Rating starRating = new Rating();
+        starRating.setUpdateOnHover(true);
+        starRating.setMax(5);
+        starRating.setLayoutX(131);
+        starRating.setLayoutY(410);
+        starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+        starRating.setEffect(new DropShadow());
+        starRating.setPartialRating(true);
+
+
+        anchorPane0.getChildren().addAll(rateHere, starRating);
+
         // Adding child to parent
         anchorPane0.getChildren().add(nameText);
         Label label4 = new Label();
@@ -80,21 +101,6 @@ public class ProductMenuG extends GMenu {
         priceLabel.setText("price sits here");
 
         // Adding child to parent
-
-        Label label6 = new Label();
-        label6.setLayoutX(76.0);
-        label6.setLayoutY(444.0);
-        label6.setText("Score:");
-
-        // Adding child to parent
-        anchorPane0.getChildren().add(label6);
-        Label scoreText = new Label();
-        scoreText.setLayoutX(131.0);
-        scoreText.setLayoutY(444.0);
-        scoreText.setText("Score sits here");
-
-        // Adding child to parent
-        anchorPane0.getChildren().add(scoreText);
 
         Label label9 = new Label();
         label9.setLayoutX(380.0);
@@ -195,8 +201,18 @@ public class ProductMenuG extends GMenu {
             commentsGridPane.add(commentBox(comment),0,i);
             i++;
         }
-        commentsGridPane.add(createAddComment(),i,0);
+        commentsGridPane.add(createAddComment(),0,i);
+        commentsGridPane.setPadding(new Insets(10,10,10,10));
+        commentsGridPane.setAlignment(CENTER);
         commentsScrollPane.setContent(commentsGridPane);
+
+        GridPane backGround = new GridPane();
+        backGround.getChildren().add(createDetails());
+        backGround.setAlignment(CENTER);
+        backGround.setPadding(new Insets(10,10,10,10));
+        details.setClosable(false);
+        comments.setClosable(false);
+        detailsScrollPane.setContent(backGround);
         details.setContent(detailsScrollPane);
         comments.setContent(commentsScrollPane);
 
@@ -210,7 +226,6 @@ public class ProductMenuG extends GMenu {
 
 
         descriptionText.setText(product.getDescription());
-        scoreText.setText( String.valueOf(controller.getProductController().controlGetAverageScoreByProduct(product)));
         nameText.setText(product.getName());
 
         addToCartButton.setOnAction( e -> {
@@ -225,11 +240,24 @@ public class ProductMenuG extends GMenu {
         });
 
         suppliers.setOnAction( e -> {
-            priceLabel.setText(String.valueOf(product.getPrice(Supplier.getSupplierByCompanyName(suppliers.getValue()))));
+            int originalPrice = product.getPrice(Supplier.getSupplierByCompanyName(suppliers.getValue()));
+            if(Sale.isProductHasAnySale(product)){
+                priceLabel.setText((originalPrice) + "=>" + (originalPrice - Sale.getProductSale(product,Supplier.getSupplierByCompanyName(suppliers.getValue())).discountAmountFor(originalPrice)));
+
+            } else {
+                priceLabel.setText(originalPrice +"");
+            }
             suppliers.setPromptText("Choose your supplier");
         });
 
-
+        starRating.setOnMouseClicked( e -> {
+            float rating =(float) starRating.getRating();
+            try {
+                controller.getProductController().controlRateProductById(product.getProductId(), rating);
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
+            }
+        });
 
 
 
@@ -243,13 +271,22 @@ public class ProductMenuG extends GMenu {
         gridPane.setVgap(5);
         gridPane.setHgap(5);
         gridPane.setGridLinesVisible(true);
+        Button compareButton = new Button("Compare");
+        TextField productName = new TextField();
+        productName.setPromptText("Other product's name");
         int i = 0;
         for (String key : product.getSpecification().keySet()) {
             gridPane.add(new Label(key), 0, i);
             gridPane.add(new Label(product.getSpecification().get(key)), 1, i);
             i++;
         }
+        gridPane.add(compareButton,1,i);
+        gridPane.add(productName,0,i);
+        compareButton.setOnAction( e -> {
+            stage.setScene(new CompareGMenu("Compare menu",this,stage,controller,product,Product.getProductByName(productName.getText())).createScene());
+        });
 
+        gridPane.setPadding(new Insets(10,10,10,10));
         background.getChildren().add(gridPane);
         return background;
 
@@ -262,10 +299,10 @@ public class ProductMenuG extends GMenu {
         GridPane gridPane1 = new GridPane();
         gridPane1.setPrefHeight(400.0);
         gridPane1.setPrefWidth(572.0);
-        gridPane1.setAlignment(Pos.CENTER);
+        gridPane1.setAlignment(CENTER);
         Label label2 = new Label();
         label2.setText("Title:");
-        label2.setAlignment(Pos.CENTER);
+        label2.setAlignment(CENTER);
 
 // Adding child to parent
         TextField titleField = new TextField();
@@ -293,7 +330,11 @@ public class ProductMenuG extends GMenu {
         comment.setOnAction( e -> {
             String title = titleField.getText();
             String description = descriptionArea.getText();
-            controller.getProductController().controlAddCommentToProduct(title, description, product);
+            try {
+                controller.getProductController().controlAddCommentToProduct(title, description, product);
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
+            }
         });
 
 

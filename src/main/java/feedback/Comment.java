@@ -32,6 +32,7 @@ public class Comment {
         this.state = state;
         this.customerBoughtThisProduct = customerBoughtThisProduct;
         this.commentId = commentId;
+        allCommentsNum++;
         comments.add(this);
     }
 

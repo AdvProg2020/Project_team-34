@@ -176,8 +176,6 @@ public class AllProductGMenu extends GMenu {
         treeView.setPrefHeight(250);
         treeView.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
         treeView.getStyleClass().add("my tree");
-
-
         filterAndSort.getChildren().add(treeView);
 
 //        rootTreeView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<javafx.scene.input.MouseEvent>() {

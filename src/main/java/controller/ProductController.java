@@ -489,4 +489,8 @@ public class ProductController {
     public boolean controlHasCustomerBoughtThisProduct(Customer customer, Product product ){
         return CustomerLog.getAllCustomersBoughtProduct(product).contains(customer);
     }
+
+    public void controlViewThisProduct(Product product){
+        product.setNumberOfViews(product.getNumberOfViews()+ 1);
+    }
 }

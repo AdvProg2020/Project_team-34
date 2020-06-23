@@ -286,9 +286,8 @@ public class Product {
     }
 
 
-    public void removeProduct() throws ExceptionalMassage {
-        setProductState(State.DELETED);
-        Category.getProductCategory(this).removeProduct(this);
+    public void removeProduct(){
+        setProductState(State.PREPARING_TO_BE_DELETED);
     }
 
     public void addProduct(){
@@ -345,6 +344,15 @@ public class Product {
         return false;
     }
 
+    public ArrayList<Supplier> getAllSuppliersThatHaveAvailableProduct(){
+        ArrayList<Supplier> suppliers = new ArrayList<>();
+        for (Supplier supplier : remainedNumberForEachSupplier.keySet()) {
+            if(remainedNumberForEachSupplier.get(supplier)> 0)
+                suppliers.add(supplier);
+        }
+        return suppliers;
+    }
+
     public boolean isProductProvidedInPriceLowerThan(int upperBound) {
         for (Supplier supplier : priceForEachSupplier.keySet()) {
             if(priceForEachSupplier.get(supplier) <= upperBound )
@@ -364,7 +372,7 @@ public class Product {
     public static ArrayList<String> getAllProductRequestId(){
         ArrayList<String > result = new ArrayList<>();
         for (Product eachProduct : allProduct) {
-            if(eachProduct.getProductState() == State.PREPARING_TO_EDIT || eachProduct.getProductState() == State.PREPARING_TO_BUILD){
+            if(eachProduct.getProductState() == State.PREPARING_TO_EDIT || eachProduct.getProductState() == State.PREPARING_TO_BUILD  || eachProduct.getProductState() == State.PREPARING_TO_BE_DELETED){
                 result.add(convertProductIdToRequestId(eachProduct.getProductId()));
             }
         }
@@ -408,10 +416,14 @@ public class Product {
             productRequest.setProductState(State.CONFIRMED);
             Category.getCategoryByName(productRequest.getFutureCategoryName()).addProduct(productRequest);
         }
-        else {
+        else if(productRequest.getProductState() == State.PREPARING_TO_EDIT) {
             setRequestValuesInRealProduct(productRequest);
             removeProductRequest(productRequest);
             ProductDataBase.update(Product.getProductById(productRequest.getRootProductId()));
+        }else {
+            productRequest.setProductState(State.DELETED);
+            Category.getProductCategory(productRequest).removeProduct(productRequest);
+//            Category.getProductCategory(Product.getProductById(productRequest.getRootProductId())).removeProduct(Product.getProductById(productRequest.getRootProductId()));
         }
 
     }

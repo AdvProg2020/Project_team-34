@@ -82,12 +82,12 @@ public class AllProductGMenu extends GMenu {
         });
 
         score.setOnMouseClicked(e->{
-            controller.getProductController().controlFilterSetSortType("by time added");
+            controller.getProductController().controlFilterSetSortType("by score");
             putNewProductsInProductGridPane(productGridPane);
         });
 
         time.setOnMouseClicked(e->{
-            controller.getProductController().controlFilterSetSortType("by score");
+            controller.getProductController().controlFilterSetSortType("by time added");
             putNewProductsInProductGridPane(productGridPane);
         });
 
@@ -102,7 +102,7 @@ public class AllProductGMenu extends GMenu {
         RangeSlider rangeSlider = new RangeSlider(0, 10000, 0, 10000);
         rangeSlider.setMajorTickUnit(1000);
         rangeSlider.setShowTickLabels(true);
-        rangeSlider.setOnMouseClicked(e->{
+        rangeSlider.setOnMouseReleased(e->{
             try {
                 System.out.println(rangeSlider.getHighValue());
                 controller.getProductController().getFilterAndSort().setPriceUpperBound((int) rangeSlider.getHighValue());
@@ -141,52 +141,16 @@ public class AllProductGMenu extends GMenu {
         price.setPadding(new Insets(10, 10 , 10 , 10));
 
         putNewProductsInProductGridPane(productGridPane);
-//
-        TreeItem<String> rootNode = new TreeItem<String>("MyCompany Human Resources");
-        TreeItem<String > baby = new TreeItem<>("baby");
-//        TreeItem<String > grandSon = new TreeItem<>("grand Son");
-//        rootNode.getChildren().add(baby);
-//        baby.getChildren().add(grandSon);
-        TreeItem<Button> treeItem = new TreeItem<>(new Button("hi"));
-
-        Button byeButton = new Button("bye");
-        byeButton.setOnMouseClicked(e->{
-            System.out.println("ah aha");
-        });
-//        TreeItem<Button> treeItemBaby = new TreeItem<>(byeButton);
-//        treeItem.getChildren().add(treeItemBaby);
-
-//        treeItemBaby.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<javafx.scene.input.MouseEvent>() {
-//            @Override
-//            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-//                System.out.println("print");
-//            }
-//
-//        });
-//        treeItem.addEventHandler(TreeItem.branchExpandedEvent(), new EventHandler() {
-//            @Override
-//            public void handle(Event event) {
-//                System.out.println("man");
-//            }
-//        });
 
 
         TreeView<Label> treeView = new TreeView<>(getTreeItem(controller.getProductController().controlGetAllProductCategory(), controller, productGridPane , numberOfViews, saleCheck, availabilityCheck, rangeSlider));
 //        TreeView<String> babyTreeView = new TreeView<>(baby);
         treeView.setPrefHeight(250);
-        treeView.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
-        treeView.getStyleClass().add("my tree");
-        filterAndSort.getChildren().add(treeView);
+        filterAndSort.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+//        treeView.getStyleClass().add("my tree");
 
-//        rootTreeView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<javafx.scene.input.MouseEvent>() {
-//            @Override
-//            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-//                System.out.println("print");
-//            }
-//
-//        });
 
-        filterAndSort.getChildren().addAll(appliedFilter, sort,availability, price);
+        filterAndSort.getChildren().addAll(appliedFilter, sort,availability, price, treeView);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
 
 
@@ -235,10 +199,11 @@ public class AllProductGMenu extends GMenu {
             ImageView productImageView = GMenu.getImageView(product.getImageUrl(), 200 , 200);
 
             productImageView.setOnMouseClicked(e->{
+                controller.getProductController().controlViewThisProduct(product);
                 stage.setScene(new ProductMenuG(this,stage,  product, controller).getScene());
             });
 
-            if(!product.isProductAvailableNow()) {
+            if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.ADD);
@@ -269,6 +234,7 @@ public class AllProductGMenu extends GMenu {
 
     public TreeItem<Label> getTreeItem(Category rootCategory, Controller controller, GridPane productGridPane, RadioButton numberOfViews, CheckBox saleCheck , CheckBox availabilityCheck, RangeSlider rangeSlider){
         Label rootLabel = new Label(rootCategory.getName());
+        rootLabel.setStyle("-fx-text-fill: #4677c8");
         rootLabel.setOnMouseClicked(e->{
             controller.getProductController().getFilterAndSort().setCategory(rootCategory);
             resetAllFilters(numberOfViews,saleCheck, availabilityCheck, rangeSlider);

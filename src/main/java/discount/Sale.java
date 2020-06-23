@@ -35,7 +35,9 @@ public class Sale extends Discount {
         } else {
             state = State.PREPARING_TO_EDIT;
         }
+        this.rootSaleId = rootSaleId;
         this.supplier = supplier;
+        SaleDataBase.add(this);
         addSale(this);
     }
 
@@ -46,6 +48,7 @@ public class Sale extends Discount {
         this.state = state;
         this.supplier = supplier;
         this.rootSaleId = rootSaleId;
+        allCreatedSalesNum++;
         sales.add(this);
     }
 
@@ -93,8 +96,8 @@ public class Sale extends Discount {
     }
 
     public static boolean isProductHasAnySale(Product product) {
-        for (Sale sale : sales) {
-            if (sale.isProductInSale(product)) {
+        for (Sale sale : Sale.getActiveSales()) {
+            if (sale.isProductInSale(product) ) {
                 return true;
             }
         }
@@ -157,7 +160,6 @@ public class Sale extends Discount {
 
     public static ArrayList<String> getAllSaleRequestId() {
         ArrayList<String> result = new ArrayList<>();
-        String id;
         for (Sale sale : sales) {
             if (sale.getState() == State.PREPARING_TO_EDIT || sale.getState() == State.PREPARING_TO_BUILD) {
                 result.add(convertSaleIdToRequestId(sale.getOffId()));
@@ -226,7 +228,7 @@ public class Sale extends Discount {
         } else {
             setRequestValuesInRealSale(saleRequest);
             sales.remove(saleRequest);
-            ProductDataBase.delete(saleRequest.getOffId());
+            SaleDataBase.delete(saleRequest.getOffId());
             SaleDataBase.update(Sale.getSaleById(saleRequest.getRootSaleId()));
         }
 

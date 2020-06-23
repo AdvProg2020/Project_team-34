@@ -5,6 +5,7 @@ import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import gui.mainMenu.MainMenuG;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -281,7 +282,7 @@ public class PurchaseMenuG extends GMenu {
         purchaseButton.setOnAction( e -> {
             try{
                 controller.getAccountController().finalizeOrder();
-
+                stage.setScene(new MainMenuG(null, stage, controller).getScene());
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }

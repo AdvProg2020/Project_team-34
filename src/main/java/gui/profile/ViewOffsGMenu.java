@@ -121,6 +121,8 @@ public class ViewOffsGMenu extends GMenu {
             salesList.getItems().add(sale.getOffId());
         }
 
+
+
         detailsButton.setOnAction( e -> {
             ObservableList<String> saleIds = salesList.getSelectionModel().getSelectedItems();
             for (String id : saleIds) {
@@ -444,6 +446,8 @@ public class ViewOffsGMenu extends GMenu {
             productsList.getItems().add(product.getProductId());
         }
 
+        productsList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
+
         createSaleButton.setOnAction( e -> {
             Date newStart = Date.from(startDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
             Date newEnd = Date.from(endDatePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
@@ -456,6 +460,7 @@ public class ViewOffsGMenu extends GMenu {
                 }
                 try{
                     controller.getOffController().controlCreateSale(newStart,newEnd,percent,arrayList);
+                    ((Stage)anchorPane0.getScene().getWindow()).close();
                 } catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();
                 }

@@ -8,6 +8,7 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import gui.cartMenu.CartGMenu;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -234,6 +235,7 @@ public class ProductMenuG extends GMenu {
             String supplierNameOfCompany = suppliers.getValue();
             try {
                 controller.getAccountController().controlAddToCart(productId, supplierNameOfCompany);
+                stage.setScene(new CartGMenu(this, stage, controller).getScene());
             } catch (ExceptionalMassage ex) {
                 new AlertBox(this, ex, controller).showAndWait();
             }

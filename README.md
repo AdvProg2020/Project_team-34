@@ -9,4 +9,4 @@ Advanced Programing Project, 2020 Spring
 | _***[Mr. Soheil Mahdizadeh](https://github.com/s0heil20)***_ | 98106083 |
 
 ## Advisor
-**_[Mr. Saber Zafarpoor](www.telegram.me/Saber_coder)_**
+**_Mr. Saber Zafarpoor_**

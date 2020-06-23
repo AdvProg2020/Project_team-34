@@ -343,7 +343,7 @@ public class Cart {
     @Override
     public String toString() {
         update();
-        StringBuilder cart = new StringBuilder("Cart, Identifier: " + identifier + " for <username: " + owner.getUserName() + ">" + "\n");
+        StringBuilder cart = new StringBuilder("Cart, Identifier: " + identifier + " for <username: " + (owner == null ? "NA" : owner.getUserName()) + ">" + "\n");
         if (shippingInfo != null)
             cart.append(shippingInfo.toString()).append("\n");
         if (codedDiscount != null)

@@ -39,11 +39,13 @@ public class Sale extends Discount {
         addSale(this);
     }
 
-    public Sale(Date start, Date end, int percent, String offId, ArrayList<Product> products, State state) {
+    public Sale(Date start, Date end, int percent, String offId, ArrayList<Product> products, State state, Supplier supplier, String rootSaleId) {
         super(start, end, percent);
         this.offId = offId;
         this.products = products;
         this.state = state;
+        this.supplier = supplier;
+        this.rootSaleId = rootSaleId;
         sales.add(this);
     }
 

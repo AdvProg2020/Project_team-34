@@ -3,3 +3,7 @@
      -fx-text-fill:  #f5f5f2;
      -fx-background-radius :  100PX;
  }
+.myTree .tree-cell {
+    -fx-background-color: red ;
+    -fx-text-fill: #ffffff ;
+}

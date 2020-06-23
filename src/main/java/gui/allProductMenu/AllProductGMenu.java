@@ -174,6 +174,8 @@ public class AllProductGMenu extends GMenu {
         TreeView<Label> treeView = new TreeView<>(getTreeItem(controller.getProductController().controlGetAllProductCategory(), controller, productGridPane , numberOfViews, saleCheck, availabilityCheck, rangeSlider));
 //        TreeView<String> babyTreeView = new TreeView<>(baby);
         treeView.setPrefHeight(250);
+        treeView.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+        treeView.getStyleClass().add("my tree");
 
 
         filterAndSort.getChildren().add(treeView);

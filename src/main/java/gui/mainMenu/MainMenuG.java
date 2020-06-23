@@ -46,7 +46,6 @@ public class MainMenuG extends GMenu {
         stackPane2.setPrefHeight(492.0);
         stackPane2.setPrefWidth(405.0);
         stackPane2.setLayoutX(173.0);
-        stackPane2.setStyle("-fx-background-color: #9cbfe3;");
         stackPane2.setLayoutY(71.0);
         stackPane2.setTranslateY(80);
         stackPane2.setEffect(new DropShadow());
@@ -80,6 +79,7 @@ public class MainMenuG extends GMenu {
 
         // Adding child to parent
         stackPane2.getChildren().add(salesMenu);
+        stackPane2.setStyle("-fx-font-family: Aliens; -fx-font-size: 15pt; -fx-background-color: #9cbfe3;");
 
 
         // Adding child to parent
@@ -118,7 +118,6 @@ public class MainMenuG extends GMenu {
         background.getChildren().add(anchorPane0);
 
         Scene scene = new Scene(background);
-        scene.getStylesheets().add(new File("src/main/java/gui/mainMenu/style/style.css").toURI().toString());
 
         return scene;
     }

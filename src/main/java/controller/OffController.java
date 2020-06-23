@@ -75,7 +75,13 @@ public class OffController {
     }
 
     public ArrayList<Sale> controlGetAllSales(){
-        return Sale.getSales();
+        ArrayList<Sale> allSalesForThisSupplier = new ArrayList<>();
+        for (Sale sale : Sale.getSales()) {
+            if(sale.getSupplier() == mainController.getAccount() && sale.getState() == State.CONFIRMED){
+                allSalesForThisSupplier.add(sale);
+            }
+        }
+        return allSalesForThisSupplier;
     }
 
     public Sale controlGetSaleById(String id){

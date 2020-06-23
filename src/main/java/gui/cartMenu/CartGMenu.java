@@ -4,6 +4,7 @@ import cart.ProductInCart;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -82,7 +83,7 @@ public class CartGMenu extends GMenu {
         return scene;
     }
 
-    private static VBox createProductsInCartPane ( Controller controller){
+    private  VBox createProductsInCartPane ( Controller controller){
         VBox productsInCartPane = new VBox();
         Label label = new Label();
         label.setStyle("-fx-background-color: transparent");
@@ -109,13 +110,20 @@ public class CartGMenu extends GMenu {
         return productsInCartPane;
     }
 
-    private static HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
+    private HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
         Label IdLabel = new Label(product.getProductId());
         Label nameLabel = new Label(product.getName());
         Label priceLabel = new Label(String.valueOf(product.getPrice(productInCart.getSupplier())));
         Label countLabel = new Label(String.valueOf(count));
+        gridPane.setHgap(70);
+        gridPane.setVgap(0);
+        gridPane.setAlignment(Pos.CENTER);
+        HBox hBox = new HBox();
+        hBox.setStyle("-fx-border-color: orange");
+        hBox.setSpacing(20);
+        hBox.getChildren().addAll(getImageView(product.getImageUrl(), 70, 70), gridPane);
 
         Button increment = new Button("+");
         Button decrement = new Button("-");
@@ -142,11 +150,12 @@ public class CartGMenu extends GMenu {
                 controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) + 1));
                 controller.getAccountController().controlViewCart().update();
-                if(countLabel.getText().equals("0"))
-                    productInCartPane.getChildren().remove(gridPane);
+                if(countLabel.getText().equals("0")) {
+                    productInCartPane.getChildren().remove(hBox);
+                }
 
             } catch (ExceptionalMassage exceptionalMassage) {
-                exceptionalMassage.printStackTrace();
+                new AlertBox(this, exceptionalMassage,controller).showAndWait();
             }
         });
 
@@ -155,20 +164,15 @@ public class CartGMenu extends GMenu {
                 controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                     countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
                 controller.getAccountController().controlViewCart().update();
-                    if(countLabel.getText().equals("0"))
-                        productInCartPane.getChildren().remove(gridPane);
+                    if(countLabel.getText().equals("0")) {
+                        productInCartPane.getChildren().remove(hBox);
+                    }
             } catch (ExceptionalMassage exceptionalMassage) {
-                exceptionalMassage.printStackTrace();
+                new AlertBox(this, exceptionalMassage,controller).showAndWait();
             }
         });
 
-        gridPane.setHgap(70);
-        gridPane.setVgap(0);
-        gridPane.setAlignment(Pos.CENTER);
-        HBox hBox = new HBox();
-        hBox.setStyle("-fx-border-color: orange");
-        hBox.setSpacing(20);
-        hBox.getChildren().addAll(getImageView(product.getImageUrl(), 70, 70), gridPane);
+
         return hBox;
     }
 

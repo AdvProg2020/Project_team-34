@@ -282,6 +282,7 @@ public class ManageProductsSupplierGMenu extends GMenu {
         editButton.setOnAction( e -> {
             try{
                 controller.getProductController().controlEditProductById(editing.getProductId(),editRequest);
+                ((Stage)anchorPane0.getScene().getWindow()).close();
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }
@@ -572,6 +573,7 @@ public class ManageProductsSupplierGMenu extends GMenu {
                 int remainedNumber = Integer.parseInt(remainedNumberField.getText());
                 try{
                     controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL);
+                    ((Stage)anchorPane0.getScene().getWindow()).close();
                 }  catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();
                 }

@@ -8,6 +8,7 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -268,6 +269,7 @@ public class ProductMenuG extends GMenu {
 
         HBox background = new HBox();
         GridPane gridPane = new GridPane();
+        gridPane.setAlignment(CENTER);
         gridPane.setVgap(5);
         gridPane.setHgap(5);
         gridPane.setGridLinesVisible(true);
@@ -276,17 +278,29 @@ public class ProductMenuG extends GMenu {
         productName.setPromptText("Other product's name");
         int i = 0;
         for (String key : product.getSpecification().keySet()) {
-            gridPane.add(new Label(key), 0, i);
-            gridPane.add(new Label(product.getSpecification().get(key)), 1, i);
+            Label keyLabel = new Label(key);
+            keyLabel.setAlignment(Pos.CENTER);
+            GridPane.setHalignment(keyLabel, HPos.CENTER);
+            Label value = new Label(product.getSpecification().get(key));
+            GridPane.setHalignment(value, HPos.CENTER);
+            value.setAlignment(Pos.CENTER);
+            gridPane.add(keyLabel, 0, i);
+            gridPane.add(value, 1, i);
             i++;
         }
         gridPane.add(compareButton,1,i);
         gridPane.add(productName,0,i);
         compareButton.setOnAction( e -> {
-            stage.setScene(new CompareGMenu("Compare menu",this,stage,controller,product,Product.getProductByName(productName.getText())).createScene());
+            Product comparing = Product.getProductByName(productName.getText());
+            if(comparing == null){
+                new AlertBox(this,"No such product","OK",controller).showAndWait();
+            } else {
+                stage.setScene(new CompareGMenu("Compare menu", this, stage, controller, product,comparing ).createScene());
+            }
         });
 
         gridPane.setPadding(new Insets(10,10,10,10));
+
         background.getChildren().add(gridPane);
         return background;
 

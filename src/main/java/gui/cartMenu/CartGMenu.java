@@ -1,11 +1,11 @@
 package gui.cartMenu;
 
-import account.Supplier;
 import cart.ProductInCart;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.loginMenu.LoginGMenu;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -15,7 +15,6 @@ import javafx.stage.Stage;
 import product.Product;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
 
@@ -71,12 +70,17 @@ public class CartGMenu extends GMenu {
 
 
         buttonPane.add(updateCart, 2, 3);
+        buttonPane.setAlignment(Pos.CENTER);
+        buttonPane.setPadding(new Insets(10, 10, 10, 10));
 
 
 
-        backgroundLayout.add( createHeader(), 0,0);
-        backgroundLayout.add( productsInCartPane, 0, 1);
+        backgroundLayout.setVgap(20);
+        backgroundLayout.add(createHeader(), 0,0);
+        backgroundLayout.add(productsInCartPane, 0, 1);
         backgroundLayout.add(buttonPane, 0, 2);
+        backgroundLayout.setAlignment(Pos.CENTER);
+        backgroundLayout.setPadding(new Insets(10, 10, 10, 10));
         Scene scene = new Scene(backgroundLayout);
         return scene;
     }
@@ -84,7 +88,7 @@ public class CartGMenu extends GMenu {
     private static VBox createProductsInCartPane ( Controller controller){
         VBox productsInCartPane = new VBox();
         Label label = new Label();
-        label.setStyle("-fx-background-color: #9cbfe3;");
+        label.setStyle("-fx-background-color: transparent");
         label.setContentDisplay(CENTER);
         label.setPrefWidth(400);
         label.setText("Products On Your Shopping Cart");
@@ -94,20 +98,21 @@ public class CartGMenu extends GMenu {
         productsInCartPane.setSpacing(20);
         productsInCartPane.setAlignment(Pos.CENTER);
 
-        productsInCartPane.getChildren().add(createTableHeader());
+//        productsInCartPane.getChildren().add(createTableHeader());
 
         ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
         //Supplier supplier = new Supplier("i", "i", "i", "i", "ij", "kj", 6, "hdi");
         //Product product = new Product(supplier, "laptop", "Asus", 499, 5, "good", null, null, new HashMap<>());
         //ProductInCart newProductInCart = new ProductInCart(product, supplier);
         //productInCarts.add(newProductInCart);
+        productsInCartPane.setAlignment(Pos.CENTER);
         for (ProductInCart productInCart : productInCarts) {
             productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane));
         }
         return productsInCartPane;
     }
 
-    private static GridPane createProductGridPane(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
+    private static HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
         Label IdLabel = new Label(product.getProductId());
@@ -157,8 +162,11 @@ public class CartGMenu extends GMenu {
 
         gridPane.setHgap(70);
         gridPane.setVgap(0);
-        gridPane.setStyle("-fx-border-color: orange");
-        return gridPane;
+        HBox hBox = new HBox();
+        hBox.setStyle("-fx-border-color: orange");
+        hBox.setSpacing(20);
+        hBox.getChildren().addAll(getImageView(product.getImageUrl(), 70, 70), gridPane);
+        return hBox;
     }
 
     private static HBox createTableHeader(){

@@ -115,7 +115,6 @@ public class AccountDataBase {
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-            System.out.println("hi");
         }
     }
 

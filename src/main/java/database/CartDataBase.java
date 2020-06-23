@@ -63,7 +63,6 @@ public class CartDataBase {
             else {
                 statement.setString(7, cart.getShippingInfo().getIdentifier());
             }
-
             statement.executeUpdate();
         } catch (SQLException e) {
             System.out.println(e.getMessage());

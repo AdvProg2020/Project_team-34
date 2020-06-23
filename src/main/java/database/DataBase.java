@@ -53,8 +53,7 @@ public class DataBase {
         StringBuilder sql = new StringBuilder("DELETE FROM ");
         sql.append(nameOfTable).append(" WHERE ").append(nameOfColumn).append("=?");
 
-        try (Connection connect = connect();
-             PreparedStatement preparedStatement = connect.prepareStatement(String.valueOf(sql))) {
+        try (PreparedStatement preparedStatement = DataBase.getConnection().prepareStatement(String.valueOf(sql))) {
 
             preparedStatement.setString(1, identifier);
             preparedStatement.executeUpdate();
@@ -67,8 +66,7 @@ public class DataBase {
         StringBuilder sql = new StringBuilder("SELECT ");
         sql.append(nameOfColumn).append(" FROM ").append(nameOfTable);
 
-        try (Connection connection = connect();
-             Statement statement = connection.createStatement();
+        try (Statement statement = connection.createStatement();
              ResultSet resultSet = statement.executeQuery(String.valueOf(sql))) {
             while (resultSet.next()) {
                 if(resultSet.getString(nameOfColumn).equals(identifier))
@@ -168,7 +166,4 @@ public class DataBase {
         CartDataBase.createNewTable();
         CustomerLogDataBase.createNewTable();
     }
-
-
-
 }

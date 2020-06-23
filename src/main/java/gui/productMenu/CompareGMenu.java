@@ -51,8 +51,6 @@ public class CompareGMenu extends GMenu {
 
         int row = 1;
 
-        //Set<String> keys = product1Specifications.keySet();
-        //keys.addAll(product2Specifications.keySet());
         ArrayList<String> keysArray = new ArrayList<>();
         keysArray.addAll(product1Specifications.keySet());
         keysArray.addAll(product2Specifications.keySet());

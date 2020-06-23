@@ -171,7 +171,7 @@ public class AllProductGMenu extends GMenu {
 //        });
 
 
-        TreeView<Button> treeView = new TreeView<>(getTreeItem(controller.getProductController().controlGetAllProductCategory(), controller, productGridPane));
+        TreeView<Label> treeView = new TreeView<>(getTreeItem(controller.getProductController().controlGetAllProductCategory(), controller, productGridPane , numberOfViews, saleCheck, availabilityCheck, rangeSlider));
 //        TreeView<String> babyTreeView = new TreeView<>(baby);
         treeView.setPrefHeight(250);
 
@@ -267,19 +267,29 @@ public class AllProductGMenu extends GMenu {
         }
     }
 
-    public TreeItem<Button> getTreeItem(Category rootCategory, Controller controller, GridPane productGridPane){
-        Button rootButton = new Button(rootCategory.getName());
-        rootButton.setOnMouseClicked(e->{
+    public TreeItem<Label> getTreeItem(Category rootCategory, Controller controller, GridPane productGridPane, RadioButton numberOfViews, CheckBox saleCheck , CheckBox availabilityCheck, RangeSlider rangeSlider){
+        Label rootLabel = new Label(rootCategory.getName());
+        rootLabel.setOnMouseClicked(e->{
             controller.getProductController().getFilterAndSort().setCategory(rootCategory);
+            resetAllFilters(numberOfViews,saleCheck, availabilityCheck, rangeSlider);
             putNewProductsInProductGridPane(productGridPane);
         });
-        TreeItem<Button> rootTreeItem = new TreeItem<>(rootButton);
+        TreeItem<Label> rootTreeItem = new TreeItem<>(rootLabel);
         if(!rootCategory.isCategoryClassifier())
             return rootTreeItem;
         ArrayList<Category> allCategoriesIn = controller.getProductController().controlGetAllCategoriesInACategory(rootCategory);
         for (Category categoryIn : allCategoriesIn) {
-            rootTreeItem.getChildren().add(getTreeItem(categoryIn, controller, productGridPane));
+            rootTreeItem.getChildren().add(getTreeItem(categoryIn, controller, productGridPane, numberOfViews, saleCheck, availabilityCheck, rangeSlider));
         }
         return rootTreeItem;
+    }
+
+    public void resetAllFilters(RadioButton numberOfViews ,CheckBox saleCheck , CheckBox availabilityCheck, RangeSlider rangeSlider){
+        numberOfViews.setSelected(true);
+        saleCheck.setSelected(false);
+        availabilityCheck.setSelected(false);
+        rangeSlider.setHighValue(10000);
+        rangeSlider.setLowValue(0);
+        rangeSlider.setDisable(true);
     }
 }

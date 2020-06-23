@@ -4,12 +4,26 @@
      -fx-background-radius :  100PX;
  }
 
-.tree-cell {
-    -fx-background-color: transparent;
-    -fx-text-fill: #ffffff;
-    -fx-border-color: transparent;
-}
+/*.tree-cell {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-text-fill: red;*/
+/*    -fx-progress-color: blue;*/
+/*    -fx-border-color: transparent;*/
+/*    -fx-stroke: blue;*/
+/*}*/
 
-.tree-view {
-    -fx-background-color: transparent;
+/*.tree-view {*/
+/*    -fx-background-color: transparent;*/
+/*    -fx-progress-color: blue;*/
+/*    -fx-text-fill: red;*/
+/*    -fx-stroke: blue;*/
+/*}*/
+
+.tree-view, .tree-cell {
+    -fx-background-color: transparent ;
+
+}
+.tree-cell:selected {
+    -fx-font-weight: bold ;
+
 }

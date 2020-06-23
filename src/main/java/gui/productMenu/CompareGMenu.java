@@ -11,7 +11,9 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import product.Product;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -49,8 +51,11 @@ public class CompareGMenu extends GMenu {
 
         int row = 1;
 
-        Set<String> keys = product1Specifications.keySet();
-        keys.addAll(product2Specifications.keySet());
+        ArrayList<String> keysArray = new ArrayList<>();
+        keysArray.addAll(product1Specifications.keySet());
+        keysArray.addAll(product2Specifications.keySet());
+        HashSet<String> keys = new HashSet<>(keysArray);
+
 
         for (String key : keys) {
             compareTable.add(new Label(key), 0, row);

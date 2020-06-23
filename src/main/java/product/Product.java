@@ -407,7 +407,6 @@ public class Product {
         if(productRequest.getProductState() == State.PREPARING_TO_BUILD) {
             productRequest.setProductState(State.CONFIRMED);
             Category.getCategoryByName(productRequest.getFutureCategoryName()).addProduct(productRequest);
-            ProductDataBase.update(productRequest);
         }
         else {
             setRequestValuesInRealProduct(productRequest);

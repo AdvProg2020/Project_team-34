@@ -14,6 +14,7 @@ import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import product.Product;
 
+import java.io.File;
 import java.util.ArrayList;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
@@ -67,13 +68,9 @@ public class CartGMenu extends GMenu {
 //        updateCart.setMnemonicParsing(false);
         GMenu.addStyleToButton(updateCart);
 
-
-
         buttonPane.add(updateCart, 2, 3);
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setPadding(new Insets(10, 10, 10, 10));
-
-
 
         backgroundLayout.setVgap(20);
         backgroundLayout.add(createHeader(), 0,0);
@@ -123,6 +120,13 @@ public class CartGMenu extends GMenu {
         Button increment = new Button("+");
         Button decrement = new Button("-");
 
+        HBox countBox = new HBox();
+        countBox.getChildren().addAll(decrement, countLabel, increment);
+        countBox.setMaxHeight(30);
+        countBox.setSpacing(5);
+        countBox.setAlignment(Pos.CENTER);
+        countBox.getStylesheets().add(new File("src/main/java/gui/cartMenu/style.css").toURI().toString());
+
         int column = 0;
         gridPane.add(IdLabel, column, 1);
         column++;
@@ -130,10 +134,8 @@ public class CartGMenu extends GMenu {
         column++;
         gridPane.add(priceLabel, column, 1);
         column++;
-        gridPane.add(countLabel, column, 1);
-        column++;
-        gridPane.add(increment, column, 0);
-        gridPane.add(decrement, column, 2);
+
+        gridPane.add(countBox, column, 1);
 
         increment.setOnMouseClicked(e->{
             try {
@@ -162,6 +164,7 @@ public class CartGMenu extends GMenu {
 
         gridPane.setHgap(70);
         gridPane.setVgap(0);
+        gridPane.setAlignment(Pos.CENTER);
         HBox hBox = new HBox();
         hBox.setStyle("-fx-border-color: orange");
         hBox.setSpacing(20);

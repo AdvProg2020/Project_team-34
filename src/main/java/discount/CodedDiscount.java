@@ -92,6 +92,7 @@ public class CodedDiscount extends Discount{
 
     public void addUsedCountForCustomer(Customer customer){
         usedDiscountPerCustomer.put(customer, usedDiscountPerCustomer.get(customer)+1);
+        CodedDiscountDataBase.update(this);
     }
 
     public boolean canCustomerUseCode(Customer customer){
@@ -122,11 +123,13 @@ public class CodedDiscount extends Discount{
     }
 
 
-
-    public static void importAllData(){
-
+    public int getRemainedNumberByCustomer(Customer customer){
+        for (Customer eachCustomer : usedDiscountPerCustomer.keySet()) {
+            if(eachCustomer.equals(customer))
+                return maximumNumberOfUsagePerCustomer.get(customer) - usedDiscountPerCustomer.get(customer);
+        }
+        return 0;
     }
-
 
     public void setMaxDiscountAmount(int maxDiscountAmount) {
         this.maxDiscountAmount = maxDiscountAmount;

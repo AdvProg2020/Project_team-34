@@ -5,6 +5,9 @@ import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.productMenu.ProductMenuG;
+import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -20,15 +23,19 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.controlsfx.control.CheckComboBox;
 import product.Category;
 import product.Product;
 import org.controlsfx.control.RangeSlider;
 
+import javax.net.ssl.SSLEngineResult;
 import java.io.BufferedInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class AllProductGMenu extends GMenu {
 
@@ -44,21 +51,26 @@ public class AllProductGMenu extends GMenu {
         GridPane backgroundLayout = new GridPane();
         GridPane mainPane = new GridPane();
         VBox filterAndSort = new VBox();
-        VBox appliedFilter = new VBox();
+        ScrollPane filterAndSortScrollPane = new ScrollPane();
+        VBox availabilityVBox = new VBox();
         HBox price = new HBox();
         VBox sort = new VBox();
-        VBox availability = new VBox();
+        VBox specialFilterVBox = new VBox();
         GridPane productGridPane = new GridPane();
         ScrollPane productScrollPane = new ScrollPane();
 
-        mainPane.setMinWidth(1000);
-        mainPane.setMinHeight(630);
+        mainPane.setMinWidth(1150);
+        mainPane.setMaxWidth(1150);
+        mainPane.setMinHeight(650);
 
 
-        Label label = new Label("Applied Filter");
-        appliedFilter.getChildren().add(label);
-        appliedFilter.setSpacing(10);
-        appliedFilter.setPadding(new Insets(10, 10 , 10 , 10));
+
+        Label sortLabel = new Label("Sort");
+        sortLabel.setStyle("-fx-font-size: 20 ");
+        filterAndSort.setAlignment(Pos.CENTER);
+
+        Label filterLabel = new Label("Filter");
+        filterLabel.setStyle("-fx-font-size: 20 ");
 
         ToggleGroup toggleGroup = new ToggleGroup();
         RadioButton numberOfViews = new RadioButton("Number Of Views");
@@ -82,12 +94,12 @@ public class AllProductGMenu extends GMenu {
         });
 
         score.setOnMouseClicked(e->{
-            controller.getProductController().controlFilterSetSortType("by time added");
+            controller.getProductController().controlFilterSetSortType("by score");
             putNewProductsInProductGridPane(productGridPane);
         });
 
         time.setOnMouseClicked(e->{
-            controller.getProductController().controlFilterSetSortType("by score");
+            controller.getProductController().controlFilterSetSortType("by time added");
             putNewProductsInProductGridPane(productGridPane);
         });
 
@@ -95,16 +107,17 @@ public class AllProductGMenu extends GMenu {
         CheckBox saleCheck = new CheckBox("Only Products In Sale");
         saleCheck.setSelected(onlyProductInSale);
         saleCheck.setOnMouseClicked(e->{
-            controller.getProductController().getFilterAndSort().setAvailabilityFilter(saleCheck.isSelected());
+            controller.getProductController().getFilterAndSort().setInSaleOnly(saleCheck.isSelected());
             putNewProductsInProductGridPane(productGridPane);
         });
+
+
 
         RangeSlider rangeSlider = new RangeSlider(0, 10000, 0, 10000);
         rangeSlider.setMajorTickUnit(1000);
         rangeSlider.setShowTickLabels(true);
-        rangeSlider.setOnMouseClicked(e->{
+        rangeSlider.setOnMouseReleased(e->{
             try {
-                System.out.println(rangeSlider.getHighValue());
                 controller.getProductController().getFilterAndSort().setPriceUpperBound((int) rangeSlider.getHighValue());
                 System.out.println(controller.getProductController().getFilterAndSort().getPriceUpperBound());
             } catch (ExceptionalMassage exceptionalMassage) {
@@ -119,9 +132,9 @@ public class AllProductGMenu extends GMenu {
         });
 
         CheckBox availabilityCheck = new CheckBox("Only Available Products");
-        availability.getChildren().addAll(availabilityCheck, saleCheck);
-        availability.setSpacing(10);
-        availability.setPadding(new Insets(10, 10 , 10 , 10));
+        availabilityVBox.getChildren().addAll(availabilityCheck, saleCheck);
+        availabilityVBox.setSpacing(10);
+        availabilityVBox.setPadding(new Insets(10, 10 , 10 , 10));
 
         availabilityCheck.setOnMouseReleased(e->{
             rangeSlider.setDisable(!availabilityCheck.isSelected());
@@ -141,52 +154,17 @@ public class AllProductGMenu extends GMenu {
         price.setPadding(new Insets(10, 10 , 10 , 10));
 
         putNewProductsInProductGridPane(productGridPane);
-//
-        TreeItem<String> rootNode = new TreeItem<String>("MyCompany Human Resources");
-        TreeItem<String > baby = new TreeItem<>("baby");
-//        TreeItem<String > grandSon = new TreeItem<>("grand Son");
-//        rootNode.getChildren().add(baby);
-//        baby.getChildren().add(grandSon);
-        TreeItem<Button> treeItem = new TreeItem<>(new Button("hi"));
-
-        Button byeButton = new Button("bye");
-        byeButton.setOnMouseClicked(e->{
-            System.out.println("ah aha");
-        });
-//        TreeItem<Button> treeItemBaby = new TreeItem<>(byeButton);
-//        treeItem.getChildren().add(treeItemBaby);
-
-//        treeItemBaby.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<javafx.scene.input.MouseEvent>() {
-//            @Override
-//            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-//                System.out.println("print");
-//            }
-//
-//        });
-//        treeItem.addEventHandler(TreeItem.branchExpandedEvent(), new EventHandler() {
-//            @Override
-//            public void handle(Event event) {
-//                System.out.println("man");
-//            }
-//        });
 
 
-        TreeView<Label> treeView = new TreeView<>(getTreeItem(controller.getProductController().controlGetAllProductCategory(), controller, productGridPane , numberOfViews, saleCheck, availabilityCheck, rangeSlider));
+        TreeView<Label> treeView = new TreeView<>(getTreeItem(controller.getProductController().controlGetAllProductCategory(), controller, productGridPane , numberOfViews, saleCheck, availabilityCheck, rangeSlider, specialFilterVBox));
 //        TreeView<String> babyTreeView = new TreeView<>(baby);
         treeView.setPrefHeight(250);
+        filterAndSort.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+//        treeView.getStyleClass().add("my tree");
 
+        specialFilterVBox.setPadding(new Insets(20, 20, 20 , 20));
 
-        filterAndSort.getChildren().add(treeView);
-
-//        rootTreeView.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<javafx.scene.input.MouseEvent>() {
-//            @Override
-//            public void handle(javafx.scene.input.MouseEvent mouseEvent) {
-//                System.out.println("print");
-//            }
-//
-//        });
-
-        filterAndSort.getChildren().addAll(appliedFilter, sort,availability, price);
+        filterAndSort.getChildren().addAll(sortLabel, sort, filterLabel, availabilityVBox,  price, specialFilterVBox, treeView);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
 
 
@@ -205,7 +183,8 @@ public class AllProductGMenu extends GMenu {
 //        headerBackground.setMaxWidth(Double.MAX_VALUE);
 //        mainPane.setFillWidth(headerBackground, true);
 //        mainPane.add(headerBackground,0, 0 );
-        mainPane.add(filterAndSort, 0, 1);
+        filterAndSortScrollPane.setContent(filterAndSort);
+        mainPane.add(filterAndSortScrollPane, 0, 1);
         mainPane.add(productScrollPane, 1,1);
 
         backgroundLayout.add(headerBackground, 0, 0);
@@ -235,19 +214,21 @@ public class AllProductGMenu extends GMenu {
             ImageView productImageView = GMenu.getImageView(product.getImageUrl(), 200 , 200);
 
             productImageView.setOnMouseClicked(e->{
+                controller.getProductController().controlViewThisProduct(product);
                 stage.setScene(new ProductMenuG(this,stage,  product, controller).getScene());
             });
 
-            if(!product.isProductAvailableNow()) {
+            if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
-                soldOutImageView.setBlendMode(BlendMode.ADD);
+                soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
                 Group blend = new Group(
                         productImageView,
                         soldOutImageView
                 );
 
-                gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
+                gridPane.getChildren().addAll( productImageView, blend,soldOutImageView);
+//                gridPane.getChildren().add(soldOutImageView);
             }
             else {
                 gridPane.getChildren().add(productImageView);
@@ -267,19 +248,21 @@ public class AllProductGMenu extends GMenu {
         }
     }
 
-    public TreeItem<Label> getTreeItem(Category rootCategory, Controller controller, GridPane productGridPane, RadioButton numberOfViews, CheckBox saleCheck , CheckBox availabilityCheck, RangeSlider rangeSlider){
+    public TreeItem<Label> getTreeItem(Category rootCategory, Controller controller, GridPane productGridPane, RadioButton numberOfViews, CheckBox saleCheck , CheckBox availabilityCheck, RangeSlider rangeSlider , VBox specialFilterVBox){
         Label rootLabel = new Label(rootCategory.getName());
+        rootLabel.setStyle("-fx-text-fill: #4677c8");
         rootLabel.setOnMouseClicked(e->{
             controller.getProductController().getFilterAndSort().setCategory(rootCategory);
             resetAllFilters(numberOfViews,saleCheck, availabilityCheck, rangeSlider);
             putNewProductsInProductGridPane(productGridPane);
+            putNewSpecialFilters(specialFilterVBox, productGridPane);
         });
         TreeItem<Label> rootTreeItem = new TreeItem<>(rootLabel);
         if(!rootCategory.isCategoryClassifier())
             return rootTreeItem;
         ArrayList<Category> allCategoriesIn = controller.getProductController().controlGetAllCategoriesInACategory(rootCategory);
         for (Category categoryIn : allCategoriesIn) {
-            rootTreeItem.getChildren().add(getTreeItem(categoryIn, controller, productGridPane, numberOfViews, saleCheck, availabilityCheck, rangeSlider));
+            rootTreeItem.getChildren().add(getTreeItem(categoryIn, controller, productGridPane, numberOfViews, saleCheck, availabilityCheck, rangeSlider, specialFilterVBox));
         }
         return rootTreeItem;
     }
@@ -291,5 +274,39 @@ public class AllProductGMenu extends GMenu {
         rangeSlider.setHighValue(10000);
         rangeSlider.setLowValue(0);
         rangeSlider.setDisable(true);
+    }
+
+    public void putNewSpecialFilters(VBox specialFiltersVBox, GridPane productGridPane){
+        HashMap<String, ArrayList<String>> specialFilters = controller.getProductController().controlGetAllAvailableFilters();
+        System.out.println(specialFilters);
+        specialFiltersVBox.getChildren().clear();
+        for (String specialField : specialFilters.keySet()) {
+
+            CheckComboBox<String> checkComboBox = new CheckComboBox<>();
+            checkComboBox.setTitle(specialField);
+            checkComboBox.getItems().addAll(specialFilters.get(specialField));
+            checkComboBox.setMinWidth(100);
+
+
+            checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
+                public void onChanged(ListChangeListener.Change<? extends String> c) {
+
+                    controller.getProductController().controlFilterRemoveAllSpecialFilter();
+
+                    for (String checkedItem : checkComboBox.getCheckModel().getCheckedItems()) {
+                        try {
+                            controller.getProductController().controlFilterAddSpecialFilter(specialField, checkedItem);
+                        } catch (ExceptionalMassage exceptionalMassage) {
+                            System.out.println(exceptionalMassage.toString());
+                        }
+                    }
+
+                    putNewProductsInProductGridPane(productGridPane);
+
+                }
+            });
+
+            specialFiltersVBox.getChildren().add(checkComboBox);
+        }
     }
 }

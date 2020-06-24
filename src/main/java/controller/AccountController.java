@@ -7,6 +7,7 @@ import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
+import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import log.LogStatus;
@@ -243,6 +244,9 @@ public class AccountController {
     }
 
     public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+        if(!(mainController.getAccount() instanceof Customer)){
+            throw new ExceptionalMassage("Sign in as a Customer!");
+        }
         Product product = Product.getProductById(productId);
         if (product == null)
             throw new ExceptionalMassage("Product not found.");
@@ -330,6 +334,9 @@ public class AccountController {
             if (productInCart.getProduct().getRemainedNumber(productInCart.getSupplier()) < productInCount.get(productInCart))
                 throw new ExceptionalMassage("Product " + productInCart.getProduct().getName() +
                         " is not available in this amount, please reduce.");
+        }
+        if(cart.getCodedDiscount() != null){
+            cart.getCodedDiscount().addUsedCountForCustomer((Customer)mainController.getAccount());
         }
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());

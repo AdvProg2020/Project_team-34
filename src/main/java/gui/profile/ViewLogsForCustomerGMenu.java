@@ -24,6 +24,8 @@ public class ViewLogsForCustomerGMenu extends GMenu {
         for (String log : controller.getAccountController().getCustomerLogs()) {
             logsBox.getChildren().add(customerLogBox(log));
         }
+        logsBox.setMaxHeight(720);
+        logsBox.setPadding(new Insets(10, 10, 10, 10));
         return createLogScene(logsBox);
     }
 

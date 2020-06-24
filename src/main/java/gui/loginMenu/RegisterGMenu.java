@@ -148,11 +148,11 @@ public class RegisterGMenu extends GMenu {
 
         // Adding child to parent
         gridPane15.add(hBox16,0,1);
-        HBox hBox18 = new HBox();
-        hBox18.setPrefHeight(51.0);
-        hBox18.setPrefWidth(345.0);
-        gridPane15.add(hBox18,0,4);
-        hBox18.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
+        HBox companyNameHbox = new HBox();
+        companyNameHbox.setPrefHeight(51.0);
+        companyNameHbox.setPrefWidth(345.0);
+        gridPane15.add(companyNameHbox,0,4);
+        companyNameHbox.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         TextField companyNameField = new TextField();
         companyNameField.setPrefHeight(51.0);
         companyNameField.setPrefWidth(295.0);
@@ -161,14 +161,14 @@ public class RegisterGMenu extends GMenu {
         companyNameField.setPromptText("Company name");
 
         // Adding child to parent
-        hBox18.getChildren().add(companyNameField);
+        companyNameHbox.getChildren().add(companyNameField);
 
         // Adding child to parent
-        HBox hBox20 = new HBox();
-        hBox20.setPrefHeight(51.0);
-        hBox20.setPrefWidth(345.0);
-        gridPane15.add(hBox20,0,3);
-        hBox20.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
+        HBox creditHbox = new HBox();
+        creditHbox.setPrefHeight(51.0);
+        creditHbox.setPrefWidth(345.0);
+        gridPane15.add(creditHbox,0,3);
+        creditHbox.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         TextField creditField = new TextField();
         creditField.setPrefHeight(51.0);
         creditField.setPrefWidth(295.0);
@@ -177,7 +177,7 @@ public class RegisterGMenu extends GMenu {
         creditField.setPromptText("Credit");
 
         // Adding child to parent
-        hBox20.getChildren().add(creditField);
+        creditHbox.getChildren().add(creditField);
 
 
         // Adding child to parent
@@ -248,14 +248,20 @@ public class RegisterGMenu extends GMenu {
         customerButton.setToggleGroup(accountType);
         supplierButton.setToggleGroup(accountType);
         if(((RadioButton)accountType.getSelectedToggle()).getText().equals("Customer")){
+            creditHbox.setOpacity(10);
+            companyNameHbox.setOpacity(0.5);
             companyNameField.setDisable(true);
             creditField.setDisable(false);
         } else {
+            creditHbox.setOpacity(0.5);
+            companyNameHbox.setOpacity(10);
             companyNameField.setDisable(false);
             creditField.setDisable(true);
         }
 
         customerButton.setOnMouseClicked(e ->{
+            creditHbox.setOpacity(10);
+            companyNameHbox.setOpacity(0.5);
             companyNameField.setDisable(true);
             creditField.setDisable(false);
             companyNameField.clear();
@@ -263,6 +269,8 @@ public class RegisterGMenu extends GMenu {
         });
 
         supplierButton.setOnMouseClicked(e ->{
+            creditHbox.setOpacity(0.5);
+            companyNameHbox.setOpacity(10);
             companyNameField.setDisable(false);
             creditField.setDisable(true);
             companyNameField.clear();
@@ -288,6 +296,7 @@ public class RegisterGMenu extends GMenu {
                         controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,credit,companyName);
                         stage.close();
                         popUpCallerStage.setScene(parentMenu.getScene());
+                        //popUpCallerStage.setScene(new MainMenuG(null, stage, controller).getScene());
                     }catch (ExceptionalMassage ex){
                         new AlertBox(this, ex, controller).showAndWait();
                     }
@@ -298,7 +307,8 @@ public class RegisterGMenu extends GMenu {
                 try{
                     controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,1,companyName);
                     stage.close();
-                    popUpCallerStage.setScene(new MainMenuG(null, stage, controller).getScene());
+                    popUpCallerStage.setScene(parentMenu.getScene());
+                    //popUpCallerStage.setScene(new MainMenuG(null, stage, controller).getScene());
                 }catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();
                 }

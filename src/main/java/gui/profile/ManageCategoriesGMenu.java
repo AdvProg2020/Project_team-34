@@ -72,7 +72,7 @@ public class ManageCategoriesGMenu extends GMenu {
 
     private ChoiceBox<String> allCategoriesChoiceBox() {
         ChoiceBox<String> choiceBox = new ChoiceBox<>();
-        choiceBox.getItems().addAll(controller.getProductController().controlGetAllCategoriesName());
+        choiceBox.getItems().addAll(controller.getProductController().controlGetAllCategoryCategoriesName());
         choiceBox.setValue("All Products");
         return choiceBox;
     }

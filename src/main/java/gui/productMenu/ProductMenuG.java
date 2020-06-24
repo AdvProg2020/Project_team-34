@@ -1,5 +1,6 @@
 package gui.productMenu;
 
+import account.Account;
 import account.Supplier;
 import controller.Controller;
 import controller.FilterAndSort;
@@ -221,7 +222,7 @@ public class ProductMenuG extends GMenu {
 
 
         ArrayList<String> suppliersIds = new ArrayList<>();
-        for (Supplier supplier : controller.getProductController().controlGetAllSuppliersForAProduct(product)) {
+        for (Supplier supplier : product.getAllSuppliersThatHaveAvailableProduct()) {
             suppliersIds.add(supplier.getNameOfCompany());
         }
         suppliers.getItems().addAll(suppliersIds);
@@ -244,7 +245,7 @@ public class ProductMenuG extends GMenu {
 
         suppliers.setOnAction( e -> {
             int originalPrice = product.getPrice(Supplier.getSupplierByCompanyName(suppliers.getValue()));
-            if(Sale.isProductHasAnySale(product)){
+            if(Sale.isProductInThisSuppliersSale(product, Supplier.getSupplierByCompanyName(suppliers.getValue()))){
                 priceLabel.setText((originalPrice) + "=>" + (originalPrice - Sale.getProductSale(product,Supplier.getSupplierByCompanyName(suppliers.getValue())).discountAmountFor(originalPrice)));
 
             } else {
@@ -257,9 +258,17 @@ public class ProductMenuG extends GMenu {
             float rating =(float) starRating.getRating();
             try {
                 controller.getProductController().controlRateProductById(product.getProductId(), rating);
+                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+                starRating.setDisable(true);
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }
+            starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+        });
+
+        starRating.setOnMouseExited( e -> {
+            starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+
         });
 
 

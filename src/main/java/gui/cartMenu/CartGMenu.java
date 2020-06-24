@@ -33,6 +33,7 @@ public class CartGMenu extends GMenu {
         GridPane buttonPane = new GridPane();
 
         buttonPane.setHgap(100);
+        buttonPane.setAlignment(Pos.CENTER);
 
         productsInCartPane = createProductsInCartPane(controller);
 
@@ -60,18 +61,15 @@ public class CartGMenu extends GMenu {
         });
 
 
-        Button updateCart = new Button();
-//        updateCart.setPrefHeight(26.0);
-//        updateCart.setPrefWidth(110.0);
-//        updateCart.setLayoutX(273.0);
-//        updateCart.setLayoutY(432.0);
-        updateCart.setText("Update Cart");
-//        updateCart.setMnemonicParsing(false);
-        GMenu.addStyleToButton(updateCart);
-
-        buttonPane.add(updateCart, 2, 3);
-        buttonPane.setAlignment(Pos.CENTER);
-        buttonPane.setPadding(new Insets(10, 10, 10, 10));
+//        Button updateCart = new Button();
+//
+//        updateCart.setText("Update Cart");
+////        updateCart.setMnemonicParsing(false);
+//        GMenu.addStyleToButton(updateCart);
+//
+//        buttonPane.add(updateCart, 2, 3);
+//        buttonPane.setAlignment(Pos.CENTER);
+//        buttonPane.setPadding(new Insets(10, 10, 10, 10));
 
         backgroundLayout.setVgap(20);
         backgroundLayout.add(createHeader(), 0,0);

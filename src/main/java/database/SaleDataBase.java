@@ -1,5 +1,7 @@
 package database;
 
+import account.Account;
+import account.Supplier;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
@@ -24,6 +26,8 @@ public class SaleDataBase {
         content.put("offId" , "String");
         content.put("listOfProductIds" , "String");
         content.put("state" , "String");
+        content.put("supplierUsername", "String");
+        content.put("rootSaleId", "String");
 
         DataBase.createNewTable("Sales", content);
     }
@@ -32,8 +36,8 @@ public class SaleDataBase {
         if (DataBase.doesIdAlreadyExist("Sales", "offId", sale.getOffId())) {
             return;
         }
-        String sql = "INSERT into Sales (start , end , percent, offId , listOfProductIds, state) " +
-                "VALUES (?,?, ? , ? , ? , ?)";
+        String sql = "INSERT into Sales (start , end , percent, offId , listOfProductIds, state, supplierUsername, rootSaleId) " +
+                "VALUES (?,?, ? , ? , ? , ?, ?, ?)";
         try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setLong(1,sale.getStart().getTime());
@@ -42,6 +46,8 @@ public class SaleDataBase {
             statement.setString(4, sale.getOffId());
             statement.setString(5, convertObjectToJsonString(convertProductArrayListToStringArrayList(sale.getProducts())));
             statement.setString(6, String.valueOf(sale.getState()));
+            statement.setString(7, sale.getSupplier().getUserName());
+            statement.setString(8, sale.getRootSaleId());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -71,9 +77,11 @@ public class SaleDataBase {
                 String offId = resultSet.getString("OffId");
                 ArrayList<Product> products = convertStringArrayListToProductArrayList(convertJsonToArrayList(resultSet.getString("listOfProductIds")));
                 State state = State.valueOf(resultSet.getString("state"));
+                Supplier supplier = (Supplier) Account.getAccountByUsername(resultSet.getString("supplierUsername"));
+                String rootSaleId = resultSet.getString("rootSaleId");
 
 
-                new Sale(start,end,percent,offId,products, state);
+                new Sale(start,end,percent,offId,products, state, supplier, rootSaleId);
 
             }
         } catch (SQLException e) {

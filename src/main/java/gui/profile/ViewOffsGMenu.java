@@ -224,6 +224,7 @@ public class ViewOffsGMenu extends GMenu {
 // Adding child to parent
         anchorPane0.getChildren().add(hBox5);
         ListView addingProducts = new ListView();
+        addingProducts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         addingProducts.setPrefHeight(138.0);
         addingProducts.setPrefWidth(283.0);
         addingProducts.setLayoutX(438.0);
@@ -275,6 +276,7 @@ public class ViewOffsGMenu extends GMenu {
 // Adding child to parent
         anchorPane0.getChildren().add(editButton);
         ListView removingProducts = new ListView();
+        removingProducts.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
         removingProducts.setPrefHeight(138.0);
         removingProducts.setPrefWidth(283.0);
         removingProducts.setLayoutX(767.0);
@@ -321,10 +323,7 @@ public class ViewOffsGMenu extends GMenu {
                         removingProductsArray.add(Product.getProductById(s));
                     }
                     controller.getOffController().controlEditSaleById(sale.getOffId(), newEnd, newStart, newPercent, addingProductsArray, removingProductsArray);
-                    removingProducts.getItems().clear();
-                    for (Product product : sale.getProducts()) {
-                        removingProducts.getItems().add(product.getProductId());
-                    }
+                    ((Stage) anchorPane0.getScene().getWindow()).close();
                 } catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller);
                 }

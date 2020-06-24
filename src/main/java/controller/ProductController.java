@@ -35,6 +35,25 @@ public class ProductController {
             throw new ExceptionalMassage("Sing in first.");
         if (!(mainController.getAccount() instanceof Supplier))
             throw new ExceptionalMassage("Sign in as a Supplier");
+        if(!specifications.keySet().containsAll(Category.getCategoryByName(category).getSpecialFields().keySet())){
+            String error = "You have to enter a value for the category's special fields :\n";
+            for (String s : Category.getCategoryByName(category).getSpecialFields().keySet()) {
+                error += s + "\n";
+            }
+            throw new ExceptionalMassage(error);
+        }
+        /*if(!Category.getCategoryByName(category).getSpecialFields().values().contains(specifications.values())){
+            String error = "You have to enter valid values for each field : \n";
+            HashMap<String, ArrayList<String>> map = Category.getCategoryByName(category).getSpecialFields();
+            for (String s : map.keySet()) {
+                error += s + " : ";
+                for (String s1 : map.get(s)) {
+                    error += s1 + " ";
+                }
+                error += "\n";
+            }
+            throw new ExceptionalMassage(error);
+        }*/
         Supplier supplier = (Supplier) mainController.getAccount();
         Product product;
         product = Product.getProductByName(name);
@@ -135,6 +154,8 @@ public class ProductController {
                     case "description":
                         newProduct.setDescription(value);
                         break;
+                    case "imageUrl":
+                        newProduct.setImageUrl(value);
                     default:
                         newProduct.editSpecialField(field, value);
                 }
@@ -432,6 +453,10 @@ public class ProductController {
         filterAndSort.removeSpecialFilter(key, value);
     }
 
+    public void controlFilterRemoveAllSpecialFilter(){
+        filterAndSort.removeAllSpecialFilter();
+    }
+
     public void controlFilterAddNameFilter(String name) throws ExceptionalMassage {
         filterAndSort.addNameFilter(name);
     }
@@ -474,6 +499,16 @@ public class ProductController {
         return allProductCategoriesName;
     }
 
+    public ArrayList<String> controlGetAllCategoryCategoriesName() {
+        ArrayList<String> allCategoryCategoriesName = new ArrayList<>();
+        for (String categoryName : Category.getAllCategoriesName()) {
+            if (Category.getCategoryByName(categoryName).isCategoryClassifier()) {
+                allCategoryCategoriesName.add(categoryName);
+            }
+        }
+        return allCategoryCategoriesName;
+    }
+
     public String controlGetCategoryParentName(String name) {
         return Category.getCategoryByName(name).getParentCategoryName();
     }
@@ -488,5 +523,9 @@ public class ProductController {
 
     public boolean controlHasCustomerBoughtThisProduct(Customer customer, Product product ){
         return CustomerLog.getAllCustomersBoughtProduct(product).contains(customer);
+    }
+
+    public void controlViewThisProduct(Product product){
+        product.setNumberOfViews(product.getNumberOfViews()+ 1);
     }
 }

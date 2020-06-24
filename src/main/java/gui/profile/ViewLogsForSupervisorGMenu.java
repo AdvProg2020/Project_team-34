@@ -28,6 +28,8 @@ public class ViewLogsForSupervisorGMenu extends GMenu {
         for (String log : controller.getAccountController().getSupervisorLogs()) {
             logsBox.getChildren().add(SupervisorLogBox(log));
         }
+        logsBox.setMaxHeight(720);
+        logsBox.setPadding(new Insets(10, 10, 10, 10));
         return createLogScene(logsBox);
     }
 

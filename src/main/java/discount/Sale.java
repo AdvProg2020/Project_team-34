@@ -149,6 +149,15 @@ public class Sale extends Discount {
         }
     }
 
+    public static boolean isProductInThisSuppliersSale(Product product, Supplier supplier){
+        for (Sale sale : Sale.getActiveSales()) {
+            if (sale.isProductInSale(product) && sale.getSupplier() == supplier) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static Sale getProductSale(Product product, Supplier supplier) {
         for (Sale sale : sales) {
             if (sale.isProductInSale(product) && sale.getSupplier() == supplier && sale.isSaleActive()) {

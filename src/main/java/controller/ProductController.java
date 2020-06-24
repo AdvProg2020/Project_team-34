@@ -35,6 +35,13 @@ public class ProductController {
             throw new ExceptionalMassage("Sing in first.");
         if (!(mainController.getAccount() instanceof Supplier))
             throw new ExceptionalMassage("Sign in as a Supplier");
+        if(!specifications.keySet().containsAll(Category.getCategoryByName(category).getSpecialFields().keySet())){
+            String error = "You have to enter a value for the category's special fields :\n";
+            for (String s : Category.getCategoryByName(category).getSpecialFields().keySet()) {
+                error += s + "\n";
+            }
+            throw new ExceptionalMassage(error);
+        }
         Supplier supplier = (Supplier) mainController.getAccount();
         Product product;
         product = Product.getProductByName(name);

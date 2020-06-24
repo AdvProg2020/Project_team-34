@@ -96,31 +96,37 @@ public class CartGMenu extends GMenu {
 
 //        productsInCartPane.getChildren().add(createTableHeader());
 
+        Label billLabel = new Label("Bill : " + controller.getAccountController().controlViewCart().getBill());
+        billLabel.setStyle("-fx-font-size: 20");
+
         ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
-        //Supplier supplier = new Supplier("i", "i", "i", "i", "ij", "kj", 6, "hdi");
-        //Product product = new Product(supplier, "laptop", "Asus", 499, 5, "good", null, null, new HashMap<>());
-        //ProductInCart newProductInCart = new ProductInCart(product, supplier);
-        //productInCarts.add(newProductInCart);
         productsInCartPane.setAlignment(Pos.CENTER);
         for (ProductInCart productInCart : productInCarts) {
-            productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane));
+            productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane,billLabel ));
         }
+
+
+        productsInCartPane.getChildren().add(billLabel);
+
         return productsInCartPane;
     }
 
-    private HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
+    private HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, VBox productInCartPane, Label billLabel) {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
+        int price = product.getPrice(productInCart.getSupplier());
         Label IdLabel = new Label(product.getProductId());
         Label nameLabel = new Label(product.getName());
-        Label priceLabel = new Label(String.valueOf(product.getPrice(productInCart.getSupplier())));
+        Label priceLabel = new Label(String.valueOf(price));
         Label countLabel = new Label(String.valueOf(count));
+        Label lastPrice = new Label(String.valueOf(price * count));
         gridPane.setHgap(70);
         gridPane.setVgap(0);
         gridPane.setAlignment(Pos.CENTER);
         HBox hBox = new HBox();
         hBox.setStyle("-fx-border-color: orange");
         hBox.setSpacing(20);
+        hBox.setPadding(new Insets(10, 30, 10, 30));
         hBox.getChildren().addAll(getImageView(product.getImageUrl(), 70, 70), gridPane);
 
         Button increment = new Button("+");
@@ -140,13 +146,16 @@ public class CartGMenu extends GMenu {
         column++;
         gridPane.add(priceLabel, column, 1);
         column++;
-
         gridPane.add(countBox, column, 1);
+        column++;
+        gridPane.add(lastPrice, column , 1);
 
         increment.setOnMouseClicked(e->{
             try {
                 controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) + 1));
+                lastPrice.setText(String.valueOf(Integer.parseInt(countLabel.getText() )* price));
+                updateBillLabel(billLabel, controller);
                 controller.getAccountController().controlViewCart().update();
                 if(countLabel.getText().equals("0")) {
                     productInCartPane.getChildren().remove(hBox);
@@ -160,7 +169,9 @@ public class CartGMenu extends GMenu {
         decrement.setOnMouseClicked(e->{
             try {
                 controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
-                    countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
+                countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
+                lastPrice.setText(String.valueOf(Integer.parseInt(countLabel.getText() )* price));
+                updateBillLabel(billLabel , controller);
                 controller.getAccountController().controlViewCart().update();
                     if(countLabel.getText().equals("0")) {
                         productInCartPane.getChildren().remove(hBox);
@@ -172,6 +183,10 @@ public class CartGMenu extends GMenu {
 
 
         return hBox;
+    }
+
+    private static void updateBillLabel(Label billLabel, Controller controller){
+        billLabel.setText("Bill : " + controller.getAccountController().controlViewCart().getBill());
     }
 
     private static HBox createTableHeader(){

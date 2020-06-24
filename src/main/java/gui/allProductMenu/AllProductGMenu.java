@@ -104,8 +104,9 @@ public class AllProductGMenu extends GMenu {
         });
 
 
-        CheckBox saleCheck = new CheckBox("Only Products In Sale");
+        CheckBox saleCheck = new CheckBox("Only Products On Sale");
         saleCheck.setSelected(onlyProductInSale);
+        controller.getProductController().getFilterAndSort().setInSaleOnly(onlyProductInSale);
         saleCheck.setOnMouseClicked(e->{
             controller.getProductController().getFilterAndSort().setInSaleOnly(saleCheck.isSelected());
             putNewProductsInProductGridPane(productGridPane);
@@ -163,7 +164,8 @@ public class AllProductGMenu extends GMenu {
 //        treeView.getStyleClass().add("my tree");
 
         specialFilterVBox.setPadding(new Insets(20, 20, 20 , 20));
-
+        specialFilterVBox.setSpacing(20);
+        putNewSpecialFilters(specialFilterVBox, productGridPane);
         filterAndSort.getChildren().addAll(sortLabel, sort, filterLabel, availabilityVBox,  price, specialFilterVBox, treeView);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
 

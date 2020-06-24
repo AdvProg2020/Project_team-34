@@ -221,13 +221,14 @@ public class AllProductGMenu extends GMenu {
             if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
-                soldOutImageView.setBlendMode(BlendMode.ADD);
+                soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
                 Group blend = new Group(
                         productImageView,
                         soldOutImageView
                 );
 
-                gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
+                gridPane.getChildren().addAll( productImageView, blend,soldOutImageView);
+//                gridPane.getChildren().add(soldOutImageView);
             }
             else {
                 gridPane.getChildren().add(productImageView);
@@ -278,6 +279,7 @@ public class AllProductGMenu extends GMenu {
     public void putNewSpecialFilters(VBox specialFiltersVBox, GridPane productGridPane){
         HashMap<String, ArrayList<String>> specialFilters = controller.getProductController().controlGetAllAvailableFilters();
         System.out.println(specialFilters);
+        specialFiltersVBox.getChildren().clear();
         for (String specialField : specialFilters.keySet()) {
 
             CheckComboBox<String> checkComboBox = new CheckComboBox<>();
@@ -303,7 +305,7 @@ public class AllProductGMenu extends GMenu {
 
                 }
             });
-            specialFiltersVBox.getChildren().clear();
+
             specialFiltersVBox.getChildren().add(checkComboBox);
         }
     }

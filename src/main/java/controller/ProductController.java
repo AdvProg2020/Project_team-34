@@ -154,6 +154,8 @@ public class ProductController {
                     case "description":
                         newProduct.setDescription(value);
                         break;
+                    case "imageUrl":
+                        newProduct.setImageUrl(value);
                     default:
                         newProduct.editSpecialField(field, value);
                 }

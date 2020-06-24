@@ -42,6 +42,18 @@ public class ProductController {
             }
             throw new ExceptionalMassage(error);
         }
+        /*if(!Category.getCategoryByName(category).getSpecialFields().values().contains(specifications.values())){
+            String error = "You have to enter valid values for each field : \n";
+            HashMap<String, ArrayList<String>> map = Category.getCategoryByName(category).getSpecialFields();
+            for (String s : map.keySet()) {
+                error += s + " : ";
+                for (String s1 : map.get(s)) {
+                    error += s1 + " ";
+                }
+                error += "\n";
+            }
+            throw new ExceptionalMassage(error);
+        }*/
         Supplier supplier = (Supplier) mainController.getAccount();
         Product product;
         product = Product.getProductByName(name);

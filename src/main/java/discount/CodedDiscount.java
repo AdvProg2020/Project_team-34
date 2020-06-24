@@ -92,6 +92,7 @@ public class CodedDiscount extends Discount{
 
     public void addUsedCountForCustomer(Customer customer){
         usedDiscountPerCustomer.put(customer, usedDiscountPerCustomer.get(customer)+1);
+        CodedDiscountDataBase.update(this);
     }
 
     public boolean canCustomerUseCode(Customer customer){

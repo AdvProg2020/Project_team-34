@@ -221,12 +221,12 @@ public class ManageProductsSupplierGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(availableField);
-        HBox hBox4 = new HBox();
-        hBox4.setPrefHeight(51.0);
-        hBox4.setPrefWidth(316.0);
-        hBox4.setLayoutX(340.0);
-        hBox4.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
-        hBox4.setLayoutY(179.0);
+        HBox newValueHbox = new HBox();
+        newValueHbox.setPrefHeight(51.0);
+        newValueHbox.setPrefWidth(316.0);
+        newValueHbox.setLayoutX(340.0);
+        newValueHbox.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
+        newValueHbox.setLayoutY(179.0);
         TextField valueField = new TextField();
         valueField.setPrefHeight(51.0);
         valueField.setPrefWidth(295.0);
@@ -235,13 +235,13 @@ public class ManageProductsSupplierGMenu extends GMenu {
         valueField.setPromptText("Enter new Value");
 
         // Adding child to parent
-        hBox4.getChildren().add(valueField);
+        newValueHbox.getChildren().add(valueField);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(hBox4);
+        anchorPane0.getChildren().add(newValueHbox);
 
         // Adding controller
-        availableField.getItems().addAll("name","nameOfCompany","description");
+        availableField.getItems().addAll("name","nameOfCompany","description","imageURL");
         availableField.getItems().addAll(editing.getSpecification().keySet());
 
         Button addToListButton = new Button();
@@ -270,6 +270,17 @@ public class ManageProductsSupplierGMenu extends GMenu {
 
 
         HashMap<String , String> editRequest = new HashMap<>();
+
+        Button fileChooserButton = new Button("...");
+        fileChooserButton.setPrefWidth(62);
+        fileChooserButton.setPrefHeight(59);
+
+        //availableField.setOnAction( e -> {
+            //if(availableField.getValue().equals("imageURL")){
+               // newValueHbox.getChildren().add(fileChooserButton);
+
+           // }
+       // });
 
         addToListButton.setOnAction( e -> {
             String key = availableField.getValue();
@@ -532,6 +543,8 @@ public class ManageProductsSupplierGMenu extends GMenu {
                 new FileChooser.ExtensionFilter("Image Files", "*.jpg", "*.png")
         );
 
+        createButton.setDisable(true);
+
         File[] selectedImage = new File[1];
 
         fileChooserButton.setOnAction( e -> {
@@ -540,14 +553,24 @@ public class ManageProductsSupplierGMenu extends GMenu {
             newStage.setTitle("Create product");
             selectedImage[0] = fileChooser.showOpenDialog(newStage);
             imageURL.setText(selectedImage[0].getAbsolutePath());
+            boolean isDisable2 = (nameField.getText().trim().equals("") || priceField.getText().trim().equals("") || remainedNumberField.getText().trim().equals("") ||
+                    nameOfCompanyField.getText().trim().equals("") || imageURL.getText().trim().equals("") || categoryField.getValue().trim().equals("") );
+
+            createButton.setDisable(isDisable2);
         });
 
         anchorPane0.onKeyReleasedProperty().set( e -> {
             boolean isDisable = (keyField.getText().trim().equals("") || valueField.getText().trim().equals("") );
             addToList.setDisable(isDisable);
+            boolean isDisable2 = (nameField.getText().trim().equals("") || priceField.getText().trim().equals("") || remainedNumberField.getText().trim().equals("") ||
+                    nameOfCompanyField.getText().trim().equals("") || imageURL.getText().trim().equals("") || categoryField.getValue().trim().equals("") );
+
+            createButton.setDisable(isDisable2);
         });
 
         HashMap<String, String> specification = new HashMap<>();
+
+        imageURL.setDisable(true);
 
         addToList.setOnAction( e -> {
             specification.put(keyField.getText(), valueField.getText());

@@ -125,4 +125,10 @@ public class OffController {
         }
         return codedDiscounts;
     }
+
+    public int controlGetRemainedNumberInCodedDiscountForCustomer(CodedDiscount codedDiscount) throws ExceptionalMassage {
+        if(!(mainController.getAccount() instanceof Customer))
+            throw new ExceptionalMassage("Sign in as a Customer");
+        return codedDiscount.getRemainedNumberByCustomer((Customer)mainController.getAccount());
+    }
 }

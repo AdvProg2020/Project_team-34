@@ -236,6 +236,11 @@ public class Product {
         ProductDataBase.update(this);
     }
 
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+        ProductDataBase.update(this);
+    }
+
     public void setPriceForEachSupplier(HashMap<Supplier, Integer> priceForEachSupplier) {
         this.priceForEachSupplier = priceForEachSupplier;
         ProductDataBase.update(this);
@@ -258,10 +263,10 @@ public class Product {
         return listOfSuppliers;
     }
 
-    private static ArrayList<Product> getConfirmedProducts(){
+    private static ArrayList<Product> getShouldBeShownProducts(){
         ArrayList<Product> confirmedProducts = new ArrayList<>();
         for (Product eachProduct : allProduct) {
-            if(eachProduct.getProductState() == State.CONFIRMED)
+            if(eachProduct.getProductState() == State.CONFIRMED || eachProduct.getProductState() == State.PREPARING_TO_BE_DELETED)
                 confirmedProducts.add(eachProduct);
         }
         return confirmedProducts;
@@ -276,8 +281,8 @@ public class Product {
         return null;
     }
 
-    public static Product getConFirmedProductById(String productId){
-        ArrayList<Product> confirmedProducts = getConfirmedProducts();
+    public static Product getShouldBeShownProductById(String productId){
+        ArrayList<Product> confirmedProducts = getShouldBeShownProducts();
         for (Product eachProduct : confirmedProducts) {
             if(eachProduct.getProductId().equals(productId))
                 return eachProduct;
@@ -300,7 +305,8 @@ public class Product {
 
     public static ArrayList<Product> getProductForSupplier(Supplier supplier){
         ArrayList<Product> result = new ArrayList<>();
-        for (Product product : allProduct) {
+        ArrayList<Product> shouldBeShownProducts = getShouldBeShownProducts();
+        for (Product product : shouldBeShownProducts) {
             if(product.doesSupplierSellThisProduct(supplier))
                 result.add(product);
         }

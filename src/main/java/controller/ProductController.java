@@ -432,6 +432,10 @@ public class ProductController {
         filterAndSort.removeSpecialFilter(key, value);
     }
 
+    public void controlFilterRemoveAllSpecialFilter(){
+        filterAndSort.removeAllSpecialFilter();
+    }
+
     public void controlFilterAddNameFilter(String name) throws ExceptionalMassage {
         filterAndSort.addNameFilter(name);
     }

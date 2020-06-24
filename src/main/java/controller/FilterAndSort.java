@@ -235,6 +235,10 @@ public class FilterAndSort {
             specialFilter.remove(key);
     }
 
+    public void removeAllSpecialFilter(){
+        specialFilter.clear();
+    }
+
     private ArrayList<Product> applySpecialFilter(ArrayList<Product> products) {
         products = new ArrayList<>(products);
         if (specialFilter.size() != 0) {

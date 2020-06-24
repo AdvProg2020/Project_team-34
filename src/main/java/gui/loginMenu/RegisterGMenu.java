@@ -296,6 +296,7 @@ public class RegisterGMenu extends GMenu {
                         controller.getAccountController().controlCreateAccount(userName,"customer",firstName,lastName,email,phoneNum,password,credit,companyName);
                         stage.close();
                         popUpCallerStage.setScene(parentMenu.getScene());
+                        //popUpCallerStage.setScene(new MainMenuG(null, stage, controller).getScene());
                     }catch (ExceptionalMassage ex){
                         new AlertBox(this, ex, controller).showAndWait();
                     }
@@ -306,7 +307,8 @@ public class RegisterGMenu extends GMenu {
                 try{
                     controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,1,companyName);
                     stage.close();
-                    popUpCallerStage.setScene(new MainMenuG(null, stage, controller).getScene());
+                    popUpCallerStage.setScene(parentMenu.getScene());
+                    //popUpCallerStage.setScene(new MainMenuG(null, stage, controller).getScene());
                 }catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();
                 }

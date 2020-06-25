@@ -312,6 +312,8 @@ public class FilterAndSort {
 
     public void addSupplierFilter(String supplierName) throws ExceptionalMassage {
         Supplier supplier = Supplier.getSupplierByCompanyName(supplierName);
+        if (supplier == null)
+            throw new ExceptionalMassage("Supplier not found!");
         if (supplierFilter.contains(supplier))
             throw new ExceptionalMassage("This supplier filter has already applied.");
         supplierFilter.add(supplier);

@@ -9,6 +9,8 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
@@ -549,5 +551,11 @@ public class ProductController {
 
     public void clearFilterAndSort() {
         filterAndSort.clear();
+    }
+
+    public ObservableList<Customer> getCustomersBoughtProductObservable(Product product, Supplier supplier) {
+        ObservableList<Customer> customers = FXCollections.observableArrayList();
+        customers.addAll(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
+        return customers;
     }
 }

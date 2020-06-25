@@ -131,4 +131,9 @@ public class OffController {
             throw new ExceptionalMassage("Sign in as a Customer");
         return codedDiscount.getRemainedNumberByCustomer((Customer)mainController.getAccount());
     }
+
+    public int controlGetPriceForEachProductAfterSale(Product product, Supplier supplier){
+        int percent = Sale.getProductSale(product, supplier).getPercent();
+        return product.getPrice(supplier)* (100 - percent)/100;
+    }
 }

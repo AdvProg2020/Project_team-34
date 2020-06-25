@@ -345,6 +345,9 @@ public class AccountController {
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);
+        if (customerLog.getPaidAmount() >= BOUND) {
+            controlCreateCodedDiscountForLoggedInCustomer();
+        }
         return customerLog.getPaidAmount() >= BOUND;
     }
 

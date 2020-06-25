@@ -112,9 +112,9 @@ public class MainMenuG extends GMenu {
             stage.setScene(new AllProductGMenu(this,stage,controller, false).getScene());
         });
 
-        //loginMenu.setOnAction( e-> {
-        //stage.setScene(new LoginGMenu("Login Menu",this,stage).getScene());
-        //});
+        salesMenu.setOnAction( e-> {
+            stage.setScene(new AllProductGMenu(this,stage,controller,true).getScene());
+        });
         GridPane background = new GridPane();
         background.setAlignment(Pos.CENTER);
         background.getChildren().add(anchorPane0);

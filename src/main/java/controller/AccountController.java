@@ -15,6 +15,7 @@ import log.SupplierLog;
 import product.Product;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class AccountController {
@@ -244,9 +245,6 @@ public class AccountController {
     }
 
     public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
-        if(!(mainController.getAccount() instanceof Customer)){
-            throw new ExceptionalMassage("Sign in as a Customer!");
-        }
         Product product = Product.getProductById(productId);
         if (product == null)
             throw new ExceptionalMassage("Product not found.");
@@ -430,5 +428,20 @@ public class AccountController {
 
     public void controlClearCart(){
         mainController.getCart().clear();
+    }
+
+    public ArrayList<Product> controlGetRequestForLoggedInSupplier(){
+        return Product.getRequestsForThisSupplier((Supplier) mainController.getAccount());
+    }
+
+    public void controlCreateRandomCodesForCustomers(ArrayList<Customer> luckyCustomers,int percent, int maxAmount){
+        HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
+        String randomCode = CodedDiscount.codeGenerator();
+        for (Customer luckyCustomer : luckyCustomers) {
+            maxUsagePerCustomer.put(luckyCustomer, 1);
+        }
+        Date start = new Date(System.currentTimeMillis());
+        Date end = new Date(System.currentTimeMillis() + 7*24*60*60000);
+        new CodedDiscount(randomCode,start, end,percent,maxAmount,maxUsagePerCustomer);
     }
 }

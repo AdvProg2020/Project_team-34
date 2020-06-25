@@ -187,7 +187,7 @@ public class Sale extends Discount {
             throw new ExceptionalMassage("No such id!");
         }
         Sale sale = Sale.getSaleById(convertRequestIdToSaleId(requestId));
-        if (sale.getState() == State.PREPARING_TO_BUILD) {
+        if (sale.getState() == State.PREPARING_TO_BUILD || sale.getState() == State.BUILD_DECLINED || sale.getState() == State.BUILD_ACCEPTED) {
             result += "This Sale wants to be created!\n";
             result += "sale info :\n";
             result += "start date :" + sale.getStart().toString() + "\n";
@@ -214,11 +214,11 @@ public class Sale extends Discount {
         return result;
     }
 
-    private static String convertSaleIdToRequestId(String requestId) {
+    public static String convertSaleIdToRequestId(String requestId) {
         return "T34SR" + requestId.substring(4);
     }
 
-    private static String convertRequestIdToSaleId(String productId) {
+    public static String convertRequestIdToSaleId(String productId) {
         return "T34S" + productId.substring(5);
     }
 
@@ -227,17 +227,27 @@ public class Sale extends Discount {
         if (saleRequest == null)
             throw new ExceptionalMassage("Invalid request identifier");
         if (!isAccepted) {
-            sales.remove(saleRequest);
-            ProductDataBase.delete(saleRequest.getOffId());
+            if(saleRequest.getState() == State.PREPARING_TO_BUILD)
+                saleRequest.setState(State.BUILD_DECLINED);
+            else if(saleRequest.getState() == State.PREPARING_TO_EDIT){
+                saleRequest.setState(State.EDIT_DECLINED);
+            }
+            SaleDataBase.update(saleRequest);
             return;
         }
         if (saleRequest.getState() == State.PREPARING_TO_BUILD) {
             saleRequest.setState(State.CONFIRMED);
+            Sale newRequest = new Sale(saleRequest.getSupplier(),saleRequest.getStart(),saleRequest.getEnd(),saleRequest.getPercent(),null);
+            for (Product product : saleRequest.getProducts()) {
+                newRequest.addProductToSale(product);
+            }
+            newRequest.setState(State.BUILD_ACCEPTED);
+            SaleDataBase.update(newRequest);
             SaleDataBase.update(saleRequest);
         } else {
             setRequestValuesInRealSale(saleRequest);
-            sales.remove(saleRequest);
-            SaleDataBase.delete(saleRequest.getOffId());
+            saleRequest.setState(State.EDIT_ACCEPTED);
+            SaleDataBase.update(saleRequest);
             SaleDataBase.update(Sale.getSaleById(saleRequest.getRootSaleId()));
         }
 
@@ -256,6 +266,15 @@ public class Sale extends Discount {
 
     }
 
+    public static ArrayList<Sale> getAllSaleRequestsBySupplier(Supplier supplier){
+        ArrayList<Sale> requests = new ArrayList<>();
+        for (Sale sale : sales) {
+            if(sale.getSupplier() == supplier && (sale.getState() != State.CONFIRMED)){
+                requests.add(sale);
+            }
+        }
+        return requests;
+    }
 
     @Override
     public String toString() {

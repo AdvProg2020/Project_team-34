@@ -62,7 +62,7 @@ public class ViewDiscountCodesForCustomerGMenu extends GMenu{
         codedDiscountLabel.setStyle("-fx-border-color: orange");
         codedDiscountLabel.setOnMouseClicked(e->{
             try {
-                resultLabel.setText("Start Date : " + codedDiscount.getStart() + " ,  End Date :" + codedDiscount.getEnd() + controller.getOffController().controlGetRemainedNumberInCodedDiscountForCustomer(codedDiscount));
+                resultLabel.setText("Start Date : " + codedDiscount.getStart() + " ,  End Date :" + codedDiscount.getEnd() + "Remained Number Of Usage for you" + controller.getOffController().controlGetRemainedNumberInCodedDiscountForCustomer(codedDiscount));
             } catch (ExceptionalMassage exceptionalMassage) {
                 exceptionalMassage.printStackTrace();
             }

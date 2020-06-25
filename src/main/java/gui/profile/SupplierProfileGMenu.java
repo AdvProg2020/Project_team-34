@@ -29,6 +29,12 @@ public class SupplierProfileGMenu extends GMenu {
             stage.setScene(new ManageProductsSupplierGMenu(this, stage, controller).createScene());
         });
 
+        Button viewRequestsForThisSupplier = new Button("View My Requests");
+        GMenu.addStyleToButton(viewRequestsForThisSupplier);
+        viewRequestsForThisSupplier.setOnMouseClicked(e->{
+            stage.setScene(new ManageRequestForSupplierGMenu(this, stage, controller).createScene());
+        });
+
         Button viewLogButton = new Button("View Log");
         GMenu.addStyleToButton(viewLogButton);
         viewLogButton.setOnMouseClicked(e->{
@@ -50,7 +56,7 @@ public class SupplierProfileGMenu extends GMenu {
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setSpacing(10);
         buttonPane.setPadding(new Insets(10, 10 , 10 , 10));
-        buttonPane.getChildren().addAll(viewProductsForThisSupplier,viewLogButton, editPersonalInfoButton, manageOffsButton);
+        buttonPane.getChildren().addAll(viewProductsForThisSupplier,viewRequestsForThisSupplier, viewLogButton, editPersonalInfoButton, manageOffsButton);
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
         mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()), buttonPane);

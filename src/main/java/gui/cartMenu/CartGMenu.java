@@ -1,7 +1,9 @@
 package gui.cartMenu;
 
+import cart.Cart;
 import cart.ProductInCart;
 import controller.Controller;
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
@@ -90,37 +92,56 @@ public class CartGMenu extends GMenu {
         label.setText("Products On Your Shopping Cart");
         label.setAlignment(Pos.CENTER);
 
+        productsInCartPane.setMinWidth(820);
         productsInCartPane.getChildren().add(label);
         productsInCartPane.setSpacing(20);
         productsInCartPane.setAlignment(Pos.CENTER);
 
 //        productsInCartPane.getChildren().add(createTableHeader());
 
+        Label billLabel = new Label("Bill : " + controller.getAccountController().controlViewCart().getBill());
+        billLabel.setStyle("-fx-font-size: 20");
+
         ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
-        //Supplier supplier = new Supplier("i", "i", "i", "i", "ij", "kj", 6, "hdi");
-        //Product product = new Product(supplier, "laptop", "Asus", 499, 5, "good", null, null, new HashMap<>());
-        //ProductInCart newProductInCart = new ProductInCart(product, supplier);
-        //productInCarts.add(newProductInCart);
         productsInCartPane.setAlignment(Pos.CENTER);
         for (ProductInCart productInCart : productInCarts) {
-            productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane));
+            productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane,billLabel ));
         }
+
+        productsInCartPane.getChildren().add(billLabel);
+
         return productsInCartPane;
     }
 
-    private HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, Pane productInCartPane) {
+    private HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, VBox productInCartPane, Label billLabel) {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
+        int priceBeforeSale = product.getPrice(productInCart.getSupplier());
+        int priceAfterSale = controller.getOffController().controlGetPriceForEachProductAfterSale(product, productInCart.getSupplier());
         Label IdLabel = new Label(product.getProductId());
         Label nameLabel = new Label(product.getName());
-        Label priceLabel = new Label(String.valueOf(product.getPrice(productInCart.getSupplier())));
+
+        String textPriceLabel = String.valueOf(priceBeforeSale);
+        if(priceAfterSale != priceBeforeSale)
+            textPriceLabel = textPriceLabel + "=>" + String.valueOf(priceAfterSale);
+        Label priceLabel = new Label(textPriceLabel);
         Label countLabel = new Label(String.valueOf(count));
+        String textLastPriceLabel =  String.valueOf(priceBeforeSale * count);
+        if(priceAfterSale != priceBeforeSale)
+            textLastPriceLabel = textLastPriceLabel + "=>" + String.valueOf(priceAfterSale * count);
+
+
+        Label lastPrice = new Label(textLastPriceLabel);
+
+//        lastPrice.setMinHeight(90);
+//        lastPrice.setMinHeight(90);
         gridPane.setHgap(70);
         gridPane.setVgap(0);
         gridPane.setAlignment(Pos.CENTER);
         HBox hBox = new HBox();
         hBox.setStyle("-fx-border-color: orange");
         hBox.setSpacing(20);
+        hBox.setPadding(new Insets(10, 30, 10, 30));
         hBox.getChildren().addAll(getImageView(product.getImageUrl(), 70, 70), gridPane);
 
         Button increment = new Button("+");
@@ -140,13 +161,16 @@ public class CartGMenu extends GMenu {
         column++;
         gridPane.add(priceLabel, column, 1);
         column++;
-
         gridPane.add(countBox, column, 1);
+        column++;
+        gridPane.add(lastPrice, column , 1);
 
         increment.setOnMouseClicked(e->{
             try {
                 controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) + 1));
+                updateLastPriceLabel(lastPrice,Integer.parseInt(countLabel.getText()), priceBeforeSale, priceAfterSale);
+                updateBillLabel(billLabel, controller);
                 controller.getAccountController().controlViewCart().update();
                 if(countLabel.getText().equals("0")) {
                     productInCartPane.getChildren().remove(hBox);
@@ -160,7 +184,9 @@ public class CartGMenu extends GMenu {
         decrement.setOnMouseClicked(e->{
             try {
                 controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
-                    countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
+                countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
+                updateLastPriceLabel(lastPrice, Integer.parseInt(countLabel.getText()),priceBeforeSale,priceAfterSale);
+                updateBillLabel(billLabel , controller);
                 controller.getAccountController().controlViewCart().update();
                     if(countLabel.getText().equals("0")) {
                         productInCartPane.getChildren().remove(hBox);
@@ -172,6 +198,18 @@ public class CartGMenu extends GMenu {
 
 
         return hBox;
+    }
+
+    private static void updateBillLabel(Label billLabel, Controller controller){
+        billLabel.setText("Bill : " + controller.getAccountController().controlViewCart().getBill());
+    }
+
+    private static void updateLastPriceLabel (Label lastPriceLabel , int count ,int priceBeforeSale, int priceAfterSale){
+        String textLastPriceLabel =  String.valueOf(priceBeforeSale * count);
+        if(priceAfterSale != priceBeforeSale)
+            textLastPriceLabel = textLastPriceLabel + "=>" + String.valueOf(priceAfterSale * count);
+        lastPriceLabel.setText(textLastPriceLabel);
+
     }
 
     private static HBox createTableHeader(){

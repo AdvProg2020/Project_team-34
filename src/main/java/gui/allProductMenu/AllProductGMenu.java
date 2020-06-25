@@ -1,10 +1,12 @@
 package gui.allProductMenu;
 
 import controller.Controller;
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.productMenu.ProductMenuG;
+import gui.profile.EditPersonalInfoGMenu;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -16,6 +18,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -24,6 +27,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.Rating;
 import product.Category;
 import product.Product;
 import org.controlsfx.control.RangeSlider;
@@ -44,6 +48,7 @@ public class AllProductGMenu extends GMenu {
     public AllProductGMenu(GMenu parentMenu, Stage stage, Controller controller, boolean onlyProductInSale) {
         super("All products Menu", parentMenu, stage, controller);
         this.onlyProductInSale = onlyProductInSale;
+        controller.getProductController().clearFilterAndSort();
     }
 
     @Override
@@ -104,8 +109,9 @@ public class AllProductGMenu extends GMenu {
         });
 
 
-        CheckBox saleCheck = new CheckBox("Only Products In Sale");
+        CheckBox saleCheck = new CheckBox("Only Products On Sale");
         saleCheck.setSelected(onlyProductInSale);
+        controller.getProductController().getFilterAndSort().setInSaleOnly(onlyProductInSale);
         saleCheck.setOnMouseClicked(e->{
             controller.getProductController().getFilterAndSort().setInSaleOnly(saleCheck.isSelected());
             putNewProductsInProductGridPane(productGridPane);
@@ -162,9 +168,37 @@ public class AllProductGMenu extends GMenu {
         filterAndSort.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
 //        treeView.getStyleClass().add("my tree");
 
-        specialFilterVBox.setPadding(new Insets(20, 20, 20 , 20));
 
-        filterAndSort.getChildren().addAll(sortLabel, sort, filterLabel, availabilityVBox,  price, specialFilterVBox, treeView);
+        VBox nameFilter = new VBox();
+        Label filterByNameLabel = new Label("Filter By Name");
+        nameFilter.getChildren().add(filterByNameLabel);
+        TextField filterByNameTextField = new TextField();
+        nameFilter.getChildren().add(filterByNameTextField);
+
+
+        ListView<String> filterByNameListView = new ListView<>();
+        filterByNameListView.getItems().add("hi");
+        nameFilter.getChildren().add(filterByNameListView);
+
+        Button filterByNameAddButton = new Button("Add");
+        GMenu.addStyleToButton(filterByNameAddButton);
+        filterByNameAddButton.setOnMouseClicked(e->{
+            filterByNameListView.getItems().add(filterByNameTextField.getText());
+//            controller.getProductController().getFilterAndSort().addNameFilter();
+        });
+        nameFilter.getChildren().add(filterByNameAddButton);
+
+        Button filterByNameRemoveButton = new Button("Remove");
+        GMenu.addStyleToButton(filterByNameRemoveButton);
+        filterByNameRemoveButton.setOnMouseClicked(e->{
+
+        });
+        nameFilter.getChildren().add(filterByNameRemoveButton);
+
+        specialFilterVBox.setPadding(new Insets(20, 20, 20 , 20));
+        specialFilterVBox.setSpacing(20);
+        putNewSpecialFilters(specialFilterVBox, productGridPane);
+        filterAndSort.getChildren().addAll(sortLabel, sort, filterLabel, availabilityVBox,  price, specialFilterVBox,nameFilter, treeView);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
 
 
@@ -217,8 +251,19 @@ public class AllProductGMenu extends GMenu {
                 controller.getProductController().controlViewThisProduct(product);
                 stage.setScene(new ProductMenuG(this,stage,  product, controller).getScene());
             });
+            if(Sale.isProductHasAnySale(product)) {
+                ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/Sale.png", 200, 200);
 
-            if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
+                soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
+                Group blend = new Group(
+                        productImageView,
+                        soldOutImageView
+                );
+
+                gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
+//                gridPane.getChildren().add(soldOutImageView);
+            }
+            else if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
@@ -234,8 +279,17 @@ public class AllProductGMenu extends GMenu {
                 gridPane.getChildren().add(productImageView);
             }
 
+            Rating starRating = new Rating();
+            starRating.setMax(5);
+            starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+            starRating.setEffect(new DropShadow());
+            starRating.setPartialRating(true);
+            starRating.setFocusTraversable(false);
+            starRating.setMouseTransparent(true);
+
             mainVBox.getChildren().add(gridPane);
             mainVBox.getChildren().add(nameLabel);
+            mainVBox.getChildren().add(starRating);
             mainVBox.setAlignment(Pos.CENTER);
 
             productGridPane.add(mainVBox, column, row);

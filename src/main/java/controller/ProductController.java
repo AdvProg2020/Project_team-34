@@ -12,6 +12,8 @@ import feedback.Score;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
+import state.State;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -60,11 +62,13 @@ public class ProductController {
         if (Category.getCategoryByName(category) == null) {
             throw new ExceptionalMassage("Category not found.");
         }
-        if (product == null)
-            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications, imageURL);
-        else {
-            product.addNewSupplierForProduct(supplier, price, remainedNumbers);
-        }
+//        if (product == null)
+//            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications, imageURL);
+//        else {
+//            product.addNewSupplierForProduct(supplier, price, remainedNumbers);
+//        }
+        Product product1 = new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications, imageURL);
+        System.out.println(product1);
     }
 
     public void controlRemoveProductById(String productId) throws ExceptionalMassage {
@@ -72,7 +76,11 @@ public class ProductController {
         if (product == null) {
             throw new ExceptionalMassage("Invalid Id");
         } else {
-            product.removeProduct();
+            Product newProduct = new Product(product);
+            newProduct.setProductState(State.PREPARING_TO_BE_DELETED);
+            ArrayList<Supplier> newListOfSuppliers = new ArrayList<>();
+            newListOfSuppliers.add((Supplier)mainController.getAccount());
+            newProduct.setListOfSuppliers(newListOfSuppliers);
         }
     }
 
@@ -160,6 +168,8 @@ public class ProductController {
                         newProduct.editSpecialField(field, value);
                 }
             }
+            newProduct.getListOfSuppliers().clear();
+            newProduct.getListOfSuppliers().add((Supplier) mainController.getAccount());
         }
     }
 
@@ -366,6 +376,14 @@ public class ProductController {
         }
     }
 
+    public State controlGetEnumForRequest(String requestId) throws ExceptionalMassage {
+        if(requestId.charAt(3) == 'P'){
+            return Product.getProductById(Product.convertRequestIdToProductId(requestId)).getProductState();
+        } else {
+            return Sale.getSaleById(Sale.convertRequestIdToSaleId(requestId)).getState();
+        }
+    }
+
     public void controlAcceptOrDeclineRequest(String requestId, boolean isAccepted) throws ExceptionalMassage {
         if (requestId.charAt(3) == 'P') {
             Product.acceptOrDeclineRequest(requestId, isAccepted);
@@ -527,5 +545,9 @@ public class ProductController {
 
     public void controlViewThisProduct(Product product){
         product.setNumberOfViews(product.getNumberOfViews()+ 1);
+    }
+
+    public void clearFilterAndSort() {
+        filterAndSort.clear();
     }
 }

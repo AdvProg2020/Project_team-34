@@ -6,6 +6,7 @@ import javafx.collections.ObservableList;
 
 import java.util.ArrayList;
 import java.util.Objects;
+import java.util.Random;
 
 /**
  * @author rpirayadi
@@ -61,6 +62,10 @@ public abstract class Account {
 
     public boolean getIsAvailable() {
         return isAvailable;
+    }
+
+    public static ArrayList<Account> getAllAccounts() {
+        return allAccounts;
     }
 
     public static ArrayList<String> getAllUsername(){
@@ -218,5 +223,18 @@ public abstract class Account {
             }
         }
         return false;
+    }
+
+    public static ArrayList<Customer> getRandomCustomers() {
+        ArrayList<Customer> randomCustomers = new ArrayList<>();
+        for (Account account : allAccounts) {
+            if (account instanceof Customer) {
+                Random random = new Random();
+                if (random.nextInt(100) > 90) {
+                    randomCustomers.add((Customer) account);
+                }
+            }
+        }
+        return randomCustomers;
     }
 }

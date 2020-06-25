@@ -15,6 +15,7 @@ import log.SupplierLog;
 import product.Product;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 
 public class AccountController {
@@ -436,4 +437,14 @@ public class AccountController {
         return Product.getRequestsForThisSupplier((Supplier) mainController.getAccount());
     }
 
+    public void controlCreateRandomCodesForCustomers(ArrayList<Customer> luckyCustomers,int percent, int maxAmount){
+        HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
+        String randomCode = CodedDiscount.codeGenerator();
+        for (Customer luckyCustomer : luckyCustomers) {
+            maxUsagePerCustomer.put(luckyCustomer, 1);
+        }
+        Date start = new Date(System.currentTimeMillis());
+        Date end = new Date(System.currentTimeMillis() + 7*24*60*60000);
+        new CodedDiscount(randomCode,start, end,percent,maxAmount,maxUsagePerCustomer);
+    }
 }

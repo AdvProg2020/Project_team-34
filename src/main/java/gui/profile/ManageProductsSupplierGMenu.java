@@ -119,6 +119,16 @@ public class ManageProductsSupplierGMenu extends GMenu {
         // Adding child to parent
         anchorPane0.getChildren().add(removeButton);
 
+        Button showCustomers = new Button();
+        showCustomers.setPrefHeight(33.0);
+        showCustomers.setPrefWidth(233.0);
+        showCustomers.setLayoutX(505.0);
+        showCustomers.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        showCustomers.setLayoutY(165.0);
+        showCustomers.setText("Show customers");
+        showCustomers.setMnemonicParsing(false);
+
+        anchorPane0.getChildren().add(showCustomers);
         // Adding controller
 
         for (Product product : Product.getProductForSupplier((Supplier) controller.getAccount())) {
@@ -174,6 +184,9 @@ public class ManageProductsSupplierGMenu extends GMenu {
             }
         });
 
+        showCustomers.setOnAction(e -> {
+
+        });
 
 
         return new Scene(anchorPane0);

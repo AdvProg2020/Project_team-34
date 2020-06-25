@@ -2,6 +2,7 @@ package gui.profile;
 
 import account.Supplier;
 import controller.Controller;
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
@@ -88,6 +89,9 @@ public class ManageRequestForSupplierGMenu extends GMenu{
         for (Product product : controller.getAccountController().controlGetRequestForLoggedInSupplier()) {
             products.getItems().add(Product.convertProductIdToRequestId(product.getProductId()));
         }
+        for (Sale sale : controller.getOffController().getAllSaleRequestsIdForThisSupplier()) {
+            products.getItems().add(Sale.convertSaleIdToRequestId(sale.getOffId()));
+        }
 
 
         detailButton.setOnAction( e -> {
@@ -100,7 +104,7 @@ public class ManageRequestForSupplierGMenu extends GMenu{
                 }
                 Stage newStage = new Stage();
                 newStage.getIcons().add(logoImage);
-                newStage.setTitle("Product details");
+                newStage.setTitle("Requests details");
                 newStage.setScene(createDetails(id));
                 newStage.showAndWait();
             }
@@ -147,12 +151,22 @@ public class ManageRequestForSupplierGMenu extends GMenu{
 
         // Adding child to parent
         anchorPane0.getChildren().add(text3);
-        Product product = Product.getProductById(Product.convertRequestIdToProductId(productId));
-        String detailsToShow = product.getProductState().toString();
-        text3.setText(detailsToShow + "\n" + product.toString());
+        String detailsToShow = null;
+        try {
+            detailsToShow = controller.getProductController().controlShowDetailForRequest(productId);
+        } catch (ExceptionalMassage ex){
+            new AlertBox(this, ex, controller);
+        }
+        State state = null;
+        try {
+            state = controller.getProductController().controlGetEnumForRequest(productId);
+        } catch (ExceptionalMassage ex){
+            new AlertBox(this, ex,controller);
+        }
+        text3.setText(state + "\n" + detailsToShow);
 
         String source ;
-        State state = product.getProductState();
+
         if(state == State.DELETE_DECLINED || state == State.EDIT_DECLINED || state == State.BUILD_DECLINED){
             source = "./src/main/resources/icons/error.png";
         }

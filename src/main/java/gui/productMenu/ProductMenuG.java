@@ -13,8 +13,10 @@ import gui.cartMenu.CartGMenu;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -48,11 +50,13 @@ public class ProductMenuG extends GMenu {
         anchorPane0.setPrefHeight(800.0);
         anchorPane0.setPrefWidth(1200.0);
         anchorPane0.setStyle("-fx-background-color: #f5f5f2;");
+        GridPane imageViewGridPane = new GridPane();
+        imageViewGridPane.setLayoutX(76.0);
+        imageViewGridPane.setLayoutY(120);
         ImageView imageViewBox = new ImageView();
         imageViewBox.setPickOnBounds(true);
-        imageViewBox.setFitWidth(285.0);
-        imageViewBox.setFitHeight(305.0);
-        imageViewBox.setPreserveRatio(true);
+        imageViewBox.setFitWidth(250.0);
+        imageViewBox.setFitHeight(250.0);
         imageViewBox.setLayoutX(76.0);
         imageViewBox.setLayoutY(100.0);
         HBox header = createHeader();
@@ -60,7 +64,7 @@ public class ProductMenuG extends GMenu {
 
 
         // Adding child to parent
-        anchorPane0.getChildren().add(imageViewBox);
+        anchorPane0.getChildren().add(imageViewGridPane);
         Label label2 = new Label();
         label2.setLayoutX(76.0);
         label2.setLayoutY(390.0);
@@ -220,6 +224,33 @@ public class ProductMenuG extends GMenu {
         comments.setContent(commentsScrollPane);
 
 
+        if(Sale.isProductHasAnySale(product)) {
+            ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/Sale.png", 250, 205);
+
+            soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
+            Group blend = new Group(
+                    imageViewBox,
+                    soldOutImageView
+            );
+
+            imageViewGridPane.getChildren().addAll(imageViewBox, blend, soldOutImageView);
+//                gridPane.getChildren().add(soldOutImageView);
+        }
+        else if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
+            ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 250, 250);
+
+            soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
+            Group blend = new Group(
+                    imageViewBox,
+                    soldOutImageView
+            );
+
+            imageViewGridPane.getChildren().addAll( imageViewBox, blend,soldOutImageView);
+//                gridPane.getChildren().add(soldOutImageView);
+        }
+        else {
+            imageViewGridPane.getChildren().add(imageViewBox);
+        }
 
         ArrayList<String> suppliersIds = new ArrayList<>();
         for (Supplier supplier : product.getAllSuppliersThatHaveAvailableProduct()) {

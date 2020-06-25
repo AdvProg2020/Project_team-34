@@ -132,6 +132,10 @@ public class OffController {
         return codedDiscount.getRemainedNumberByCustomer((Customer)mainController.getAccount());
     }
 
+    public ArrayList<Sale> getAllSaleRequestsIdForThisSupplier(){
+        return Sale.getAllSaleRequestsBySupplier((Supplier)mainController.getAccount());
+    }
+
     public int controlGetPriceForEachProductAfterSale(Product product, Supplier supplier){
         int percent = Sale.getProductSale(product, supplier).getPercent();
         return product.getPrice(supplier)* (100 - percent)/100;

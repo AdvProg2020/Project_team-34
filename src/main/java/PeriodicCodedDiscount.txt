@@ -1,0 +1,6 @@
+Data
+10
+100
+604800000
+1593086498421
+percent, max amount, period, lastTime

@@ -13,31 +13,20 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 
 public class Main extends Application {
-    private static long timeBeginning;
-    private static long timeProgramWasOpened;
-    private static int timesDiscountCodeGenerated;
-    private static final long WEEK = 7*24*3600*1000;
 
     public static void main(String[] args)  {
         DataBase.createNewTablesToStart();
         DataBase.importAllData();
-        timeProgramWasOpened = System.currentTimeMillis();
-        if(timeProgramWasOpened - timeBeginning > timesDiscountCodeGenerated * WEEK ){
-            generateRandomCodes();
-        }
         launch(args);
     }
 
-    private static void generateRandomCodes(){
-
-    }
-
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) {
         Image logoImage = null;
         try {
             logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
         } catch (FileNotFoundException e) {
+            System.out.println("Icon not found");
         }
         stage.setTitle("Team 34 Online retail store");
         stage.getIcons().add(logoImage);

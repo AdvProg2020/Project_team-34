@@ -318,7 +318,7 @@ public class AccountController {
         mainController.getCart().removeCodedDiscount();
     }
 
-    public void finalizeOrder() throws ExceptionalMassage {
+    public boolean finalizeOrder(int bound) throws ExceptionalMassage {
         Account account = mainController.getAccount();
         if (account == null)
             throw new ExceptionalMassage("Login First.");
@@ -342,7 +342,7 @@ public class AccountController {
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);
-        //customer credit decrease
+        return customerLog.getPaidAmount() >= bound;
     }
 
     public String getAccountUsername() {

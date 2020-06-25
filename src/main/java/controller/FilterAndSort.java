@@ -1,14 +1,12 @@
 package controller;
 
+import account.Supplier;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Category;
 import product.Product;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
+import java.util.*;
 
 /**
  * @author Aryan Ahadinia
@@ -25,6 +23,7 @@ public class FilterAndSort {
     private final HashMap<String, ArrayList<String>> specialFilter;
     private final ArrayList<String> nameFilter;
     private final ArrayList<String> brandFilter;
+    private final ArrayList<Supplier> supplierFilter;
 
     public FilterAndSort() {
         this.availabilityFilter = false;
@@ -36,6 +35,7 @@ public class FilterAndSort {
         this.specialFilter = new HashMap<>();
         this.nameFilter = new ArrayList<>();
         this.brandFilter = new ArrayList<>();
+        this.supplierFilter = new ArrayList<>();
     }
 
     public void clear() {
@@ -48,6 +48,7 @@ public class FilterAndSort {
         this.specialFilter.clear();
         this.nameFilter.clear();
         this.brandFilter.clear();
+        this.supplierFilter.clear();
     }
 
     public void clearFiltersExceptCategory() {
@@ -59,6 +60,7 @@ public class FilterAndSort {
         this.specialFilter.clear();
         this.nameFilter.clear();
         this.brandFilter.clear();
+        this.supplierFilter.clear();
     }
 
     public boolean getAvailabilityFilter() {
@@ -95,6 +97,10 @@ public class FilterAndSort {
 
     public ArrayList<String> getBrandFilter() {
         return brandFilter;
+    }
+
+    public ArrayList<Supplier> getSupplierFilter() {
+        return supplierFilter;
     }
 
     public void setAvailabilityFilter(boolean availabilityFilter) {
@@ -298,6 +304,33 @@ public class FilterAndSort {
             ArrayList<Product> filteredProducts = new ArrayList<>();
             for (Product product : products){
                 if (brandFilter.contains(product.getNameOfCompany()))
+                    filteredProducts.add(product);
+            }
+            return filteredProducts;
+        }
+    }
+
+    public void addSupplierFilter(String supplierName) throws ExceptionalMassage {
+        Supplier supplier = Supplier.getSupplierByCompanyName(supplierName);
+        if (supplierFilter.contains(supplier))
+            throw new ExceptionalMassage("This supplier filter has already applied.");
+        supplierFilter.add(supplier);
+    }
+
+    public void removeSupplierFilter(String supplierName) throws ExceptionalMassage {
+        Supplier supplier = Supplier.getSupplierByCompanyName(supplierName);
+        if (!supplierFilter.contains(supplier))
+            throw new ExceptionalMassage("This supplier filter hasn't applied yet.");
+        supplierFilter.add(supplier);
+    }
+
+    private ArrayList<Product> applySupplierFilter(ArrayList<Product> products) {
+        if (supplierFilter.size() == 0) {
+            return new ArrayList<>(products);
+        } else {
+            ArrayList<Product> filteredProducts = new ArrayList<>();
+            for (Product product : products){
+                if (new HashSet<>(product.getListOfSuppliers()).retainAll(supplierFilter))
                     filteredProducts.add(product);
             }
             return filteredProducts;

@@ -1,6 +1,7 @@
 package gui.allProductMenu;
 
 import controller.Controller;
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
@@ -219,8 +220,19 @@ public class AllProductGMenu extends GMenu {
                 controller.getProductController().controlViewThisProduct(product);
                 stage.setScene(new ProductMenuG(this,stage,  product, controller).getScene());
             });
+            if(Sale.isProductHasAnySale(product)) {
+                ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/Sale.png", 200, 200);
 
-            if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
+                soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
+                Group blend = new Group(
+                        productImageView,
+                        soldOutImageView
+                );
+
+                gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
+//                gridPane.getChildren().add(soldOutImageView);
+            }
+            else if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.SRC_OVER);

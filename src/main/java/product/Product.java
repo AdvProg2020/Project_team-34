@@ -83,6 +83,7 @@ public class Product {
         this.productState = State.PREPARING_TO_EDIT;
         this.specification = new HashMap<>(product.getSpecification());
         this.futureCategoryName = product.getFutureCategoryName();
+        this.imageUrl = product.getImageUrl();
         allCreatedProductNum++;
         allProduct.add(this);
         ProductDataBase.add(this);

@@ -131,4 +131,8 @@ public class OffController {
             throw new ExceptionalMassage("Sign in as a Customer");
         return codedDiscount.getRemainedNumberByCustomer((Customer)mainController.getAccount());
     }
+
+    public ArrayList<Sale> getAllSaleRequestsIdForThisSupplier(){
+        return Sale.getAllSaleRequestsBySupplier((Supplier)mainController.getAccount());
+    }
 }

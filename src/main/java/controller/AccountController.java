@@ -435,4 +435,5 @@ public class AccountController {
     public ArrayList<Product> controlGetRequestForLoggedInSupplier(){
         return Product.getRequestsForThisSupplier((Supplier) mainController.getAccount());
     }
+
 }

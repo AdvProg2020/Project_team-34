@@ -376,6 +376,14 @@ public class ProductController {
         }
     }
 
+    public State controlGetEnumForRequest(String requestId) throws ExceptionalMassage {
+        if(requestId.charAt(3) == 'P'){
+            return Product.getProductById(Product.convertRequestIdToProductId(requestId)).getProductState();
+        } else {
+            return Sale.getSaleById(Sale.convertRequestIdToSaleId(requestId)).getState();
+        }
+    }
+
     public void controlAcceptOrDeclineRequest(String requestId, boolean isAccepted) throws ExceptionalMassage {
         if (requestId.charAt(3) == 'P') {
             Product.acceptOrDeclineRequest(requestId, isAccepted);

@@ -280,7 +280,7 @@ public class Sale extends Discount {
         int maxPercent = 0;
         Sale resultSale = null;
         for (Sale sale : sales) {
-            if(sale.getProducts().contains(product) && sale.getPercent()> maxPercent){
+            if(sale.getProducts().contains(product) && sale.getPercent()> maxPercent && sale.isSaleActive() && product.getRemainedNumberForEachSupplier().get(sale.getSupplier()) != 0){
                 maxPercent = sale.getPercent();
                 resultSale = sale;
             }

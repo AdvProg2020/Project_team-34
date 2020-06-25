@@ -549,7 +549,7 @@ public class Product {
     public int getMinimumPrice() {
         int minimumPrice = this.getPrice(this.getListOfSuppliers().get(0));
         for (Supplier supplier : priceForEachSupplier.keySet()) {
-            if (this.getPrice(supplier) < minimumPrice)
+            if (this.getRemainedNumberForEachSupplier().get(supplier) != 0 && this.getPrice(supplier) < minimumPrice)
                 minimumPrice = this.getPrice(supplier);
         }
         return minimumPrice;

@@ -31,8 +31,8 @@ public class Controller {
         try {
             Scanner reader = new Scanner(new File("src/main/java/PeriodicCodedDiscount.txt"));
             reader.nextLine();
-            long percent = Long.parseLong(reader.nextLine());
-            long maxAmount = Long.parseLong(reader.nextLine());
+            int percent = Integer.parseInt(reader.nextLine());
+            int maxAmount = Integer.parseInt(reader.nextLine());
             long period = Long.parseLong(reader.nextLine());
             long lastTime = Long.parseLong(reader.nextLine());
             long timeNow = System.currentTimeMillis();
@@ -46,6 +46,7 @@ public class Controller {
                 writer.write(timeNow + "\n");
                 writer.write("percent, max amount, period, lastTime");
                 writer.close();
+                accountController.controlCreateRandomCodesForCustomers(Account.getRandomCustomers(), percent, maxAmount);
             }
         } catch (FileNotFoundException e) {
             System.err.println("PeriodicCodedDiscount Err");

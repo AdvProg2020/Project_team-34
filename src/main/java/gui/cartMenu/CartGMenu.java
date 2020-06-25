@@ -8,11 +8,14 @@ import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.loginMenu.LoginGMenu;
+import gui.productMenu.ProductMenuG;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import product.Product;
@@ -31,7 +34,7 @@ public class CartGMenu extends GMenu {
     @Override
     protected Scene createScene() {
         GridPane backgroundLayout = new GridPane();
-        VBox productsInCartPane ;
+        ScrollPane productsInCartPane;
         GridPane buttonPane = new GridPane();
 
         buttonPane.setHgap(100);
@@ -43,8 +46,9 @@ public class CartGMenu extends GMenu {
         clearCart.setText("Clear Cart");
         GMenu.addStyleToButton(clearCart);
         buttonPane.add(clearCart, 0, 3);
-        clearCart.setOnMouseClicked(e->{
-            productsInCartPane.getChildren().clear();
+        clearCart.setOnMouseClicked(e -> {
+            VBox vBox = (VBox) productsInCartPane.getContent();
+            vBox.getChildren().clear();
             controller.getAccountController().controlClearCart();
         });
 
@@ -62,19 +66,8 @@ public class CartGMenu extends GMenu {
             }
         });
 
-
-//        Button updateCart = new Button();
-//
-//        updateCart.setText("Update Cart");
-////        updateCart.setMnemonicParsing(false);
-//        GMenu.addStyleToButton(updateCart);
-//
-//        buttonPane.add(updateCart, 2, 3);
-//        buttonPane.setAlignment(Pos.CENTER);
-//        buttonPane.setPadding(new Insets(10, 10, 10, 10));
-
         backgroundLayout.setVgap(20);
-        backgroundLayout.add(createHeader(), 0,0);
+        backgroundLayout.add(createHeader(), 0, 0);
         backgroundLayout.add(productsInCartPane, 0, 1);
         backgroundLayout.add(buttonPane, 0, 2);
         backgroundLayout.setAlignment(Pos.CENTER);
@@ -83,7 +76,7 @@ public class CartGMenu extends GMenu {
         return scene;
     }
 
-    private  VBox createProductsInCartPane ( Controller controller){
+    private ScrollPane createProductsInCartPane(Controller controller) {
         VBox productsInCartPane = new VBox();
         Label label = new Label();
         label.setStyle("-fx-background-color: transparent");
@@ -97,20 +90,21 @@ public class CartGMenu extends GMenu {
         productsInCartPane.setSpacing(20);
         productsInCartPane.setAlignment(Pos.CENTER);
 
-//        productsInCartPane.getChildren().add(createTableHeader());
-
         Label billLabel = new Label("Bill : " + controller.getAccountController().controlViewCart().getBill());
         billLabel.setStyle("-fx-font-size: 20");
 
         ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
         productsInCartPane.setAlignment(Pos.CENTER);
         for (ProductInCart productInCart : productInCarts) {
-            productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane,billLabel ));
+            productsInCartPane.getChildren().add(createProductGridPane(productInCart, controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane, billLabel));
         }
 
         productsInCartPane.getChildren().add(billLabel);
 
-        return productsInCartPane;
+        ScrollPane scrollPane = new ScrollPane(productsInCartPane);
+        scrollPane.setMinWidth(900);
+
+        return scrollPane;
     }
 
     private HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, VBox productInCartPane, Label billLabel) {
@@ -122,12 +116,12 @@ public class CartGMenu extends GMenu {
         Label nameLabel = new Label(product.getName());
 
         String textPriceLabel = String.valueOf(priceBeforeSale);
-        if(priceAfterSale != priceBeforeSale)
+        if (priceAfterSale != priceBeforeSale)
             textPriceLabel = textPriceLabel + "=>" + String.valueOf(priceAfterSale);
         Label priceLabel = new Label(textPriceLabel);
         Label countLabel = new Label(String.valueOf(count));
-        String textLastPriceLabel =  String.valueOf(priceBeforeSale * count);
-        if(priceAfterSale != priceBeforeSale)
+        String textLastPriceLabel = String.valueOf(priceBeforeSale * count);
+        if (priceAfterSale != priceBeforeSale)
             textLastPriceLabel = textLastPriceLabel + "=>" + String.valueOf(priceAfterSale * count);
 
 
@@ -142,7 +136,10 @@ public class CartGMenu extends GMenu {
         hBox.setStyle("-fx-border-color: orange");
         hBox.setSpacing(20);
         hBox.setPadding(new Insets(10, 30, 10, 30));
-        hBox.getChildren().addAll(getImageView(product.getImageUrl(), 70, 70), gridPane);
+        ImageView imageView = getImageView(product.getImageUrl(), 70, 70);
+        imageView.setOnMouseClicked(e ->
+                stage.setScene(new ProductMenuG(this, stage, product, controller).getScene()));
+        hBox.getChildren().addAll(imageView, gridPane);
 
         Button increment = new Button("+");
         Button decrement = new Button("-");
@@ -163,36 +160,36 @@ public class CartGMenu extends GMenu {
         column++;
         gridPane.add(countBox, column, 1);
         column++;
-        gridPane.add(lastPrice, column , 1);
+        gridPane.add(lastPrice, column, 1);
 
-        increment.setOnMouseClicked(e->{
+        increment.setOnMouseClicked(e -> {
             try {
                 controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) + 1));
-                updateLastPriceLabel(lastPrice,Integer.parseInt(countLabel.getText()), priceBeforeSale, priceAfterSale);
+                updateLastPriceLabel(lastPrice, Integer.parseInt(countLabel.getText()), priceBeforeSale, priceAfterSale);
                 updateBillLabel(billLabel, controller);
                 controller.getAccountController().controlViewCart().update();
-                if(countLabel.getText().equals("0")) {
+                if (countLabel.getText().equals("0")) {
                     productInCartPane.getChildren().remove(hBox);
                 }
 
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
         });
 
-        decrement.setOnMouseClicked(e->{
+        decrement.setOnMouseClicked(e -> {
             try {
                 controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
-                updateLastPriceLabel(lastPrice, Integer.parseInt(countLabel.getText()),priceBeforeSale,priceAfterSale);
-                updateBillLabel(billLabel , controller);
+                updateLastPriceLabel(lastPrice, Integer.parseInt(countLabel.getText()), priceBeforeSale, priceAfterSale);
+                updateBillLabel(billLabel, controller);
                 controller.getAccountController().controlViewCart().update();
-                    if(countLabel.getText().equals("0")) {
-                        productInCartPane.getChildren().remove(hBox);
-                    }
+                if (countLabel.getText().equals("0")) {
+                    productInCartPane.getChildren().remove(hBox);
+                }
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
         });
 
@@ -200,19 +197,19 @@ public class CartGMenu extends GMenu {
         return hBox;
     }
 
-    private static void updateBillLabel(Label billLabel, Controller controller){
+    private static void updateBillLabel(Label billLabel, Controller controller) {
         billLabel.setText("Bill : " + controller.getAccountController().controlViewCart().getBill());
     }
 
-    private static void updateLastPriceLabel (Label lastPriceLabel , int count ,int priceBeforeSale, int priceAfterSale){
-        String textLastPriceLabel =  String.valueOf(priceBeforeSale * count);
-        if(priceAfterSale != priceBeforeSale)
+    private static void updateLastPriceLabel(Label lastPriceLabel, int count, int priceBeforeSale, int priceAfterSale) {
+        String textLastPriceLabel = String.valueOf(priceBeforeSale * count);
+        if (priceAfterSale != priceBeforeSale)
             textLastPriceLabel = textLastPriceLabel + "=>" + String.valueOf(priceAfterSale * count);
         lastPriceLabel.setText(textLastPriceLabel);
 
     }
 
-    private static HBox createTableHeader(){
+    private static HBox createTableHeader() {
         HBox hBox = new HBox();
         Label idLabel = new Label("      Product Id");
         Label nameLabel = new Label("Product Name");

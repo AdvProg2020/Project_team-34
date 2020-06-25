@@ -278,10 +278,12 @@ public class Sale extends Discount {
 
     @Override
     public String toString() {
-        String returning = "offId=" + offId + "\n" +
-                ", state=" + state +
-                ", percent=" + percent +
-                '}';
+        String returning = "ID :" + offId + "\n" +
+                ", State:" + state +
+                ", Off percent:" + percent + "\n" +
+                ", Products In sale: \n"
+                ;
+
         for (Product product : products) {
             returning += product.getName() + '\n';
         }

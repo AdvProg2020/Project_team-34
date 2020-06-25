@@ -143,4 +143,8 @@ public class OffController {
         int percent = sale.getPercent();
         return product.getPrice(supplier)* (100 - percent)/100;
     }
+
+    public void removeCodedDiscount(CodedDiscount codedDiscount){
+        CodedDiscount.removeCodeFromList(codedDiscount);
+    }
 }

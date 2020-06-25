@@ -110,6 +110,7 @@ public class CodedDiscount extends Discount{
 
     public static void removeCodeFromList(CodedDiscount codedDiscount){
         codedDiscounts.remove(codedDiscount);
+        CodedDiscountDataBase.delete(codedDiscount.getDiscountCode());
     }
 
     public static CodedDiscount getCodedDiscountByCode(String code){
@@ -140,17 +141,17 @@ public class CodedDiscount extends Discount{
         return Integer.min((initialAmount * percent) / 100, maxDiscountAmount);
     }
 
-    /**
-     *
-     * @return returns the String form of a JSON object for storing in the database.
-     */
     @Override
     public String toString() {
-        return "CodedDiscount{" +
-                "discountCode='" + discountCode + '\'' +
-                ", maxDiscountPercent=" + maxDiscountAmount +
-                ", customers=" + customers +
-                ", percent=" + percent +
-                '}';
+
+        String returning =
+                "Discount Code :" + discountCode + '\n' +
+                ", Max discount percent: " + maxDiscountAmount + '\n' +
+                ", Percent: " + percent + '\n' +
+                ", Customers :\n";
+        for (Customer customer : customers) {
+            returning += customer.getUserName() + "\n";
+        }
+        return returning;
     }
 }

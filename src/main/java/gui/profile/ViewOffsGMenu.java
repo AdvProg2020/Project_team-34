@@ -10,6 +10,7 @@ import gui.alerts.AlertBox;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -56,7 +57,7 @@ public class ViewOffsGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox2);
-        ListView salesList = new ListView();
+        TableView salesList = new TableView();
         salesList.setPrefHeight(398.0);
         salesList.setPrefWidth(350.0);
         salesList.setLayoutX(50.0);
@@ -117,22 +118,34 @@ public class ViewOffsGMenu extends GMenu {
 
         // Adding controller
 
+        TableColumn saleId = new TableColumn("Sale ID");
+        saleId.setCellValueFactory(new PropertyValueFactory<>("offId"));
+        TableColumn percent = new TableColumn("Percent");
+        percent.setCellValueFactory(new PropertyValueFactory<>("percent"));
+        TableColumn start = new TableColumn("Start");
+        start.setCellValueFactory(new PropertyValueFactory<>("start"));
+        TableColumn end = new TableColumn("End");
+        end.setCellValueFactory(new PropertyValueFactory<>("end"));
+        salesList.getColumns().addAll(saleId,percent, start, end);
+
+
+
         for (Sale sale : controller.getOffController().controlGetAllSales()) {
-            salesList.getItems().add(sale.getOffId());
+            salesList.getItems().add(sale);
         }
 
 
 
         detailsButton.setOnAction( e -> {
-            ObservableList<String> saleIds = salesList.getSelectionModel().getSelectedItems();
-            for (String id : saleIds) {
-                saleInfo.setText((controller.getOffController().controlGetSaleById(id)).toString());
+            ObservableList<Sale> saleIds = salesList.getSelectionModel().getSelectedItems();
+            for (Sale id : saleIds) {
+                saleInfo.setText(id.toString());
             }
         });
 
         editButton.setOnAction( e -> {
-            ObservableList<String> saleIds = salesList.getSelectionModel().getSelectedItems();
-            for (String id : saleIds) {
+            ObservableList<Sale> saleIds = salesList.getSelectionModel().getSelectedItems();
+            for (Sale id : saleIds) {
                 Image logoImage = null;
                 try {
                     logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
@@ -141,7 +154,7 @@ public class ViewOffsGMenu extends GMenu {
 
                 Stage newStage = new Stage();
                 newStage.initModality(Modality.APPLICATION_MODAL);
-                newStage.setScene(createEdit(Sale.getSaleById(id)));
+                newStage.setScene(createEdit(id));
                 newStage.getIcons().add(logoImage);
                 newStage.setTitle("Edit Sale Menu");
                 newStage.showAndWait();

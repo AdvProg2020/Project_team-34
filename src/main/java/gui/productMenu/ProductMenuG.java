@@ -410,6 +410,7 @@ public class ProductMenuG extends GMenu {
             String description = descriptionArea.getText();
             try {
                 controller.getProductController().controlAddCommentToProduct(title, description, product);
+                stage.setScene(new ProductMenuG(this, stage,product,controller).getScene());
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }

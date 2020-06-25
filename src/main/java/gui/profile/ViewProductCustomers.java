@@ -24,10 +24,10 @@ public class ViewProductCustomers extends GMenu {
     private final Product product;
     private final Supplier supplier;
 
-    public ViewProductCustomers(String menuName, GMenu parentMenu, Stage stage, Controller controller, Product product, Supplier supplier) {
+    public ViewProductCustomers(String menuName, GMenu parentMenu, Stage stage, Controller controller, Product product) {
         super(menuName, parentMenu, stage, controller);
         this.product = product;
-        this.supplier = supplier;
+        this.supplier = (Supplier)controller.getAccount();
     }
 
     @Override

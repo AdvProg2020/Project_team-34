@@ -21,6 +21,8 @@ import java.util.HashMap;
 public class AccountController {
     private static final long WEEK = 7*24*60*60000;
 
+    private static final int BOUND = 1000;
+
     private Controller mainController;
 
     public AccountController(Controller mainController) {
@@ -319,7 +321,7 @@ public class AccountController {
         mainController.getCart().removeCodedDiscount();
     }
 
-    public void finalizeOrder() throws ExceptionalMassage {
+    public boolean finalizeOrder() throws ExceptionalMassage {
         Account account = mainController.getAccount();
         if (account == null)
             throw new ExceptionalMassage("Login First.");
@@ -343,7 +345,7 @@ public class AccountController {
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);
-        //customer credit decrease
+        return customerLog.getPaidAmount() >= BOUND;
     }
 
     public String getAccountUsername() {

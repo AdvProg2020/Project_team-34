@@ -245,6 +245,9 @@ public class AccountController {
     }
 
     public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+        if (getAccount() instanceof Supplier || getAccount() instanceof Supervisor) {
+            throw new ExceptionalMassage("logout, Supervisor and Supplier are denied");
+        }
         Product product = Product.getProductById(productId);
         if (product == null)
             throw new ExceptionalMassage("Product not found.");

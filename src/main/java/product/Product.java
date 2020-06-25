@@ -417,29 +417,46 @@ public class Product {
         ProductDataBase.update(productRequest);
     }
 
+    private static void declineRequest(Product product){
+        switch (product.getProductState()){
+            case PREPARING_TO_BUILD:
+                product.setProductState(State.BUILD_DECLINED);
+                break;
+            case PREPARING_TO_EDIT:
+                product.setProductState(State.EDIT_DECLINED);
+                break;
+            case PREPARING_TO_BE_DELETED:
+                product.setProductState(State.DELETE_DECLINED);
+        }
+    }
+
     public static void acceptOrDeclineRequest(String requestId, boolean isAccepted) throws ExceptionalMassage {
         Product productRequest = Product.getProductById(convertRequestIdToProductId(requestId));
         if (productRequest == null)
             throw new ExceptionalMassage("Invalid request identifier");
         if (!isAccepted) {
-            removeProductRequest(productRequest);
+            declineRequest(productRequest);
+//            removeProductRequest(productRequest);
 //            productRequest.setProductState(State.REQUEST_DECLINED);
             return;
         }
         if (productRequest.getProductState() == State.PREPARING_TO_BUILD) {
             Product productGotByName = Product.getConfirmedProductByName(productRequest.getName());
             if (productGotByName == null) {
-                productRequest.setProductState(State.CONFIRMED);
-                Category.getCategoryByName(productRequest.getFutureCategoryName()).addProduct(productRequest);
+                Product newProduct = new Product(productRequest);
+                newProduct.setProductState(State.CONFIRMED);
+                Category.getCategoryByName(newProduct.getFutureCategoryName()).addProduct(newProduct);
             } else {
                 productGotByName.getListOfSuppliers().addAll(productRequest.getListOfSuppliers());
                 productGotByName.getPriceForEachSupplier().putAll(productRequest.getPriceForEachSupplier());
                 productGotByName.getRemainedNumberForEachSupplier().putAll(productRequest.getRemainedNumberForEachSupplier());
 //                productRequest.setProductState(State.REQUEST_ACCEPTED);
             }
-        } else if (productRequest.getProductState() == State.PREPARING_TO_EDIT && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.DELETED) {
+            productRequest.setProductState(State.BUILD_ACCEPTED);
+        } else if (productRequest.getProductState() == State.PREPARING_TO_EDIT && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.DELETED  && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.BUILD_DECLINED) {
             setRequestValuesInRealProduct(productRequest);
-            removeProductRequest(productRequest);
+//            removeProductRequest(productRequest);
+            productRequest.setProductState(State.EDIT_ACCEPTED);
             ProductDataBase.update(Product.getProductById(productRequest.getRootProductId()));
         } else {
             productRequest.setProductState(State.DELETED);
@@ -455,6 +472,7 @@ public class Product {
                 rootProduct.getRemainedNumberForEachSupplier().remove(supplier);
             }
 //            Category.getProductCategory(Product.getProductById(productRequest.getRootProductId())).removeProduct(Product.getProductById(productRequest.getRootProductId()));
+            productRequest.setProductState(State.DELETE_ACCEPTED);
         }
 
     }
@@ -476,11 +494,29 @@ public class Product {
         realProduct.setRemainedNumberForEachSupplier(productRequest.getRemainedNumberForEachSupplier());
     }
 
-    private static String convertProductIdToRequestId(String requestId) {
+    public static ArrayList<Product> getRequestsForThisSupplier(Supplier supplier){
+        ArrayList<Product> result = new ArrayList<>();
+        for (Product eachProduct : allProduct) {
+            if(eachProduct.isRequest() && eachProduct.getListOfSuppliers().contains(supplier))
+                result.add(eachProduct);
+        }
+        return result;
+    }
+
+    private boolean isRequest(){
+        State state = this.getProductState();
+        if( state == State.PREPARING_TO_BUILD || state == State.PREPARING_TO_EDIT || state == State.PREPARING_TO_BE_DELETED||
+                state == State.BUILD_ACCEPTED|| state == State.BUILD_DECLINED|| state == State.EDIT_ACCEPTED
+                || state == State.EDIT_DECLINED|| state == State.DELETE_ACCEPTED|| state == State.DELETE_DECLINED)
+            return true;
+        return false;
+    }
+
+    public static String convertProductIdToRequestId(String requestId) {
         return "T34PR" + requestId.substring(4);
     }
 
-    private static String convertRequestIdToProductId(String productId) {
+    public static String convertRequestIdToProductId(String productId) {
         return "T34P" + productId.substring(5);
     }
 

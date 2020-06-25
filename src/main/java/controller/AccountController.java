@@ -431,4 +431,8 @@ public class AccountController {
     public void controlClearCart(){
         mainController.getCart().clear();
     }
+
+    public ArrayList<Product> controlGetRequestForLoggedInSupplier(){
+        return Product.getRequestsForThisSupplier((Supplier) mainController.getAccount());
+    }
 }

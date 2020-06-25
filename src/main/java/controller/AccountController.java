@@ -20,6 +20,8 @@ import java.util.HashMap;
 
 public class AccountController {
 
+    private static final int BOUND = 1000;
+
     private Controller mainController;
 
     public AccountController(Controller mainController) {
@@ -318,7 +320,7 @@ public class AccountController {
         mainController.getCart().removeCodedDiscount();
     }
 
-    public boolean finalizeOrder(int bound) throws ExceptionalMassage {
+    public boolean finalizeOrder() throws ExceptionalMassage {
         Account account = mainController.getAccount();
         if (account == null)
             throw new ExceptionalMassage("Login First.");
@@ -342,7 +344,7 @@ public class AccountController {
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);
-        return customerLog.getPaidAmount() >= bound;
+        return customerLog.getPaidAmount() >= BOUND;
     }
 
     public String getAccountUsername() {

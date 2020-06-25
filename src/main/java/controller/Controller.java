@@ -2,9 +2,11 @@ package controller;
 
 import account.Account;
 import cart.Cart;
-import discount.CodedDiscount;
 
-import java.io.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Controller {
@@ -29,17 +31,20 @@ public class Controller {
         try {
             Scanner reader = new Scanner(new File("src/main/java/PeriodicCodedDiscount.txt"));
             reader.nextLine();
-            String periodString = reader.nextLine();
-            String lastTimeString = reader.nextLine();
-            reader.close();
-            long period = Long.parseLong(periodString);
-            long lastTime = Long.parseLong(lastTimeString);
+            long percent = Long.parseLong(reader.nextLine());
+            long maxAmount = Long.parseLong(reader.nextLine());
+            long period = Long.parseLong(reader.nextLine());
+            long lastTime = Long.parseLong(reader.nextLine());
             long timeNow = System.currentTimeMillis();
+            reader.close();
             if (timeNow - lastTime >= period) {
                 FileWriter writer = new FileWriter(new File("src/main/java/PeriodicCodedDiscount.txt"));
                 writer.write("Data\n");
-                writer.write(periodString + "\n");
-                writer.write(String.valueOf(timeNow));
+                writer.write(percent + "\n");
+                writer.write(maxAmount + "\n");
+                writer.write(period + "\n");
+                writer.write(timeNow + "\n");
+                writer.write("percent, max amount, period, lastTime");
                 writer.close();
             }
         } catch (FileNotFoundException e) {

@@ -320,6 +320,7 @@ public class AllProductGMenu extends GMenu {
         VBox headerBackground = new VBox();
         headerBackground.setStyle("-fx-background-color: #4677c8");
         headerBackground.getChildren().add(createHeader());
+        filterAndSortScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         filterAndSortScrollPane.setContent(filterAndSort);
         mainPane.add(filterAndSortScrollPane, 0, 1);
         mainPane.add(productScrollPane, 1, 1);

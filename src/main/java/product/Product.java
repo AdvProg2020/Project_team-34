@@ -529,8 +529,7 @@ public class Product {
                 ", productId='" + productId + '\'' +
                 ", name='" + name + '\'' +
                 ", nameOfCompany='" + nameOfCompany + '\'' +
-                ", priceForEachSupplier=" + priceForEachSupplier +
-                ", remainedNumberForEachSupplier=" + remainedNumberForEachSupplier +
+                ", ListOfSuppliersUserName=" + getStringListOfSuppliers()+  '\'' +
                 ", description='" + description + '\'' +
                 ", specification=" + specification +
                 '}' + '\'';
@@ -546,5 +545,13 @@ public class Product {
             return false;
         }
         return getProductId().equals(((Product) o).getProductId());
+    }
+
+    public String getStringListOfSuppliers(){
+        StringBuilder result = new StringBuilder();
+        for (Supplier supplier : listOfSuppliers) {
+            result.append(supplier.getUserName());
+        }
+        return String.valueOf(result);
     }
 }

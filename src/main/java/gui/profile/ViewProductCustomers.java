@@ -39,7 +39,7 @@ public class ViewProductCustomers extends GMenu {
         backgroundLayout.getChildren().add(mainLayout);
         backgroundLayout.setAlignment(Pos.CENTER);
         scrollLayout.setMinWidth(1000);
-        return new Scene(scrollLayout);
+        return new Scene(backgroundLayout);
     }
 
     private TableView<Customer> customerTable() {

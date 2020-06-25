@@ -13,6 +13,7 @@ import gui.cartMenu.CartGMenu;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -20,6 +21,8 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.PixelReader;
+import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -51,14 +54,18 @@ public class ProductMenuG extends GMenu {
         anchorPane0.setPrefWidth(1200.0);
         anchorPane0.setStyle("-fx-background-color: #f5f5f2;");
         GridPane imageViewGridPane = new GridPane();
+
+
         imageViewGridPane.setLayoutX(76.0);
         imageViewGridPane.setLayoutY(120);
+        imageViewGridPane.setPrefWidth(250);
+        imageViewGridPane.setPrefHeight(250);
         ImageView imageViewBox = new ImageView();
-        imageViewBox.setPickOnBounds(true);
+        imageViewBox.setSmooth(true);
         imageViewBox.setFitWidth(250.0);
         imageViewBox.setFitHeight(250.0);
-        imageViewBox.setLayoutX(76.0);
-        imageViewBox.setLayoutY(100.0);
+
+
         HBox header = createHeader();
         anchorPane0.getChildren().add(header);
 
@@ -191,13 +198,28 @@ public class ProductMenuG extends GMenu {
         // Adding Controller
         // adding image!
         File file = new File(product.getImageUrl());
-        Image productImage = null;
+        Image[] productImage = new Image[1];
         try {
-            productImage = new Image(file.toURI().toURL().toExternalForm());
+            productImage[0] = new Image(file.toURI().toURL().toExternalForm());
         } catch (Exception ex){
             System.out.println(ex.getMessage());
         }
-        imageViewBox.setImage(productImage);
+        imageViewBox.setImage(productImage[0]);
+        ImageView zoomedImageView = new ImageView();
+        imageViewGridPane.add(zoomedImageView,1,0);
+        int ratioWidth = (int)(productImage[0].getWidth()/250);
+        int ratioHeight = (int)(productImage[0].getHeight()/250);
+        imageViewGridPane.setOnMouseMoved( e -> {
+            int x = (int) e.getX() * ratioWidth;
+            int y = (int) e.getY() * ratioHeight;
+            zoomedImageView.setImage(productImage[0]);
+            Rectangle2D viewPortRec = new Rectangle2D(x, y, 250,250);
+            zoomedImageView.setViewport(viewPortRec);
+        });
+
+        imageViewGridPane.setOnMouseExited( e -> {
+            zoomedImageView.setImage(null);
+        });
 
         ScrollPane detailsScrollPane = new ScrollPane();
         ScrollPane commentsScrollPane = new ScrollPane();

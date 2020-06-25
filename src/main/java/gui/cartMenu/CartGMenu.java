@@ -12,9 +12,7 @@ import gui.productMenu.ProductMenuG;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.stage.Stage;
@@ -22,13 +20,58 @@ import product.Product;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
+import static javafx.scene.control.ContentDisplay.LEFT;
 
 public class CartGMenu extends GMenu {
 
+
+    private Comparator<ProductInCart> sortType;
+
+    Comparator<ProductInCart> byCountComparator = new Comparator<ProductInCart>() {
+        @Override
+        public int compare(ProductInCart o1, ProductInCart o2) {
+            return controller.getAccountController().numberOfProductInCart(o1) - controller.getAccountController().numberOfProductInCart(o2);
+        }
+
+        @Override
+        public String toString() {
+            return "By Count";
+        }
+    };
+
+    Comparator<ProductInCart> byUnitPriceComparator = new Comparator<ProductInCart>() {
+        @Override
+        public int compare(ProductInCart o1, ProductInCart o2) {
+            return o1.getProduct().getPrice(o1.getSupplier()) - o2.getProduct().getPrice(o2.getSupplier());
+        }
+
+        @Override
+        public String toString() {
+            return "By Unit Price";
+        }
+    };
+
+    Comparator<ProductInCart> byTotalPriceComparator = new Comparator<ProductInCart>() {
+        @Override
+        public int compare(ProductInCart o1, ProductInCart o2) {
+            return (o1.getProduct().getPrice(o1.getSupplier()) * controller.getAccountController().numberOfProductInCart(o1))
+                    - (o2.getProduct().getPrice(o2.getSupplier()) * controller.getAccountController().numberOfProductInCart(o2));
+        }
+
+        @Override
+        public String toString() {
+            return "By Total Price";
+        }
+    };
+
     public CartGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Cart Menu", parentMenu, stage, controller);
+        sortType = byCountComparator;
     }
 
     @Override
@@ -66,10 +109,24 @@ public class CartGMenu extends GMenu {
             }
         });
 
+        HBox sortBox = new HBox();
+        sortBox.setSpacing(10);
+        ComboBox<Comparator<ProductInCart>> sortTypeBox = new ComboBox<>();
+        sortTypeBox.getItems().addAll(byCountComparator, byUnitPriceComparator, byTotalPriceComparator);
+        sortTypeBox.setValue(sortType);
+        sortBox.getChildren().addAll(sortTypeBox);
+        sortBox.setAlignment(Pos.CENTER_LEFT);
+        Button sort = new Button("Sort");
+        sortBox.getChildren().add(sort);
+        sort.setOnAction(e -> {
+            stage.setScene(getScene());
+        });
+
         backgroundLayout.setVgap(20);
         backgroundLayout.add(createHeader(), 0, 0);
-        backgroundLayout.add(productsInCartPane, 0, 1);
-        backgroundLayout.add(buttonPane, 0, 2);
+        backgroundLayout.add(sortBox, 0, 1);
+        backgroundLayout.add(productsInCartPane, 0, 2);
+        backgroundLayout.add(buttonPane, 0, 4);
         backgroundLayout.setAlignment(Pos.CENTER);
         backgroundLayout.setPadding(new Insets(10, 10, 10, 10));
         Scene scene = new Scene(backgroundLayout);
@@ -95,6 +152,7 @@ public class CartGMenu extends GMenu {
 
         ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
         productsInCartPane.setAlignment(Pos.CENTER);
+        productInCarts.sort(sortType);
         for (ProductInCart productInCart : productInCarts) {
             productsInCartPane.getChildren().add(createProductGridPane(productInCart, controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane, billLabel));
         }
@@ -221,5 +279,4 @@ public class CartGMenu extends GMenu {
 
         return hBox;
     }
-
 }

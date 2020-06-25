@@ -19,8 +19,9 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class AccountController {
+    private static final long WEEK = 7*24*60*60000;
 
-    private static final int BOUND = 1000;
+    private static final int BOUND = 100;
 
     private Controller mainController;
 
@@ -344,6 +345,9 @@ public class AccountController {
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);
+        if (customerLog.getPaidAmount() >= BOUND) {
+            controlCreateCodedDiscountForLoggedInCustomer();
+        }
         return customerLog.getPaidAmount() >= BOUND;
     }
 
@@ -446,7 +450,16 @@ public class AccountController {
             maxUsagePerCustomer.put(luckyCustomer, 1);
         }
         Date start = new Date(System.currentTimeMillis());
-        Date end = new Date(System.currentTimeMillis() + 7*24*60*60000);
+        Date end = new Date(System.currentTimeMillis() + WEEK);
         new CodedDiscount(randomCode,start, end,percent,maxAmount,maxUsagePerCustomer);
+    }
+
+    public void controlCreateCodedDiscountForLoggedInCustomer(){
+        Date start = new Date(System.currentTimeMillis());
+        Date end = new Date(System.currentTimeMillis() + WEEK);
+        String randomCode = CodedDiscount.codeGenerator();
+        HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
+        maxUsagePerCustomer.put((Customer)mainController.getAccount(),1);
+        new CodedDiscount(randomCode,start,end, 15, 100,maxUsagePerCustomer);
     }
 }

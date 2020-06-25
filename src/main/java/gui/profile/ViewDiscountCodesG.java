@@ -108,6 +108,16 @@ public class ViewDiscountCodesG extends GMenu {
         // Adding child to parent
         anchorPane0.getChildren().add(editButton);
 
+        Button removeButton = new Button();
+        removeButton.setPrefHeight(33.0);
+        removeButton.setPrefWidth(233.0);
+        removeButton.setLayoutX(505.0);
+        removeButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        removeButton.setLayoutY(337.0);
+        removeButton.setText("Removing");
+        removeButton.setMnemonicParsing(false);
+
+        anchorPane0.getChildren().add(removeButton);
         // Adding controller
         // Adding controller
 
@@ -184,6 +194,18 @@ public class ViewDiscountCodesG extends GMenu {
             for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
                 listView3.getItems().add(codedDiscount);
             }
+        });
+
+        removeButton.setOnAction( e -> {
+            ObservableList<CodedDiscount> codes = listView3.getSelectionModel().getSelectedItems();
+            for (CodedDiscount code : codes) {
+                controller.getOffController().removeCodedDiscount(code);
+            }
+            listView3.getItems().clear();
+            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                listView3.getItems().add(codedDiscount);
+            }
+
         });
 
 

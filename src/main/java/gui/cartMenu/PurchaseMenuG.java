@@ -281,7 +281,10 @@ public class PurchaseMenuG extends GMenu {
 
         purchaseButton.setOnAction( e -> {
             try{
-                controller.getAccountController().finalizeOrder();
+                boolean hasCustomerWonCode =  controller.getAccountController().finalizeOrder();
+                if(hasCustomerWonCode){
+                    new AlertBox(this, "Congratulations, You have won a coded discount!", "OK",controller).showAndWait();
+                }
                 stage.setScene(new MainMenuG(null, stage, controller).getScene());
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();

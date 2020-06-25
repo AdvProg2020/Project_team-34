@@ -21,11 +21,13 @@ import product.Product;
  */
 
 public class ViewProductCustomers extends GMenu {
-    private Product product;
-    private Supplier supplier;
+    private final Product product;
+    private final Supplier supplier;
 
-    public ViewProductCustomers(String menuName, GMenu parentMenu, Stage stage, Controller controller) {
+    public ViewProductCustomers(String menuName, GMenu parentMenu, Stage stage, Controller controller, Product product, Supplier supplier) {
         super(menuName, parentMenu, stage, controller);
+        this.product = product;
+        this.supplier = supplier;
     }
 
     @Override

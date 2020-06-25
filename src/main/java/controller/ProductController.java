@@ -538,4 +538,8 @@ public class ProductController {
     public void controlViewThisProduct(Product product){
         product.setNumberOfViews(product.getNumberOfViews()+ 1);
     }
+
+    public void clearFilterAndSort() {
+        filterAndSort.clear();
+    }
 }

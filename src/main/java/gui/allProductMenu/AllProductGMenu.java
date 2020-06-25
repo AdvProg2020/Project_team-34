@@ -200,6 +200,7 @@ public class AllProductGMenu extends GMenu {
 
 
         GridPane listViewsGridPane = new GridPane();
+        listViewsGridPane.setAlignment(Pos.CENTER);
         listViewsGridPane.setVgap(10);
         listViewsGridPane.setHgap(20);
         listViewsGridPane.setAlignment(Pos.CENTER);
@@ -291,6 +292,7 @@ public class AllProductGMenu extends GMenu {
                         new AlertBox(this, exceptionalMassage, controller).showAndWait();
                     }
                 }
+                putNewProductsInProductGridPane(productGridPane);
             }
         });
         buttonVBox.getChildren().add(filterByNameRemoveButton);
@@ -396,6 +398,12 @@ public class AllProductGMenu extends GMenu {
                 row++;
             }
 
+        }
+        if(products.size() == 0){
+            Label tryAgainLabel = new Label("No Product Found! Try Another Filter\t\t\t\t\t");
+            tryAgainLabel.setStyle("-fx-font-size: 20");
+            productGridPane.add(tryAgainLabel, 7, 10);
+            productGridPane.setAlignment(Pos.CENTER);
         }
     }
 

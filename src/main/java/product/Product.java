@@ -8,6 +8,7 @@ import state.State;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * @author rpirayadi
@@ -454,7 +455,7 @@ public class Product {
 //                productRequest.setProductState(State.REQUEST_ACCEPTED);
             }
             productRequest.setProductState(State.BUILD_ACCEPTED);
-        } else if (productRequest.getProductState() == State.PREPARING_TO_EDIT && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.DELETED && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.BUILD_DECLINED) {
+        } else if (productRequest.getProductState() == State.PREPARING_TO_EDIT && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.DELETED  && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.BUILD_DECLINED) {
             setRequestValuesInRealProduct(productRequest);
 //            removeProductRequest(productRequest);
             productRequest.setProductState(State.EDIT_ACCEPTED);
@@ -527,7 +528,7 @@ public class Product {
                 ", productId='" + productId + '\'' +
                 ", name='" + name + '\'' +
                 ", nameOfCompany='" + nameOfCompany + '\'' +
-                ", ListOfSuppliersUserName=" + getStringListOfSuppliers() + '\'' +
+                ", ListOfSuppliersUserName=" + getStringListOfSuppliers()+  '\'' +
                 ", description='" + description + '\'' +
                 ", specification=" + specification +
                 '}' + '\'';
@@ -552,5 +553,13 @@ public class Product {
                 minimumPrice = this.getPrice(supplier);
         }
         return minimumPrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Product)) {
+            return false;
+        }
+        return getProductId().equals(((Product) o).getProductId());
     }
 }

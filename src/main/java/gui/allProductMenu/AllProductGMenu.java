@@ -387,9 +387,35 @@ public class AllProductGMenu extends GMenu {
             starRating.setFocusTraversable(false);
             starRating.setMouseTransparent(true);
 
+            Label priceLabel = new Label(String.valueOf(product.getMinimumPrice()) + "$");
+            priceLabel.setStyle("-fx-font-size: 18");
+
+            Sale sale = Sale.getMaxSaleForThisProduct(product);
+
+            VBox saleVBox = new VBox();
+            saleVBox.setAlignment(Pos.CENTER);
+            if(sale != null) {
+                Label percentLabel = new Label(sale.getPercent() + "%");
+                percentLabel.setStyle("-fx-font-size: 13");
+                Label fromLabel = new Label("from" + String.valueOf(sale.getStart()));
+                fromLabel.setStyle("-fx-font-size: 13");
+                Label toLabel = new Label("to   " + String.valueOf(sale.getEnd()));
+                toLabel.setStyle("-fx-font-size: 13");
+                saleVBox.getChildren().addAll(percentLabel, fromLabel, toLabel);
+            }else {
+                Label noSale =  new Label("No Sale \n\n");
+                noSale.setStyle("-fx-font-size: 13");
+                saleVBox.getChildren().add(noSale);
+            }
+
+            saleVBox.setPrefHeight(70);
+
             mainVBox.getChildren().add(gridPane);
             mainVBox.getChildren().add(nameLabel);
+            mainVBox.getChildren().add(priceLabel);
             mainVBox.getChildren().add(starRating);
+            mainVBox.getChildren().add(saleVBox);
+
             mainVBox.setAlignment(Pos.CENTER);
 
             productGridPane.add(mainVBox, column, row);

@@ -418,8 +418,8 @@ public class Product {
         ProductDataBase.update(productRequest);
     }
 
-    private static void declineRequest(Product product){
-        switch (product.getProductState()){
+    private static void declineRequest(Product product) {
+        switch (product.getProductState()) {
             case PREPARING_TO_BUILD:
                 product.setProductState(State.BUILD_DECLINED);
                 break;
@@ -454,7 +454,7 @@ public class Product {
 //                productRequest.setProductState(State.REQUEST_ACCEPTED);
             }
             productRequest.setProductState(State.BUILD_ACCEPTED);
-        } else if (productRequest.getProductState() == State.PREPARING_TO_EDIT && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.DELETED  && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.BUILD_DECLINED) {
+        } else if (productRequest.getProductState() == State.PREPARING_TO_EDIT && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.DELETED && Product.getProductById(productRequest.getRootProductId()).getProductState() != State.BUILD_DECLINED) {
             setRequestValuesInRealProduct(productRequest);
 //            removeProductRequest(productRequest);
             productRequest.setProductState(State.EDIT_ACCEPTED);
@@ -465,8 +465,7 @@ public class Product {
             if (rootProduct.getListOfSuppliers().size() == 1) {
                 rootProduct.setProductState(State.DELETED);
                 Category.getProductCategory(rootProduct).removeProduct(rootProduct);
-            }
-            else {
+            } else {
                 Supplier supplier = productRequest.getListOfSuppliers().get(0);
                 rootProduct.getListOfSuppliers().remove(supplier);
                 rootProduct.getPriceForEachSupplier().remove(supplier);
@@ -495,20 +494,20 @@ public class Product {
         realProduct.setRemainedNumberForEachSupplier(productRequest.getRemainedNumberForEachSupplier());
     }
 
-    public static ArrayList<Product> getRequestsForThisSupplier(Supplier supplier){
+    public static ArrayList<Product> getRequestsForThisSupplier(Supplier supplier) {
         ArrayList<Product> result = new ArrayList<>();
         for (Product eachProduct : allProduct) {
-            if(eachProduct.isRequest() && eachProduct.getListOfSuppliers().contains(supplier))
+            if (eachProduct.isRequest() && eachProduct.getListOfSuppliers().contains(supplier))
                 result.add(eachProduct);
         }
         return result;
     }
 
-    private boolean isRequest(){
+    private boolean isRequest() {
         State state = this.getProductState();
-        if( state == State.PREPARING_TO_BUILD || state == State.PREPARING_TO_EDIT || state == State.PREPARING_TO_BE_DELETED||
-                state == State.BUILD_ACCEPTED|| state == State.BUILD_DECLINED|| state == State.EDIT_ACCEPTED
-                || state == State.EDIT_DECLINED|| state == State.DELETE_ACCEPTED|| state == State.DELETE_DECLINED)
+        if (state == State.PREPARING_TO_BUILD || state == State.PREPARING_TO_EDIT || state == State.PREPARING_TO_BE_DELETED ||
+                state == State.BUILD_ACCEPTED || state == State.BUILD_DECLINED || state == State.EDIT_ACCEPTED
+                || state == State.EDIT_DECLINED || state == State.DELETE_ACCEPTED || state == State.DELETE_DECLINED)
             return true;
         return false;
     }
@@ -528,7 +527,7 @@ public class Product {
                 ", productId='" + productId + '\'' +
                 ", name='" + name + '\'' +
                 ", nameOfCompany='" + nameOfCompany + '\'' +
-                ", ListOfSuppliersUserName=" + getStringListOfSuppliers()+  '\'' +
+                ", ListOfSuppliersUserName=" + getStringListOfSuppliers() + '\'' +
                 ", description='" + description + '\'' +
                 ", specification=" + specification +
                 '}' + '\'';
@@ -538,11 +537,20 @@ public class Product {
         return returning;
     }
 
-    public String getStringListOfSuppliers(){
+    public String getStringListOfSuppliers() {
         StringBuilder result = new StringBuilder();
         for (Supplier supplier : listOfSuppliers) {
             result.append(supplier.getUserName());
         }
         return String.valueOf(result);
+    }
+
+    public int getMinimumPrice() {
+        int minimumPrice = this.getPrice(this.getListOfSuppliers().get(0));
+        for (Supplier supplier : priceForEachSupplier.keySet()) {
+            if (this.getPrice(supplier) < minimumPrice)
+                minimumPrice = this.getPrice(supplier);
+        }
+        return minimumPrice;
     }
 }

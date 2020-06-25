@@ -119,6 +119,7 @@ public class CartGMenu extends GMenu {
         Button sort = new Button("Sort");
         sortBox.getChildren().add(sort);
         sort.setOnAction(e -> {
+            sortType = sortTypeBox.getValue();
             stage.setScene(getScene());
         });
 

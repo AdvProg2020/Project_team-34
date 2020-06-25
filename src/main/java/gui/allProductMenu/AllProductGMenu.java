@@ -6,6 +6,7 @@ import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.productMenu.ProductMenuG;
+import gui.profile.EditPersonalInfoGMenu;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
@@ -47,6 +48,7 @@ public class AllProductGMenu extends GMenu {
     public AllProductGMenu(GMenu parentMenu, Stage stage, Controller controller, boolean onlyProductInSale) {
         super("All products Menu", parentMenu, stage, controller);
         this.onlyProductInSale = onlyProductInSale;
+        controller.getProductController().clearFilterAndSort();
     }
 
     @Override
@@ -166,10 +168,40 @@ public class AllProductGMenu extends GMenu {
         filterAndSort.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
 //        treeView.getStyleClass().add("my tree");
 
+
+        VBox nameFilter = new VBox();
+        Label filterByNameLabel = new Label("Filter By Name");
+        nameFilter.getChildren().add(filterByNameLabel);
+        TextField filterByNameTextField = new TextField();
+        nameFilter.getChildren().add(filterByNameTextField);
+
+
+        ListView<String> filterByNameListView = new ListView<>();
+        filterByNameListView.getItems().add("hi");
+        nameFilter.getChildren().add(filterByNameListView);
+
+        Button filterByNameAddButton = new Button("Add");
+        GMenu.addStyleToButton(filterByNameAddButton);
+        filterByNameAddButton.setOnMouseClicked(e->{
+            filterByNameListView.getItems().add(filterByNameTextField.getText());
+//            controller.getProductController().getFilterAndSort().addNameFilter();
+        });
+        nameFilter.getChildren().add(filterByNameAddButton);
+
+        Button filterByNameRemoveButton = new Button("Remove");
+        GMenu.addStyleToButton(filterByNameRemoveButton);
+        filterByNameRemoveButton.setOnMouseClicked(e->{
+
+        });
+        nameFilter.getChildren().add(filterByNameRemoveButton);
+
+
+
+
         specialFilterVBox.setPadding(new Insets(20, 20, 20 , 20));
         specialFilterVBox.setSpacing(20);
         putNewSpecialFilters(specialFilterVBox, productGridPane);
-        filterAndSort.getChildren().addAll(sortLabel, sort, filterLabel, availabilityVBox,  price, specialFilterVBox, treeView);
+        filterAndSort.getChildren().addAll(sortLabel, sort, filterLabel, availabilityVBox,  price, specialFilterVBox,nameFilter, treeView);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
 
 

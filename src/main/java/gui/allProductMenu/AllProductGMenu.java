@@ -195,9 +195,6 @@ public class AllProductGMenu extends GMenu {
         });
         nameFilter.getChildren().add(filterByNameRemoveButton);
 
-
-
-
         specialFilterVBox.setPadding(new Insets(20, 20, 20 , 20));
         specialFilterVBox.setSpacing(20);
         putNewSpecialFilters(specialFilterVBox, productGridPane);

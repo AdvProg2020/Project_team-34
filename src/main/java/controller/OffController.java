@@ -137,7 +137,10 @@ public class OffController {
     }
 
     public int controlGetPriceForEachProductAfterSale(Product product, Supplier supplier){
-        int percent = Sale.getProductSale(product, supplier).getPercent();
+        Sale sale = Sale.getProductSale(product, supplier);
+        if(sale == null)
+            return product.getPrice(supplier);
+        int percent = sale.getPercent();
         return product.getPrice(supplier)* (100 - percent)/100;
     }
 }

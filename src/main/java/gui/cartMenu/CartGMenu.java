@@ -1,7 +1,9 @@
 package gui.cartMenu;
 
+import cart.Cart;
 import cart.ProductInCart;
 import controller.Controller;
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
@@ -90,6 +92,7 @@ public class CartGMenu extends GMenu {
         label.setText("Products On Your Shopping Cart");
         label.setAlignment(Pos.CENTER);
 
+        productsInCartPane.setMinWidth(820);
         productsInCartPane.getChildren().add(label);
         productsInCartPane.setSpacing(20);
         productsInCartPane.setAlignment(Pos.CENTER);
@@ -105,7 +108,6 @@ public class CartGMenu extends GMenu {
             productsInCartPane.getChildren().add(createProductGridPane(productInCart,controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane,billLabel ));
         }
 
-
         productsInCartPane.getChildren().add(billLabel);
 
         return productsInCartPane;
@@ -114,12 +116,25 @@ public class CartGMenu extends GMenu {
     private HBox createProductGridPane(ProductInCart productInCart, int count, Controller controller, VBox productInCartPane, Label billLabel) {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
-        int price = product.getPrice(productInCart.getSupplier());
+        int priceBeforeSale = product.getPrice(productInCart.getSupplier());
+        int priceAfterSale = controller.getOffController().controlGetPriceForEachProductAfterSale(product, productInCart.getSupplier());
         Label IdLabel = new Label(product.getProductId());
         Label nameLabel = new Label(product.getName());
-        Label priceLabel = new Label(String.valueOf(price));
+
+        String textPriceLabel = String.valueOf(priceBeforeSale);
+        if(priceAfterSale != priceBeforeSale)
+            textPriceLabel = textPriceLabel + "=>" + String.valueOf(priceAfterSale);
+        Label priceLabel = new Label(textPriceLabel);
         Label countLabel = new Label(String.valueOf(count));
-        Label lastPrice = new Label(String.valueOf(price * count));
+        String textLastPriceLabel =  String.valueOf(priceBeforeSale * count);
+        if(priceAfterSale != priceBeforeSale)
+            textLastPriceLabel = textLastPriceLabel + "=>" + String.valueOf(priceAfterSale * count);
+
+
+        Label lastPrice = new Label(textLastPriceLabel);
+
+//        lastPrice.setMinHeight(90);
+//        lastPrice.setMinHeight(90);
         gridPane.setHgap(70);
         gridPane.setVgap(0);
         gridPane.setAlignment(Pos.CENTER);
@@ -154,7 +169,7 @@ public class CartGMenu extends GMenu {
             try {
                 controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) + 1));
-                lastPrice.setText(String.valueOf(Integer.parseInt(countLabel.getText() )* price));
+                updateLastPriceLabel(lastPrice,Integer.parseInt(countLabel.getText()), priceBeforeSale, priceAfterSale);
                 updateBillLabel(billLabel, controller);
                 controller.getAccountController().controlViewCart().update();
                 if(countLabel.getText().equals("0")) {
@@ -170,7 +185,7 @@ public class CartGMenu extends GMenu {
             try {
                 controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
-                lastPrice.setText(String.valueOf(Integer.parseInt(countLabel.getText() )* price));
+                updateLastPriceLabel(lastPrice, Integer.parseInt(countLabel.getText()),priceBeforeSale,priceAfterSale);
                 updateBillLabel(billLabel , controller);
                 controller.getAccountController().controlViewCart().update();
                     if(countLabel.getText().equals("0")) {
@@ -187,6 +202,14 @@ public class CartGMenu extends GMenu {
 
     private static void updateBillLabel(Label billLabel, Controller controller){
         billLabel.setText("Bill : " + controller.getAccountController().controlViewCart().getBill());
+    }
+
+    private static void updateLastPriceLabel (Label lastPriceLabel , int count ,int priceBeforeSale, int priceAfterSale){
+        String textLastPriceLabel =  String.valueOf(priceBeforeSale * count);
+        if(priceAfterSale != priceBeforeSale)
+            textLastPriceLabel = textLastPriceLabel + "=>" + String.valueOf(priceAfterSale * count);
+        lastPriceLabel.setText(textLastPriceLabel);
+
     }
 
     private static HBox createTableHeader(){

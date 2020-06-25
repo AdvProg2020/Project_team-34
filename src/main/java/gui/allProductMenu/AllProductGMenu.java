@@ -17,6 +17,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.effect.BlendMode;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -25,6 +26,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import org.controlsfx.control.CheckComboBox;
+import org.controlsfx.control.Rating;
 import product.Category;
 import product.Product;
 import org.controlsfx.control.RangeSlider;
@@ -248,8 +250,17 @@ public class AllProductGMenu extends GMenu {
                 gridPane.getChildren().add(productImageView);
             }
 
+            Rating starRating = new Rating();
+            starRating.setMax(5);
+            starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+            starRating.setEffect(new DropShadow());
+            starRating.setPartialRating(true);
+            starRating.setFocusTraversable(false);
+            starRating.setMouseTransparent(true);
+
             mainVBox.getChildren().add(gridPane);
             mainVBox.getChildren().add(nameLabel);
+            mainVBox.getChildren().add(starRating);
             mainVBox.setAlignment(Pos.CENTER);
 
             productGridPane.add(mainVBox, column, row);

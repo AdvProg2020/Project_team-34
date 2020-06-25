@@ -48,10 +48,16 @@ public class SupervisorProfileGMenu extends GMenu {
             stage.setScene(new ManageRequestsG(this, stage, controller).getScene());
         });
 
+        Button editPersonalInfoButton = new Button("Edit Personal Info");
+        GMenu.addStyleToButton(editPersonalInfoButton);
+        editPersonalInfoButton.setOnMouseClicked(e->{
+            stage.setScene(new EditPersonalInfoGMenu(this, stage, controller).createScene());
+        });
+
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setSpacing(10);
         buttonPane.setPadding(new Insets(10, 10 , 10 , 10));
-        buttonPane.getChildren().addAll(manageCodedDiscountButton, manageAccountButton, manageCategoryButton, manageRequestButton);
+        buttonPane.getChildren().addAll(manageCodedDiscountButton, manageAccountButton, manageCategoryButton, manageRequestButton,editPersonalInfoButton);
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
         mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()), buttonPane);

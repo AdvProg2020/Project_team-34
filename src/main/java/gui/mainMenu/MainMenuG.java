@@ -34,7 +34,7 @@ public class MainMenuG extends GMenu {
         vBox1.setStyle("");
         vBox1.setPrefHeight(700.0);
         vBox1.setPrefWidth(375.0);
-        vBox1.setLayoutX(373.0);
+        vBox1.setLayoutX(375.0);
         vBox1.setStyle("-fx-background-color: #f8e8e2;");
 
         HBox header = createHeader();
@@ -90,6 +90,8 @@ public class MainMenuG extends GMenu {
         header.setTranslateX(135);
         anchorPane0.getChildren().add(header);
 
+
+
         // Adding controller
         if(controller.getAccountController().hasSomeOneLoggedIn()){
             loginMenu.setText("Sign out");
@@ -116,6 +118,7 @@ public class MainMenuG extends GMenu {
         GridPane background = new GridPane();
         background.setAlignment(Pos.CENTER);
         background.getChildren().add(anchorPane0);
+        background.setStyle("-fx-background-color: #eeb39e");
 
         Scene scene = new Scene(background);
 

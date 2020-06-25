@@ -547,7 +547,7 @@ public class Product {
     }
 
     public int getMinimumPrice() {
-        int minimumPrice = this.getPrice(this.getListOfSuppliers().get(0));
+        int minimumPrice = 100000;
         for (Supplier supplier : priceForEachSupplier.keySet()) {
             if (this.getRemainedNumberForEachSupplier().get(supplier) != 0 && this.getPrice(supplier) < minimumPrice)
                 minimumPrice = this.getPrice(supplier);

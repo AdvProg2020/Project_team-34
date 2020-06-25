@@ -387,7 +387,12 @@ public class AllProductGMenu extends GMenu {
             starRating.setFocusTraversable(false);
             starRating.setMouseTransparent(true);
 
-            Label priceLabel = new Label(String.valueOf(product.getMinimumPrice()) + "$");
+            Label priceLabel;
+            if(!product.isProductAvailableNow()){
+                priceLabel = new Label("Not Available");
+            }else {
+                priceLabel = new Label(String.valueOf(product.getMinimumPrice()) + "$");
+            }
             priceLabel.setStyle("-fx-font-size: 18");
 
             Sale sale = Sale.getMaxSaleForThisProduct(product);

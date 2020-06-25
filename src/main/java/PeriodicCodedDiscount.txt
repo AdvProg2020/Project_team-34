@@ -1,0 +1,6 @@
+Data
+10
+100
+604800000
+0
+percent, period, lastTime

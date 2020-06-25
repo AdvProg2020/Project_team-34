@@ -225,7 +225,7 @@ public abstract class Account {
         return false;
     }
 
-    public ArrayList<Customer> getRandomCustomers() {
+    public static ArrayList<Customer> getRandomCustomers() {
         ArrayList<Customer> randomCustomers = new ArrayList<>();
         for (Account account : allAccounts) {
             if (account instanceof Customer) {

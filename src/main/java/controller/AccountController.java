@@ -245,9 +245,6 @@ public class AccountController {
     }
 
     public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
-        if(!(mainController.getAccount() instanceof Customer)){
-            throw new ExceptionalMassage("Sign in as a Customer!");
-        }
         Product product = Product.getProductById(productId);
         if (product == null)
             throw new ExceptionalMassage("Product not found.");

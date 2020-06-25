@@ -110,6 +110,7 @@ public class CodedDiscount extends Discount{
 
     public static void removeCodeFromList(CodedDiscount codedDiscount){
         codedDiscounts.remove(codedDiscount);
+        CodedDiscountDataBase.delete(codedDiscount.getDiscountCode());
     }
 
     public static CodedDiscount getCodedDiscountByCode(String code){

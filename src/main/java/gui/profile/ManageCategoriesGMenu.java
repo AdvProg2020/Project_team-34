@@ -4,6 +4,7 @@ import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import gui.allProductMenu.AllProductGMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -62,8 +63,10 @@ public class ManageCategoriesGMenu extends GMenu {
         }
         allCategoriesBox.setSpacing(10);
         allCategoriesBox.setPadding(new Insets(10, 10, 10, 10));
+        ScrollPane scrollPane = new ScrollPane(allCategoriesBox);
+        scrollPane.setMinWidth(605);
 
-        mainLayout.getChildren().addAll(createHeader(), createCategoryBox, allCategoriesBox);
+        mainLayout.getChildren().addAll(createHeader(), createCategoryBox, scrollPane);
         backLayout.getChildren().addAll(mainLayout);
         backLayout.setAlignment(Pos.CENTER);
 

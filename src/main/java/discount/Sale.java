@@ -276,6 +276,18 @@ public class Sale extends Discount {
         return requests;
     }
 
+    public static Sale getMaxSaleForThisProduct(Product product){
+        int maxPercent = 0;
+        Sale resultSale = null;
+        for (Sale sale : sales) {
+            if(sale.getProducts().contains(product) && sale.getPercent()> maxPercent){
+                maxPercent = sale.getPercent();
+                resultSale = sale;
+            }
+        }
+        return resultSale;
+    }
+
     @Override
     public String toString() {
         String returning = "ID :" + offId + "\n" +

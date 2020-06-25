@@ -178,7 +178,7 @@ public class AllProductGMenu extends GMenu {
         nameFilter.setSpacing(15);
         nameFilter.setPadding(new Insets(20, 15, 20, 10));
 
-        Label nameAndBrandFilter = new Label("Name and Brand");
+        Label nameAndBrandFilter = new Label("Name,Brand and Company Name");
         nameFilter.getChildren().add(nameAndBrandFilter);
         nameAndBrandFilter.setStyle("-fx-font-size: 15");
 
@@ -190,6 +190,7 @@ public class AllProductGMenu extends GMenu {
         choseBetweenNameAndBrand.setPromptText("Choose");
         choseBetweenNameAndBrand.getItems().add("Name");
         choseBetweenNameAndBrand.getItems().add("Brand");
+        choseBetweenNameAndBrand.getItems().add("Name Of Company");
         choosingHBox.getChildren().add(choseBetweenNameAndBrand);
 
         TextField filterByNameOrBrandTextField = new TextField();
@@ -199,13 +200,16 @@ public class AllProductGMenu extends GMenu {
 
 
         GridPane listViewsGridPane = new GridPane();
+        listViewsGridPane.setAlignment(Pos.CENTER);
         listViewsGridPane.setVgap(10);
         listViewsGridPane.setHgap(20);
         listViewsGridPane.setAlignment(Pos.CENTER);
-        Label filterByNameLabel = new Label("Filter By Name");
+        Label filterByNameLabel = new Label("Name");
         listViewsGridPane.add(filterByNameLabel, 0, 0);
-        Label filterByBrandLabel = new Label("Filter By Brand");
+        Label filterByBrandLabel = new Label("Brand");
         listViewsGridPane.add(filterByBrandLabel, 1, 0);
+        Label filterByNameOfCompany = new Label("Name Of Company");
+        listViewsGridPane.add(filterByNameOfCompany, 0, 2);
 
         ListView<String> filterByNameListView = new ListView<>();
         filterByNameListView.setMaxHeight(100);
@@ -217,18 +221,29 @@ public class AllProductGMenu extends GMenu {
         filterByBrandListView.setMaxWidth(100);
         listViewsGridPane.add(filterByBrandListView, 1, 1);
 
+        ListView<String> filterByNameOfCompanyListView = new ListView<>();
+        filterByNameOfCompanyListView.setMaxHeight(100);
+        filterByNameOfCompanyListView.setMaxWidth(100);
+        listViewsGridPane.add(filterByNameOfCompanyListView, 0,3);
+
         nameFilter.getChildren().add(listViewsGridPane);
+
+        VBox buttonVBox = new VBox();
+
         Button filterByNameAddButton = new Button("Add");
-        GMenu.addStyleToButton(filterByNameAddButton);
+        GMenu.addStyleToSmallButton(filterByNameAddButton);
         filterByNameAddButton.setOnMouseClicked(e -> {
-            if (!filterByNameOrBrandTextField.getText().equals("")) {
+            if (!filterByNameOrBrandTextField.getText().equals("")  && choseBetweenNameAndBrand.getSelectionModel().getSelectedItem() != null) {
                 try {
                     if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Name")) {
                         controller.getProductController().getFilterAndSort().addNameFilter(filterByNameOrBrandTextField.getText());
                         filterByNameListView.getItems().add(filterByNameOrBrandTextField.getText());
-                    } else {
+                    } else if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Brand")){
                         controller.getProductController().getFilterAndSort().addBrandFilter(filterByNameOrBrandTextField.getText());
                         filterByBrandListView.getItems().add(filterByNameOrBrandTextField.getText());
+                    }else{
+                        controller.getProductController().getFilterAndSort().addSupplierFilter(filterByNameOrBrandTextField.getText());
+                        filterByNameOfCompanyListView.getItems().add(filterByNameOrBrandTextField.getText());
                     }
                     filterByNameOrBrandTextField.setText("");
                     putNewProductsInProductGridPane(productGridPane);
@@ -237,20 +252,14 @@ public class AllProductGMenu extends GMenu {
                 }
             }
         });
-        nameFilter.getChildren().add(filterByNameAddButton);
-
-//        Group group = new Group(
-//                filterByBrandListView,
-//                filterByNameListView
-//        );
-//
-//        nameFilter.getChildren().addAll(filterByNameListView, group, filterByBrandListView);
+        buttonVBox.getChildren().add(filterByNameAddButton);
 
         Button filterByNameRemoveButton = new Button("Remove");
-        GMenu.addStyleToButton(filterByNameRemoveButton);
+        GMenu.addStyleToSmallButton(filterByNameRemoveButton);
         filterByNameRemoveButton.setOnMouseClicked(e -> {
-            if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Name") &&
-                    filterByNameListView.getSelectionModel().getSelectedItems().size() != 0) {
+            if(choseBetweenNameAndBrand.getSelectionModel().getSelectedItem() != null) {
+                if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Name") &&
+                        filterByNameListView.getSelectionModel().getSelectedItems().size() != 0) {
                     String itemWantedToBeRemoved = filterByNameListView.getSelectionModel().getSelectedItems().get(0);
                     try {
                         controller.getProductController().getFilterAndSort().removeNameFilter(itemWantedToBeRemoved);
@@ -260,20 +269,37 @@ public class AllProductGMenu extends GMenu {
                     } catch (ExceptionalMassage exceptionalMassage) {
                         new AlertBox(this, exceptionalMassage, controller).showAndWait();
                     }
-            } else if(choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Brand") &&
-                    filterByBrandListView.getSelectionModel().getSelectedItems().size() != 0) {
-                String itemWantedToBeRemoved = filterByBrandListView.getSelectionModel().getSelectedItems().get(0);
-                try {
-                    controller.getProductController().getFilterAndSort().removeBrandFilter(itemWantedToBeRemoved);
-                    filterByBrandListView.getItems().remove(itemWantedToBeRemoved);
-                    filterByNameOrBrandTextField.setText("");
-                    putNewProductsInProductGridPane(productGridPane);
-                } catch (ExceptionalMassage exceptionalMassage) {
-                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
+                } else if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Brand") &&
+                        filterByBrandListView.getSelectionModel().getSelectedItems().size() != 0) {
+                    String itemWantedToBeRemoved = filterByBrandListView.getSelectionModel().getSelectedItems().get(0);
+                    try {
+                        controller.getProductController().getFilterAndSort().removeBrandFilter(itemWantedToBeRemoved);
+                        filterByBrandListView.getItems().remove(itemWantedToBeRemoved);
+                        filterByNameOrBrandTextField.setText("");
+                        putNewProductsInProductGridPane(productGridPane);
+                    } catch (ExceptionalMassage exceptionalMassage) {
+                        new AlertBox(this, exceptionalMassage, controller).showAndWait();
+                    }
+                } else if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Name Of Company") &&
+                        filterByNameOfCompanyListView.getSelectionModel().getSelectedItems().size() != 0) {
+                    String itemWantedToBeRemoved = filterByNameOfCompanyListView.getSelectionModel().getSelectedItems().get(0);
+                    try {
+                        controller.getProductController().getFilterAndSort().removeSupplierFilter(itemWantedToBeRemoved);
+                        filterByNameOfCompanyListView.getItems().remove(itemWantedToBeRemoved);
+                        filterByNameOrBrandTextField.setText("");
+                        putNewProductsInProductGridPane(productGridPane);
+                    } catch (ExceptionalMassage exceptionalMassage) {
+                        new AlertBox(this, exceptionalMassage, controller).showAndWait();
+                    }
                 }
+                putNewProductsInProductGridPane(productGridPane);
             }
         });
-        nameFilter.getChildren().add(filterByNameRemoveButton);
+        buttonVBox.getChildren().add(filterByNameRemoveButton);
+
+        buttonVBox.setAlignment(Pos.CENTER);
+        buttonVBox.setSpacing(15);
+        listViewsGridPane.add(buttonVBox, 1, 3);
 
         specialFilterVBox.setPadding(new Insets(20, 20, 20, 20));
         specialFilterVBox.setSpacing(20);
@@ -294,6 +320,7 @@ public class AllProductGMenu extends GMenu {
         VBox headerBackground = new VBox();
         headerBackground.setStyle("-fx-background-color: #4677c8");
         headerBackground.getChildren().add(createHeader());
+        filterAndSortScrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         filterAndSortScrollPane.setContent(filterAndSort);
         mainPane.add(filterAndSortScrollPane, 0, 1);
         mainPane.add(productScrollPane, 1, 1);
@@ -360,9 +387,35 @@ public class AllProductGMenu extends GMenu {
             starRating.setFocusTraversable(false);
             starRating.setMouseTransparent(true);
 
+            Label priceLabel = new Label(String.valueOf(product.getMinimumPrice()) + "$");
+            priceLabel.setStyle("-fx-font-size: 18");
+
+            Sale sale = Sale.getMaxSaleForThisProduct(product);
+
+            VBox saleVBox = new VBox();
+            saleVBox.setAlignment(Pos.CENTER);
+            if(sale != null) {
+                Label percentLabel = new Label(sale.getPercent() + "%");
+                percentLabel.setStyle("-fx-font-size: 13");
+                Label fromLabel = new Label("from" + String.valueOf(sale.getStart()));
+                fromLabel.setStyle("-fx-font-size: 13");
+                Label toLabel = new Label("to   " + String.valueOf(sale.getEnd()));
+                toLabel.setStyle("-fx-font-size: 13");
+                saleVBox.getChildren().addAll(percentLabel, fromLabel, toLabel);
+            }else {
+                Label noSale =  new Label("No Sale \n\n");
+                noSale.setStyle("-fx-font-size: 13");
+                saleVBox.getChildren().add(noSale);
+            }
+
+            saleVBox.setPrefHeight(70);
+
             mainVBox.getChildren().add(gridPane);
             mainVBox.getChildren().add(nameLabel);
+            mainVBox.getChildren().add(priceLabel);
             mainVBox.getChildren().add(starRating);
+            mainVBox.getChildren().add(saleVBox);
+
             mainVBox.setAlignment(Pos.CENTER);
 
             productGridPane.add(mainVBox, column, row);
@@ -372,6 +425,12 @@ public class AllProductGMenu extends GMenu {
                 row++;
             }
 
+        }
+        if(products.size() == 0){
+            Label tryAgainLabel = new Label("No Product Found! Try Another Filter\t\t\t\t\t");
+            tryAgainLabel.setStyle("-fx-font-size: 20");
+            productGridPane.add(tryAgainLabel, 7, 10);
+            productGridPane.setAlignment(Pos.CENTER);
         }
     }
 

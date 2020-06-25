@@ -24,10 +24,10 @@ public class ViewProductCustomers extends GMenu {
     private final Product product;
     private final Supplier supplier;
 
-    public ViewProductCustomers(String menuName, GMenu parentMenu, Stage stage, Controller controller, Product product, Supplier supplier) {
+    public ViewProductCustomers(String menuName, GMenu parentMenu, Stage stage, Controller controller, Product product) {
         super(menuName, parentMenu, stage, controller);
         this.product = product;
-        this.supplier = supplier;
+        this.supplier = (Supplier)controller.getAccount();
     }
 
     @Override
@@ -39,7 +39,7 @@ public class ViewProductCustomers extends GMenu {
         backgroundLayout.getChildren().add(mainLayout);
         backgroundLayout.setAlignment(Pos.CENTER);
         scrollLayout.setMinWidth(1000);
-        return new Scene(scrollLayout);
+        return new Scene(backgroundLayout);
     }
 
     private TableView<Customer> customerTable() {

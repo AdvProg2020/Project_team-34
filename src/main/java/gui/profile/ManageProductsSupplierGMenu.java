@@ -185,7 +185,10 @@ public class ManageProductsSupplierGMenu extends GMenu {
         });
 
         showCustomers.setOnAction(e -> {
-
+            ObservableList<String> selectedProduct = products.getSelectionModel().getSelectedItems();
+            for (String s : selectedProduct) {
+                stage.setScene(new ViewProductCustomers("View products customer",this,stage,controller,Product.getProductById(s)).getScene());
+            }
         });
 
 

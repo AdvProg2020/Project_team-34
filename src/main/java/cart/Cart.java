@@ -289,7 +289,7 @@ public class Cart {
         //check
         int totalSale = 0;
         for (ProductInCart productInCart : productsIn) {
-            if (productInCart.getSupplier() == supplier) {
+            if (productInCart.getSupplier().equals(supplier)) {
                 Sale sale = productInSale.get(productInCart);
                 if (sale != null) {
                     totalSale += (sale.discountAmountFor((productInCart.getProduct()).getPrice(supplier))) * productInCount.get(productInCart);
@@ -315,7 +315,7 @@ public class Cart {
 
     public boolean isProductInCart(Product product) {
         for (ProductInCart productInCart : productsIn) {
-            if (productInCart.getProduct() == product)
+            if (productInCart.getProduct().equals(product))
                 return true;
         }
         return false;

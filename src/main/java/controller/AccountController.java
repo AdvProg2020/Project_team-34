@@ -21,7 +21,7 @@ import java.util.HashMap;
 public class AccountController {
     private static final long WEEK = 7*24*60*60000;
 
-    private static final int BOUND = 1000;
+    private static final int BOUND = 100;
 
     private Controller mainController;
 

@@ -244,6 +244,14 @@ public abstract class GMenu {
         button.setPrefWidth(170);
     }
 
+    public static void addStyleToSmallButton(Button button){
+        button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+        button.getStyleClass().add("button");
+        button.setMinHeight(25);
+        button.setMinWidth(100);
+        button.setPrefWidth(100);
+    }
+
     public void showAndWait() {
         stage.initModality(Modality.APPLICATION_MODAL);
         Image logoImage = null;

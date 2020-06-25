@@ -135,9 +135,9 @@ public class Product {
         this.productId = generateIdentifier();
         this.name = product.getName();
         this.nameOfCompany = product.getNameOfCompany();
-        this.priceForEachSupplier = product.getPriceForEachSupplier();
-        this.listOfSuppliers = product.getListOfSuppliers();
-        this.remainedNumberForEachSupplier = product.getRemainedNumberForEachSupplier();
+        this.priceForEachSupplier = new HashMap<>(product.getPriceForEachSupplier());
+        this.listOfSuppliers = new ArrayList<>(listOfSuppliers);
+        this.remainedNumberForEachSupplier = new HashMap<>(product.getRemainedNumberForEachSupplier());
         this.description = product.getDescription();
         this.numberOfViews = product.getNumberOfViews();
         this.rootProductId = product.getProductId();

@@ -321,9 +321,11 @@ public class FilterAndSort {
 
     public void removeSupplierFilter(String supplierName) throws ExceptionalMassage {
         Supplier supplier = Supplier.getSupplierByCompanyName(supplierName);
+        if (supplier == null)
+            throw new ExceptionalMassage("Supplier not found!");
         if (!supplierFilter.contains(supplier))
             throw new ExceptionalMassage("This supplier filter hasn't applied yet.");
-        supplierFilter.add(supplier);
+        supplierFilter.remove(supplier);
     }
 
     private ArrayList<Product> applySupplierFilter(ArrayList<Product> products) {
@@ -332,7 +334,9 @@ public class FilterAndSort {
         } else {
             ArrayList<Product> filteredProducts = new ArrayList<>();
             for (Product product : products){
-                if (new HashSet<>(product.getListOfSuppliers()).retainAll(supplierFilter))
+                HashSet<Supplier> hashSet = new HashSet<>(product.getListOfSuppliers());
+                hashSet.retainAll(supplierFilter);
+                if (hashSet.size() != 0)
                     filteredProducts.add(product);
             }
             return filteredProducts;

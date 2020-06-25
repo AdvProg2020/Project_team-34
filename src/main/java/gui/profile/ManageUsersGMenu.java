@@ -63,7 +63,10 @@ public class ManageUsersGMenu extends GMenu {
                 supervisorTableView, new Label("Suppliers:"), supplierTableView, new Label("Customers"),
                 customerTableView);
 
-        backgroundLayout.getChildren().add(mainLayout);
+        ScrollPane scrollPane = new ScrollPane(mainLayout);
+        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+
+        backgroundLayout.getChildren().add(scrollPane);
         backgroundLayout.setAlignment(Pos.CENTER);
 
         return scene;

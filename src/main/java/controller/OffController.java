@@ -135,4 +135,12 @@ public class OffController {
     public ArrayList<Sale> getAllSaleRequestsIdForThisSupplier(){
         return Sale.getAllSaleRequestsBySupplier((Supplier)mainController.getAccount());
     }
+
+    public int controlGetPriceForEachProductAfterSale(Product product, Supplier supplier){
+        Sale sale = Sale.getProductSale(product, supplier);
+        if(sale == null)
+            return product.getPrice(supplier);
+        int percent = sale.getPercent();
+        return product.getPrice(supplier)* (100 - percent)/100;
+    }
 }

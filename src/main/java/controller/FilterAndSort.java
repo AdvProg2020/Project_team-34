@@ -346,6 +346,7 @@ public class FilterAndSort {
         products = applyNameFilter(products);
         products = applyBrandFilter(products);
         products = applySaleOnlyFilter(products);
+        products = applySupplierFilter(products);
         products = sort(products);
         return products;
     }

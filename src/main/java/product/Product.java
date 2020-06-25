@@ -8,6 +8,7 @@ import state.State;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * @author rpirayadi
@@ -537,5 +538,13 @@ public class Product {
             returning += listOfSupplier.getUserName() + '\n';
         }
         return returning;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Product)) {
+            return false;
+        }
+        return getProductId().equals(((Product) o).getProductId());
     }
 }

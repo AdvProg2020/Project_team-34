@@ -77,7 +77,7 @@ public class OffController {
     public ArrayList<Sale> controlGetAllSales(){
         ArrayList<Sale> allSalesForThisSupplier = new ArrayList<>();
         for (Sale sale : Sale.getSales()) {
-            if(sale.getSupplier() == mainController.getAccount() && sale.getState() == State.CONFIRMED){
+            if(sale.getSupplier().equals(mainController.getAccount()) && sale.getState() == State.CONFIRMED){
                 allSalesForThisSupplier.add(sale);
             }
         }
@@ -142,5 +142,9 @@ public class OffController {
             return product.getPrice(supplier);
         int percent = sale.getPercent();
         return product.getPrice(supplier)* (100 - percent)/100;
+    }
+
+    public void removeCodedDiscount(CodedDiscount codedDiscount){
+        CodedDiscount.removeCodeFromList(codedDiscount);
     }
 }

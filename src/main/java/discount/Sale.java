@@ -123,7 +123,7 @@ public class Sale extends Discount {
 
     public boolean isProductInSale(Product product) {
         for (Product product1 : products) {
-            if (product1.getProductId().equals(product.getProductId())) {
+            if (product1.getProductId().equals(product.getProductId()) &&  product1.getRemainedNumberForEachSupplier().get(this.getSupplier()) != 0 && this.getSupplier().getIsAvailable()) {
                 return true;
             }
         }
@@ -276,12 +276,26 @@ public class Sale extends Discount {
         return requests;
     }
 
+    public static Sale getMaxSaleForThisProduct(Product product){
+        int maxPercent = 0;
+        Sale resultSale = null;
+        for (Sale sale : sales) {
+            if(sale.getProducts().contains(product) && sale.getPercent()> maxPercent && sale.isSaleActive() && product.getRemainedNumberForEachSupplier().get(sale.getSupplier()) != 0  && sale.getSupplier().getIsAvailable()){
+                maxPercent = sale.getPercent();
+                resultSale = sale;
+            }
+        }
+        return resultSale;
+    }
+
     @Override
     public String toString() {
-        String returning = "offId=" + offId + "\n" +
-                ", state=" + state +
-                ", percent=" + percent +
-                '}';
+        String returning = "ID :" + offId + "\n" +
+                ", State:" + state +
+                ", Off percent:" + percent + "\n" +
+                ", Products In sale: \n"
+                ;
+
         for (Product product : products) {
             returning += product.getName() + '\n';
         }

@@ -2,7 +2,6 @@ package database;
 
 import account.Account;
 import account.Supplier;
-import com.google.gson.Gson;
 import feedback.Comment;
 import product.Product;
 import state.State;
@@ -79,7 +78,7 @@ public class ProductDataBase {
     private static HashMap<Supplier,Integer> convertStringHashMapToSupplierHashMap(HashMap<String,Integer> stringHashMap){
         HashMap<Supplier,Integer> supplierHashMap = new HashMap<>() ;
         for (String username : stringHashMap.keySet()) {
-            supplierHashMap.put((Supplier) Account.getAccountByUsername(username),stringHashMap.get(username));
+            supplierHashMap.put((Supplier) Account.getAccountByUsernameWithinAll(username),stringHashMap.get(username));
         }
         return supplierHashMap;
     }
@@ -95,7 +94,7 @@ public class ProductDataBase {
     private static ArrayList<Supplier> convertStringArrayListToSupplierArrayList(ArrayList<String > stringArrayList){
         ArrayList<Supplier> supplierArrayList = new ArrayList<>();
         for (String username : stringArrayList) {
-            supplierArrayList.add((Supplier) Account.getAccountByUsername(username));
+            supplierArrayList.add((Supplier) Account.getAccountByUsernameWithinAll(username));
         }
         return supplierArrayList;
     }

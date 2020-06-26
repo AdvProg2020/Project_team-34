@@ -77,7 +77,7 @@ public class SaleDataBase {
                 String offId = resultSet.getString("OffId");
                 ArrayList<Product> products = convertStringArrayListToProductArrayList(convertJsonToArrayList(resultSet.getString("listOfProductIds")));
                 State state = State.valueOf(resultSet.getString("state"));
-                Supplier supplier = (Supplier) Account.getAccountByUsername(resultSet.getString("supplierUsername"));
+                Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAll(resultSet.getString("supplierUsername"));
                 String rootSaleId = resultSet.getString("rootSaleId");
 
 

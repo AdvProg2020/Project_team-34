@@ -7,11 +7,10 @@ import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
-import javafx.animation.ScaleTransition;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
@@ -21,7 +20,6 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
@@ -58,7 +56,7 @@ public class ViewDiscountCodesG extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox2);
-        ListView listView3 = new ListView();
+        TableView listView3 = new TableView();
         listView3.setPrefHeight(398.0);
         listView3.setPrefWidth(350.0);
         listView3.setLayoutX(50.0);
@@ -107,28 +105,49 @@ public class ViewDiscountCodesG extends GMenu {
         // Adding child to parent
         anchorPane0.getChildren().add(editButton);
 
+        Button removeButton = new Button();
+        removeButton.setPrefHeight(33.0);
+        removeButton.setPrefWidth(233.0);
+        removeButton.setLayoutX(505.0);
+        removeButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        removeButton.setLayoutY(337.0);
+        removeButton.setText("Removing");
+        removeButton.setMnemonicParsing(false);
+
+        anchorPane0.getChildren().add(removeButton);
         // Adding controller
         // Adding controller
+
+        TableColumn discountCode = new TableColumn("Code");
+        discountCode.setCellValueFactory(new PropertyValueFactory<>("discountCode"));
+        TableColumn percent = new TableColumn("Percent");
+        percent.setCellValueFactory(new PropertyValueFactory<>("percent"));
+        TableColumn start = new TableColumn("Start");
+        start.setCellValueFactory(new PropertyValueFactory<>("start"));
+        TableColumn end = new TableColumn("End");
+        end.setCellValueFactory(new PropertyValueFactory<>("end"));
+        listView3.getColumns().addAll(discountCode,percent, start, end);
+
         for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-            listView3.getItems().add(codedDiscount.getDiscountCode());
+            listView3.getItems().add(codedDiscount);
         }
 
         detailsButton.setOnAction( e -> {
-            ObservableList<String> codes = listView3.getSelectionModel().getSelectedItems();
-            for (String code : codes) {
+            ObservableList<CodedDiscount> codes = listView3.getSelectionModel().getSelectedItems();
+            for (CodedDiscount code : codes) {
                 Stage newStage = new Stage();
-                newStage.setScene(createDetails(code));
+                newStage.setScene(createDetails(code.getDiscountCode()));
                 newStage.showAndWait();
             }
             listView3.getItems().clear();
             for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-                listView3.getItems().add(codedDiscount.getDiscountCode());
+                listView3.getItems().add(codedDiscount);
             }
         });
 
         editButton.setOnAction( e -> {
-            ObservableList<String> codes = listView3.getSelectionModel().getSelectedItems();
-            for (String code : codes) {
+            ObservableList<CodedDiscount> codes = listView3.getSelectionModel().getSelectedItems();
+            for (CodedDiscount code : codes) {
                 try {
 
                     Image logoImage = null;
@@ -139,7 +158,7 @@ public class ViewDiscountCodesG extends GMenu {
 
                     Stage newStage = new Stage();
                     newStage.initModality(Modality.APPLICATION_MODAL);
-                    newStage.setScene(createEditMenu(controller.getOffController().controlGetDiscountByCode(code)));
+                    newStage.setScene(createEditMenu(controller.getOffController().controlGetDiscountByCode(code.getDiscountCode())));
                     newStage.getIcons().add(logoImage);
                     newStage.setTitle("Edit discount code");
                     newStage.showAndWait();
@@ -150,7 +169,7 @@ public class ViewDiscountCodesG extends GMenu {
             }
             listView3.getItems().clear();
             for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-                listView3.getItems().add(codedDiscount.getDiscountCode());
+                listView3.getItems().add(codedDiscount);
             }
         });
 
@@ -170,8 +189,20 @@ public class ViewDiscountCodesG extends GMenu {
 
             listView3.getItems().clear();
             for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-                listView3.getItems().add(codedDiscount.getDiscountCode());
+                listView3.getItems().add(codedDiscount);
             }
+        });
+
+        removeButton.setOnAction( e -> {
+            ObservableList<CodedDiscount> codes = listView3.getSelectionModel().getSelectedItems();
+            for (CodedDiscount code : codes) {
+                controller.getOffController().removeCodedDiscount(code);
+            }
+            listView3.getItems().clear();
+            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                listView3.getItems().add(codedDiscount);
+            }
+
         });
 
 
@@ -487,7 +518,7 @@ public class ViewDiscountCodesG extends GMenu {
 
         //Adding controller
         for (String username : controller.getAccountController().controlGetListOfAccountUserNames()) {
-            if(Account.getAccountByUsername(username) instanceof Customer) {
+            if(Account.getAccountByUsernameWithinAvailable(username) instanceof Customer) {
                 customers.getItems().add(username);
             }
         }
@@ -506,7 +537,7 @@ public class ViewDiscountCodesG extends GMenu {
                 try {
                     ObservableList<String> userNames = customers.getSelectionModel().getSelectedItems();
                     for (String userName : userNames) {
-                        maxNumberOfUsage.put((Customer)Customer.getAccountByUsername(userName),maxNumber);
+                        maxNumberOfUsage.put((Customer)Customer.getAccountByUsernameWithinAvailable(userName),maxNumber);
                     }
                     controller.getOffController().controlCreateCodedDiscount(code, startDate, endDate, percent, maxAmount,maxNumberOfUsage);
                     ((Stage)anchorPane0.getScene().getWindow()).close();

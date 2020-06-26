@@ -60,7 +60,7 @@ public class ProductInCartDataBase {
             while (resultSet.next()) {
                 String productInCartId = resultSet.getString("productInCartId");
                 Product product = Product.getProductById(resultSet.getString("productId"));
-                Supplier supplier = (Supplier) Account.getAccountByUsername(resultSet.getString("supplierUsername"));
+                Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAll(resultSet.getString("supplierUsername"));
 
                 new ProductInCart(productInCartId,product,supplier);
             }

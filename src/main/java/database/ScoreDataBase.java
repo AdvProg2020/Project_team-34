@@ -62,7 +62,7 @@ public class ScoreDataBase {
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String scoreId = resultSet.getString("scoreId");
-                Customer customer = (Customer) (Account.getAccountByUsername(resultSet.getString("customerUsername")));
+                Customer customer = (Customer) (Account.getAccountByUsernameWithinAll(resultSet.getString("customerUsername")));
                 Product product = Product.getProductById(resultSet.getString("productId"));
                 Float score = resultSet.getFloat("score");
 

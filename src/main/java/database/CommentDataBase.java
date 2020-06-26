@@ -73,7 +73,7 @@ public class CommentDataBase {
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String commentId = resultSet.getString("commentId");
-                Customer customer = (Customer) (Account.getAccountByUsername(resultSet.getString("customerUsername")));
+                Customer customer = (Customer) (Account.getAccountByUsernameWithinAll(resultSet.getString("customerUsername")));
                 Product product = Product.getProductById(resultSet.getString("productId"));
                 String title = resultSet.getString("title");
                 String content = resultSet.getString("content");

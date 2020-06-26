@@ -62,7 +62,7 @@ public class CodedDiscountDataBase {
     private static HashMap<Customer,Integer> convertStringHashMapToCustomerHashMap(HashMap<String,Integer> stringHashMap){
         HashMap<Customer,Integer> customerHashMap = new HashMap<>() ;
         for (String username : stringHashMap.keySet()) {
-            customerHashMap.put((Customer) Account.getAccountByUsername(username),stringHashMap.get(username));
+            customerHashMap.put((Customer) Account.getAccountByUsernameWithinAll(username),stringHashMap.get(username));
         }
         return customerHashMap;
     }
@@ -78,7 +78,7 @@ public class CodedDiscountDataBase {
     private static ArrayList<Customer> convertStringArrayListToCustomerArrayList(ArrayList<String > stringArrayList){
         ArrayList<Customer> supplierArrayList = new ArrayList<>();
         for (String username : stringArrayList) {
-            supplierArrayList.add((Customer) Account.getAccountByUsername(username));
+            supplierArrayList.add((Customer) Account.getAccountByUsernameWithinAvailable(username));
         }
         return supplierArrayList;
     }

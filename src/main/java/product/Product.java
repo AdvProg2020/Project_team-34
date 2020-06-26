@@ -8,6 +8,7 @@ import state.State;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Objects;
 
 /**
  * @author rpirayadi
@@ -135,9 +136,9 @@ public class Product {
         this.productId = generateIdentifier();
         this.name = product.getName();
         this.nameOfCompany = product.getNameOfCompany();
-        this.priceForEachSupplier = product.getPriceForEachSupplier();
-        this.listOfSuppliers = product.getListOfSuppliers();
-        this.remainedNumberForEachSupplier = product.getRemainedNumberForEachSupplier();
+        this.priceForEachSupplier = new HashMap<>(product.getPriceForEachSupplier());
+        this.listOfSuppliers = new ArrayList<>(listOfSuppliers);
+        this.remainedNumberForEachSupplier = new HashMap<>(product.getRemainedNumberForEachSupplier());
         this.description = product.getDescription();
         this.numberOfViews = product.getNumberOfViews();
         this.rootProductId = product.getProductId();
@@ -353,7 +354,7 @@ public class Product {
 
     public boolean isProductAvailableNow() {
         for (Supplier supplier : remainedNumberForEachSupplier.keySet()) {
-            if (remainedNumberForEachSupplier.get(supplier) > 0)
+            if (remainedNumberForEachSupplier.get(supplier) > 0 && supplier.getIsAvailable())
                 return true;
         }
         return false;
@@ -362,7 +363,7 @@ public class Product {
     public ArrayList<Supplier> getAllSuppliersThatHaveAvailableProduct() {
         ArrayList<Supplier> suppliers = new ArrayList<>();
         for (Supplier supplier : remainedNumberForEachSupplier.keySet()) {
-            if (remainedNumberForEachSupplier.get(supplier) > 0)
+            if (remainedNumberForEachSupplier.get(supplier) > 0 && supplier.getIsAvailable())
                 suppliers.add(supplier);
         }
         return suppliers;
@@ -418,8 +419,8 @@ public class Product {
         ProductDataBase.update(productRequest);
     }
 
-    private static void declineRequest(Product product){
-        switch (product.getProductState()){
+    private static void declineRequest(Product product) {
+        switch (product.getProductState()) {
             case PREPARING_TO_BUILD:
                 product.setProductState(State.BUILD_DECLINED);
                 break;
@@ -465,8 +466,7 @@ public class Product {
             if (rootProduct.getListOfSuppliers().size() == 1) {
                 rootProduct.setProductState(State.DELETED);
                 Category.getProductCategory(rootProduct).removeProduct(rootProduct);
-            }
-            else {
+            } else {
                 Supplier supplier = productRequest.getListOfSuppliers().get(0);
                 rootProduct.getListOfSuppliers().remove(supplier);
                 rootProduct.getPriceForEachSupplier().remove(supplier);
@@ -495,20 +495,20 @@ public class Product {
         realProduct.setRemainedNumberForEachSupplier(productRequest.getRemainedNumberForEachSupplier());
     }
 
-    public static ArrayList<Product> getRequestsForThisSupplier(Supplier supplier){
+    public static ArrayList<Product> getRequestsForThisSupplier(Supplier supplier) {
         ArrayList<Product> result = new ArrayList<>();
         for (Product eachProduct : allProduct) {
-            if(eachProduct.isRequest() && eachProduct.getListOfSuppliers().contains(supplier))
+            if (eachProduct.isRequest() && eachProduct.getListOfSuppliers().contains(supplier))
                 result.add(eachProduct);
         }
         return result;
     }
 
-    private boolean isRequest(){
+    private boolean isRequest() {
         State state = this.getProductState();
-        if( state == State.PREPARING_TO_BUILD || state == State.PREPARING_TO_EDIT || state == State.PREPARING_TO_BE_DELETED||
-                state == State.BUILD_ACCEPTED|| state == State.BUILD_DECLINED|| state == State.EDIT_ACCEPTED
-                || state == State.EDIT_DECLINED|| state == State.DELETE_ACCEPTED|| state == State.DELETE_DECLINED)
+        if (state == State.PREPARING_TO_BUILD || state == State.PREPARING_TO_EDIT || state == State.PREPARING_TO_BE_DELETED ||
+                state == State.BUILD_ACCEPTED || state == State.BUILD_DECLINED || state == State.EDIT_ACCEPTED
+                || state == State.EDIT_DECLINED || state == State.DELETE_ACCEPTED || state == State.DELETE_DECLINED)
             return true;
         return false;
     }
@@ -528,8 +528,7 @@ public class Product {
                 ", productId='" + productId + '\'' +
                 ", name='" + name + '\'' +
                 ", nameOfCompany='" + nameOfCompany + '\'' +
-                ", priceForEachSupplier=" + priceForEachSupplier +
-                ", remainedNumberForEachSupplier=" + remainedNumberForEachSupplier +
+                ", ListOfSuppliersUserName=" + getStringListOfSuppliers()+  '\'' +
                 ", description='" + description + '\'' +
                 ", specification=" + specification +
                 '}' + '\'';
@@ -537,5 +536,30 @@ public class Product {
             returning += listOfSupplier.getUserName() + '\n';
         }
         return returning;
+    }
+
+    public String getStringListOfSuppliers() {
+        StringBuilder result = new StringBuilder();
+        for (Supplier supplier : listOfSuppliers) {
+            result.append(supplier.getUserName());
+        }
+        return String.valueOf(result);
+    }
+
+    public int getMinimumPrice() {
+        int minimumPrice = 100000;
+        for (Supplier supplier : priceForEachSupplier.keySet()) {
+            if (this.getRemainedNumberForEachSupplier().get(supplier) != 0 && this.getPrice(supplier) < minimumPrice)
+                minimumPrice = this.getPrice(supplier);
+        }
+        return minimumPrice;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (!(o instanceof Product)) {
+            return false;
+        }
+        return getProductId().equals(((Product) o).getProductId());
     }
 }

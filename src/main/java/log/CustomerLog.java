@@ -121,7 +121,7 @@ public class CustomerLog {
     public static ArrayList<CustomerLog> getCustomerCustomerLogs(Customer customer) {
         ArrayList<CustomerLog> customerLogs = new ArrayList<>();
         for (CustomerLog customerLog: allCustomerLogs) {
-            if (customerLog.getCustomer() == customer) {
+            if (customerLog.getCustomer().getUserName().equals(customer.getUserName())) {
                 customerLogs.add(customerLog);
             }
         }

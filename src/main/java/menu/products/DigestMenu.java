@@ -49,7 +49,7 @@ public class DigestMenu extends Menu {
                 Matcher matcher = getMatcher(command, regex);
                 if(matcher.find()){
                     try {
-                        seller = (Supplier) (Account.getAccountByUsername(matcher.group(1)));
+                        seller = (Supplier) (Account.getAccountByUsernameWithinAvailable(matcher.group(1)));
                         if(seller == null){
                             System.out.println("No such supplier!");
                         }

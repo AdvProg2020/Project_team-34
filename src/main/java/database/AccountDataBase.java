@@ -4,7 +4,6 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
-import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 
 import java.sql.*;
@@ -129,7 +128,7 @@ public class AccountDataBase {
             while (resultSet.next()) {
                 username = resultSet.getString("username");
                 if(whatToShow.contains(username))
-                    result.add(Account.getAccountByUsername(username));
+                    result.add(Account.getAccountByUsernameWithinAvailable(username));
             }
             return result;
 

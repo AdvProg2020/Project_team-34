@@ -19,6 +19,9 @@ import java.util.Date;
 import java.util.HashMap;
 
 public class AccountController {
+    private static final long WEEK = 7*24*60*60000;
+
+    private static final int BOUND = 100;
 
     private Controller mainController;
 
@@ -100,7 +103,7 @@ public class AccountController {
     public void controlLogin(String username, String password) throws ExceptionalMassage {
         if (hasSomeOneLoggedIn())
             throw new ExceptionalMassage("Logout first.");
-        Account account = Account.getAccountByUsername(username);
+        Account account = Account.getAccountByUsernameWithinAvailable(username);
         if (account == null)
             throw new ExceptionalMassage("Username doesn't exist.");
         if (!account.getPassword().equals(password))
@@ -205,14 +208,14 @@ public class AccountController {
     }
 
     public String controlViewUserInfo(String username) throws ExceptionalMassage {
-        Account account = Account.getAccountByUsername(username);
+        Account account = Account.getAccountByUsernameWithinAvailable(username);
         if (account == null)
             throw new ExceptionalMassage("Account not found.");
         return account.toString();
     }
 
     public void controlDeleteUser(String username) throws ExceptionalMassage {
-        Account accountGotByUsername = Account.getAccountByUsername(username);
+        Account accountGotByUsername = Account.getAccountByUsernameWithinAvailable(username);
         if (accountGotByUsername == null)
             throw new ExceptionalMassage("Account not found.");
         if(username.equals(getAccount().getUserName()))
@@ -245,6 +248,9 @@ public class AccountController {
     }
 
     public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+        if (getAccount() instanceof Supplier || getAccount() instanceof Supervisor) {
+            throw new ExceptionalMassage("logout, Supervisor and Supplier are denied");
+        }
         Product product = Product.getProductById(productId);
         if (product == null)
             throw new ExceptionalMassage("Product not found.");
@@ -315,7 +321,7 @@ public class AccountController {
         mainController.getCart().removeCodedDiscount();
     }
 
-    public void finalizeOrder() throws ExceptionalMassage {
+    public boolean finalizeOrder() throws ExceptionalMassage {
         Account account = mainController.getAccount();
         if (account == null)
             throw new ExceptionalMassage("Login First.");
@@ -339,7 +345,10 @@ public class AccountController {
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);
-        //customer credit decrease
+        if (customerLog.getPaidAmount() >= BOUND) {
+            controlCreateCodedDiscountForLoggedInCustomer();
+        }
+        return customerLog.getPaidAmount() >= BOUND;
     }
 
     public String getAccountUsername() {
@@ -441,7 +450,16 @@ public class AccountController {
             maxUsagePerCustomer.put(luckyCustomer, 1);
         }
         Date start = new Date(System.currentTimeMillis());
-        Date end = new Date(System.currentTimeMillis() + 7*24*60*60000);
+        Date end = new Date(System.currentTimeMillis() + WEEK);
         new CodedDiscount(randomCode,start, end,percent,maxAmount,maxUsagePerCustomer);
+    }
+
+    public void controlCreateCodedDiscountForLoggedInCustomer(){
+        Date start = new Date(System.currentTimeMillis());
+        Date end = new Date(System.currentTimeMillis() + WEEK);
+        String randomCode = CodedDiscount.codeGenerator();
+        HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
+        maxUsagePerCustomer.put((Customer)mainController.getAccount(),1);
+        new CodedDiscount(randomCode,start,end, 15, 100,maxUsagePerCustomer);
     }
 }

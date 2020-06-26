@@ -62,10 +62,10 @@ public class SupervisorProfileMenu extends ProfileMenu {
                     System.out.println("enter max number of usage :");
                     max = scanner.nextInt();
                     String junk3 = scanner.nextLine();
-                    if(Customer.getAccountByUsername(customerId) == null){
+                    if(Customer.getAccountByUsernameWithinAvailable(customerId) == null){
                         System.out.println("no such username!");
                     } else {
-                        maxNumberOfUsagePerCustomer.put((Customer)Customer.getAccountByUsername(customerId), max);
+                        maxNumberOfUsagePerCustomer.put((Customer)Customer.getAccountByUsernameWithinAvailable(customerId), max);
                     }
                     System.out.println("Enter customer id:");
                 }

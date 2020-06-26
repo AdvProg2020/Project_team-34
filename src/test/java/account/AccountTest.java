@@ -65,13 +65,13 @@ public class AccountTest {
     public void testGetByUsername() {
         testCreateTable();
 
-        Account gotByUsername = Account.getAccountByUsername("rpirayadi");
+        Account gotByUsername = Account.getAccountByUsernameWithinAvailable("rpirayadi");
         Assert.assertEquals(supervisor, gotByUsername);
 
-        Account gotByWrongUsername = Account.getAccountByUsername("not a valid username:)");
+        Account gotByWrongUsername = Account.getAccountByUsernameWithinAvailable("not a valid username:)");
         Assert.assertNull(gotByWrongUsername);
 
-        Account gotByNull = Account.getAccountByUsername(null);
+        Account gotByNull = Account.getAccountByUsernameWithinAvailable(null);
         Assert.assertNull(gotByNull);
 
     }

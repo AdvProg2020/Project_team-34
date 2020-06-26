@@ -103,7 +103,7 @@ public class AccountController {
     public void controlLogin(String username, String password) throws ExceptionalMassage {
         if (hasSomeOneLoggedIn())
             throw new ExceptionalMassage("Logout first.");
-        Account account = Account.getAccountByUsername(username);
+        Account account = Account.getAccountByUsernameWithinAvailable(username);
         if (account == null)
             throw new ExceptionalMassage("Username doesn't exist.");
         if (!account.getPassword().equals(password))
@@ -208,14 +208,14 @@ public class AccountController {
     }
 
     public String controlViewUserInfo(String username) throws ExceptionalMassage {
-        Account account = Account.getAccountByUsername(username);
+        Account account = Account.getAccountByUsernameWithinAvailable(username);
         if (account == null)
             throw new ExceptionalMassage("Account not found.");
         return account.toString();
     }
 
     public void controlDeleteUser(String username) throws ExceptionalMassage {
-        Account accountGotByUsername = Account.getAccountByUsername(username);
+        Account accountGotByUsername = Account.getAccountByUsernameWithinAvailable(username);
         if (accountGotByUsername == null)
             throw new ExceptionalMassage("Account not found.");
         if(username.equals(getAccount().getUserName()))

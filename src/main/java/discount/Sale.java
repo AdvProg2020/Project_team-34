@@ -123,7 +123,7 @@ public class Sale extends Discount {
 
     public boolean isProductInSale(Product product) {
         for (Product product1 : products) {
-            if (product1.getProductId().equals(product.getProductId())) {
+            if (product1.getProductId().equals(product.getProductId()) &&  product1.getRemainedNumberForEachSupplier().get(this.getSupplier()) != 0 && this.getSupplier().getIsAvailable()) {
                 return true;
             }
         }
@@ -280,7 +280,7 @@ public class Sale extends Discount {
         int maxPercent = 0;
         Sale resultSale = null;
         for (Sale sale : sales) {
-            if(sale.getProducts().contains(product) && sale.getPercent()> maxPercent && sale.isSaleActive() && product.getRemainedNumberForEachSupplier().get(sale.getSupplier()) != 0){
+            if(sale.getProducts().contains(product) && sale.getPercent()> maxPercent && sale.isSaleActive() && product.getRemainedNumberForEachSupplier().get(sale.getSupplier()) != 0  && sale.getSupplier().getIsAvailable()){
                 maxPercent = sale.getPercent();
                 resultSale = sale;
             }

@@ -121,10 +121,21 @@ public abstract class Account {
         return true;
     }
 
-    public static Account getAccountByUsername(String userName) {
+    public static Account getAccountByUsernameWithinAvailable(String userName) {
         ArrayList<Account> availableAccounts = getAllAvailableAccounts();
         if( availableAccounts.size() != 0) {
             for (Account account : availableAccounts) {
+                if (account.getUserName().equals(userName)) {
+                    return account;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static Account getAccountByUsernameWithinAll(String userName) {
+        if( allAccounts.size() != 0) {
+            for (Account account : allAccounts) {
                 if (account.getUserName().equals(userName)) {
                     return account;
                 }

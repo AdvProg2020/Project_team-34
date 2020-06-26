@@ -7,9 +7,7 @@ import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
-import javafx.animation.ScaleTransition;
 import javafx.collections.ObservableList;
-import javafx.event.Event;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -22,7 +20,6 @@ import javafx.stage.Stage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.HashMap;
@@ -521,7 +518,7 @@ public class ViewDiscountCodesG extends GMenu {
 
         //Adding controller
         for (String username : controller.getAccountController().controlGetListOfAccountUserNames()) {
-            if(Account.getAccountByUsername(username) instanceof Customer) {
+            if(Account.getAccountByUsernameWithinAvailable(username) instanceof Customer) {
                 customers.getItems().add(username);
             }
         }
@@ -540,7 +537,7 @@ public class ViewDiscountCodesG extends GMenu {
                 try {
                     ObservableList<String> userNames = customers.getSelectionModel().getSelectedItems();
                     for (String userName : userNames) {
-                        maxNumberOfUsage.put((Customer)Customer.getAccountByUsername(userName),maxNumber);
+                        maxNumberOfUsage.put((Customer)Customer.getAccountByUsernameWithinAvailable(userName),maxNumber);
                     }
                     controller.getOffController().controlCreateCodedDiscount(code, startDate, endDate, percent, maxAmount,maxNumberOfUsage);
                     ((Stage)anchorPane0.getScene().getWindow()).close();

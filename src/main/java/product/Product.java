@@ -354,7 +354,7 @@ public class Product {
 
     public boolean isProductAvailableNow() {
         for (Supplier supplier : remainedNumberForEachSupplier.keySet()) {
-            if (remainedNumberForEachSupplier.get(supplier) > 0)
+            if (remainedNumberForEachSupplier.get(supplier) > 0 && supplier.getIsAvailable())
                 return true;
         }
         return false;
@@ -363,7 +363,7 @@ public class Product {
     public ArrayList<Supplier> getAllSuppliersThatHaveAvailableProduct() {
         ArrayList<Supplier> suppliers = new ArrayList<>();
         for (Supplier supplier : remainedNumberForEachSupplier.keySet()) {
-            if (remainedNumberForEachSupplier.get(supplier) > 0)
+            if (remainedNumberForEachSupplier.get(supplier) > 0 && supplier.getIsAvailable())
                 suppliers.add(supplier);
         }
         return suppliers;

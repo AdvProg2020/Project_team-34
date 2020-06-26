@@ -141,7 +141,7 @@ public class CartDataBase {
              ResultSet resultSet = statement.executeQuery(sql)) {
             while (resultSet.next()) {
                 String cartId = resultSet.getString("identifier");
-                Customer owner = (Customer) (Account.getAccountByUsername(resultSet.getString("ownerUsername")));
+                Customer owner = (Customer) (Account.getAccountByUsernameWithinAll(resultSet.getString("ownerUsername")));
                 ArrayList<ProductInCart> productInCarts = convertStringArrayListToProductInCartArrayList(convertJsonToArrayList(resultSet.getString("listOfProductInCartIds")));
                 HashMap<ProductInCart, Integer> productInCount = convertStringIntegerHashMapToProductInCartIntegerHashMap(convertJsonToHashMap(resultSet.getString("countForEachProductIn")));
                 HashMap<ProductInCart, Sale> productInSale = convertStringHashMapToProductInCartSaleHashMap(convertJsonToStringStringHashMap(resultSet.getString("saleForEachProductIn")));

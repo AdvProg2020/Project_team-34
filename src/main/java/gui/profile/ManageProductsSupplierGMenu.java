@@ -257,7 +257,7 @@ public class ManageProductsSupplierGMenu extends GMenu {
         anchorPane0.getChildren().add(newValueHbox);
 
         // Adding controller
-        availableField.getItems().addAll("name","nameOfCompany","description","imageURL");
+        availableField.getItems().addAll("name","nameOfCompany","description");
         availableField.getItems().addAll(editing.getSpecification().keySet());
 
         Button addToListButton = new Button();
@@ -291,12 +291,7 @@ public class ManageProductsSupplierGMenu extends GMenu {
         fileChooserButton.setPrefWidth(62);
         fileChooserButton.setPrefHeight(59);
 
-        //availableField.setOnAction( e -> {
-            //if(availableField.getValue().equals("imageURL")){
-               // newValueHbox.getChildren().add(fileChooserButton);
 
-           // }
-       // });
 
         addToListButton.setOnAction( e -> {
             String key = availableField.getValue();

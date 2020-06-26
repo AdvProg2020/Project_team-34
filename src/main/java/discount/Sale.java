@@ -275,7 +275,7 @@ public class Sale extends Discount {
         }
         return requests;
     }
-
+//
     public static Sale getMaxSaleForThisProduct(Product product){
         int maxPercent = 0;
         Sale resultSale = null;

@@ -8,8 +8,8 @@ package Server.Communications;
  */
 
 public class Response {
-    private final RequestStatus status;
-    private final String content;
+    private RequestStatus status;
+    private String content;
 
     public Response(RequestStatus status, String content) {
         this.status = status;
@@ -20,7 +20,15 @@ public class Response {
         return status;
     }
 
+    public void setStatus(RequestStatus status) {
+        this.status = status;
+    }
+
     public String getContent() {
         return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
     }
 }

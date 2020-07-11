@@ -1,18 +1,21 @@
 package Server;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 
 public class ClientThread extends Thread {
-    private final Socket socket;
-    private final ObjectInputStream objectInputStream;
-    private final ObjectOutputStream objectOutputStream;
+    private final Server server;
+    private final DataOutputStream dataOutputStream;
+    private final DataInputStream dataInputStream;
 
-    public ClientThread(Socket socket, String token) throws IOException {
-        this.socket = socket;
-        this.objectInputStream = new ObjectInputStream(socket.getInputStream());
-        this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+    public ClientThread(Socket socket, Server server) throws IOException {
+        this.server = server;
+        this.dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+        this.dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+    }
+
+    @Override
+    public void run() {
+        System.out.println("Thread run");
     }
 }

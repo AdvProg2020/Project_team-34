@@ -9,15 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.*;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import menu.menuAbstract.Menu;
-
-import java.io.File;
-
-import static javafx.geometry.Pos.CENTER;
-import static javafx.geometry.Pos.TOP_CENTER;
-import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class MainMenuG extends GMenu {
     public MainMenuG( GMenu parentMenu, Stage stage, Controller controller) {

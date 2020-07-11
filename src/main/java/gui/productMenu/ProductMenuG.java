@@ -1,9 +1,7 @@
 package gui.productMenu;
 
-import account.Account;
 import account.Supplier;
 import controller.Controller;
-import controller.FilterAndSort;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
@@ -21,15 +19,12 @@ import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.image.PixelReader;
-import javafx.scene.image.WritableImage;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import menu.menuAbstract.Menu;
 import org.controlsfx.control.Rating;
 import product.Product;
 
@@ -38,7 +33,6 @@ import java.util.ArrayList;
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_CENTER;
-import static javafx.scene.control.TabPane.TabClosingPolicy.UNAVAILABLE;
 import static javafx.scene.shape.StrokeType.OUTSIDE;
 
 public class ProductMenuG extends GMenu {

@@ -1,11 +1,7 @@
 package feedback;
 
 import account.Customer;
-import database.DataBase;
-import database.ScoreDataBase;
 import product.Product;
-
-import java.util.ArrayList;
 
 /**
  * @author soheil
@@ -13,100 +9,40 @@ import java.util.ArrayList;
  */
 
 public class Score {
-    private static ArrayList<Score> scores = new ArrayList<>();
-    private static int allCreatedScoreNum = 0 ;
     private String identifier ;
     private Customer customer;
     private Product product;
     private float score;
 
-
-    public Score(float score, Customer customer, Product product) {
-        this.score = score;
-        this.customer = customer;
-        this.product = product;
-        this.identifier = generateIdentifier();
-        allCreatedScoreNum ++ ;
-        ScoreDataBase.add(this);
-        scores.add(this);
+    public String getIdentifier() {
+        return identifier;
     }
 
-    public Score(String identifier, Customer customer, Product product, float score) {
+    public void setIdentifier(String identifier) {
         this.identifier = identifier;
-        this.customer = customer;
-        this.product = product;
-        this.score = score;
-        scores.add(this);
-        allCreatedScoreNum++;
-
     }
-    
 
     public Customer getCustomer() {
         return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
     }
 
     public Product getProduct() {
         return product;
     }
 
+    public void setProduct(Product product) {
+        this.product = product;
+    }
+
     public float getScore() {
         return score;
     }
 
-    public String getIdentifier() {
-        return identifier;
-    }
-
-    public static float getAverageScoreForProduct(Product product){
-        float total = 0;
-        int counter = 0;
-        for (Score score : scores) {
-            if(score.getProduct() == product){
-                total += score.getScore();
-                counter++;
-            }
-        }
-        if(total == 0 && counter == 0){
-            return 0;
-        }
-        return total/counter;
-    }
-
-    private String generateIdentifier(){
-        return "T34P" + String.format("%015d", allCreatedScoreNum + 1);
-    }
-
-    //Added by rpirayadi
-    public static Score getScoreByIdentifier(String scoreId){
-        for (Score eachScore : scores) {
-            if(eachScore.getIdentifier().equals(scoreId))
-                return eachScore;
-        }
-        return null;
-    }
-
-    public static boolean hasCustomerRateThisProduct(Product product,Customer customer){
-        for (Score score : scores) {
-            if (score.getCustomer() == customer && score.getProduct() == product){
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-
-    /**
-     *
-     * @return returns the String form of a JSON object for storing in the database.
-     */
-    @Override
-    public String toString() {
-        return "Score{" +
-                "customer=" + customer +
-                ", product=" + product +
-                ", score=" + score +
-                '}';
+    public void setScore(float score) {
+        this.score = score;
     }
 }

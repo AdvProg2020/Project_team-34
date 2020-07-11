@@ -1,7 +1,6 @@
 package main;
 
 import controller.Controller;
-import database.DataBase;
 import gui.GMenu;
 import gui.loginMenu.FirstSupervisorMenu;
 import gui.mainMenu.MainMenuG;
@@ -15,8 +14,6 @@ import java.io.FileNotFoundException;
 public class Main extends Application {
 
     public static void main(String[] args)  {
-        DataBase.createNewTablesToStart();
-        DataBase.importAllData();
         launch(args);
     }
 

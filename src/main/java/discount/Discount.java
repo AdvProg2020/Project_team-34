@@ -14,10 +14,20 @@ public abstract class Discount {
     protected Date end;
     protected int percent;
 
-    public Discount(Date start, Date end, int percent) {
+    public Date getStart() {
+        return start;
+    }
+
+    public void setStart(Date start) {
         this.start = start;
+    }
+
+    public Date getEnd() {
+        return end;
+    }
+
+    public void setEnd(Date end) {
         this.end = end;
-        this.percent = percent;
     }
 
     public int getPercent() {
@@ -26,26 +36,5 @@ public abstract class Discount {
 
     public void setPercent(int percent) {
         this.percent = percent;
-    }
-
-    public void setStart(Date start) {
-        this.start = start;
-    }
-
-    public void setEnd(Date end) {
-        this.end = end;
-    }
-
-    public Date getStart() {
-        return start;
-    }
-
-    public Date getEnd() {
-        return end;
-    }
-
-    public int discountAmountFor(int initialAmount) {
-        //Aryan
-        return (initialAmount * percent) / 100;
     }
 }

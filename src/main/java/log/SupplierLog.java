@@ -15,128 +15,94 @@ import java.util.HashMap;
  */
 
 public class SupplierLog {
-    private static final ArrayList<SupplierLog> allSupplierLogs = new ArrayList<>();
-    private static int allSupplierLogCreatedCount = 0;
+    private String identifier;
+    private Date date;
+    private int earnedMoney;
+    private int discountAmount;
+    private int totalPurchase;
+    private CustomerLog customerLog;
+    private Supplier supplier;
+    private ArrayList<Product> products;
+    private HashMap<Product, Integer> productsCount;
+    private HashMap<Product, Sale> productsSale;
 
-    private final String identifier;
-    private final Date date;
-    private final int earnedMoney;
-    private final int discountAmount;
-    private final int totalPurchase;
-    private final CustomerLog customerLog;
-    private final Supplier supplier;
-    private final ArrayList<Product> products;
-    private final HashMap<Product, Integer> productsCount;
-    private final HashMap<Product, Sale> productsSale;
-
-    //Constructor:
-    public SupplierLog(CustomerLog customerLog, Supplier supplier) {
-        this.customerLog = customerLog;
-        this.supplier = supplier;
-        this.earnedMoney = customerLog.getSupplierEarnedMoney(supplier);
-        this.discountAmount = customerLog.getSupplierSaleAmount(supplier);
-        this.totalPurchase = customerLog.getTotalPurchaseFromSupplier(supplier);
-        this.identifier = generateIdentifier();
-        this.products = customerLog.getProductsBoughtFromSupplier(supplier);
-        this.productsCount = customerLog.getProductsBoughtFromSupplierCount(supplier);
-        this.productsSale = customerLog.getProductsBoughtFromSupplierSale(supplier);
-        this.date = customerLog.getDate();
-        allSupplierLogs.add(this);
-        allSupplierLogCreatedCount++;
-    }
-
-    //Getters:
     public String getIdentifier() {
         return identifier;
+    }
+
+    public void setIdentifier(String identifier) {
+        this.identifier = identifier;
     }
 
     public Date getDate() {
         return date;
     }
 
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     public int getEarnedMoney() {
         return earnedMoney;
+    }
+
+    public void setEarnedMoney(int earnedMoney) {
+        this.earnedMoney = earnedMoney;
     }
 
     public int getDiscountAmount() {
         return discountAmount;
     }
 
+    public void setDiscountAmount(int discountAmount) {
+        this.discountAmount = discountAmount;
+    }
+
     public int getTotalPurchase() {
         return totalPurchase;
+    }
+
+    public void setTotalPurchase(int totalPurchase) {
+        this.totalPurchase = totalPurchase;
     }
 
     public CustomerLog getCustomerLog() {
         return customerLog;
     }
 
+    public void setCustomerLog(CustomerLog customerLog) {
+        this.customerLog = customerLog;
+    }
+
     public Supplier getSupplier() {
         return supplier;
+    }
+
+    public void setSupplier(Supplier supplier) {
+        this.supplier = supplier;
     }
 
     public ArrayList<Product> getProducts() {
         return products;
     }
 
+    public void setProducts(ArrayList<Product> products) {
+        this.products = products;
+    }
+
     public HashMap<Product, Integer> getProductsCount() {
         return productsCount;
+    }
+
+    public void setProductsCount(HashMap<Product, Integer> productsCount) {
+        this.productsCount = productsCount;
     }
 
     public HashMap<Product, Sale> getProductsSale() {
         return productsSale;
     }
 
-    public static ArrayList<SupplierLog> getAllSupplierLogs() {
-        return allSupplierLogs;
-    }
-
-    public static int getAllSupplierLogCreatedCount() {
-        return allSupplierLogCreatedCount;
-    }
-
-    //Modeling methods:
-    private static String generateIdentifier() {
-        return "T34SL" + String.format("%015d", allSupplierLogCreatedCount + 1);
-    }
-
-    public static ArrayList<SupplierLog> getSupplierSupplierLog(Supplier supplier) {
-        ArrayList<SupplierLog> supplierLogs = new ArrayList<>();
-        if (allSupplierLogs.size() != 0) {
-            for (SupplierLog supplierLog : allSupplierLogs) {
-                if (supplierLog.getSupplier() == supplier) {
-                    supplierLogs.add(supplierLog);
-                }
-            }
-        }
-        return supplierLogs;
-    }
-
-    public static SupplierLog getSupplierLogById(String identifier){
-        for (SupplierLog supplierLog : allSupplierLogs) {
-            if (supplierLog.getIdentifier().equals(identifier))
-                return supplierLog;
-        }
-        return null;
-    }
-
-    public String productsBoughtString() {
-        StringBuilder string = new StringBuilder();
-        int i = 1;
-        for (Product product : products) {
-            string.append("Product").append(i).append(". ").append(product.getProductId()).append(" X ").append(productsCount.get(product));
-            if (productsSale.get(product) != null) {
-                string.append(" in sale: ").append(productsSale.get(product).getOffId());
-            }
-            string.append("\n");
-        }
-        return string.toString();
-    }
-
-    @Override
-    public String toString() {
-        SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
-        return "SupplierLog on " + formatter.format(customerLog.getDate()) + ", Log identifier: " + identifier + "\n" +
-                "earnedMoney: " + earnedMoney + ", discountAmount: " + discountAmount + ", totalPurchase: " + totalPurchase + "\n" +
-                productsBoughtString();
+    public void setProductsSale(HashMap<Product, Sale> productsSale) {
+        this.productsSale = productsSale;
     }
 }

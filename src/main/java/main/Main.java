@@ -1,6 +1,6 @@
 package main;
 
-import Server.Server;
+import server.Server;
 import database.DataBase;
 
 import java.io.IOException;

@@ -1,4 +1,4 @@
-package Server.Communications;
+package server.communications;
 
 /**
  * @author Aryan Ahadinia

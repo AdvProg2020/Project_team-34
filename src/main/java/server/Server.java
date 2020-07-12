@@ -23,8 +23,7 @@ public class Server extends Thread {
             try {
                 Socket clientSocket = serverSocket.accept();
                 try {
-                    ClientThread clientThread = new ClientThread(this, clientSocket);
-                    clientThread.start();
+                    new ClientThread(this, clientSocket).start();
                 } catch (IOException e) {
                     System.err.println("Error: ClientThread start");
                 }

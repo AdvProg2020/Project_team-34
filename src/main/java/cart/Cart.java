@@ -7,6 +7,7 @@ import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
+import server.communications.Response;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -339,6 +340,11 @@ public class Cart {
         }
         return productInCount.get(productInCart);
     }
+
+    public static Cart convertJsonStringToCart(String jsonString){
+        return (Cart) Response.convertStringToObject(jsonString, "cart.Cart");
+    }
+
 
     @Override
     public String toString() {

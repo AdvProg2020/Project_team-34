@@ -1,6 +1,7 @@
 package account;
 
 import database.AccountDataBase;
+import server.communications.Response;
 
 /**
  * @author rpirayadi
@@ -60,6 +61,10 @@ public class Supplier extends Account{
         this.credit = credit;
         this.nameOfCompany = nameOfCompany;
         AccountDataBase.update(this);
+    }
+
+    public static Supplier convertJsonStringToSupplier(String jsonString){
+        return (Supplier) Response.convertStringToObject(jsonString, "account.Supplier");
     }
 
     @Override

@@ -2,7 +2,9 @@ package feedback;
 
 import account.Customer;
 import database.CommentDataBase;
+import discount.CodedDiscount;
 import product.Product;
+import server.communications.Response;
 
 import java.util.ArrayList;
 
@@ -106,6 +108,10 @@ public class Comment {
                 return eachComment;
         }
         return null;
+    }
+
+    public static Comment convertJsonStringToComment(String jsonString){
+        return (Comment) Response.convertStringToObject(jsonString, "feedback.Comment");
     }
 
     @Override

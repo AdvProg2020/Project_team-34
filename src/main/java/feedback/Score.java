@@ -3,7 +3,9 @@ package feedback;
 import account.Customer;
 import database.DataBase;
 import database.ScoreDataBase;
+import discount.CodedDiscount;
 import product.Product;
+import server.communications.Response;
 
 import java.util.ArrayList;
 
@@ -96,6 +98,9 @@ public class Score {
     }
 
 
+    public static Score convertJsonStringToScore(String jsonString){
+        return (Score) Response.convertStringToObject(jsonString, "score.Score");
+    }
 
     /**
      *

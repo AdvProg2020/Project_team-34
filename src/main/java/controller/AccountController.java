@@ -7,12 +7,15 @@ import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
+import com.google.gson.JsonObject;
 import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import log.LogStatus;
 import log.SupplierLog;
 import product.Product;
+import server.communications.RequestStatus;
+import server.communications.Response;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -48,66 +51,73 @@ public class AccountController {
         return mainController.getAccount();
     }
 
-    public void controlCreateAccount(String username, String type, String name, String familyName, String email,
-                                     String phoneNumber, String password, int credit, String nameOfCompany)
-            throws ExceptionalMassage {
-        if (username.trim().length() == 0) throw new ExceptionalMassage("username can't be empty");
-        if (name.trim().length() == 0) throw new ExceptionalMassage("name can't be empty");
-        if (familyName.trim().length() == 0) throw new ExceptionalMassage("family name can't be empty");
-        if (email.trim().length() == 0) throw new ExceptionalMassage("email can't be empty");
-        if (phoneNumber.trim().length() == 0) throw new ExceptionalMassage("phone number can't be empty");
-        if (password.trim().length() == 0) throw new ExceptionalMassage("password can't be empty");
+    public Response controlCreateAccount(String username, String type, String name, String familyName, String email,
+                                     String phoneNumber, String password, int credit, String nameOfCompany) {
+        if (username.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("username can't be empty"));
+        if (name.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("name can't be empty"));
+        if (familyName.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("family name can't be empty"));
+        if (email.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("email can't be empty"));
+        if (phoneNumber.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("phone number can't be empty"));
+        if (password.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("password can't be empty"));
 
         if (!Account.isUsernameAvailable(username))
-            throw new ExceptionalMassage("Duplicate username");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate username"));
         if (type.equals("customer")) {
-            if (credit == 0) throw new ExceptionalMassage("credit cannot be 0");
-            controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
+            if (credit == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
+            Response response = controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
             controlLogin(username, password);
+            return response;
         }
         if (type.equals("supplier")) {
-            if (nameOfCompany.trim().length() == 0) throw new ExceptionalMassage("credit cannot be 0");
-            controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
+            if (nameOfCompany.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
+            Response response = controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
+            if(response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
+                return response;
             controlLogin(username, password);
+            return response;
         }
         if (type.equals("supervisor"))
-            controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
+            return controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
+        return null;
     }
 
-    private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
+    private Response controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
                                        String password, int credit) {
         new Customer(username, name, familyName, email, phoneNumber, password, credit);
+        return Response.createSuccessResponse();
     }
 
-    private void controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber,
-                                       String password, int credit, String nameOfCompany) throws ExceptionalMassage {
+    private Response controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber,
+                                       String password, int credit, String nameOfCompany){
         if (Supplier.getSupplierByCompanyName(nameOfCompany) != null) {
-            throw new ExceptionalMassage("Duplicate company name.");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate company name."));
         }
         new Supplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
+        return Response.createSuccessResponse();
     }
 
-    private void controlCreateSupervisor(String username, String name, String familyName, String email,
-                                         String phoneNumber, String password, int credit) throws ExceptionalMassage {
+    private Response controlCreateSupervisor(String username, String name, String familyName, String email,
+                                         String phoneNumber, String password, int credit){
         mainController.setIsFirstSupervisorCreated(Account.isSupervisorCreated());
         if (mainController.getIsFirstSupervisorCreated()) {
             if (mainController.getAccount() == null)
-                throw new ExceptionalMassage("You must login as supervisor before create a supervisor account.");
+                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must login as supervisor before create a supervisor account."));
             if (!(mainController.getAccount() instanceof Supervisor))
-                throw new ExceptionalMassage("You must be a supervisor to create supervisor account.");
+                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must be a supervisor to create supervisor account."));
         }
         new Supervisor(username, name, familyName, email, phoneNumber, password, credit);
         mainController.setIsFirstSupervisorCreated(true);
+        return Response.createSuccessResponse();
     }
 
-    public void controlLogin(String username, String password) throws ExceptionalMassage {
+    public Response controlLogin(String username, String password){
         if (hasSomeOneLoggedIn())
-            throw new ExceptionalMassage("Logout first.");
+            return  Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Logout first."));
         Account account = Account.getAccountByUsernameWithinAvailable(username);
         if (account == null)
-            throw new ExceptionalMassage("Username doesn't exist.");
+            return  Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Username doesn't exist."));
         if (!account.getPassword().equals(password))
-            throw new ExceptionalMassage("Invalid password.");
+            return  Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Invalid password."));
         Cart cart = mainController.getCart();
         mainController.setAccount(account);
         if (account instanceof Customer) {
@@ -122,23 +132,27 @@ public class AccountController {
                 }
             }
         }
+        return new Response(RequestStatus.SUCCESSFUL,"");
     }
 
-    public void controlLogout() {
+    public Response controlLogout() {
         mainController.setAccount(null);
         mainController.setCart(new Cart(null));
         mainController.getProductController().getFilterAndSort().clear();
+        return Response.createSuccessResponse();
     }
 
-    public String controlViewPersonalInfo() {
-        return String.valueOf(mainController.getAccount());
+    public Response controlViewPersonalInfo() {
+        String personalInfo = Response.convertObjectToJsonString(mainController.getAccount());
+        return new Response(RequestStatus.SUCCESSFUL, personalInfo);
     }
 
-    public int controlViewBalance() {
-        return (mainController.getAccount()).getCredit();
+    public Response controlViewBalance() {
+        String credit = String.valueOf((mainController.getAccount()).getCredit());
+        return new Response(RequestStatus.SUCCESSFUL, credit);
     }
 
-    public void controlEditField(String field, String newValue) throws ExceptionalMassage {
+    public Response controlEditField(String field, String newValue) {
         Account account = mainController.getAccount();
         switch (field) {
             case "name":
@@ -158,7 +172,7 @@ public class AccountController {
                 try {
                     value = Integer.parseInt(newValue);
                 } catch (Exception exception) {
-                    throw new ExceptionalMassage("You must enter a number for credit");
+                   return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must enter a number for credit"));
                 }
                 account.setCredit(value);
                 break;
@@ -166,17 +180,17 @@ public class AccountController {
                 if (account instanceof Supplier)
                     ((Supplier) account).setNameOfCompany(newValue);
                 else
-                    throw new ExceptionalMassage("You must login as a Supplier to edit company name");
+                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must login as a Supplier to edit company name"));
                 break;
             case  "username":
-                throw new ExceptionalMassage("You can not edit username");
+                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You can not edit username"));
             case "password":
                 account.setPassword(newValue);
                 break;
             default:
-                throw new ExceptionalMassage("No such field " + field);
+                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No such field " + field));
         }
-
+        return Response.createSuccessResponse();
     }
 
     public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,

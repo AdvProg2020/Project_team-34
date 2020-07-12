@@ -24,35 +24,6 @@ public class Controller {
         accountController = new AccountController(this);
         productController = new ProductController(this);
         offController = new OffController(this);
-        periodicCodedDiscount();
-    }
-
-    public void periodicCodedDiscount() {
-        try {
-            Scanner reader = new Scanner(new File("src/main/java/PeriodicCodedDiscount.txt"));
-            reader.nextLine();
-            int percent = Integer.parseInt(reader.nextLine());
-            int maxAmount = Integer.parseInt(reader.nextLine());
-            long period = Long.parseLong(reader.nextLine());
-            long lastTime = Long.parseLong(reader.nextLine());
-            long timeNow = System.currentTimeMillis();
-            reader.close();
-            if (timeNow - lastTime >= period) {
-                FileWriter writer = new FileWriter(new File("src/main/java/PeriodicCodedDiscount.txt"));
-                writer.write("Data\n");
-                writer.write(percent + "\n");
-                writer.write(maxAmount + "\n");
-                writer.write(period + "\n");
-                writer.write(timeNow + "\n");
-                writer.write("percent, max amount, period, lastTime");
-                writer.close();
-                accountController.controlCreateRandomCodesForCustomers(Account.getRandomCustomers(), percent, maxAmount);
-            }
-        } catch (FileNotFoundException e) {
-            System.err.println("PeriodicCodedDiscount Err");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public AccountController getAccountController() {

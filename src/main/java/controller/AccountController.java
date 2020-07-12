@@ -443,17 +443,6 @@ public class AccountController {
         return Product.getRequestsForThisSupplier((Supplier) mainController.getAccount());
     }
 
-    public void controlCreateRandomCodesForCustomers(ArrayList<Customer> luckyCustomers,int percent, int maxAmount){
-        HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
-        String randomCode = CodedDiscount.codeGenerator();
-        for (Customer luckyCustomer : luckyCustomers) {
-            maxUsagePerCustomer.put(luckyCustomer, 1);
-        }
-        Date start = new Date(System.currentTimeMillis());
-        Date end = new Date(System.currentTimeMillis() + WEEK);
-        new CodedDiscount(randomCode,start, end,percent,maxAmount,maxUsagePerCustomer);
-    }
-
     public void controlCreateCodedDiscountForLoggedInCustomer(){
         Date start = new Date(System.currentTimeMillis());
         Date end = new Date(System.currentTimeMillis() + WEEK);
@@ -461,5 +450,18 @@ public class AccountController {
         HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
         maxUsagePerCustomer.put((Customer)mainController.getAccount(),1);
         new CodedDiscount(randomCode,start,end, 15, 100,maxUsagePerCustomer);
+    }
+
+    //Aryan:
+    public static synchronized void controlCreateRandomCodesForCustomers(ArrayList<Customer> luckyCustomers,
+                                                                         int percent, int maxAmount) {
+        HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
+        String randomCode = CodedDiscount.codeGenerator();
+        for (Customer luckyCustomer : luckyCustomers) {
+            maxUsagePerCustomer.put(luckyCustomer, 1);
+        }
+        Date start = new Date(System.currentTimeMillis());
+        Date end = new Date(System.currentTimeMillis() + WEEK);
+        new CodedDiscount(randomCode, start, end, percent, maxAmount, maxUsagePerCustomer);
     }
 }

@@ -15,7 +15,7 @@ import java.util.HashMap;
 
 public class OffController {
 
-    private Controller mainController;
+    private final Controller mainController;
 
     public OffController(Controller mainController) {
         this.mainController = mainController;

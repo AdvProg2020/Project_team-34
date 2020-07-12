@@ -77,4 +77,11 @@ public class Controller {
     public void setToken(String token) {
         this.token = token;
     }
+
+    public void disconnect() throws IOException {
+        objectOutputStream.close();
+        objectInputStream.close();
+        socket.close();
+        System.exit(0);
+    }
 }

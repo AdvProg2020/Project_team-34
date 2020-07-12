@@ -23,7 +23,7 @@ public class AccountController {
 
     private static final int BOUND = 100;
 
-    private Controller mainController;
+    private final Controller mainController;
 
     public AccountController(Controller mainController) {
         this.mainController = mainController;

@@ -21,7 +21,7 @@ import java.util.HashMap;
 
 public class ProductController {
 
-    private Controller mainController;
+    private final Controller mainController;
     private final FilterAndSort filterAndSort;
 
     public ProductController(Controller mainController) {

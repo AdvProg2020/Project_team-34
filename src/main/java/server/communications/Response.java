@@ -54,7 +54,18 @@ public class Response {
         return new Response(requestStatus, content);
     }
 
-    //this methods are here temporarily
+    public static Response createResponseFromExceptionalMassage(ExceptionalMassage exceptionalMassage){
+        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+    }
+
+    public static Response createResponseFromExceptionalMassage(String message){
+        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, message);
+    }
+
+    public static Response createSuccessResponse(){
+        return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
     public static String convertObjectToJsonString(Object object){
         Gson gson = new Gson();
         return gson.toJson(object);
@@ -68,13 +79,4 @@ public class Response {
             return null;
         }
     }
-
-    public static Response createResponseFromExceptionalMassage(ExceptionalMassage exceptionalMassage){
-        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
-    }
-
-    public static Response createSuccessResponse(){
-        return new Response(RequestStatus.SUCCESSFUL, "");
-    }
-
 }

@@ -22,10 +22,14 @@ public class Server extends Thread {
         while (unlocked) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                ClientThread clientThread = new ClientThread(clientSocket, this);
-                clientThread.start();
+                try {
+                    ClientThread clientThread = new ClientThread(this, clientSocket);
+                    clientThread.start();
+                } catch (IOException e) {
+                    System.err.println("Error: ClientThread start");
+                }
             } catch (IOException e) {
-                e.printStackTrace();
+                System.err.println("Error: accepting client socket");
             }
         }
     }

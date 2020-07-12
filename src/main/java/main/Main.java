@@ -24,10 +24,11 @@ public class Main {
             System.exit(1);
         }
         while (true) {
-            System.out.print("server :: command > ");
             String command = scanner.nextLine();
             if (command.equalsIgnoreCase("shutdown")) {
                 System.exit(0);
+            } else {
+                System.err.println("Invalid command.");
             }
         }
     }

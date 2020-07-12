@@ -1,5 +1,7 @@
 package server;
 
+import discount.PeriodicCodedDiscountGenerator;
+
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;

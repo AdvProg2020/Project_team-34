@@ -1,4 +1,4 @@
-package server;
+package discount;
 
 import account.Account;
 import controller.AccountController;

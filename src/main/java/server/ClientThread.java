@@ -31,7 +31,7 @@ public class ClientThread extends Thread {
     }
 
     public void analyseRequest(JsonElement requestJson){
-
+        //This method needs modification!
         //Parsing the requestJson to Request!
         Gson gson = new Gson();
         Request request = gson.fromJson(requestJson,Request.class);
@@ -80,10 +80,11 @@ public class ClientThread extends Thread {
                 method.invoke(controller.getProductController(),values.toArray());
             }
         } catch (Exception ex){
+            System.out.println("Can't call the method...; Error type:");
             System.out.println(ex.getMessage());
-            System.out.println("Can't call the method...!");
+
         }
-
-
     }
+
+
 }

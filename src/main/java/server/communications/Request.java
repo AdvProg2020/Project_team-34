@@ -1,5 +1,9 @@
 package server.communications;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+
 /**
  * @author Aryan Ahadinia
  * @author Soheil Mahdi Zadeh
@@ -50,5 +54,17 @@ public class Request {
 
     public void setSource(ControllerSource source) {
         this.source = source;
+    }
+
+    public String convertToJsonParsableString(){
+        //This method needs modification!
+        JsonObject json = new JsonObject();
+        json.addProperty("Token",token);
+        json.addProperty("FunctionName",function);
+        json.addProperty("ControllerType", source.toString());
+        JsonParser parser = new JsonParser();
+        json.add("Arguments",parser.parse(inputs));
+
+        return json.toString();
     }
 }

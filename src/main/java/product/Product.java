@@ -2,15 +2,12 @@ package product;
 
 import account.Supplier;
 import database.ProductDataBase;
-import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
-import server.communications.Response;
+import server.communications.Utils;
 import state.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Objects;
 
 /**
  * @author rpirayadi
@@ -558,7 +555,7 @@ public class Product {
     }
 
     public static Product convertJsonStringToProduct(String jsonString){
-        return (Product) Response.convertStringToObject(jsonString, "product.Product");
+        return (Product) Utils.convertStringToObject(jsonString, "product.Product");
     }
 
     @Override

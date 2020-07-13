@@ -2,6 +2,7 @@ package account;
 
 import database.AccountDataBase;
 import server.communications.Response;
+import server.communications.Utils;
 
 /**
  * @author rpirayadi
@@ -20,7 +21,7 @@ public class Supervisor extends Account {
     }
 
     public static Supervisor convertJsonStringToSupervisor(String jsonString){
-        return (Supervisor) Response.convertStringToObject(jsonString, "account.Supervisor");
+        return (Supervisor) Utils.convertStringToObject(jsonString, "account.Supervisor");
     }
 
     public String toString() {

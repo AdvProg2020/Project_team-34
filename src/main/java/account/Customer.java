@@ -3,6 +3,7 @@ package account;
 import cart.Cart;
 import database.AccountDataBase;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.util.Objects;
 
@@ -36,7 +37,7 @@ public class Customer extends Account {
     }
 
     public static Customer convertJsonStringToCustomer(String jsonString){
-        return (Customer) Response.convertStringToObject(jsonString, "account.Customer");
+        return (Customer) Utils.convertStringToObject(jsonString, "account.Customer");
     }
 
     @Override

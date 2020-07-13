@@ -6,6 +6,7 @@ import database.ScoreDataBase;
 import discount.CodedDiscount;
 import product.Product;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.util.ArrayList;
 
@@ -99,7 +100,7 @@ public class Score {
 
 
     public static Score convertJsonStringToScore(String jsonString){
-        return (Score) Response.convertStringToObject(jsonString, "score.Score");
+        return (Score) Utils.convertStringToObject(jsonString, "score.Score");
     }
 
     /**

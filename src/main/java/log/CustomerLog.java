@@ -10,6 +10,7 @@ import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -223,8 +224,8 @@ public class CustomerLog {
         return productsBoughtFromSupplierSale;
     }
 
-    public static CustomerLog convertJsonStringToCustomerLog(String jsonString){
-        return (CustomerLog) Response.convertStringToObject(jsonString, "log.CustomerLog");
+    public static CustomerLog convertJsonStringToCustomerLog(String jsonString) {
+        return (CustomerLog) Utils.convertStringToObject(jsonString, "log.CustomerLog");
     }
 
 

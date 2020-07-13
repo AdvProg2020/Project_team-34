@@ -3,6 +3,7 @@ package cart;
 import account.Supplier;
 import database.ShippingInfoDataBase;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.util.ArrayList;
 
@@ -96,7 +97,7 @@ public class ShippingInfo {
     }
 
     public static ShippingInfo convertJsonStringToShippingInfo(String jsonString){
-        return (ShippingInfo) Response.convertStringToObject(jsonString, "cart.ShippingInfo");
+        return (ShippingInfo) Utils.convertStringToObject(jsonString, "cart.ShippingInfo");
     }
 
 

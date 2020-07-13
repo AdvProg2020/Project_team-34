@@ -1,6 +1,9 @@
 package server;
 
-import com.google.gson.*;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import controller.Controller;
 import server.communications.ControllerSource;
 import server.communications.Request;
@@ -25,7 +28,11 @@ public class ClientThread extends Thread {
         this.socket = socket;
         this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         this.objectInputStream = new ObjectInputStream(socket.getInputStream());
-        this.controller = new Controller();
+        this.controller = new Controller(this, server.assignToken(this));
+    }
+
+    public String getNewToken() {
+        return server.changeToken(controller.getToken());
     }
 
     @Override
@@ -77,6 +84,7 @@ public class ClientThread extends Thread {
         } catch (IOException e) {
             status = false;
         }
+        server.clientGoodbye(controller.getToken());
         return status;
     }
 
@@ -136,5 +144,4 @@ public class ClientThread extends Thread {
         }
         return null;
     }
-
 }

@@ -6,6 +6,7 @@ import database.SaleDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import server.communications.Response;
+import server.communications.Utils;
 import state.State;
 
 import java.util.ArrayList;
@@ -290,7 +291,7 @@ public class Sale extends Discount {
     }
 
     public static Sale convertJsonStringToSale(String jsonString){
-        return (Sale) Response.convertStringToObject(jsonString, "discount.Sale");
+        return (Sale) Utils.convertStringToObject(jsonString, "discount.Sale");
     }
 
     @Override

@@ -2,6 +2,7 @@ package account;
 
 import database.AccountDataBase;
 import server.communications.Response;
+import server.communications.Utils;
 
 /**
  * @author rpirayadi
@@ -64,7 +65,7 @@ public class Supplier extends Account{
     }
 
     public static Supplier convertJsonStringToSupplier(String jsonString){
-        return (Supplier) Response.convertStringToObject(jsonString, "account.Supplier");
+        return (Supplier) Utils.convertStringToObject(jsonString, "account.Supplier");
     }
 
     @Override

@@ -1,9 +1,8 @@
 package product;
 
 import database.CategoryDataBase;
-import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
-import server.communications.Response;
+import server.communications.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -372,6 +371,6 @@ public class Category {
     }
 
     public static Category convertJsonStringToCategory(String jsonString){
-        return (Category) Response.convertStringToObject(jsonString, "product.Category");
+        return (Category) Utils.convertStringToObject(jsonString, "product.Category");
     }
 }

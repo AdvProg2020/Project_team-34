@@ -4,6 +4,7 @@ import account.Supplier;
 import database.ProductInCartDataBase;
 import product.Product;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.util.ArrayList;
 
@@ -68,7 +69,7 @@ public class ProductInCart {
     }
 
     public static ProductInCart convertJsonStringToProdcutInCart(String jsonString){
-        return (ProductInCart) Response.convertStringToObject(jsonString, "cart.ProductInCart");
+        return (ProductInCart) Utils.convertStringToObject(jsonString, "cart.ProductInCart");
     }
 
 }

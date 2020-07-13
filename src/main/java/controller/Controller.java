@@ -2,31 +2,66 @@ package controller;
 
 import account.Account;
 import cart.Cart;
-import server.Server;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Scanner;
+import server.ClientThread;
 
 public class Controller {
+    private final ClientThread clientThread;
+
+    private String token;
     private Account account;
     private Cart cart;
-    private String token;
+
     private boolean isFirstSupervisorCreated;
+
     private final AccountController accountController;
     private final ProductController productController;
     private final OffController offController;
 
-    public Controller() {
-        account = null;
-        cart = new Cart(null);
-        isFirstSupervisorCreated = Account.isFirstSupervisorCreated();
-        accountController = new AccountController(this);
-        productController = new ProductController(this);
-        offController = new OffController(this);
-        token = Server.generateToken();
+    public Controller(ClientThread clientThread, String firstToken) {
+        this.clientThread = clientThread;
+        this.token = firstToken;
+        this.account = null;
+        this.cart = new Cart(null);
+        this.isFirstSupervisorCreated = Account.isFirstSupervisorCreated();
+        this.accountController = new AccountController(this);
+        this.productController = new ProductController(this);
+        this.offController = new OffController(this);
+    }
+
+    public ClientThread getClientThread() {
+        return clientThread;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
+    }
+
+    public boolean getIsFirstSupervisorCreated() {
+        return isFirstSupervisorCreated;
+    }
+
+    public void setIsFirstSupervisorCreated(boolean firstSupervisorCreated) {
+        isFirstSupervisorCreated = firstSupervisorCreated;
     }
 
     public AccountController getAccountController() {
@@ -39,37 +74,5 @@ public class Controller {
 
     public OffController getOffController() {
         return offController;
-    }
-
-    public Account getAccount() {
-        return account;
-    }
-
-    public Cart getCart() {
-        return cart;
-    }
-
-    public boolean getIsFirstSupervisorCreated() {
-        return isFirstSupervisorCreated;
-    }
-
-    public void setAccount(Account account) {
-        this.account = account;
-    }
-
-    public void setCart(Cart cart) {
-        this.cart = cart;
-    }
-
-    public void setIsFirstSupervisorCreated(boolean firstSupervisorCreated) {
-        isFirstSupervisorCreated = firstSupervisorCreated;
-    }
-
-    public String getToken() {
-        return token;
-    }
-
-    public void setToken(String token) {
-        this.token = token;
     }
 }

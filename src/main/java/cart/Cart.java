@@ -8,6 +8,7 @@ import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -342,7 +343,7 @@ public class Cart {
     }
 
     public static Cart convertJsonStringToCart(String jsonString){
-        return (Cart) Response.convertStringToObject(jsonString, "cart.Cart");
+        return (Cart) Utils.convertStringToObject(jsonString, "cart.Cart");
     }
 
 

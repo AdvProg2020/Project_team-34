@@ -16,6 +16,7 @@ import log.SupplierLog;
 import product.Product;
 import server.communications.RequestStatus;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -143,7 +144,7 @@ public class AccountController {
     }
 
     public Response controlViewPersonalInfo() {
-        String personalInfo = Response.convertObjectToJsonString(mainController.getAccount());
+        String personalInfo = Utils.convertObjectToJsonString(mainController.getAccount());
         return new Response(RequestStatus.SUCCESSFUL, personalInfo);
     }
 

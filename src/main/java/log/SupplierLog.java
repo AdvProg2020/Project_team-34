@@ -5,6 +5,7 @@ import discount.CodedDiscount;
 import discount.Sale;
 import product.Product;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -135,7 +136,7 @@ public class SupplierLog {
     }
 
     public static SupplierLog convertJsonStringToSupplierLog(String jsonString){
-        return (SupplierLog) Response.convertStringToObject(jsonString, "log.SupplierLog");
+        return (SupplierLog) Utils.convertStringToObject(jsonString, "log.SupplierLog");
     }
 
     @Override

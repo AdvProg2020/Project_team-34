@@ -4,6 +4,7 @@ import account.Customer;
 import account.Supplier;
 import database.CodedDiscountDataBase;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -144,7 +145,7 @@ public class CodedDiscount extends Discount{
     }
 
     public static CodedDiscount convertJsonStringToCodedDiscount(String jsonString){
-        return (CodedDiscount) Response.convertStringToObject(jsonString, "discount.CodedDiscount");
+        return (CodedDiscount) Utils.convertStringToObject(jsonString, "discount.CodedDiscount");
     }
 
 

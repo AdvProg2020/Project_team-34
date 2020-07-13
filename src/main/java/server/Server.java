@@ -4,18 +4,40 @@ import discount.PeriodicCodedDiscountGenerator;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.HashMap;
 
 public class Server extends Thread {
     private final ServerSocket serverSocket;
+    private final HashMap<String, ClientThread> tokenToClientThreadHashMap;
     private boolean unlocked;
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(8088);
+        tokenToClientThreadHashMap = new HashMap<>();
         this.unlocked = true;
         new PeriodicCodedDiscountGenerator(true).start();
     }
 
-    public static String generateToken() {
+    public synchronized String assignToken(ClientThread clientThread) {
+        String token;
+        do {
+            token = generateRandomToken();
+        } while (tokenToClientThreadHashMap.containsKey(token));
+        tokenToClientThreadHashMap.put(token, clientThread);
+        return token;
+    }
+
+    public synchronized String changeToken(String token) {
+        ClientThread clientThread = tokenToClientThreadHashMap.get(token);
+        tokenToClientThreadHashMap.remove(token);
+        return assignToken(clientThread);
+    }
+
+    public void clientGoodbye(String token) {
+        tokenToClientThreadHashMap.remove(token);
+    }
+
+    public String generateRandomToken() {
         return "";
     }
 

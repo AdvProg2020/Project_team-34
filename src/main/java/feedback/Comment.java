@@ -5,6 +5,7 @@ import database.CommentDataBase;
 import discount.CodedDiscount;
 import product.Product;
 import server.communications.Response;
+import server.communications.Utils;
 
 import java.util.ArrayList;
 
@@ -111,7 +112,7 @@ public class Comment {
     }
 
     public static Comment convertJsonStringToComment(String jsonString){
-        return (Comment) Response.convertStringToObject(jsonString, "feedback.Comment");
+        return (Comment) Utils.convertStringToObject(jsonString, "feedback.Comment");
     }
 
     @Override

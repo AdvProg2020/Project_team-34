@@ -2,6 +2,7 @@ package exceptionalMassage;
 
 import discount.CodedDiscount;
 import server.communications.Response;
+import server.communications.Utils;
 
 /**
  * @author Aryan Ahadinia
@@ -14,7 +15,7 @@ public class ExceptionalMassage extends Exception {
     }
 
     public static ExceptionalMassage convertJsonStringToExceptionalMessage(String jsonString){
-        return (ExceptionalMassage) Response.convertStringToObject(jsonString, "exceptionalMessage.ExceptionalMessage");
+        return (ExceptionalMassage) Utils.convertStringToObject(jsonString, "exceptionalMessage.ExceptionalMessage");
     }
 }
 

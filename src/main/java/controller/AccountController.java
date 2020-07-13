@@ -7,6 +7,11 @@ import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
+import com.google.gson.JsonArray;
+import communications.ControllerSource;
+import communications.Request;
+import communications.RequestStatus;
+import communications.Response;
 import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
@@ -14,6 +19,7 @@ import log.LogStatus;
 import log.SupplierLog;
 import product.Product;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -101,26 +107,24 @@ public class AccountController {
     }
 
     public void controlLogin(String username, String password) throws ExceptionalMassage {
-        if (hasSomeOneLoggedIn())
-            throw new ExceptionalMassage("Logout first.");
-        Account account = Account.getAccountByUsernameWithinAvailable(username);
-        if (account == null)
-            throw new ExceptionalMassage("Username doesn't exist.");
-        if (!account.getPassword().equals(password))
-            throw new ExceptionalMassage("Invalid password.");
-        Cart cart = mainController.getCart();
-        mainController.setAccount(account);
-        if (account instanceof Customer) {
-            if (cart.isCartClear()) {
-                mainController.setCart(((Customer) mainController.getAccount()).getCart());
-            } else {
-                if (((Customer) account).getCart().isCartClear()) {
-                    ((Customer) account).setCart(cart);
-                    cart.setOwner((Customer) account);
-                } else {
-                    mainController.setCart(((Customer) account).getCart());
-                }
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(username);
+        jsonArray.add(password);
+        Request request = new Request(mainController.getToken(), "controlLogin", jsonArray.toString(),
+                ControllerSource.ACCOUNT_CONTROLLER);
+        try {
+            mainController.getObjectOutputStream().writeUTF(Response.convertObjectToJsonString(request));
+        } catch (IOException e) {
+            throw new ExceptionalMassage("Request failed");
+        }
+        try {
+            String responseString = mainController.getObjectInputStream().readUTF();
+            Response response = Response.convertJsonStringToResponse(responseString);
+            if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
+                throw new ExceptionalMassage(response.getContent());
             }
+        } catch (IOException e) {
+            throw new ExceptionalMassage("Response not received");
         }
     }
 

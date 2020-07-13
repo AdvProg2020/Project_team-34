@@ -79,6 +79,7 @@ public class Controller {
     }
 
     public void disconnect() throws IOException {
+        objectOutputStream.writeUTF("goodbye");
         objectOutputStream.close();
         objectInputStream.close();
         socket.close();

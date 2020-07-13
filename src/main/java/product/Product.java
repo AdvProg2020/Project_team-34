@@ -2,7 +2,9 @@ package product;
 
 import account.Supplier;
 import database.ProductDataBase;
+import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
+import server.communications.Response;
 import state.State;
 
 import java.util.ArrayList;
@@ -553,6 +555,10 @@ public class Product {
                 minimumPrice = this.getPrice(supplier);
         }
         return minimumPrice;
+    }
+
+    public static Product convertJsonStringToProduct(String jsonString){
+        return (Product) Response.convertStringToObject(jsonString, "product.Product");
     }
 
     @Override

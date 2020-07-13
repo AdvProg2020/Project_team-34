@@ -2,6 +2,7 @@ package account;
 
 import cart.Cart;
 import database.AccountDataBase;
+import server.communications.Response;
 
 import java.util.Objects;
 
@@ -34,6 +35,10 @@ public class Customer extends Account {
         AccountDataBase.update(this);
     }
 
+    public static Customer convertJsonStringToCustomer(String jsonString){
+        return (Customer) Response.convertStringToObject(jsonString, "account.Customer");
+    }
+
     @Override
     public String toString() {
         return "Customer: \n" +
@@ -53,4 +58,6 @@ public class Customer extends Account {
         }
         return this.getUserName().equals(((Customer) o).getUserName());
     }
+
+
 }

@@ -1,7 +1,9 @@
 package discount;
 
 import account.Customer;
+import account.Supplier;
 import database.CodedDiscountDataBase;
+import server.communications.Response;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -140,6 +142,11 @@ public class CodedDiscount extends Discount{
         //Aryan
         return Integer.min((initialAmount * percent) / 100, maxDiscountAmount);
     }
+
+    public static CodedDiscount convertJsonStringToCodedDiscount(String jsonString){
+        return (CodedDiscount) Response.convertStringToObject(jsonString, "discount.CodedDiscount");
+    }
+
 
     @Override
     public String toString() {

@@ -1,6 +1,7 @@
 package account;
 
 import database.AccountDataBase;
+import server.communications.Response;
 
 /**
  * @author rpirayadi
@@ -16,6 +17,10 @@ public class Supervisor extends Account {
 
     public Supervisor(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit, boolean isAvailable) {
         super(userName, name, familyName, email, phoneNumber, password, credit, isAvailable);
+    }
+
+    public static Supervisor convertJsonStringToSupervisor(String jsonString){
+        return (Supervisor) Response.convertStringToObject(jsonString, "account.Supervisor");
     }
 
     public String toString() {

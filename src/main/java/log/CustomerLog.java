@@ -5,9 +5,11 @@ import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import database.CustomerLogDataBase;
+import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
+import server.communications.Response;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -219,6 +221,10 @@ public class CustomerLog {
             }
         }
         return productsBoughtFromSupplierSale;
+    }
+
+    public static CustomerLog convertJsonStringToCustomerLog(String jsonString){
+        return (CustomerLog) Response.convertStringToObject(jsonString, "log.CustomerLog");
     }
 
 

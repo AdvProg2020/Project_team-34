@@ -32,7 +32,9 @@ public class ClientThread extends Thread {
     public void run() {
         while (true) {
             try {
+                System.out.println("C1");
                 String requestString = objectInputStream.readUTF();
+                System.out.println(requestString);
                 if (requestString.equals("super_disconnect")) {
                     break;
                 }

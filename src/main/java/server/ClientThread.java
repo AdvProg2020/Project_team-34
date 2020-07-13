@@ -35,23 +35,24 @@ public class ClientThread extends Thread {
         }
     }
 
-    public Response analyseRequest(JsonElement requestJson){
+    public Response analyseRequest(String requestStringJson){
         //This method needs modification!
         //Parsing the requestJson to Request!
         Gson gson = new Gson();
+        JsonParser jsonParser = new JsonParser();
+        JsonElement requestJson = jsonParser.parse(requestStringJson);
         Request request = gson.fromJson(requestJson,Request.class);
         String functionName = request.getFunction();
         String token = request.getToken();
         //Analysing the token and checking if it's valid
         ArrayList<Class> params = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
-        JsonParser jsonParser = new JsonParser();
         JsonObject arguments = (JsonObject)jsonParser.parse(request.getInputs());
         JsonArray argumentsArray = arguments.getAsJsonArray("Arguments");
 
         if(argumentsArray != null){
             for (JsonElement jsonElement : argumentsArray) {
-                values.add(jsonElement.getAsJsonObject().get("Value").getAsString());
+                values.add(jsonElement.getAsString());
                 try {
                     params.add(Class.forName("java.lang.String"));
                 } catch (ClassNotFoundException e) {
@@ -90,6 +91,5 @@ public class ClientThread extends Thread {
         }
         return null;
     }
-
 
 }

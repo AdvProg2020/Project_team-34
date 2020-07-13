@@ -4,8 +4,11 @@ import com.google.gson.*;
 import controller.Controller;
 import server.communications.ControllerSource;
 import server.communications.Request;
+import server.communications.Response;
 
-import java.io.*;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -27,10 +30,12 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
-        System.err.println("Thread run");
+        while (true) {
+            String requestString = objectInputStream.readUTF();
+        }
     }
 
-    public void analyseRequest(JsonElement requestJson){
+    public Response analyseRequest(JsonElement requestJson){
         //This method needs modification!
         //Parsing the requestJson to Request!
         Gson gson = new Gson();
@@ -63,27 +68,27 @@ public class ClientThread extends Thread {
                 } else {
                     method = controller.getAccount().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
                 }
-                method.invoke(controller.getAccount(),values.toArray());
+                return (Response) method.invoke(controller.getAccount(),values.toArray());
             } else if (request.getSource() == ControllerSource.OFF_CONTROLLER) {
                 if (params.size() == 0) {
                     method = controller.getAccount().getClass().getMethod(functionName);
                 } else {
                     method = controller.getAccount().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
                 }
-                method.invoke(controller.getOffController(),values.toArray());
+                return (Response) method.invoke(controller.getOffController(),values.toArray());
             } else if (request.getSource() == ControllerSource.PRODUCT_CONTROLLER) {
                 if (params.size() == 0) {
                     method = controller.getAccount().getClass().getMethod(functionName);
                 } else {
                     method = controller.getAccount().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
                 }
-                method.invoke(controller.getProductController(),values.toArray());
+                return (Response) method.invoke(controller.getProductController(),values.toArray());
             }
         } catch (Exception ex){
             System.out.println("Can't call the method...; Error type:");
             System.out.println(ex.getMessage());
-
         }
+        return null;
     }
 
 

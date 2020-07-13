@@ -63,8 +63,8 @@ public class ClientThread extends Thread {
         //Analysing the token and checking if it's valid
         ArrayList<Class> params = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
-        JsonObject arguments = (JsonObject)jsonParser.parse(request.getInputs());
-        JsonArray argumentsArray = arguments.getAsJsonArray("Arguments");
+
+        JsonArray argumentsArray = (JsonArray)jsonParser.parse(request.getInputs());
 
         if(argumentsArray != null){
             for (JsonElement jsonElement : argumentsArray) {

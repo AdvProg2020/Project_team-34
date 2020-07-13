@@ -35,7 +35,7 @@ public class ClientThread extends Thread {
         }
     }
 
-    public Response analyseRequest(String requestStringJson){
+    private Response analyseRequest(String requestStringJson){
         //This method needs modification!
         //Parsing the requestJson to Request!
         Gson gson = new Gson();

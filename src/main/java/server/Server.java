@@ -15,6 +15,10 @@ public class Server extends Thread {
         new PeriodicCodedDiscountGenerator(true).start();
     }
 
+    public static String generateToken() {
+        return "";
+    }
+
     public void setUnlocked(boolean unlocked) {
         this.unlocked = unlocked;
     }

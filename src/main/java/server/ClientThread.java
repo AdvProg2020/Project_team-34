@@ -23,15 +23,29 @@ public class ClientThread extends Thread {
     public ClientThread(Server server, Socket socket) throws IOException {
         this.server = server;
         this.socket = socket;
-        this.controller = new Controller();
         this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         this.objectInputStream = new ObjectInputStream(socket.getInputStream());
+        this.controller = new Controller();
     }
 
     @Override
     public void run() {
         while (true) {
-            String requestString = objectInputStream.readUTF();
+            try {
+                String requestString = objectInputStream.readUTF();
+                if (requestString.equals("super_disconnect")) {
+                    break;
+                }
+                try {
+                    objectOutputStream.writeUTF(analyseRequest(requestString).convertResponseToJsonString());
+                } catch (IOException e) {
+                    System.err.println("Error, OutputStream: username:" + controller.getAccount().getUserName() +
+                            " token: " + controller.getToken());
+                }
+            } catch (IOException e) {
+                System.err.println("Error, InputStream: username:" + controller.getAccount().getUserName() + " token: "
+                        + controller.getToken());
+            }
         }
     }
 

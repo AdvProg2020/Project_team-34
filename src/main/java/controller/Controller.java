@@ -2,6 +2,7 @@ package controller;
 
 import account.Account;
 import cart.Cart;
+import server.Server;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -12,6 +13,7 @@ import java.util.Scanner;
 public class Controller {
     private Account account;
     private Cart cart;
+    private String token;
     private boolean isFirstSupervisorCreated;
     private final AccountController accountController;
     private final ProductController productController;
@@ -24,6 +26,7 @@ public class Controller {
         accountController = new AccountController(this);
         productController = new ProductController(this);
         offController = new OffController(this);
+        token = Server.generateToken();
     }
 
     public AccountController getAccountController() {
@@ -60,5 +63,13 @@ public class Controller {
 
     public void setIsFirstSupervisorCreated(boolean firstSupervisorCreated) {
         isFirstSupervisorCreated = firstSupervisorCreated;
+    }
+
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }

@@ -3,8 +3,7 @@ package server;
 import discount.PeriodicCodedDiscountGenerator;
 
 import java.io.IOException;
-import java.net.ServerSocket;
-import java.net.Socket;
+import java.net.*;
 
 public class Server extends Thread {
     private final ServerSocket serverSocket;
@@ -22,6 +21,12 @@ public class Server extends Thread {
 
     @Override
     public void run() {
+        try {
+            System.out.println("Server local ip: " + InetAddress.getLocalHost());
+        } catch (UnknownHostException e) {
+            System.err.println("Error: localhost UnknownHostException");
+        }
+        System.out.println("Server is up");
         while (unlocked) {
             try {
                 Socket clientSocket = serverSocket.accept();

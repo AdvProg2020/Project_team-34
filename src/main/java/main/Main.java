@@ -35,7 +35,6 @@ public class Main {
         try {
             Server server = new Server();
             server.start();
-            System.out.println("Server is up");
         } catch (IOException e) {
             System.err.println("Error During starting server");
             scanner.close();

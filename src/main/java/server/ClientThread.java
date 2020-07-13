@@ -32,23 +32,52 @@ public class ClientThread extends Thread {
     public void run() {
         while (true) {
             try {
-                System.out.println("C1");
                 String requestString = objectInputStream.readUTF();
-                System.out.println(requestString);
-                if (requestString.equals("super_disconnect")) {
+                if (requestString.equals("goodbye")) {
+                    disconnect();
                     break;
                 }
                 try {
                     objectOutputStream.writeUTF(analyseRequest(requestString).convertResponseToJsonString());
+                    objectOutputStream.flush();
                 } catch (IOException e) {
-                    System.err.println("Error, OutputStream: username:" + controller.getAccount().getUserName() +
-                            " token: " + controller.getToken());
+                    System.err.println("Error, OutputStream");
+                    break;
                 }
             } catch (IOException e) {
-                System.err.println("Error, InputStream: username:" + controller.getAccount().getUserName() + " token: "
-                        + controller.getToken());
+                try {
+                    if (objectInputStream.read() == -1) {
+                        disconnect();
+                        System.err.println("InputStream IOException, user eventually disconnected, Thread disconnected");
+                        break;
+                    }
+                } catch (IOException ioException) {
+                    System.err.println("Error reading InputStream status");
+                    break;
+                }
+                System.err.println("Error, InputStream");
             }
         }
+    }
+
+    private boolean disconnect() {
+        boolean status = true;
+        try {
+            socket.close();
+        } catch (IOException e) {
+            status = false;
+        }
+        try {
+            objectOutputStream.close();
+        } catch (IOException e) {
+            status = false;
+        }
+        try {
+            objectInputStream.close();
+        } catch (IOException e) {
+            status = false;
+        }
+        return status;
     }
 
     private Response analyseRequest(String requestStringJson){
@@ -81,23 +110,23 @@ public class ClientThread extends Thread {
         try {
             if (request.getSource() == ControllerSource.ACCOUNT_CONTROLLER) {
                 if (params.size() == 0) {
-                    method = controller.getAccount().getClass().getMethod(functionName);
+                    method = controller.getAccountController().getClass().getMethod(functionName);
                 } else {
-                    method = controller.getAccount().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
+                    method = controller.getAccountController().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
                 }
-                return (Response) method.invoke(controller.getAccount(),values.toArray());
+                return (Response) method.invoke(controller.getAccountController(),values.toArray());
             } else if (request.getSource() == ControllerSource.OFF_CONTROLLER) {
                 if (params.size() == 0) {
-                    method = controller.getAccount().getClass().getMethod(functionName);
+                    method = controller.getOffController().getClass().getMethod(functionName);
                 } else {
-                    method = controller.getAccount().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
+                    method = controller.getOffController().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
                 }
                 return (Response) method.invoke(controller.getOffController(),values.toArray());
             } else if (request.getSource() == ControllerSource.PRODUCT_CONTROLLER) {
                 if (params.size() == 0) {
-                    method = controller.getAccount().getClass().getMethod(functionName);
+                    method = controller.getProductController().getClass().getMethod(functionName);
                 } else {
-                    method = controller.getAccount().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
+                    method = controller.getProductController().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
                 }
                 return (Response) method.invoke(controller.getProductController(),values.toArray());
             }

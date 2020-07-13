@@ -10,7 +10,7 @@ public class Server extends Thread {
     private boolean unlocked;
 
     public Server() throws IOException {
-        this.serverSocket = new ServerSocket(8080);
+        this.serverSocket = new ServerSocket(8088);
         this.unlocked = true;
         new PeriodicCodedDiscountGenerator(true).start();
     }

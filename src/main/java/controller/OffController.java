@@ -1,25 +1,22 @@
 package controller;
 
-import account.Account;
 import account.Customer;
 import account.Supplier;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import communications.ControllerSource;
-import communications.Response;
+import communications.Utils;
 import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
-import state.State;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 public class OffController {
-
     private final Controller mainController;
 
     public OffController(Controller mainController) {
@@ -31,130 +28,117 @@ public class OffController {
                 communication(function, inputs, ControllerSource.OFF_CONTROLLER).getContent());
     }
 
-    public ArrayList<CodedDiscount> controlGetAllCodedDiscounts(){
-        return CodedDiscount.getCodedDiscounts();
-    }
-
-    public CodedDiscount controlGetDiscountByCode(String code) throws ExceptionalMassage{
-        for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
-            if(codedDiscount.getDiscountCode().equals(code)){
-                return codedDiscount;
-            }
-        }
-        throw new ExceptionalMassage("No such code");
-    }
-
-    public void controlEditDiscountByCode (String code, Date newStartDate, Date newEndDate, int newPercent, int newMaxDiscount) throws ExceptionalMassage{
-        if(controlGetDiscountByCode(code) == null){
-            throw new ExceptionalMassage("No CodedDiscount with this Code");
-        }
-        controlGetDiscountByCode(code).setStart(newStartDate);
-        controlGetDiscountByCode(code).setEnd(newEndDate);
-        controlGetDiscountByCode(code).setPercent(newPercent);
-        controlGetDiscountByCode(code).setMaxDiscountAmount(newMaxDiscount);
-    }
-
-    public void controlCreateCodedDiscount(String code, Date startDate, Date endDate, int percent, int maxDiscountAmount, HashMap<Customer, Integer> maxNumberOfUsage) throws ExceptionalMassage {
-        for (CodedDiscount codedDiscount : controlGetAllCodedDiscounts()) {
-            if(codedDiscount.getDiscountCode().equals(code)){
-                throw new ExceptionalMassage("Code already exists!");
-            }
-        }
-        if (maxNumberOfUsage.size() == 0){
-            throw new ExceptionalMassage("Select at Least one customer, please!");
-        }
-        new CodedDiscount(code,startDate, endDate, percent, maxDiscountAmount, maxNumberOfUsage);
-    }
-
-    public void controlRemoveDiscountCode(String code) throws ExceptionalMassage{
-        if(controlGetDiscountByCode(code) == null){
-            throw new ExceptionalMassage("No such code!");
-        }
-        CodedDiscount.removeCodeFromList(controlGetDiscountByCode(code));
-    }
-
-    public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products) throws ExceptionalMassage{
-        if (products.size() == 0){
-            throw new ExceptionalMassage("Select at least one product!");
-        }
-        Sale newSale = new Sale((Supplier)mainController.getAccount(),startDate,endDate,percent,null);
-        for (Product product : products) {
-            newSale.addProductToSale(product);
-        }
-        newSale.setState(State.PREPARING_TO_BUILD);
-    }
-
-    public ArrayList<Sale> controlGetAllSales(){
-        ArrayList<Sale> allSalesForThisSupplier = new ArrayList<>();
-        for (Sale sale : Sale.getSales()) {
-            if(sale.getSupplier().equals(mainController.getAccount()) && sale.getState() == State.CONFIRMED){
-                allSalesForThisSupplier.add(sale);
-            }
-        }
-        return allSalesForThisSupplier;
-    }
-
-    public Sale controlGetSaleById(String id){
-        for (Sale sale : Sale.getSales()) {
-            if(sale.getOffId().equals(id)){
-                return sale;
-            }
-        }
-        return null;
-    }
-
-    public void controlEditSaleById(String id, Date newEndDate, Date newStartDate, int newPercent, ArrayList<Product> addingProduct, ArrayList<Product> removingProduct) throws ExceptionalMassage{
-        if(controlGetSaleById(id) == null){
-            throw new ExceptionalMassage("No such sale with this code!");
-        }
-        Sale newSale = new Sale((Supplier)mainController.getAccount(),newStartDate,newEndDate,newPercent,id);
-        for (Product product : controlGetSaleById(id).getProducts()) {
-            newSale.addProductToSale(product);
-        }
-        for (Product product : addingProduct) {
-            newSale.addProductToSale(product);
-        }
-        for (Product product : removingProduct) {
-            newSale.removeProductFromSale(product);
-        }
-    }
-
-    public void controlRemoveSaleById(String id) throws ExceptionalMassage{
-        if(controlGetSaleById(id) == null){
-            throw new ExceptionalMassage("No such sale with id!");
-        }
-        Sale.getSales().remove(controlGetSaleById(id));
-    }
-
-    public ArrayList<CodedDiscount> controlGetCodedDiscountByCustomer(){
+    public ArrayList<CodedDiscount> controlGetAllCodedDiscounts() throws ExceptionalMassage {
+        JsonArray jsonArray = communication("controlGetAllCodedDiscounts", new JsonArray()).getAsJsonArray();
         ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
-        for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
-            if(codedDiscount.getCustomers().contains((Customer)mainController.getAccount())){
-                codedDiscounts.add(codedDiscount);
-            }
+        for (JsonElement jsonElement : jsonArray) {
+            codedDiscounts.add(CodedDiscount.convertJsonStringToCodedDiscount(jsonElement.getAsString()));
         }
         return codedDiscounts;
     }
 
+    public CodedDiscount controlGetDiscountByCode(String code) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(code);
+        return CodedDiscount.convertJsonStringToCodedDiscount(communication("controlGetDiscountByCode",
+                inputs).getAsString());
+    }
+
+    public void controlEditDiscountByCode(String code, Date newStartDate, Date newEndDate, int newPercent,
+                                          int newMaxDiscount) throws ExceptionalMassage {
+        JsonArray inputs = jsonArrayFor(code, newStartDate, newEndDate, newPercent, newMaxDiscount);
+        communication("controlEditDiscountByCode", inputs);
+    }
+
+    public void controlCreateCodedDiscount(String code, Date startDate, Date endDate, int percent, int maxDiscountAmount,
+                                           HashMap<Customer, Integer> maxNumberOfUsage) throws ExceptionalMassage {
+        JsonArray inputs = jsonArrayFor(code, startDate, endDate, percent, maxDiscountAmount);
+        inputs.add(Utils.convertObjectToJsonString(maxNumberOfUsage));
+        communication("controlCreateCodedDiscount", inputs);
+    }
+
+    public void controlRemoveDiscountCode(String code) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(code);
+        communication("controlRemoveDiscountCode", inputs);
+    }
+
+    public void controlCreateSale(Date startDate, Date endDate, int percent, ArrayList<Product> products)
+            throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(startDate.getTime()));
+        inputs.add(String.valueOf(endDate.getTime()));
+        inputs.add(String.valueOf(percent));
+        inputs.add(Utils.convertProductArrayListToJsonElement(products));
+        communication("controlCreateSale", inputs);
+    }
+
+    public ArrayList<Sale> controlGetAllSales() throws ExceptionalMassage {
+        //check name
+        return Utils.convertJasonElementToSaleArrayList(communication("controlGetAllSales", new JsonArray()));
+    }
+
+    public Sale controlGetSaleById(String id) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        return Sale.convertJsonStringToSale(communication("controlGetSaleById", inputs).getAsString());
+    }
+
+    public void controlEditSaleById(String id, Date newEndDate, Date newStartDate, int newPercent, ArrayList<Product> addingProduct,
+                                    ArrayList<Product> removingProduct) throws ExceptionalMassage {
+        //check inputs
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        inputs.add(String.valueOf(newEndDate.getTime()));
+        inputs.add(String.valueOf(newStartDate.getTime()));
+        inputs.add(String.valueOf(newPercent));
+        inputs.add(Utils.convertProductArrayListToJsonElement(addingProduct));
+        inputs.add(Utils.convertProductArrayListToJsonElement(removingProduct));
+        communication("controlEditSaleById", inputs);
+    }
+
+    public void controlRemoveSaleById(String id) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        communication("controlRemoveSaleById", inputs);
+    }
+
+    public ArrayList<CodedDiscount> controlGetCodedDiscountByCustomer() throws ExceptionalMassage {
+        return Utils.convertJasonElementToCodedDiscountArrayList(
+                communication("controlGetCodedDiscountByCustomer", new JsonArray()));
+    }
+
     public int controlGetRemainedNumberInCodedDiscountForCustomer(CodedDiscount codedDiscount) throws ExceptionalMassage {
-        if(!(mainController.getAccount() instanceof Customer))
-            throw new ExceptionalMassage("Sign in as a Customer");
-        return codedDiscount.getRemainedNumberByCustomer((Customer)mainController.getAccount());
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(codedDiscount));
+        return communication("controlGetRemainedNumberInCodedDiscountForCustomer", inputs).getAsInt();
     }
 
-    public ArrayList<Sale> getAllSaleRequestsIdForThisSupplier(){
-        return Sale.getAllSaleRequestsBySupplier((Supplier)mainController.getAccount());
+    public ArrayList<Sale> getAllSaleRequestsIdForThisSupplier() throws ExceptionalMassage {
+        return Utils.convertJasonElementToSaleArrayList(communication("getAllSaleRequestsIdForThisSupplier",
+                new JsonArray()));
     }
 
-    public int controlGetPriceForEachProductAfterSale(Product product, Supplier supplier){
-        Sale sale = Sale.getProductSale(product, supplier);
-        if(sale == null)
-            return product.getPrice(supplier);
-        int percent = sale.getPercent();
-        return product.getPrice(supplier)* (100 - percent)/100;
+    public int controlGetPriceForEachProductAfterSale(Product product, Supplier supplier) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(Utils.convertObjectToJsonString(supplier));
+        return communication("controlGetPriceForEachProductAfterSale", inputs).getAsInt();
     }
 
-    public void removeCodedDiscount(CodedDiscount codedDiscount){
-        CodedDiscount.removeCodeFromList(codedDiscount);
+    public void removeCodedDiscount(CodedDiscount codedDiscount) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(codedDiscount));
+        communication("removeCodedDiscount", inputs);
+    }
+
+    private JsonArray jsonArrayFor(String code, Date startDate, Date endDate, int percent, int maxDiscountAmount) {
+        JsonArray inputs = new JsonArray();
+        inputs.add(code);
+        inputs.add(String.valueOf(startDate.getTime()));
+        inputs.add(String.valueOf(endDate.getTime()));
+        inputs.add(String.valueOf(percent));
+        inputs.add(String.valueOf(maxDiscountAmount));
+        return inputs;
     }
 }

@@ -3,7 +3,9 @@ package communications;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import discount.CodedDiscount;
+import discount.Sale;
+import product.Product;
 
 import java.util.ArrayList;
 
@@ -23,13 +25,13 @@ public class Utils {
         }
     }
 
+    //check
     public static JsonElement convertStringArrayListToJsonElement(ArrayList<String> stringArrayList) {
         JsonArray jsonArray = new JsonArray();
         for (String string : stringArrayList) {
             jsonArray.add(string);
         }
         return jsonArray;
-        //check
     }
 
     public static ArrayList<String> convertJasonObjectToStringArrayList(JsonElement jsonElement) {
@@ -38,6 +40,53 @@ public class Utils {
             stringArrayList.add(element.getAsString());
         }
         return stringArrayList;
-        //check
+    }
+
+    public static JsonElement convertProductArrayListToJsonElement(ArrayList<Product> productArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Product product : productArrayList) {
+            jsonArray.add(convertObjectToJsonString(product));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Product> convertJasonElementToProductArrayList(JsonElement jsonElement) {
+        ArrayList<Product> productArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            productArrayList.add(Product.convertJsonStringToProduct(element.getAsString()));
+        }
+        return productArrayList;
+    }
+
+    public static JsonElement convertCodedDiscountArrayListToJsonElement(ArrayList<CodedDiscount> codedDiscountArray) {
+        JsonArray jsonArray = new JsonArray();
+        for (CodedDiscount codedDiscount : codedDiscountArray) {
+            jsonArray.add(convertObjectToJsonString(codedDiscount));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<CodedDiscount> convertJasonElementToCodedDiscountArrayList(JsonElement jsonElement) {
+        ArrayList<CodedDiscount> codedDiscountArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            codedDiscountArrayList.add(CodedDiscount.convertJsonStringToCodedDiscount(element.getAsString()));
+        }
+        return codedDiscountArrayList;
+    }
+
+    public static JsonElement convertSaleArrayListToJsonElement(ArrayList<Sale> saleArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Sale sale : saleArrayList) {
+            jsonArray.add(convertObjectToJsonString(sale));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Sale> convertJasonElementToSaleArrayList(JsonElement jsonElement) {
+        ArrayList<Sale> saleArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            saleArrayList.add(Sale.convertJsonStringToSale(element.getAsString()));
+        }
+        return saleArrayList;
     }
 }

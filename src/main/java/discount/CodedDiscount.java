@@ -1,6 +1,7 @@
 package discount;
 
 import account.Customer;
+import communications.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -57,5 +58,9 @@ public class CodedDiscount extends Discount{
 
     public void setCustomers(ArrayList<Customer> customers) {
         this.customers = customers;
+    }
+
+    public static CodedDiscount convertJsonStringToCodedDiscount(String jsonString){
+        return (CodedDiscount) Utils.convertStringToObject(jsonString, "discount.CodedDiscount");
     }
 }

@@ -1,6 +1,7 @@
 package discount;
 
 import account.Supplier;
+import communications.Utils;
 import product.Product;
 import state.State;
 
@@ -56,5 +57,9 @@ public class Sale extends Discount {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public static Sale convertJsonStringToSale(String jsonString){
+        return (Sale) Utils.convertStringToObject(jsonString, "discount.Sale");
     }
 }

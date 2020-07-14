@@ -572,12 +572,8 @@ public class ProductController {
     }
 
     public ArrayList<Product> controlFilterGetFilteredAndSortedProducts() throws ExceptionalMassage {
-        JsonArray jsonArray = communication("controlFilterGetFilteredAndSortedProducts", new JsonArray()).getAsJsonArray();
-        ArrayList<Product> productArrayList = new ArrayList<>();
-        for (JsonElement jsonElement : jsonArray) {
-            productArrayList.add(Product.convertJsonStringToProduct(jsonElement.getAsString()));
-        }
-        return productArrayList;
+        return Utils.convertJasonElementToProductArrayList(communication(
+                "controlFilterGetFilteredAndSortedProducts", new JsonArray()));
     }
 
     public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters() throws ExceptionalMassage {

@@ -2,10 +2,10 @@ package controller;
 
 import account.Customer;
 import account.Supplier;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import discount.CodedDiscount;
 import discount.Sale;
-import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import server.communications.RequestStatus;
 import server.communications.Response;
@@ -61,16 +61,28 @@ public class OffController {
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public void controlCreateCodedDiscount(String code, Date startDate, Date endDate, int percent, int maxDiscountAmount, HashMap<Customer, Integer> maxNumberOfUsage) throws ExceptionalMassage {
+    public Response controlCreateCodedDiscount(String code, String startDateStr, String endDateStr, String percentStr,
+                                           String maxDiscountAmountStr, String maxNumberOfUsageStr) {
+        Date startDate = new Date(Long.parseLong(startDateStr));
+        Date endDate = new Date(Long.parseLong(endDateStr));
+        int percent = Integer.parseInt(percentStr);
+        int maxDiscountAmount = Integer.parseInt(maxDiscountAmountStr);
+        HashMap<Customer, Integer> maxNumberOfUsage = new HashMap<>();
+        JsonObject jsonObject = new JsonParser().parse(maxNumberOfUsageStr).getAsJsonObject();
+        for (String customerJson : jsonObject.keySet()) {
+            maxNumberOfUsage.put(Customer.convertJsonStringToCustomer(customerJson),
+                    jsonObject.get(customerJson).getAsInt());
+        }
         for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
             if (codedDiscount.getDiscountCode().equals(code)) {
-                throw new ExceptionalMassage("Code already exists!");
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Code already exists!");
             }
         }
         if (maxNumberOfUsage.size() == 0) {
-            throw new ExceptionalMassage("Select at Least one customer, please!");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Select at Least one customer, please!");
         }
         new CodedDiscount(code, startDate, endDate, percent, maxDiscountAmount, maxNumberOfUsage);
+        return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
     public Response controlRemoveDiscountCode(String code) {

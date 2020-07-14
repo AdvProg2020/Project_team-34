@@ -370,7 +370,7 @@ public class Category {
         return allCategoriesToString;
     }
 
-    public static Category convertJsonStringToCategory(String jsonString){
+    public static Category convertJsonStringToCategory(String jsonString) {
         return (Category) Utils.convertStringToObject(jsonString, "product.Category");
     }
 }

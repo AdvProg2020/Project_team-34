@@ -1,5 +1,9 @@
 package controller;
 
+import com.google.gson.JsonArray;
+import communications.*;
+import exceptionalMassage.ExceptionalMassage;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -84,5 +88,25 @@ public class Controller {
         objectInputStream.close();
         socket.close();
         System.exit(0);
+    }
+
+    public Response communication(String function, JsonArray inputs, ControllerSource source) throws ExceptionalMassage {
+        Request request = new Request(getToken(), function, inputs.toString(), source);
+        try {
+            objectOutputStream.writeUTF(Utils.convertObjectToJsonString(request));
+            objectOutputStream.flush();
+            try {
+                String responseString = objectInputStream.readUTF();
+                Response response = Response.convertJsonStringToResponse(responseString);
+                if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
+                    throw new ExceptionalMassage(response.getContent());
+                }
+                return response;
+            } catch (IOException e) {
+                throw new ExceptionalMassage("Response not received");
+            }
+        } catch (IOException e) {
+            throw new ExceptionalMassage("Request failed");
+        }
     }
 }

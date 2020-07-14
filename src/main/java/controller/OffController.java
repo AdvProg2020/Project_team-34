@@ -3,6 +3,9 @@ package controller;
 import account.Account;
 import account.Customer;
 import account.Supplier;
+import com.google.gson.JsonArray;
+import communications.ControllerSource;
+import communications.Response;
 import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
@@ -19,6 +22,10 @@ public class OffController {
 
     public OffController(Controller mainController) {
         this.mainController = mainController;
+    }
+
+    public Response communication(String function, JsonArray inputs) throws ExceptionalMassage {
+        return mainController.communication(function, inputs, ControllerSource.OFF_CONTROLLER);
     }
 
     public ArrayList<CodedDiscount> controlGetAllCodedDiscounts(){

@@ -8,10 +8,7 @@ import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
 import com.google.gson.JsonArray;
-import communications.ControllerSource;
-import communications.Request;
-import communications.RequestStatus;
-import communications.Response;
+import communications.*;
 import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
@@ -33,6 +30,10 @@ public class AccountController {
 
     public AccountController(Controller mainController) {
         this.mainController = mainController;
+    }
+
+    public Response communication(String function, JsonArray inputs) throws ExceptionalMassage {
+        return mainController.communication(function, inputs, ControllerSource.ACCOUNT_CONTROLLER);
     }
 
     public boolean hasSomeOneLoggedIn(){
@@ -113,18 +114,18 @@ public class AccountController {
         Request request = new Request(mainController.getToken(), "controlLogin", jsonArray.toString(),
                 ControllerSource.ACCOUNT_CONTROLLER);
         try {
-            mainController.getObjectOutputStream().writeUTF(Response.convertObjectToJsonString(request));
-        } catch (IOException e) {
-            throw new ExceptionalMassage("Request failed");
-        }
-        try {
-            String responseString = mainController.getObjectInputStream().readUTF();
-            Response response = Response.convertJsonStringToResponse(responseString);
-            if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
-                throw new ExceptionalMassage(response.getContent());
+            mainController.getObjectOutputStream().writeUTF(Utils.convertObjectToJsonString(request));
+            try {
+                String responseString = mainController.getObjectInputStream().readUTF();
+                Response response = Response.convertJsonStringToResponse(responseString);
+                if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
+                    throw new ExceptionalMassage(response.getContent());
+                }
+            } catch (IOException e) {
+                throw new ExceptionalMassage("Response not received");
             }
         } catch (IOException e) {
-            throw new ExceptionalMassage("Response not received");
+            throw new ExceptionalMassage("Request failed");
         }
     }
 

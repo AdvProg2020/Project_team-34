@@ -4,6 +4,9 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
+import com.google.gson.JsonArray;
+import communications.ControllerSource;
+import communications.Response;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
@@ -18,19 +21,17 @@ import state.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ProductController {
-
     private final Controller mainController;
-    private final FilterAndSort filterAndSort;
 
     public ProductController(Controller mainController) {
         this.mainController = mainController;
-        filterAndSort = new FilterAndSort();
     }
 
-    public FilterAndSort getFilterAndSort() {
-        return filterAndSort;
+    private Response communication(String function, JsonArray inputs) throws ExceptionalMassage {
+        return mainController.communication(function, inputs, ControllerSource.PRODUCT_CONTROLLER);
     }
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers, String category,
@@ -394,117 +395,6 @@ public class ProductController {
         }
     }
 
-    //Filter and sort:
-    public boolean controlFilterGetAvailabilityFilter() {
-        return filterAndSort.getAvailabilityFilter();
-    }
-
-    public SortType controlFilterGetSortType() {
-        return filterAndSort.getSortType();
-    }
-
-    public ArrayList<String> controlFilterGetNameFilter() {
-        return filterAndSort.getNameFilter();
-    }
-
-    public ArrayList<String> controlFilterGetBrandFilter() {
-        return filterAndSort.getBrandFilter();
-    }
-
-    public Integer controlFilterGetPriceLowerBound() {
-        return filterAndSort.getPriceLowerBound();
-    }
-
-    public Integer controlFilterGetPriceUpperBound() {
-        return filterAndSort.getPriceUpperBound();
-    }
-
-    public Category controlFilterGetCategory() {
-        return filterAndSort.getCategory();
-    }
-
-    public HashMap<String, ArrayList<String>> controlFilterGetSpecialFilter() {
-        return filterAndSort.getSpecialFilter();
-    }
-
-    public void controlFilterSetAvailabilityFilter(boolean availabilityFilter) {
-        filterAndSort.setAvailabilityFilter(availabilityFilter);
-    }
-
-    public void controlFilterSetPriceLowerBound(int priceLowerBound) throws ExceptionalMassage {
-        filterAndSort.setPriceLowerBound(priceLowerBound);
-    }
-
-    public void controlFilterSetPriceUpperBound(int priceUpperBound) throws ExceptionalMassage {
-        filterAndSort.setPriceUpperBound(priceUpperBound);
-    }
-
-    public void controlFilterSetCategoryFilter(String categoryName) throws ExceptionalMassage {
-        if (categoryName == null) {
-            filterAndSort.setCategory(null);
-        } else {
-            Category category = Category.getCategoryByName(categoryName);
-            if (category == null)
-                throw new ExceptionalMassage("Category not found");
-            filterAndSort.setCategory(category);
-        }
-        //explain
-    }
-
-    public void controlFilterSetSortType(String sortType) {
-        switch (sortType) {
-            case "by number of views":
-                filterAndSort.setSortType(SortType.BY_NUMBER_OF_VIEWS);
-                break;
-            case "by time added":
-                filterAndSort.setSortType(SortType.BY_TIME);
-                break;
-            case "by score":
-                filterAndSort.setSortType(SortType.BY_AVERAGE_SCORE);
-                break;
-        }
-    }
-
-    public void controlFilterAddSpecialFilter(String key, String value) throws ExceptionalMassage {
-        filterAndSort.addSpecialFilter(key, value);
-    }
-
-    public void controlFilterRemoveSpecialFilter(String key, String value) throws ExceptionalMassage {
-        filterAndSort.removeSpecialFilter(key, value);
-    }
-
-    public void controlFilterRemoveAllSpecialFilter(){
-        filterAndSort.removeAllSpecialFilter();
-    }
-
-    public void controlFilterAddNameFilter(String name) throws ExceptionalMassage {
-        filterAndSort.addNameFilter(name);
-    }
-
-    public void controlFilterRemoveNameFilter(String name) throws ExceptionalMassage {
-        filterAndSort.removeNameFilter(name);
-    }
-
-    public void controlFilterAddBrandFilter(String brand) throws ExceptionalMassage {
-        filterAndSort.addBrandFilter(brand);
-    }
-
-    public void controlFilterRemoveBrandFilter(String brand) throws ExceptionalMassage {
-        filterAndSort.removeBrandFilter(brand);
-    }
-
-    public ArrayList<Product> controlFilterGetFilteredAndSortedProducts() {
-        return filterAndSort.getProducts();
-    }
-
-    public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters() {
-        return filterAndSort.getCategory().getAvailableSpecialFilters();
-    }
-
-    public String controlCurrentFilters() {
-        return filterAndSort.toString();
-    }
-
     public ArrayList<String> controlGetAllCategoriesName() {
         return Category.getAllCategoriesName();
     }
@@ -549,13 +439,167 @@ public class ProductController {
         product.setNumberOfViews(product.getNumberOfViews()+ 1);
     }
 
-    public void clearFilterAndSort() {
-        filterAndSort.clear();
-    }
-
     public ObservableList<Customer> getCustomersBoughtProductObservable(Product product, Supplier supplier) {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         customers.addAll(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
         return customers;
+    }
+
+    //FilterAndSort
+    public boolean controlFilterGetAvailabilityFilter() throws ExceptionalMassage {
+        Response response = communication("controlFilterGetAvailabilityFilter", new JsonArray());
+    }
+
+    public SortType controlFilterGetSortType() throws ExceptionalMassage {
+        Response response = communication("controlFilterGetSortType", new JsonArray());
+//        return filterAndSort.getSortType();
+    }
+
+    public ArrayList<String> controlFilterGetNameFilter() throws ExceptionalMassage {
+        Response response = communication("controlFilterGetNameFilter", new JsonArray());
+//        return filterAndSort.getNameFilter();
+    }
+
+    public ArrayList<String> controlFilterGetBrandFilter() throws ExceptionalMassage {
+        Response response = communication("controlFilterGetBrandFilter", new JsonArray());
+//        return filterAndSort.getBrandFilter();
+    }
+
+    public Integer controlFilterGetPriceLowerBound() throws ExceptionalMassage {
+        Response response = communication("controlFilterGetPriceLowerBound", new JsonArray());
+//        return filterAndSort.getPriceLowerBound();
+    }
+
+    public Integer controlFilterGetPriceUpperBound() throws ExceptionalMassage {
+        Response response = communication("controlFilterGetPriceUpperBound", new JsonArray());
+//        return filterAndSort.getPriceUpperBound();
+    }
+
+    public Category controlFilterGetCategory() throws ExceptionalMassage {
+        Response response = communication("controlFilterGetCategory", new JsonArray());
+//        return filterAndSort.getCategory();
+    }
+
+    public HashMap<String, ArrayList<String>> controlFilterGetSpecialFilter() throws ExceptionalMassage {
+        Response response = communication("controlFilterGetSpecialFilter", new JsonArray());
+//        return filterAndSort.getSpecialFilter();
+    }
+
+    public void controlFilterSetAvailabilityFilter(boolean availabilityFilter) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(availabilityFilter));
+        communication("controlFilterSetAvailabilityFilter", inputs);
+    }
+
+    public void controlFilterSetPriceLowerBound(int priceLowerBound) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(priceLowerBound));
+        communication("controlFilterSetPriceLowerBound", inputs);
+    }
+
+    public void controlFilterSetPriceUpperBound(int priceUpperBound) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(priceUpperBound));
+        communication("controlFilterSetPriceUpperBound", inputs);
+    }
+
+    public void controlFilterSetCategoryFilter(String categoryName) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(Objects.requireNonNullElse(categoryName, "All Products"));
+        communication("controlFilterSetCategoryFilter", inputs);
+//        if (categoryName == null) {
+//            filterAndSort.setCategory(null);
+//        } else {
+//            Category category = Category.getCategoryByName(categoryName);
+//            if (category == null)
+//                throw new ExceptionalMassage("Category not found");
+//            filterAndSort.setCategory(category);
+//        }
+        //explain
+    }
+
+    public void controlFilterSetSortType(String sortType) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(Objects.requireNonNullElse(sortType, "by number of views"));
+        communication("controlFilterSetSortType", inputs);
+//        switch (sortType) {
+//            case "by number of views":
+//                filterAndSort.setSortType(SortType.BY_NUMBER_OF_VIEWS);
+//                break;
+//            case "by time added":
+//                filterAndSort.setSortType(SortType.BY_TIME);
+//                break;
+//            case "by score":
+//                filterAndSort.setSortType(SortType.BY_AVERAGE_SCORE);
+//                break;
+//        }
+    }
+
+    public void controlFilterAddSpecialFilter(String key, String value) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(key);
+        inputs.add(value);
+        communication("controlFilterAddSpecialFilter", inputs);
+//        filterAndSort.addSpecialFilter(key, value);
+    }
+
+    public void controlFilterRemoveSpecialFilter(String key, String value) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(key);
+        inputs.add(value);
+        communication("controlFilterRemoveSpecialFilter", inputs);
+//        filterAndSort.removeSpecialFilter(key, value);
+    }
+
+    public void controlFilterRemoveAllSpecialFilter() throws ExceptionalMassage {
+        communication("controlFilterRemoveAllSpecialFilter", new JsonArray());
+    }
+
+    public void controlFilterAddNameFilter(String name) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(name);
+        communication("controlFilterAddNameFilter", inputs);
+//        filterAndSort.addNameFilter(name);
+    }
+
+    public void controlFilterRemoveNameFilter(String name) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(name);
+        communication("controlFilterRemoveNameFilter", inputs);
+//        filterAndSort.removeNameFilter(name);
+    }
+
+    public void controlFilterAddBrandFilter(String brand) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(brand);
+        communication("controlFilterAddBrandFilter", inputs);
+//        filterAndSort.addBrandFilter(brand);
+    }
+
+    public void controlFilterRemoveBrandFilter(String brand) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(brand);
+        communication("controlFilterRemoveBrandFilter", inputs);
+//        filterAndSort.removeBrandFilter(brand);
+    }
+
+    public ArrayList<Product> controlFilterGetFilteredAndSortedProducts() throws ExceptionalMassage {
+        Response response = communication("controlFilterGetFilteredAndSortedProducts", new JsonArray());
+//        return filterAndSort.getProducts();
+    }
+
+    public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters() throws ExceptionalMassage {
+        Response response = communication("controlGetAllAvailableFilters", new JsonArray());
+//        return filterAndSort.getCategory().getAvailableSpecialFilters();
+    }
+
+    public String controlCurrentFilters() throws ExceptionalMassage {
+        Response response = communication("controlCurrentFilters", new JsonArray());
+//        return filterAndSort.toString();
+    }
+
+    public void clearFilterAndSort() throws ExceptionalMassage {
+        communication("clearFilterAndSort", new JsonArray());
+//        filterAndSort.clear();
     }
 }

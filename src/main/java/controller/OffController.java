@@ -4,6 +4,7 @@ import account.Customer;
 import account.Supplier;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import communications.ControllerSource;
 import communications.Utils;
@@ -53,7 +54,12 @@ public class OffController {
     public void controlCreateCodedDiscount(String code, Date startDate, Date endDate, int percent, int maxDiscountAmount,
                                            HashMap<Customer, Integer> maxNumberOfUsage) throws ExceptionalMassage {
         JsonArray inputs = jsonArrayFor(code, startDate, endDate, percent, maxDiscountAmount);
-        inputs.add(Utils.convertObjectToJsonString(maxNumberOfUsage));
+        JsonObject jsonHashmap = new JsonObject();
+        for (Customer customer : maxNumberOfUsage.keySet()) {
+            jsonHashmap.add(Utils.convertObjectToJsonString(customer),
+                    new JsonParser().parse(Utils.convertObjectToJsonString(maxNumberOfUsage.get(customer))));
+        }
+        inputs.add(jsonHashmap);
         communication("controlCreateCodedDiscount", inputs);
     }
 

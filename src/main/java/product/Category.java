@@ -1,5 +1,7 @@
 package product;
 
+import communications.Utils;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -53,5 +55,9 @@ public class Category {
 
     public void setSpecialFields(HashMap<String, ArrayList<String>> specialFields) {
         this.specialFields = specialFields;
+    }
+
+    public static Category convertJsonStringToCategory(String jsonString) {
+        return (Category) Utils.convertStringToObject(jsonString, "product.Category");
     }
 }

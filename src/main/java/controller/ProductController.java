@@ -4,9 +4,10 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
-import com.google.gson.JsonArray;
+import com.google.gson.*;
 import communications.ControllerSource;
 import communications.Response;
+import communications.Utils;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
@@ -30,8 +31,9 @@ public class ProductController {
         this.mainController = mainController;
     }
 
-    private Response communication(String function, JsonArray inputs) throws ExceptionalMassage {
-        return mainController.communication(function, inputs, ControllerSource.PRODUCT_CONTROLLER);
+    private JsonElement communication(String function, JsonArray inputs) throws ExceptionalMassage {
+        return new JsonParser().parse(mainController.
+                communication(function, inputs, ControllerSource.PRODUCT_CONTROLLER).getContent());
     }
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers, String category,
@@ -447,42 +449,52 @@ public class ProductController {
 
     //FilterAndSort
     public boolean controlFilterGetAvailabilityFilter() throws ExceptionalMassage {
-        Response response = communication("controlFilterGetAvailabilityFilter", new JsonArray());
+        return communication("controlFilterGetAvailabilityFilter", new JsonArray()).getAsBoolean();
     }
 
     public SortType controlFilterGetSortType() throws ExceptionalMassage {
-        Response response = communication("controlFilterGetSortType", new JsonArray());
-//        return filterAndSort.getSortType();
+        return SortType.valueOf(communication("controlFilterGetSortType", new JsonArray()).getAsString());
     }
 
     public ArrayList<String> controlFilterGetNameFilter() throws ExceptionalMassage {
-        Response response = communication("controlFilterGetNameFilter", new JsonArray());
-//        return filterAndSort.getNameFilter();
+        JsonArray jsonArray = communication("controlFilterGetNameFilter", new JsonArray()).getAsJsonArray();
+        ArrayList<String> nameFilter = new ArrayList<>();
+        for (JsonElement element : jsonArray) {
+            nameFilter.add(element.getAsString());
+        }
+        return nameFilter;
     }
 
     public ArrayList<String> controlFilterGetBrandFilter() throws ExceptionalMassage {
-        Response response = communication("controlFilterGetBrandFilter", new JsonArray());
-//        return filterAndSort.getBrandFilter();
+        JsonArray jsonArray = communication("controlFilterGetBrandFilter", new JsonArray()).getAsJsonArray();
+        ArrayList<String> brandFilter = new ArrayList<>();
+        for (JsonElement element : jsonArray) {
+            brandFilter.add(element.getAsString());
+        }
+        return brandFilter;
     }
 
     public Integer controlFilterGetPriceLowerBound() throws ExceptionalMassage {
-        Response response = communication("controlFilterGetPriceLowerBound", new JsonArray());
-//        return filterAndSort.getPriceLowerBound();
+        return communication("controlFilterGetPriceLowerBound", new JsonArray()).getAsInt();
+        //null pointer exception
     }
 
     public Integer controlFilterGetPriceUpperBound() throws ExceptionalMassage {
-        Response response = communication("controlFilterGetPriceUpperBound", new JsonArray());
-//        return filterAndSort.getPriceUpperBound();
+        return communication("controlFilterGetPriceUpperBound", new JsonArray()).getAsInt();
+        //null pointer exception
     }
 
     public Category controlFilterGetCategory() throws ExceptionalMassage {
-        Response response = communication("controlFilterGetCategory", new JsonArray());
-//        return filterAndSort.getCategory();
+        return Category.convertJsonStringToCategory(communication("controlFilterGetCategory", new JsonArray()).getAsString());
     }
 
     public HashMap<String, ArrayList<String>> controlFilterGetSpecialFilter() throws ExceptionalMassage {
-        Response response = communication("controlFilterGetSpecialFilter", new JsonArray());
-//        return filterAndSort.getSpecialFilter();
+        JsonObject jsonObject = communication("controlFilterGetSpecialFilter", new JsonArray()).getAsJsonObject();
+        HashMap<String, ArrayList<String>> specialFilters = new HashMap<>();
+        for (String key : jsonObject.keySet()) {
+            specialFilters.put(key, Utils.convertJasonObjectToStringArrayList(jsonObject.get(key)));
+        }
+        return specialFilters;
     }
 
     public void controlFilterSetAvailabilityFilter(boolean availabilityFilter) throws ExceptionalMassage {
@@ -495,44 +507,26 @@ public class ProductController {
         JsonArray inputs = new JsonArray();
         inputs.add(String.valueOf(priceLowerBound));
         communication("controlFilterSetPriceLowerBound", inputs);
+        //check
     }
 
     public void controlFilterSetPriceUpperBound(int priceUpperBound) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(String.valueOf(priceUpperBound));
         communication("controlFilterSetPriceUpperBound", inputs);
+        //check
     }
 
     public void controlFilterSetCategoryFilter(String categoryName) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(Objects.requireNonNullElse(categoryName, "All Products"));
         communication("controlFilterSetCategoryFilter", inputs);
-//        if (categoryName == null) {
-//            filterAndSort.setCategory(null);
-//        } else {
-//            Category category = Category.getCategoryByName(categoryName);
-//            if (category == null)
-//                throw new ExceptionalMassage("Category not found");
-//            filterAndSort.setCategory(category);
-//        }
-        //explain
     }
 
     public void controlFilterSetSortType(String sortType) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(Objects.requireNonNullElse(sortType, "by number of views"));
         communication("controlFilterSetSortType", inputs);
-//        switch (sortType) {
-//            case "by number of views":
-//                filterAndSort.setSortType(SortType.BY_NUMBER_OF_VIEWS);
-//                break;
-//            case "by time added":
-//                filterAndSort.setSortType(SortType.BY_TIME);
-//                break;
-//            case "by score":
-//                filterAndSort.setSortType(SortType.BY_AVERAGE_SCORE);
-//                break;
-//        }
     }
 
     public void controlFilterAddSpecialFilter(String key, String value) throws ExceptionalMassage {
@@ -540,7 +534,6 @@ public class ProductController {
         inputs.add(key);
         inputs.add(value);
         communication("controlFilterAddSpecialFilter", inputs);
-//        filterAndSort.addSpecialFilter(key, value);
     }
 
     public void controlFilterRemoveSpecialFilter(String key, String value) throws ExceptionalMassage {
@@ -548,7 +541,6 @@ public class ProductController {
         inputs.add(key);
         inputs.add(value);
         communication("controlFilterRemoveSpecialFilter", inputs);
-//        filterAndSort.removeSpecialFilter(key, value);
     }
 
     public void controlFilterRemoveAllSpecialFilter() throws ExceptionalMassage {
@@ -559,47 +551,49 @@ public class ProductController {
         JsonArray inputs = new JsonArray();
         inputs.add(name);
         communication("controlFilterAddNameFilter", inputs);
-//        filterAndSort.addNameFilter(name);
     }
 
     public void controlFilterRemoveNameFilter(String name) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(name);
         communication("controlFilterRemoveNameFilter", inputs);
-//        filterAndSort.removeNameFilter(name);
     }
 
     public void controlFilterAddBrandFilter(String brand) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(brand);
         communication("controlFilterAddBrandFilter", inputs);
-//        filterAndSort.addBrandFilter(brand);
     }
 
     public void controlFilterRemoveBrandFilter(String brand) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(brand);
         communication("controlFilterRemoveBrandFilter", inputs);
-//        filterAndSort.removeBrandFilter(brand);
     }
 
     public ArrayList<Product> controlFilterGetFilteredAndSortedProducts() throws ExceptionalMassage {
-        Response response = communication("controlFilterGetFilteredAndSortedProducts", new JsonArray());
-//        return filterAndSort.getProducts();
+        JsonArray jsonArray = communication("controlFilterGetFilteredAndSortedProducts", new JsonArray()).getAsJsonArray();
+        ArrayList<Product> productArrayList = new ArrayList<>();
+        for (JsonElement jsonElement : jsonArray) {
+            productArrayList.add(Product.convertJsonStringToProduct(jsonElement.getAsString()));
+        }
+        return productArrayList;
     }
 
     public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters() throws ExceptionalMassage {
-        Response response = communication("controlGetAllAvailableFilters", new JsonArray());
-//        return filterAndSort.getCategory().getAvailableSpecialFilters();
+        JsonObject jsonObject = communication("controlGetAllAvailableFilters", new JsonArray()).getAsJsonObject();
+        HashMap<String, ArrayList<String>> availableFilters = new HashMap<>();
+        for (String key : jsonObject.keySet()) {
+            availableFilters.put(key, Utils.convertJasonObjectToStringArrayList(jsonObject.get(key)));
+        }
+        return availableFilters;
     }
 
     public String controlCurrentFilters() throws ExceptionalMassage {
-        Response response = communication("controlCurrentFilters", new JsonArray());
-//        return filterAndSort.toString();
+        return communication("controlCurrentFilters", new JsonArray()).getAsString();
     }
 
     public void clearFilterAndSort() throws ExceptionalMassage {
         communication("clearFilterAndSort", new JsonArray());
-//        filterAndSort.clear();
     }
 }

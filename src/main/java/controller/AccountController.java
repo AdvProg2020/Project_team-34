@@ -8,6 +8,8 @@ import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import communications.*;
 import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
@@ -32,8 +34,9 @@ public class AccountController {
         this.mainController = mainController;
     }
 
-    public Response communication(String function, JsonArray inputs) throws ExceptionalMassage {
-        return mainController.communication(function, inputs, ControllerSource.ACCOUNT_CONTROLLER);
+    public JsonElement communication(String function, JsonArray inputs) throws ExceptionalMassage {
+        return new JsonParser().parse(mainController.
+                communication(function, inputs, ControllerSource.ACCOUNT_CONTROLLER).getContent());
     }
 
     public boolean hasSomeOneLoggedIn(){

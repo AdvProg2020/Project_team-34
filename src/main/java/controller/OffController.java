@@ -4,6 +4,8 @@ import account.Account;
 import account.Customer;
 import account.Supplier;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import communications.ControllerSource;
 import communications.Response;
 import discount.CodedDiscount;
@@ -24,8 +26,9 @@ public class OffController {
         this.mainController = mainController;
     }
 
-    public Response communication(String function, JsonArray inputs) throws ExceptionalMassage {
-        return mainController.communication(function, inputs, ControllerSource.OFF_CONTROLLER);
+    public JsonElement communication(String function, JsonArray inputs) throws ExceptionalMassage {
+        return new JsonParser().parse(mainController.
+                communication(function, inputs, ControllerSource.OFF_CONTROLLER).getContent());
     }
 
     public ArrayList<CodedDiscount> controlGetAllCodedDiscounts(){

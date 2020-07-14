@@ -1,6 +1,7 @@
 package product;
 
 import account.Supplier;
+import communications.Utils;
 import state.State;
 
 import java.util.ArrayList;
@@ -126,5 +127,9 @@ public class Product {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public static Product convertJsonStringToProduct(String jsonString){
+        return (Product) Utils.convertStringToObject(jsonString, "product.Product");
     }
 }

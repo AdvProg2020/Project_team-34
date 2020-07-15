@@ -1,12 +1,12 @@
 package controller;
 
-import account.Account;
 import account.Customer;
-import account.Supervisor;
 import account.Supplier;
-import com.google.gson.*;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import communications.ControllerSource;
-import communications.Response;
 import communications.Utils;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
@@ -192,113 +192,6 @@ public class ProductController {
         return product.doesSupplierSellThisProduct(seller);
     }
 
-    //related to Category:
-    public void controlAddCategory(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First. <Controller.controlAddCategory>");
-        if (!(account instanceof Supervisor))
-            throw new ExceptionalMassage("Login as a supervisor. <Controller.controlAddCategory>");
-        Category.getInstance(name, isParentCategory, parentCategoryName);
-    }
-
-    public void controlRemoveCategory(String name) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First. <Controller.controlRemoveCategory>");
-        if (!(account instanceof Supervisor))
-            throw new ExceptionalMassage("Login as a supervisor. <Controller.controlRemoveCategory>");
-        Category.removeCategory(name);
-    }
-
-    public void controlAddProductToCategory(String categoryName, String productIdentifier) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First. <Controller.controlAddProductToCategory>");
-        if (!(account instanceof Supervisor))
-            throw new ExceptionalMassage("Login as a supervisor. <Controller.controlAddProductToCategory>");
-        Category category = Category.getCategoryByName(categoryName);
-        if (category == null)
-            throw new ExceptionalMassage("Category not found.");
-        Product product = Product.getProductById(productIdentifier);
-        if (product == null)
-            throw new ExceptionalMassage("Product not found.");
-        category.addProduct(product);
-        //check
-    }
-
-    public void controlRemoveProductFromCategory(String categoryName, String productIdentifier) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        //can modify
-        if (account == null)
-            throw new ExceptionalMassage("Login First. <Controller.controlRemoveProductFromCategory>");
-        if (!(account instanceof Supervisor))
-            throw new ExceptionalMassage("Login as a supervisor. <Controller.controlRemoveProductFromCategory>");
-        Category category = Category.getCategoryByName(categoryName);
-        if (category == null)
-            throw new ExceptionalMassage("Category not found.");
-        Product product = Product.getProductById(productIdentifier);
-        if (product == null)
-            throw new ExceptionalMassage("Product not found.");
-        category.removeProduct(product);
-        //check
-    }
-
-    public void controlChangeCategoryName(String oldName, String newName) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First. <Controller.controlChangeCategoryName>");
-        if (!(account instanceof Supervisor))
-            throw new ExceptionalMassage("Login as a supervisor. <Controller.controlChangeCategoryName>");
-        Category category = Category.getCategoryByName(oldName);
-        if (category == null)
-            throw new ExceptionalMassage("Category not found.");
-        category.setName(newName);
-    }
-
-    public void controlAddSpecialFieldToCategory(String categoryName, String filterKey, String filterValues)
-            throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Supervisor))
-            throw new ExceptionalMassage("Login as a supervisor.");
-        Category category = Category.getCategoryByName(categoryName);
-        if (category == null)
-            throw new ExceptionalMassage("Category not found.");
-        category.addField(filterKey, filterValues);
-    }
-
-    public void controlRemoveSpecialFieldFromCategory(String categoryName, String filterKey, String filterValue)
-            throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Supervisor))
-            throw new ExceptionalMassage("Login as a supervisor.");
-        Category category = Category.getCategoryByName(categoryName);
-        if (category == null)
-            throw new ExceptionalMassage("Category not found.");
-        category.removeField(filterKey, filterValue);
-    }
-
-    public String controlGetAllCategories() {
-        String allCategories = "";
-        for (Category category : Category.allCategories) {
-            String categoryDescription = "";
-            categoryDescription += "Name: " + category.getName() + ", ";
-            if (category.getParentCategory() == null) {
-                categoryDescription += "Parent: " + null + ", ";
-            } else {
-                categoryDescription += "Parent: " + category.getParentCategory().getName() + ", ";
-            }
-            categoryDescription += "Is Category Classifier: " + category.isCategoryClassifier() + "\n";
-            categoryDescription += "\t" + "Fields: " + category.getSpecialFields() + "\n";
-            allCategories += categoryDescription;
-        }
-        return allCategories;
-    }
-
     //added by rpirayadi
     public ArrayList<Category> controlGetAllCategoriesInACategory(Category rootCategory){
         return rootCategory.getAllCategoriesIn();
@@ -397,42 +290,6 @@ public class ProductController {
         }
     }
 
-    public ArrayList<String> controlGetAllCategoriesName() {
-        return Category.getAllCategoriesName();
-    }
-
-    public ArrayList<String> controlGetAllProductCategoriesName() {
-        ArrayList<String> allProductCategoriesName = new ArrayList<>();
-        for (String categoryName : Category.getAllCategoriesName()) {
-            if (!Category.getCategoryByName(categoryName).isCategoryClassifier()) {
-                allProductCategoriesName.add(categoryName);
-            }
-        }
-        return allProductCategoriesName;
-    }
-
-    public ArrayList<String> controlGetAllCategoryCategoriesName() {
-        ArrayList<String> allCategoryCategoriesName = new ArrayList<>();
-        for (String categoryName : Category.getAllCategoriesName()) {
-            if (Category.getCategoryByName(categoryName).isCategoryClassifier()) {
-                allCategoryCategoriesName.add(categoryName);
-            }
-        }
-        return allCategoryCategoriesName;
-    }
-
-    public String controlGetCategoryParentName(String name) {
-        return Category.getCategoryByName(name).getParentCategoryName();
-    }
-
-    public boolean isThisCategoryClassifier(String name) {
-        return Category.getCategoryByName(name).isCategoryClassifier();
-    }
-
-    public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) {
-        return Category.getCategoryByName(name).getSpecialFields();
-    }
-
     public boolean controlHasCustomerBoughtThisProduct(Customer customer, Product product ){
         return CustomerLog.getAllCustomersBoughtProduct(product).contains(customer);
     }
@@ -447,7 +304,89 @@ public class ProductController {
         return customers;
     }
 
-    //FilterAndSort
+    //related to Category:
+    public void controlAddCategory(String name, boolean isParentCategory, String parentCategoryName) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(name);
+        inputs.add(String.valueOf(isParentCategory));
+        inputs.add(parentCategoryName);
+        communication("controlAddCategory", inputs);
+    }
+
+    public void controlRemoveCategory(String name) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(name);
+        communication("controlRemoveCategory", inputs);
+    }
+
+    public void controlAddProductToCategory(String categoryName, String productIdentifier) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(categoryName);
+        inputs.add(productIdentifier);
+        communication("controlAddProductToCategory", inputs);
+    }
+
+    public void controlRemoveProductFromCategory(String categoryName, String productIdentifier) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(categoryName);
+        inputs.add(productIdentifier);
+        communication("controlRemoveProductFromCategory", inputs);
+    }
+
+    public void controlChangeCategoryName(String oldName, String newName) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(oldName);
+        inputs.add(newName);
+        communication("controlChangeCategoryName", inputs);
+    }
+
+    public void controlAddSpecialFieldToCategory(String categoryName, String filterKey, String filterValues)
+            throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(categoryName);
+        inputs.add(filterKey);
+        inputs.add(filterValues);
+        communication("controlAddSpecialFieldToCategory", inputs);
+    }
+
+    public void controlRemoveSpecialFieldFromCategory(String categoryName, String filterKey, String filterValue)
+            throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(categoryName);
+        inputs.add(filterKey);
+        inputs.add(filterValue);
+        communication("controlRemoveSpecialFieldFromCategory", inputs);
+    }
+
+    public ArrayList<String> controlGetAllCategoriesName() throws ExceptionalMassage {
+        return Utils.convertJasonObjectToStringArrayList(communication("controlGetAllCategoriesName", new JsonArray()));
+    }
+
+    public ArrayList<String> controlGetAllProductCategoriesName() throws ExceptionalMassage {
+        return Utils.convertJasonObjectToStringArrayList(communication("controlGetAllProductCategoriesName", new JsonArray()));
+    }
+
+    public ArrayList<String> controlGetAllCategoryCategoriesName() throws ExceptionalMassage {
+        return Utils.convertJasonObjectToStringArrayList(communication("controlGetAllCategoryCategoriesName", new JsonArray()));
+    }
+
+    public String controlGetCategoryParentName(String name) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(name);
+        return communication("controlGetCategoryParentName", inputs).getAsString();
+    }
+
+    public boolean isThisCategoryClassifier(String name) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(name);
+        return Boolean.parseBoolean(communication("isThisCategoryClassifier", inputs).getAsString());
+    }
+
+    public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) {
+        return Category.getCategoryByName(name).getSpecialFields();
+    }
+
+    //related to FilterAndSort
     public boolean controlFilterGetAvailabilityFilter() throws ExceptionalMassage {
         return communication("controlFilterGetAvailabilityFilter", new JsonArray()).getAsBoolean();
     }

@@ -457,31 +457,27 @@ public class ProductController {
     }
 
     public ArrayList<String> controlFilterGetNameFilter() throws ExceptionalMassage {
-        JsonArray jsonArray = communication("controlFilterGetNameFilter", new JsonArray()).getAsJsonArray();
-        ArrayList<String> nameFilter = new ArrayList<>();
-        for (JsonElement element : jsonArray) {
-            nameFilter.add(element.getAsString());
-        }
-        return nameFilter;
+        return Utils.convertJasonObjectToStringArrayList(communication("controlFilterGetNameFilter",
+                new JsonArray()));
     }
 
     public ArrayList<String> controlFilterGetBrandFilter() throws ExceptionalMassage {
-        JsonArray jsonArray = communication("controlFilterGetBrandFilter", new JsonArray()).getAsJsonArray();
-        ArrayList<String> brandFilter = new ArrayList<>();
-        for (JsonElement element : jsonArray) {
-            brandFilter.add(element.getAsString());
-        }
-        return brandFilter;
+        return Utils.convertJasonObjectToStringArrayList(communication("controlFilterGetBrandFilter",
+                new JsonArray()));
     }
 
     public Integer controlFilterGetPriceLowerBound() throws ExceptionalMassage {
-        return communication("controlFilterGetPriceLowerBound", new JsonArray()).getAsInt();
-        //null pointer exception
+        int bound = communication("controlFilterGetPriceLowerBound", new JsonArray()).getAsInt();
+        if (bound == -1)
+            return null;
+        return bound;
     }
 
     public Integer controlFilterGetPriceUpperBound() throws ExceptionalMassage {
-        return communication("controlFilterGetPriceUpperBound", new JsonArray()).getAsInt();
-        //null pointer exception
+        int bound = communication("controlFilterGetPriceUpperBound", new JsonArray()).getAsInt();
+        if (bound == -1)
+            return null;
+        return bound;
     }
 
     public Category controlFilterGetCategory() throws ExceptionalMassage {

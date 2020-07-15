@@ -4,6 +4,8 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
@@ -14,10 +16,14 @@ import javafx.collections.ObservableList;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
+import server.communications.RequestStatus;
+import server.communications.Response;
+import server.communications.Utils;
 import state.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 public class ProductController {
 
@@ -395,116 +401,6 @@ public class ProductController {
     }
 
     //Filter and sort:
-    public boolean controlFilterGetAvailabilityFilter() {
-        return filterAndSort.getAvailabilityFilter();
-    }
-
-    public SortType controlFilterGetSortType() {
-        return filterAndSort.getSortType();
-    }
-
-    public ArrayList<String> controlFilterGetNameFilter() {
-        return filterAndSort.getNameFilter();
-    }
-
-    public ArrayList<String> controlFilterGetBrandFilter() {
-        return filterAndSort.getBrandFilter();
-    }
-
-    public Integer controlFilterGetPriceLowerBound() {
-        return filterAndSort.getPriceLowerBound();
-    }
-
-    public Integer controlFilterGetPriceUpperBound() {
-        return filterAndSort.getPriceUpperBound();
-    }
-
-    public Category controlFilterGetCategory() {
-        return filterAndSort.getCategory();
-    }
-
-    public HashMap<String, ArrayList<String>> controlFilterGetSpecialFilter() {
-        return filterAndSort.getSpecialFilter();
-    }
-
-    public void controlFilterSetAvailabilityFilter(boolean availabilityFilter) {
-        filterAndSort.setAvailabilityFilter(availabilityFilter);
-    }
-
-    public void controlFilterSetPriceLowerBound(int priceLowerBound) throws ExceptionalMassage {
-        filterAndSort.setPriceLowerBound(priceLowerBound);
-    }
-
-    public void controlFilterSetPriceUpperBound(int priceUpperBound) throws ExceptionalMassage {
-        filterAndSort.setPriceUpperBound(priceUpperBound);
-    }
-
-    public void controlFilterSetCategoryFilter(String categoryName) throws ExceptionalMassage {
-        if (categoryName == null) {
-            filterAndSort.setCategory(null);
-        } else {
-            Category category = Category.getCategoryByName(categoryName);
-            if (category == null)
-                throw new ExceptionalMassage("Category not found");
-            filterAndSort.setCategory(category);
-        }
-        //explain
-    }
-
-    public void controlFilterSetSortType(String sortType) {
-        switch (sortType) {
-            case "by number of views":
-                filterAndSort.setSortType(SortType.BY_NUMBER_OF_VIEWS);
-                break;
-            case "by time added":
-                filterAndSort.setSortType(SortType.BY_TIME);
-                break;
-            case "by score":
-                filterAndSort.setSortType(SortType.BY_AVERAGE_SCORE);
-                break;
-        }
-    }
-
-    public void controlFilterAddSpecialFilter(String key, String value) throws ExceptionalMassage {
-        filterAndSort.addSpecialFilter(key, value);
-    }
-
-    public void controlFilterRemoveSpecialFilter(String key, String value) throws ExceptionalMassage {
-        filterAndSort.removeSpecialFilter(key, value);
-    }
-
-    public void controlFilterRemoveAllSpecialFilter(){
-        filterAndSort.removeAllSpecialFilter();
-    }
-
-    public void controlFilterAddNameFilter(String name) throws ExceptionalMassage {
-        filterAndSort.addNameFilter(name);
-    }
-
-    public void controlFilterRemoveNameFilter(String name) throws ExceptionalMassage {
-        filterAndSort.removeNameFilter(name);
-    }
-
-    public void controlFilterAddBrandFilter(String brand) throws ExceptionalMassage {
-        filterAndSort.addBrandFilter(brand);
-    }
-
-    public void controlFilterRemoveBrandFilter(String brand) throws ExceptionalMassage {
-        filterAndSort.removeBrandFilter(brand);
-    }
-
-    public ArrayList<Product> controlFilterGetFilteredAndSortedProducts() {
-        return filterAndSort.getProducts();
-    }
-
-    public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters() {
-        return filterAndSort.getCategory().getAvailableSpecialFilters();
-    }
-
-    public String controlCurrentFilters() {
-        return filterAndSort.toString();
-    }
-
     public ArrayList<String> controlGetAllCategoriesName() {
         return Category.getAllCategoriesName();
     }
@@ -549,13 +445,183 @@ public class ProductController {
         product.setNumberOfViews(product.getNumberOfViews()+ 1);
     }
 
-    public void clearFilterAndSort() {
-        filterAndSort.clear();
-    }
-
     public ObservableList<Customer> getCustomersBoughtProductObservable(Product product, Supplier supplier) {
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         customers.addAll(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
         return customers;
+    }
+
+    public Response controlFilterGetAvailabilityFilter() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(filterAndSort.
+                getAvailabilityFilter()));
+    }
+
+    public Response controlFilterGetSortType() {
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(filterAndSort.getSortType()));
+    }
+
+    public Response controlFilterGetNameFilter() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(filterAndSort.
+                getNameFilter()).getAsString());
+    }
+
+    public Response controlFilterGetBrandFilter() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(filterAndSort.
+                getBrandFilter()).getAsString());
+    }
+
+    public Response controlFilterGetPriceLowerBound() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Objects.requireNonNullElse(
+                filterAndSort.getPriceLowerBound(), -1)));
+    }
+
+    public Response controlFilterGetPriceUpperBound() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Objects.requireNonNullElse(
+                filterAndSort.getPriceUpperBound(), -1)));
+    }
+
+    public Response controlFilterGetCategory() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(filterAndSort.getCategory()));
+    }
+
+    public Response controlFilterGetSpecialFilter() {
+        JsonObject jsonHashMap = new JsonObject();
+        HashMap<String, ArrayList<String>> hashMap = filterAndSort.getSpecialFilter();
+        for (String key : hashMap.keySet()) {
+            jsonHashMap.add(key, Utils.convertStringArrayListToJsonElement(hashMap.get(key)));
+        }
+        return new Response(RequestStatus.SUCCESSFUL, jsonHashMap.getAsString());
+    }
+
+    public Response controlFilterSetAvailabilityFilter(String availabilityFilterStr) {
+        boolean availabilityFilter = new JsonParser().parse(availabilityFilterStr).getAsBoolean();
+        filterAndSort.setAvailabilityFilter(availabilityFilter);
+        return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
+    public Response controlFilterSetPriceLowerBound(String priceLowerBoundStr) {
+        int priceLowerBound = new JsonParser().parse(priceLowerBoundStr).getAsInt();
+        try {
+            filterAndSort.setPriceLowerBound(priceLowerBound);
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+        }
+    }
+
+    public Response controlFilterSetPriceUpperBound(String priceUpperBoundStr) {
+        int priceUpperBound = new JsonParser().parse(priceUpperBoundStr).getAsInt();
+        try {
+            filterAndSort.setPriceUpperBound(priceUpperBound);
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+        }
+    }
+
+    public Response controlFilterSetCategoryFilter(String categoryName) {
+        if (categoryName == null) {
+            filterAndSort.setCategory(null);
+        } else {
+            Category category = Category.getCategoryByName(categoryName);
+            if (category == null)
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Category not found");
+            filterAndSort.setCategory(category);
+        }
+        return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
+    public Response controlFilterSetSortType(String sortType) {
+        switch (sortType) {
+            case "by number of views":
+                filterAndSort.setSortType(SortType.BY_NUMBER_OF_VIEWS);
+                break;
+            case "by time added":
+                filterAndSort.setSortType(SortType.BY_TIME);
+                break;
+            case "by score":
+                filterAndSort.setSortType(SortType.BY_AVERAGE_SCORE);
+                break;
+            default:
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Invalid Argument");
+        }
+        return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
+    public Response controlFilterAddSpecialFilter(String key, String value) {
+        try {
+            filterAndSort.addSpecialFilter(key, value);
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+        }
+    }
+
+    public Response controlFilterRemoveSpecialFilter(String key, String value) {
+        try {
+            filterAndSort.removeSpecialFilter(key, value);
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+        }
+    }
+
+    public Response controlFilterRemoveAllSpecialFilter() {
+        filterAndSort.removeAllSpecialFilter();
+        return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
+    public Response controlFilterAddNameFilter(String name) {
+        try {
+            filterAndSort.addNameFilter(name);
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+        }
+    }
+
+    public Response controlFilterRemoveNameFilter(String name) {
+        try {
+            filterAndSort.removeNameFilter(name);
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+        }
+    }
+
+    public Response controlFilterAddBrandFilter(String brand) {
+        try {
+            filterAndSort.addBrandFilter(brand);
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+        }
+    }
+
+    public Response controlFilterRemoveBrandFilter(String brand) {
+        try {
+            filterAndSort.removeBrandFilter(brand);
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+        }
+    }
+
+    public Response controlFilterGetFilteredAndSortedProducts() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(filterAndSort.
+                getProducts()).getAsString());
+    }
+
+    public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters() {
+        return filterAndSort.getCategory().getAvailableSpecialFilters();
+    }
+
+    public Response controlCurrentFilters() {
+        return new Response(RequestStatus.SUCCESSFUL, filterAndSort.toString());
+    }
+
+    public Response clearFilterAndSort() {
+        filterAndSort.clear();
+        return new Response(RequestStatus.SUCCESSFUL, "");
     }
 }

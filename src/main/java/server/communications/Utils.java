@@ -1,13 +1,14 @@
 package server.communications;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import account.Customer;
+import account.Supplier;
+import com.google.gson.*;
 import discount.CodedDiscount;
 import discount.Sale;
 import product.Product;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Utils {
 
@@ -25,6 +26,7 @@ public class Utils {
         }
     }
 
+    //check
     public static JsonElement convertStringArrayListToJsonElement(ArrayList<String> stringArrayList) {
         JsonArray jsonArray = new JsonArray();
         for (String string : stringArrayList) {
@@ -33,7 +35,7 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<String> convertJasonObjectToStringArrayList(JsonElement jsonElement) {
+    public static ArrayList<String> convertJasonElementToStringArrayList(JsonElement jsonElement) {
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             stringArrayList.add(element.getAsString());
@@ -87,5 +89,55 @@ public class Utils {
             saleArrayList.add(Sale.convertJsonStringToSale(element.getAsString()));
         }
         return saleArrayList;
+    }
+
+    public static JsonElement convertStringToStringHashMapToJsonElement(HashMap<String, String> hashMap) {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        for (String key : hashMap.keySet()) {
+            jsonObject.add(key, jsonParser.parse(hashMap.get(key)));
+        }
+        return jsonObject;
+    }
+
+    public static HashMap<String, String> convertJsonElementStringToStringToHashMap(JsonElement jsonElement) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        for (String key : jsonObject.keySet()) {
+            hashMap.put(key, jsonObject.get(key).getAsString());
+        }
+        return hashMap;
+    }
+
+    public static JsonElement convertCustomerToJsonElement(ArrayList<Customer> customerArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Customer customer : customerArrayList) {
+            jsonArray.add(convertObjectToJsonString(customer));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Customer> convertJsonElementToCustomerArrayList(JsonElement jsonElement) {
+        ArrayList<Customer> customerArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            customerArrayList.add(Customer.convertJsonStringToCustomer(element.getAsString()));
+        }
+        return customerArrayList;
+    }
+
+    public static JsonElement convertSupplierToJsonElement(ArrayList<Supplier> supplierArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Supplier supplier : supplierArrayList) {
+            jsonArray.add(convertObjectToJsonString(supplier));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Supplier> convertJsonElementToSupplierArrayList(JsonElement jsonElement) {
+        ArrayList<Supplier> supplierArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            supplierArrayList.add(Supplier.convertJsonStringToSupplier(element.getAsString()));
+        }
+        return supplierArrayList;
     }
 }

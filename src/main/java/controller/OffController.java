@@ -223,4 +223,10 @@ public class OffController {
         Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Sale.getProductSale(product,supplier)));
     }
+
+    public Response controlGetMaxSaleForThisProduct(String productString){
+        Product product = Product.convertJsonStringToProduct(productString);
+        Sale sale = Sale.getMaxSaleForThisProduct(product);
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(sale));
+    }
 }

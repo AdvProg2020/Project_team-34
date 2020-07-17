@@ -17,6 +17,7 @@ import log.CustomerLog;
 import log.LogStatus;
 import log.SupplierLog;
 import product.Product;
+import server.communications.Request;
 import server.communications.RequestStatus;
 import server.communications.Response;
 import server.communications.Utils;
@@ -596,5 +597,10 @@ public class AccountController {
         }
         jsonArray.add(Utils.convertObjectToJsonString(account));
         return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
+    }
+
+    public Response controlUpdateCart(){
+        mainController.getCart().update();
+        return Response.createSuccessResponse();
     }
 }

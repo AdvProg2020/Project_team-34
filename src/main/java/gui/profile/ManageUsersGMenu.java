@@ -1,6 +1,5 @@
 package gui.profile;
 
-import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
@@ -9,6 +8,7 @@ import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.alerts.ChoiceBox;
+import javafx.collections.FXCollections;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -84,7 +84,11 @@ public class ManageUsersGMenu extends GMenu {
         TableColumn<Supervisor, String> phoneNumber = new TableColumn<>("Phone Number");
         phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
         TableView<Supervisor> supervisorTableView = new TableView<>();
-        supervisorTableView.setItems(Account.getSupervisorsObservableList());
+        try {
+            supervisorTableView.setItems(controller.getAccountController().getSupervisorObservableList());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            supervisorTableView.setItems(FXCollections.observableArrayList());
+        }
         supervisorTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber);
         supervisorTableView.setPrefWidth(800);
         return supervisorTableView;
@@ -106,7 +110,11 @@ public class ManageUsersGMenu extends GMenu {
         TableColumn<Supplier, Integer> credit = new TableColumn<>("Credit");
         credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
         TableView<Supplier> supplierTableView = new TableView<>();
-        supplierTableView.setItems(Account.getSuppliersObservableList());
+        try {
+            supplierTableView.setItems(controller.getAccountController().getSupplierObservableList());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            supplierTableView.setItems(FXCollections.observableArrayList());
+        }
         supplierTableView.setPrefWidth(800);
         supplierTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber, nameOfCompany, credit);
         return supplierTableView;
@@ -126,7 +134,11 @@ public class ManageUsersGMenu extends GMenu {
         TableColumn<Customer, Integer> credit = new TableColumn<>("Credit");
         credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
         TableView<Customer> customerTableView = new TableView<>();
-        customerTableView.setItems(Account.getCustomersObservableList());
+        try {
+            customerTableView.setItems(controller.getAccountController().getCustomerObservableList());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            customerTableView.setItems(FXCollections.observableArrayList());
+        }
         customerTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber, credit);
         customerTableView.setPrefWidth(800);
         return customerTableView;

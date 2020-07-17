@@ -12,6 +12,8 @@ import com.google.gson.JsonParser;
 import communications.ControllerSource;
 import communications.Utils;
 import exceptionalMassage.ExceptionalMassage;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import product.Product;
 
 import java.util.ArrayList;
@@ -327,6 +329,30 @@ public class AccountController {
 
     public void controlCreateCodedDiscountForLoggedInCustomer() throws ExceptionalMassage {
         communication("controlCreateCodedDiscountForLoggedInCustomer", new JsonArray());
+    }
+
+    public ObservableList<Customer> getCustomerObservableList() throws ExceptionalMassage {
+        ArrayList<Customer> arrayList = Utils.convertJsonElementToCustomerArrayList(communication(
+                "getCustomerObservableList", new JsonArray()));
+        ObservableList<Customer> observableList = FXCollections.observableArrayList();
+        observableList.addAll(arrayList);
+        return observableList;
+    }
+
+    public ObservableList<Supplier> getSupplierObservableList() throws ExceptionalMassage {
+        ArrayList<Supplier> arrayList = Utils.convertJsonElementToSupplierArrayList(communication(
+                "getSupplierObservableList", new JsonArray()));
+        ObservableList<Supplier> observableList = FXCollections.observableArrayList();
+        observableList.addAll(arrayList);
+        return observableList;
+    }
+
+    public ObservableList<Supervisor> getSupervisorObservableList() throws ExceptionalMassage {
+        ArrayList<Supervisor> arrayList = Utils.convertJsonElementToSupervisorArrayList(communication(
+                "getSupervisorObservableList", new JsonArray()));
+        ObservableList<Supervisor> observableList = FXCollections.observableArrayList();
+        observableList.addAll(arrayList);
+        return observableList;
     }
 
     public Supplier getSupplierByCompanyName(String companyName) throws ExceptionalMassage {

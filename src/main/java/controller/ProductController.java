@@ -118,7 +118,7 @@ public class ProductController {
         JsonArray inputs = new JsonArray();
         inputs.add(Utils.convertObjectToJsonString(product));
         JsonElement comments = communication("controlGetCommentsOfAProduct",inputs);
-        ArrayList<Comment> commentArrayList = Utils.convertJsonElementToCommentList(comments);
+        ArrayList<Comment> commentArrayList = Utils.convertJsonElementToCommentArrayList(comments);
         return commentArrayList;
     }
 
@@ -138,7 +138,7 @@ public class ProductController {
 
     public ArrayList<Comment> controlGetConfirmedComments() throws ExceptionalMassage{
         JsonElement comments = communication("controlGetConfirmedComments", new JsonArray());
-        ArrayList<Comment> commentArrayList = Utils.convertJsonElementToCommentList(comments);
+        ArrayList<Comment> commentArrayList = Utils.convertJsonElementToCommentArrayList(comments);
         return commentArrayList;
     }
 

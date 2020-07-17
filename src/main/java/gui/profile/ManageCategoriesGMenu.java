@@ -4,7 +4,6 @@ import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
-import gui.allProductMenu.AllProductGMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -55,16 +54,21 @@ public class ManageCategoriesGMenu extends GMenu {
         createCategoryBox.getChildren().addAll(nameField, isClassifier, parentCategory, done);
         createCategoryBox.setAlignment(Pos.CENTER_LEFT);
 
-        ArrayList<String> allCategoriesName = controller.getProductController().controlGetAllCategoriesName();
-        for (String name : allCategoriesName) {
-            allCategoriesBox.getChildren().add(createCategoryBox(name,
-                    controller.getProductController().controlGetCategoryParentName(name),
-                    controller.getProductController().isThisCategoryClassifier(name)));
+        ScrollPane scrollPane;
+        try {
+            ArrayList<String> allCategoriesName = controller.getProductController().controlGetAllCategoriesName();
+            for (String name : allCategoriesName) {
+                allCategoriesBox.getChildren().add(createCategoryBox(name,
+                        controller.getProductController().controlGetCategoryParentName(name),
+                        controller.getProductController().isThisCategoryClassifier(name)));
+            }
+            allCategoriesBox.setSpacing(10);
+            allCategoriesBox.setPadding(new Insets(10, 10, 10, 10));
+            scrollPane = new ScrollPane(allCategoriesBox);
+            scrollPane.setMinWidth(605);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            scrollPane = new ScrollPane();
         }
-        allCategoriesBox.setSpacing(10);
-        allCategoriesBox.setPadding(new Insets(10, 10, 10, 10));
-        ScrollPane scrollPane = new ScrollPane(allCategoriesBox);
-        scrollPane.setMinWidth(605);
 
         mainLayout.getChildren().addAll(createHeader(), createCategoryBox, scrollPane);
         backLayout.getChildren().addAll(mainLayout);
@@ -75,7 +79,11 @@ public class ManageCategoriesGMenu extends GMenu {
 
     private ChoiceBox<String> allCategoriesChoiceBox() {
         ChoiceBox<String> choiceBox = new ChoiceBox<>();
-        choiceBox.getItems().addAll(controller.getProductController().controlGetAllCategoryCategoriesName());
+        try {
+            choiceBox.getItems().addAll(controller.getProductController().controlGetAllCategoryCategoriesName());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            choiceBox.getItems().add("All Products");
+        }
         choiceBox.setValue("All Products");
         return choiceBox;
     }

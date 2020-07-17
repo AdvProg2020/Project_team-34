@@ -435,16 +435,16 @@ public class ProductController {
         return Product.convertJsonStringToProduct(communication("getProductByName", inputs).getAsString());
     }
 
-    public void convertProductIdToRequestId(String id) throws ExceptionalMassage{
+    public String convertProductIdToRequestId(String id) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
         inputs.add(id);
-        communication("convertProductIdToRequestId", inputs);
+        return communication("convertProductIdToRequestId", inputs).getAsString();
     }
 
-    public void convertSaleIdToRequestId(String id) throws ExceptionalMassage{
+    public String convertSaleIdToRequestId(String id) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
         inputs.add(id);
-        communication("convertSaleIdToRequestId", inputs);
+        return communication("convertSaleIdToRequestId", inputs).getAsString();
     }
 
     public ArrayList<Product> getProductForSupplier(Supplier supplier) throws ExceptionalMassage{

@@ -148,9 +148,8 @@ public class OffController {
         return inputs;
     }
 
-    public boolean isProductHasAnySale(Sale sale,Product product) throws ExceptionalMassage{
+    public boolean isProductHasAnySale(Product product) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(sale));
         inputs.add(Utils.convertObjectToJsonString(product));
         return communication("isProductHasAnySale", inputs).getAsBoolean();
     }

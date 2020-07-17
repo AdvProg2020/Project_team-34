@@ -1,5 +1,6 @@
 package controller;
 
+import account.Account;
 import com.google.gson.JsonArray;
 import communications.*;
 import exceptionalMassage.ExceptionalMassage;
@@ -76,6 +77,15 @@ public class Controller {
 
     public String getToken() {
         return token;
+    }
+
+    public Account getAccount() {
+        try {
+            accountController.getAccount();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return null;
+        }
+        return null;
     }
 
     public void setToken(String token) {

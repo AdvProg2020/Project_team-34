@@ -577,5 +577,24 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Sale.isProductInThisSuppliersSale(product,supplier)));
     }
 
-
+    public Response getAccountByUsernameWithinAvailable(String username){
+        Account account = Account.getAccountByUsernameWithinAvailable(username);
+        JsonArray jsonArray = new JsonArray();
+        if (account == null) {
+            jsonArray.add("null");
+            jsonArray.add("null");
+            return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
+        }
+        if (account instanceof Customer) {
+            jsonArray.add("Customer");
+        }
+        if (account instanceof Supplier) {
+            jsonArray.add("Supplier");
+        }
+        if (account instanceof Supervisor) {
+            jsonArray.add("Supervisor");
+        }
+        jsonArray.add(Utils.convertObjectToJsonString(account));
+        return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
+    }
 }

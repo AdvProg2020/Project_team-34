@@ -38,71 +38,29 @@ public class ProductController {
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers, String category,
                                   String description, HashMap<String, String> specifications, String imageURL) throws ExceptionalMassage {
-        if (mainController.getAccount() == null)
-            throw new ExceptionalMassage("Sing in first.");
-        if (!(mainController.getAccount() instanceof Supplier))
-            throw new ExceptionalMassage("Sign in as a Supplier");
-        if(!specifications.keySet().containsAll(Category.getCategoryByName(category).getSpecialFields().keySet())){
-            String error = "You have to enter a value for the category's special fields :\n";
-            for (String s : Category.getCategoryByName(category).getSpecialFields().keySet()) {
-                error += s + "\n";
-            }
-            throw new ExceptionalMassage(error);
-        }
-        /*if(!Category.getCategoryByName(category).getSpecialFields().values().contains(specifications.values())){
-            String error = "You have to enter valid values for each field : \n";
-            HashMap<String, ArrayList<String>> map = Category.getCategoryByName(category).getSpecialFields();
-            for (String s : map.keySet()) {
-                error += s + " : ";
-                for (String s1 : map.get(s)) {
-                    error += s1 + " ";
-                }
-                error += "\n";
-            }
-            throw new ExceptionalMassage(error);
-        }*/
-        Supplier supplier = (Supplier) mainController.getAccount();
-        Product product;
-        product = Product.getProductByName(name);
-        if (Category.getCategoryByName(category) == null) {
-            throw new ExceptionalMassage("Category not found.");
-        }
-//        if (product == null)
-//            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications, imageURL);
-//        else {
-//            product.addNewSupplierForProduct(supplier, price, remainedNumbers);
-//        }
-        Product product1 = new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications, imageURL);
-        System.out.println(product1);
+        JsonArray inputs = new JsonArray();
+        inputs.add(name);
+        inputs.add(nameOfCompany);
+        inputs.add(String.valueOf(price));
+        inputs.add(String.valueOf(remainedNumbers));
+        inputs.add(category);
+        inputs.add(description);
+        //hashmap
+//        inputs.add(specifications);
+        inputs.add(imageURL);
+        communication("controlAddProduct",inputs);
     }
 
     public void controlRemoveProductById(String productId) throws ExceptionalMassage {
-        Product product = Product.getProductById(productId);
-        if (product == null) {
-            throw new ExceptionalMassage("Invalid Id");
-        } else {
-            Product newProduct = new Product(product);
-            newProduct.setProductState(State.PREPARING_TO_BE_DELETED);
-            ArrayList<Supplier> newListOfSuppliers = new ArrayList<>();
-            newListOfSuppliers.add((Supplier)mainController.getAccount());
-            newProduct.setListOfSuppliers(newListOfSuppliers);
-        }
+        JsonArray inputs = new JsonArray();
+        inputs.add(productId);
+        communication("controlRemoveProductById",inputs);
     }
 
     public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage {
-        Product productGotById = Product.getProductById(product.getProductId());
-        if (productGotById == null) {
-            throw new ExceptionalMassage("Invalid Id");
-        } else {
-            // !!
-            //needs sale for all
-            String result = "description= " + product.getDescription() + "\n" +
-                    "listOfSuppliers= " + product.getListOfSuppliers() + "\n" +
-                    "priceForEachSupplier= " + product.getPriceForEachSupplier() + "\n" +
-                    "category= " + Category.getProductCategory(product) + "\n" +
-                    "Score= " + Score.getAverageScoreForProduct(product) + "\n";
-            return String.valueOf(result);
-        }
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        communication("controlGetDigestInfosOfProduct",inputs);
     }
 
     public String controlGetAttributesOfProduct(String productId) throws ExceptionalMassage {

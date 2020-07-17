@@ -1,5 +1,7 @@
 package cart;
 
+import communications.Utils;
+
 /**
  * @author Aryan Ahadinia
  * @since 0.0.1
@@ -68,5 +70,9 @@ public class ShippingInfo {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public static ShippingInfo convertJsonStringToShippingInfo(String jsonString){
+        return (ShippingInfo) Utils.convertStringToObject(jsonString, "cart.ShippingInfo");
     }
 }

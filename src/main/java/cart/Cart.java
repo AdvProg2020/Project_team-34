@@ -1,6 +1,7 @@
 package cart;
 
 import account.Customer;
+import communications.Utils;
 import discount.CodedDiscount;
 import discount.Sale;
 
@@ -59,5 +60,9 @@ public class Cart {
 
     public void setShippingInfo(ShippingInfo shippingInfo) {
         this.shippingInfo = shippingInfo;
+    }
+
+    public static Cart convertJsonStringToCart(String jsonString){
+        return (Cart) Utils.convertStringToObject(jsonString, "cart.Cart");
     }
 }

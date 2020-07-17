@@ -35,7 +35,7 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<String> convertJasonElementToStringArrayList(JsonElement jsonElement) {
+    public static ArrayList<String> convertJsonElementToStringArrayList(JsonElement jsonElement) {
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             stringArrayList.add(element.getAsString());
@@ -51,7 +51,7 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<Product> convertJasonElementToProductArrayList(JsonElement jsonElement) {
+    public static ArrayList<Product> convertJsonElementToProductArrayList(JsonElement jsonElement) {
         ArrayList<Product> productArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             productArrayList.add(Product.convertJsonStringToProduct(element.getAsString()));
@@ -67,7 +67,7 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<CodedDiscount> convertJasonElementToCodedDiscountArrayList(JsonElement jsonElement) {
+    public static ArrayList<CodedDiscount> convertJsonElementToCodedDiscountArrayList(JsonElement jsonElement) {
         ArrayList<CodedDiscount> codedDiscountArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             codedDiscountArrayList.add(CodedDiscount.convertJsonStringToCodedDiscount(element.getAsString()));
@@ -83,7 +83,7 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<Sale> convertJasonElementToSaleArrayList(JsonElement jsonElement) {
+    public static ArrayList<Sale> convertJsonElementToSaleArrayList(JsonElement jsonElement) {
         ArrayList<Sale> saleArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             saleArrayList.add(Sale.convertJsonStringToSale(element.getAsString()));

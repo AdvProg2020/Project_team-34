@@ -99,7 +99,7 @@ public class OffController {
         Date startDate = new Date(Long.parseLong(startDateString));
         Date endDate = new Date(Long.parseLong(endDateString));
         int percent = Integer.parseInt(percentString);
-        ArrayList<Product> products = Utils.convertJasonElementToProductArrayList(new JsonParser().parse(productsString));
+        ArrayList<Product> products = Utils.convertJsonElementToProductArrayList(new JsonParser().parse(productsString));
         if (products.size() == 0) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Select at least one product!");
         }
@@ -139,9 +139,9 @@ public class OffController {
         Date newEndDate = new Date(Long.parseLong(newEndDateStr));
         Date newStartDate = new Date(Long.parseLong(newStartDateStr));
         int newPercent = Integer.parseInt(newPercentStr);
-        ArrayList<Product> addingProduct = Utils.convertJasonElementToProductArrayList(new JsonParser().
+        ArrayList<Product> addingProduct = Utils.convertJsonElementToProductArrayList(new JsonParser().
                 parse(addingProductStr));
-        ArrayList<Product> removingProduct = Utils.convertJasonElementToProductArrayList(new JsonParser().
+        ArrayList<Product> removingProduct = Utils.convertJsonElementToProductArrayList(new JsonParser().
                 parse(removingProductStr));
         Sale sale = controlInternalGetSaleById(id);
         if (sale == null) {

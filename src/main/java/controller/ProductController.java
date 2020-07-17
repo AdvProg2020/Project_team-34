@@ -574,6 +574,12 @@ public class ProductController {
         }
     }
 
+    public Response controlFilterSetInSaleOnly(String inSaleOnlyString){
+        boolean inSaleOnly = Boolean.parseBoolean(inSaleOnlyString);
+        filterAndSort.setInSaleOnly(inSaleOnly);
+        return Response.createSuccessResponse();
+    }
+
     public Response controlFilterSetCategoryFilter(String categoryName) {
         if (categoryName == null) {
             filterAndSort.setCategory(null);
@@ -641,6 +647,24 @@ public class ProductController {
             return new Response(RequestStatus.SUCCESSFUL, "");
         } catch (ExceptionalMassage exceptionalMassage) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+        }
+    }
+
+    public Response controlFilterAddSupplierFilter(String supplierName){
+        try {
+            filterAndSort.addSupplierFilter(supplierName);
+            return Response.createSuccessResponse();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+        }
+    }
+
+    public Response controlFilterRemoveSupplierFilter(String supplierName){
+        try {
+            filterAndSort.removeSupplierFilter(supplierName);
+            return Response.createSuccessResponse();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
         }
     }
 

@@ -7,7 +7,6 @@ import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
-import com.google.gson.JsonObject;
 import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
@@ -275,24 +274,30 @@ public class AccountController {
         mainController.getCart().addProductToCart(product, supplier);
     }
 
-    public void increaseProductQuantity(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+    public Response increaseProductQuantity(String productId, String supplierNameOfCompany) {
         Product product = Product.getProductById(productId);
         if (product == null)
-            throw new ExceptionalMassage("Product not found.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Product not found.");
         Supplier supplier = Supplier.getSupplierByCompanyName(supplierNameOfCompany);
         if (supplier == null)
-            throw new ExceptionalMassage("Supplier not found.");
-        mainController.getCart().increaseProductCount(product, supplier);
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Supplier not found.");
+        try {
+            mainController.getCart().increaseProductCount(product, supplier);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Response(RequestStatus.SUCCESSFUL, exceptionalMassage.getMessage());
+        }
+        return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public void decreaseProductQuantity(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+    public Response decreaseProductQuantity(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
         Product product = Product.getProductById(productId);
         if (product == null)
-            throw new ExceptionalMassage("Product not found.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Product not found.");
         Supplier supplier = Supplier.getSupplierByCompanyName(supplierNameOfCompany);
         if (supplier == null)
-            throw new ExceptionalMassage("Supplier not found.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Supplier not found.");
         mainController.getCart().decreaseProductCount(product, supplier);
+        return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
     public Cart controlViewCart() {
@@ -336,23 +341,23 @@ public class AccountController {
         mainController.getCart().removeCodedDiscount();
     }
 
-    public boolean finalizeOrder() throws ExceptionalMassage {
+    public Response finalizeOrder() {
         Account account = mainController.getAccount();
         if (account == null)
-            throw new ExceptionalMassage("Login First.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.");
         if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login as a customer.");
         Cart cart = mainController.getCart();
         Customer customer = (Customer) mainController.getAccount();
         if (cart.isCartClear())
-            throw new ExceptionalMassage("Your cart is clear.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Your cart is clear.");
         if (account.getCredit() < cart.getBill())
-            throw new ExceptionalMassage("You don't have enough credit.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "You don't have enough credit.");
         HashMap<ProductInCart, Integer> productInCount = cart.getProductInCount();
         for (ProductInCart productInCart : cart.getProductsIn()) {
             if (productInCart.getProduct().getRemainedNumber(productInCart.getSupplier()) < productInCount.get(productInCart))
-                throw new ExceptionalMassage("Product " + productInCart.getProduct().getName() +
-                        " is not available in this amount, please reduce.");
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Product " +
+                        productInCart.getProduct().getName() + " is not available in this amount, please reduce.");
         }
         if(cart.getCodedDiscount() != null){
             cart.getCodedDiscount().addUsedCountForCustomer((Customer)mainController.getAccount());
@@ -361,9 +366,9 @@ public class AccountController {
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart);
         if (customerLog.getPaidAmount() >= BOUND) {
-            controlCreateCodedDiscountForLoggedInCustomer();
+            controlInternalCreateCodedDiscountForLoggedInCustomer();
         }
-        return customerLog.getPaidAmount() >= BOUND;
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(customerLog.getPaidAmount() >= BOUND));
     }
 
     public String getAccountUsername() {
@@ -458,7 +463,7 @@ public class AccountController {
         return Product.getRequestsForThisSupplier((Supplier) mainController.getAccount());
     }
 
-    public void controlCreateCodedDiscountForLoggedInCustomer(){
+    private void controlInternalCreateCodedDiscountForLoggedInCustomer() {
         Date start = new Date(System.currentTimeMillis());
         Date end = new Date(System.currentTimeMillis() + WEEK);
         String randomCode = CodedDiscount.codeGenerator();
@@ -467,9 +472,14 @@ public class AccountController {
         new CodedDiscount(randomCode,start,end, 15, 100,maxUsagePerCustomer);
     }
 
+    public Response controlCreateCodedDiscountForLoggedInCustomer() {
+        controlInternalCreateCodedDiscountForLoggedInCustomer();
+        return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
     //Aryan:
-    public static synchronized void controlCreateRandomCodesForCustomers(ArrayList<Customer> luckyCustomers,
-                                                                         int percent, int maxAmount) {
+    public static synchronized void controlInternalCreateRandomCodesForCustomers(ArrayList<Customer> luckyCustomers,
+                                                                                 int percent, int maxAmount) {
         HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
         String randomCode = CodedDiscount.codeGenerator();
         for (Customer luckyCustomer : luckyCustomers) {

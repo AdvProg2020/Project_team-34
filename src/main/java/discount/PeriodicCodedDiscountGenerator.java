@@ -49,7 +49,7 @@ public class PeriodicCodedDiscountGenerator extends Thread {
                 writer.write(timeNow + "\n");
                 writer.write("percent, max amount, period, lastTime");
                 writer.close();
-                AccountController.controlCreateRandomCodesForCustomers(Account.getRandomCustomers(), percent, maxAmount);
+                AccountController.controlInternalCreateRandomCodesForCustomers(Account.getRandomCustomers(), percent, maxAmount);
                 lastTime = timeNow;
                 lastTry = true;
             } else {

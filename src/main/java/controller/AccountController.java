@@ -141,13 +141,13 @@ public class AccountController {
     }
 
     public String controlGetListOfAccounts() throws ExceptionalMassage{
-        JsonElement accounts = communication("controlFetListOfAccounts",new JsonArray());
+        JsonElement accounts = communication("controlGetListOfAccounts",new JsonArray());
         return accounts.getAsString();
     }
 
     public ArrayList<String> controlGetListOfAccountUserNames() throws ExceptionalMassage{
         JsonElement response = communication("controlGetListOfAccountUserNames",new JsonArray());
-        ArrayList<String> allUsername = Utils.convertJasonObjectToStringArrayList(response);
+        ArrayList<String> allUsername = Utils.convertJasonElementToStringArrayList(response);
         return allUsername;
     }
 
@@ -208,45 +208,32 @@ public class AccountController {
 
     public Cart controlViewCart() throws ExceptionalMassage{
         JsonElement cart = communication("controlViewCart",new JsonArray());
-        return Cart
-        return mainController.getCart();
+        return Cart.convertJsonStringToCart(cart.getAsString());
     }
 
     public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address,
                                           String postalCode, String phoneNumber) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
-        mainController.getCart().submitShippingInfo(new ShippingInfo(firstName, lastName, city, address, postalCode, phoneNumber));
-        //Modification required
+        JsonArray inputs = new JsonArray();
+        inputs.add(firstName);
+        inputs.add(lastName);
+        inputs.add(city);
+        inputs.add(address);
+        inputs.add(postalCode);
+        inputs.add(phoneNumber);
+        communication("controlSubmitShippingInfo",inputs);
     }
 
     public void controlRemoveShippingInfo() throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
-        mainController.getCart().removeShippingInfo();
+        communication("controlRemoveShippingInfo",new JsonArray());
     }
     public void controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
-        mainController.getCart().applyCodedDiscount(discountCode);
+        JsonArray input = new JsonArray();
+        input.add(discountCode);
+        communication("controlSubmitDiscountCode", input);
     }
 
     public void controlRemoveDiscountCode() throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
-        mainController.getCart().removeCodedDiscount();
+        communication("controlRemoveDiscountCode",new JsonArray());
     }
 
     public boolean finalizeOrder() throws ExceptionalMassage {

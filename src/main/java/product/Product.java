@@ -27,7 +27,7 @@ public class Product {
     private HashMap<String, String> specification; //method check
     private String rootProductId;
     private String futureCategoryName;
-    private String imageUrl;
+    private String imageInStringForm;
 
 
     public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description, String rootProductId, String futureCategoryName, HashMap<String, String> specification) {
@@ -83,13 +83,13 @@ public class Product {
         this.productState = State.PREPARING_TO_EDIT;
         this.specification = new HashMap<>(product.getSpecification());
         this.futureCategoryName = product.getFutureCategoryName();
-        this.imageUrl = product.getImageUrl();
+        this.imageInStringForm = product.getImageInStringForm();
         allCreatedProductNum++;
         allProduct.add(this);
         ProductDataBase.add(this);
     }
 
-    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description, String rootProductId, String futureCategoryName, HashMap<String, String> specification, String imageUrl) {
+    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description, String rootProductId, String futureCategoryName, HashMap<String, String> specification, String imageInStringForm) {
         numberOfViews = 0;
         this.productState = State.PREPARING_TO_BUILD;
         this.productId = generateIdentifier();
@@ -107,13 +107,13 @@ public class Product {
         this.specification = specification;
         allCreatedProductNum++;
         allProduct.add(this);
-        this.imageUrl = imageUrl;
+        this.imageInStringForm = imageInStringForm;
         ProductDataBase.add(this);
     }
 
     public Product(String name, String nameOfCompany, HashMap<Supplier, Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
                    HashMap<Supplier, Integer> remainedNumberForEachSupplier, String description,
-                   int numberOfViews, String productId, State state, String rootProductId, String futureCategoryName, HashMap<String, String> specification, String imageUrl) {
+                   int numberOfViews, String productId, State state, String rootProductId, String futureCategoryName, HashMap<String, String> specification, String imageInStringForm) {
         this.productState = state;
         this.productId = productId;
         this.name = name;
@@ -127,11 +127,11 @@ public class Product {
         this.futureCategoryName = futureCategoryName;
         this.specification = specification;
         allCreatedProductNum++;
-        this.imageUrl = imageUrl;
+        this.imageInStringForm = imageInStringForm;
         allProduct.add(this);
     }
 
-    public Product(Product product, String imageUrl) {
+    public Product(Product product, String imageInStringForm) {
         this.productId = generateIdentifier();
         this.name = product.getName();
         this.nameOfCompany = product.getNameOfCompany();
@@ -146,7 +146,7 @@ public class Product {
         this.futureCategoryName = product.getFutureCategoryName();
         allCreatedProductNum++;
         allProduct.add(this);
-        this.imageUrl = imageUrl;
+        this.imageInStringForm = imageInStringForm;
         ProductDataBase.add(this);
     }
 
@@ -211,8 +211,8 @@ public class Product {
         return futureCategoryName;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
+    public String getImageInStringForm() {
+        return imageInStringForm;
     }
 
     public void setNumberOfViews(int numberOfViews) {
@@ -240,8 +240,8 @@ public class Product {
         ProductDataBase.update(this);
     }
 
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
+    public void setImageInStringForm(String imageInStringForm) {
+        this.imageInStringForm = imageInStringForm;
         ProductDataBase.update(this);
     }
 

@@ -317,15 +317,15 @@ public class ProductController {
     }
 
     public ArrayList<String> controlGetAllCategoriesName() throws ExceptionalMassage {
-        return Utils.convertJasonObjectToStringArrayList(communication("controlGetAllCategoriesName", new JsonArray()));
+        return Utils.convertJasonElementToStringArrayList(communication("controlGetAllCategoriesName", new JsonArray()));
     }
 
     public ArrayList<String> controlGetAllProductCategoriesName() throws ExceptionalMassage {
-        return Utils.convertJasonObjectToStringArrayList(communication("controlGetAllProductCategoriesName", new JsonArray()));
+        return Utils.convertJasonElementToStringArrayList(communication("controlGetAllProductCategoriesName", new JsonArray()));
     }
 
     public ArrayList<String> controlGetAllCategoryCategoriesName() throws ExceptionalMassage {
-        return Utils.convertJasonObjectToStringArrayList(communication("controlGetAllCategoryCategoriesName", new JsonArray()));
+        return Utils.convertJasonElementToStringArrayList(communication("controlGetAllCategoryCategoriesName", new JsonArray()));
     }
 
     public String controlGetCategoryParentName(String name) throws ExceptionalMassage {
@@ -354,12 +354,12 @@ public class ProductController {
     }
 
     public ArrayList<String> controlFilterGetNameFilter() throws ExceptionalMassage {
-        return Utils.convertJasonObjectToStringArrayList(communication("controlFilterGetNameFilter",
+        return Utils.convertJasonElementToStringArrayList(communication("controlFilterGetNameFilter",
                 new JsonArray()));
     }
 
     public ArrayList<String> controlFilterGetBrandFilter() throws ExceptionalMassage {
-        return Utils.convertJasonObjectToStringArrayList(communication("controlFilterGetBrandFilter",
+        return Utils.convertJasonElementToStringArrayList(communication("controlFilterGetBrandFilter",
                 new JsonArray()));
     }
 
@@ -385,7 +385,7 @@ public class ProductController {
         JsonObject jsonObject = communication("controlFilterGetSpecialFilter", new JsonArray()).getAsJsonObject();
         HashMap<String, ArrayList<String>> specialFilters = new HashMap<>();
         for (String key : jsonObject.keySet()) {
-            specialFilters.put(key, Utils.convertJasonObjectToStringArrayList(jsonObject.get(key)));
+            specialFilters.put(key, Utils.convertJasonElementToStringArrayList(jsonObject.get(key)));
         }
         return specialFilters;
     }
@@ -473,7 +473,7 @@ public class ProductController {
         JsonObject jsonObject = communication("controlGetAllAvailableFilters", new JsonArray()).getAsJsonObject();
         HashMap<String, ArrayList<String>> availableFilters = new HashMap<>();
         for (String key : jsonObject.keySet()) {
-            availableFilters.put(key, Utils.convertJasonObjectToStringArrayList(jsonObject.get(key)));
+            availableFilters.put(key, Utils.convertJasonElementToStringArrayList(jsonObject.get(key)));
         }
         return availableFilters;
     }

@@ -315,30 +315,34 @@ public class AccountController {
         //Modification required
     }
 
-    public void controlRemoveShippingInfo() throws ExceptionalMassage {
+    public Response controlRemoveShippingInfo() throws ExceptionalMassage {
         Account account = mainController.getAccount();
         if (account == null)
-            throw new ExceptionalMassage("Login First.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.");
         if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login as a customer.");
         mainController.getCart().removeShippingInfo();
-    }
-    public void controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
-        mainController.getCart().applyCodedDiscount(discountCode);
+        return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public void controlRemoveDiscountCode() throws ExceptionalMassage {
+    public Response controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
         Account account = mainController.getAccount();
         if (account == null)
-            throw new ExceptionalMassage("Login First.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.");
         if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login as a customer.");
+        mainController.getCart().applyCodedDiscount(discountCode);
+        return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
+    public Response controlRemoveDiscountCode() throws ExceptionalMassage {
+        Account account = mainController.getAccount();
+        if (account == null)
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.");
+        if (!(account instanceof Customer))
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login as a customer.");
         mainController.getCart().removeCodedDiscount();
+        return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
     public Response finalizeOrder() {
@@ -371,96 +375,114 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, String.valueOf(customerLog.getPaidAmount() >= BOUND));
     }
 
-    public String getAccountUsername() {
-        return getAccount().getUserName();
+    public Response getAccountUsername() {
+        return new Response(RequestStatus.SUCCESSFUL, getAccount().getUserName());
     }
 
-    public String getAccountName() {
-        return getAccount().getName();
+    public Response getAccountName() {
+        return new Response(RequestStatus.SUCCESSFUL, getAccount().getName());
     }
 
-    public String getAccountFamilyName() {
-        return getAccount().getFamilyName();
+    public Response getAccountFamilyName() {
+        return new Response(RequestStatus.SUCCESSFUL,  getAccount().getFamilyName());
     }
 
-    public String getAccountEmail() {
-        return getAccount().getEmail();
+    public Response getAccountEmail() {
+        return new Response(RequestStatus.SUCCESSFUL, getAccount().getEmail());
     }
 
-    public String getAccountPhoneNumber() {
-        return getAccount().getPhoneNumber();
+    public Response getAccountPhoneNumber() {
+        return new Response(RequestStatus.SUCCESSFUL, getAccount().getPhoneNumber());
     }
 
-    public int getAccountCredit() {
-        return getAccount().getCredit();
+    public Response getAccountCredit() {
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(getAccount().getCredit()));
     }
 
-    public String getAccountNameOfCompany() {
-        return ((Supplier) getAccount()).getNameOfCompany();
+    public Response getAccountNameOfCompany() {
+        return new Response(RequestStatus.SUCCESSFUL, ((Supplier) getAccount()).getNameOfCompany());
     }
 
-    public ArrayList<String> getCustomerLogs() {
+    public Response getCustomerLogs() {
         ArrayList<CustomerLog> customerLogs = CustomerLog.getCustomerCustomerLogs((Customer) getAccount());
         ArrayList<String> toStringLogs = new ArrayList<>();
         for (CustomerLog customerLog : customerLogs) {
             toStringLogs.add(customerLog.toString());
         }
-        return toStringLogs;
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(toStringLogs).getAsString());
     }
 
-    public ArrayList<String> getSupplierLogs() {
+    public Response getSupplierLogs() {
         ArrayList<SupplierLog> supplierLogs = SupplierLog.getSupplierSupplierLog((Supplier) getAccount());
         ArrayList<String> toStringLogs = new ArrayList<>();
         for (SupplierLog supplierLog : supplierLogs) {
             toStringLogs.add(supplierLog.toString());
         }
-        return toStringLogs;
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(toStringLogs).getAsString());
     }
 
-    public ArrayList<String> getSupervisorLogs() {
+    public Response getSupervisorLogs() {
         ArrayList<CustomerLog> supervisorLogs = CustomerLog.getAllCustomerLogs();
         ArrayList<String> toStringLogs = new ArrayList<>();
         for (CustomerLog customerLog : supervisorLogs) {
             toStringLogs.add(customerLog.toString());
         }
-        return toStringLogs;
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(toStringLogs).getAsString());
     }
 
-    public String getCustomerLogById(String id) {
-        return CustomerLog.getCustomerLogById(id).toString();
+    public Response getCustomerLogById(String id) {
+        CustomerLog customerLog = CustomerLog.getCustomerLogById(id);
+        if (customerLog == null)
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Log not found");
+        return new Response(RequestStatus.SUCCESSFUL, customerLog.toString());
     }
 
-    public String getSupplierLogById(String id) {
-        return SupplierLog.getSupplierLogById(id).toString();
+    public Response getSupplierLogById(String id) {
+        SupplierLog supplierLog = SupplierLog.getSupplierLogById(id);
+        if (supplierLog == null)
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Log not found");
+        return new Response(RequestStatus.SUCCESSFUL, supplierLog.toString());
     }
 
-    public boolean proceedCustomerLog(String id) {
+    public Response proceedCustomerLog(String id) {
         try {
-            CustomerLog.getCustomerLogById(id).proceedToNextStep();
+            CustomerLog customerLog = CustomerLog.getCustomerLogById(id);
+            if (customerLog == null)
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Log not found");
+            customerLog.proceedToNextStep();
+            return new Response(RequestStatus.SUCCESSFUL, String.valueOf(true));
         } catch (ExceptionalMassage exceptionalMassage) {
-            return false;
-        }
-        return true;
-    }
-
-    public boolean isLogProcessable(String id) {
-        return CustomerLog.getCustomerLogById(id).getDeliveryStatus() != LogStatus.DELIVERED;
-    }
-
-    public int numberOfProductInCart(ProductInCart productInCart){
-        try {
-            return mainController.getCart().getCountOfProductInCart(productInCart);
-        } catch (ExceptionalMassage exceptionalMassage) {
-            return 0;
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "");
         }
     }
 
-    public void controlClearCart(){
+    public Response isLogProcessable(String id) {
+        CustomerLog customerLog = CustomerLog.getCustomerLogById(id);
+        if (customerLog == null) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Log not found");
+        }
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(customerLog.
+                getDeliveryStatus() != LogStatus.DELIVERED));
+    }
+
+    public Response numberOfProductInCart(ProductInCart productInCart) {
+        int c;
+        try {
+            c = mainController.getCart().getCountOfProductInCart(productInCart);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            c = 0;
+        }
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(c));
+    }
+
+    public Response controlClearCart() {
         mainController.getCart().clear();
+        return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public ArrayList<Product> controlGetRequestForLoggedInSupplier(){
-        return Product.getRequestsForThisSupplier((Supplier) mainController.getAccount());
+    public Response controlGetRequestForLoggedInSupplier() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(Product.
+                getRequestsForThisSupplier((Supplier) mainController.getAccount())).getAsString());
     }
 
     private void controlInternalCreateCodedDiscountForLoggedInCustomer() {
@@ -469,7 +491,7 @@ public class AccountController {
         String randomCode = CodedDiscount.codeGenerator();
         HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
         maxUsagePerCustomer.put((Customer)mainController.getAccount(),1);
-        new CodedDiscount(randomCode,start,end, 15, 100,maxUsagePerCustomer);
+        new CodedDiscount(randomCode,start,end, 15, 100, maxUsagePerCustomer);
     }
 
     public Response controlCreateCodedDiscountForLoggedInCustomer() {

@@ -131,8 +131,12 @@ public class ManageProductsSupplierGMenu extends GMenu {
         anchorPane0.getChildren().add(showCustomers);
         // Adding controller
 
-        for (Product product : Product.getProductForSupplier((Supplier) controller.getAccount())) {
-            products.getItems().add(product.getProductId());
+        try {
+            for (Product product : controller.getProductController().getProductForSupplier((Supplier) controller.getAccount())) {
+                products.getItems().add(product.getProductId());
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
         }
 
 
@@ -145,7 +149,12 @@ public class ManageProductsSupplierGMenu extends GMenu {
         editButton.setOnAction( e -> {
             ObservableList<String> selectedProduct = products.getSelectionModel().getSelectedItems();
             for (String productId : selectedProduct) {
-                Stage newStage = createNewStage(false, Product.getProductById(productId));
+                Stage newStage = null;
+                try {
+                    newStage = createNewStage(false, controller.getProductController().getProductById(productId));
+                } catch (ExceptionalMassage exceptionalMassage) {
+                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
+                }
                 newStage.setTitle("Edit product");
                 newStage.showAndWait();
             }
@@ -162,8 +171,12 @@ public class ManageProductsSupplierGMenu extends GMenu {
                 }
             }
             products.getItems().clear();
-            for (Product product : Product.getProductForSupplier((Supplier) controller.getAccount())) {
-                products.getItems().add(product.getProductId());
+            try {
+                for (Product product : controller.getProductController().getProductForSupplier((Supplier) controller.getAccount())) {
+                    products.getItems().add(product.getProductId());
+                }
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
 
         });
@@ -187,7 +200,11 @@ public class ManageProductsSupplierGMenu extends GMenu {
         showCustomers.setOnAction(e -> {
             ObservableList<String> selectedProduct = products.getSelectionModel().getSelectedItems();
             for (String s : selectedProduct) {
-                stage.setScene(new ViewProductCustomers("View products customer",this,stage,controller,Product.getProductById(s)).getScene());
+                try {
+                    stage.setScene(new ViewProductCustomers("View products customer",this,stage,controller,controller.getProductController().getProductById(s)).getScene());
+                } catch (ExceptionalMassage exceptionalMassage) {
+                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
+                }
             }
         });
 
@@ -666,7 +683,11 @@ public class ManageProductsSupplierGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(text3);
-        text3.setText(Product.getProductById(productId).toString());
+        try {
+            text3.setText(controller.getProductController().getProductById(productId).toString());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
 
 
         return new Scene(anchorPane0);

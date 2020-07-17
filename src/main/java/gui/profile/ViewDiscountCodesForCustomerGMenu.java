@@ -34,8 +34,9 @@ public class ViewDiscountCodesForCustomerGMenu extends GMenu{
         mainPane.setMinWidth(800);
         Text  resultLabel = new Text();
         resultLabel.setWrappingWidth(600);
+        ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
         try {
-            ArrayList<CodedDiscount> codedDiscounts = controller.getOffController().controlGetCodedDiscountByCustomer();
+            codedDiscounts = controller.getOffController().controlGetCodedDiscountByCustomer();
         } catch (ExceptionalMassage ex){
             new AlertBox(this, ex, controller).showAndWait();
         }

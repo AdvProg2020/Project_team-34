@@ -248,37 +248,45 @@ public class ProductMenuG extends GMenu {
         comments.setContent(commentsScrollPane);
 
 
-        if(Sale.isProductHasAnySale(product)) {
-            ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/Sale.png", 250, 205);
+        try {
+            if(controller.getOffController().isProductHasAnySale(product)) {
+                ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/Sale.png", 250, 205);
 
-            soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
-            Group blend = new Group(
-                    imageViewBox,
-                    soldOutImageView
-            );
+                soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
+                Group blend = new Group(
+                        imageViewBox,
+                        soldOutImageView
+                );
 
-            imageViewGridPane.getChildren().addAll(imageViewBox, blend, soldOutImageView);
-//                gridPane.getChildren().add(soldOutImageView);
-        }
-        else if(product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
-            ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 250, 250);
+                imageViewGridPane.getChildren().addAll(imageViewBox, blend, soldOutImageView);
+    //                gridPane.getChildren().add(soldOutImageView);
+            }
+            else if(controller.getProductController().getAllSuppliersThatHaveAvailableProduct(product).size() == 0) {
+                ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 250, 250);
 
-            soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
-            Group blend = new Group(
-                    imageViewBox,
-                    soldOutImageView
-            );
+                soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
+                Group blend = new Group(
+                        imageViewBox,
+                        soldOutImageView
+                );
 
-            imageViewGridPane.getChildren().addAll( imageViewBox, blend,soldOutImageView);
-//                gridPane.getChildren().add(soldOutImageView);
-        }
-        else {
-            imageViewGridPane.getChildren().add(imageViewBox);
+                imageViewGridPane.getChildren().addAll( imageViewBox, blend,soldOutImageView);
+    //                gridPane.getChildren().add(soldOutImageView);
+            }
+            else {
+                imageViewGridPane.getChildren().add(imageViewBox);
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
         }
 
         ArrayList<String> suppliersIds = new ArrayList<>();
-        for (Supplier supplier : product.getAllSuppliersThatHaveAvailableProduct()) {
-            suppliersIds.add(supplier.getNameOfCompany());
+        try {
+            for (Supplier supplier : controller.getProductController().getAllSuppliersThatHaveAvailableProduct(product)) {
+                suppliersIds.add(supplier.getNameOfCompany());
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller);
         }
         suppliers.getItems().addAll(suppliersIds);
 
@@ -299,12 +307,16 @@ public class ProductMenuG extends GMenu {
         });
 
         suppliers.setOnAction( e -> {
-            int originalPrice = product.getPrice(Supplier.getSupplierByCompanyName(suppliers.getValue()));
-            if(Sale.isProductInThisSuppliersSale(product, Supplier.getSupplierByCompanyName(suppliers.getValue()))){
-                priceLabel.setText((originalPrice) + "=>" + (originalPrice - Sale.getProductSale(product,Supplier.getSupplierByCompanyName(suppliers.getValue())).discountAmountFor(originalPrice)));
+            try {
+                int originalPrice = product.getPrice(controller.getAccountController().getSupplierByCompanyName(suppliers.getValue()));
+                if (controller.getOffController().isProductInThisSuppliersSale(product, controller.getAccountController().getSupplierByCompanyName(suppliers.getValue()))) {
+                    priceLabel.setText((originalPrice) + "=>" + (originalPrice - controller.getOffController().getProductSale(product, controller.getAccountController().getSupplierByCompanyName(suppliers.getValue())).discountAmountFor(originalPrice)));
 
-            } else {
-                priceLabel.setText(originalPrice +"");
+                } else {
+                    priceLabel.setText(originalPrice + "");
+                }
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
             }
             suppliers.setPromptText("Choose your supplier");
         });
@@ -365,7 +377,12 @@ public class ProductMenuG extends GMenu {
         gridPane.add(compareButton,1,i);
         gridPane.add(productName,0,i);
         compareButton.setOnAction( e -> {
-            Product comparing = Product.getProductByName(productName.getText());
+            Product comparing = null;
+            try {
+                comparing = controller.getProductController().getProductByName(productName.getText());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller);
+            }
             if(comparing == null){
                 new AlertBox(this,"No such product","OK",controller).showAndWait();
             } else {

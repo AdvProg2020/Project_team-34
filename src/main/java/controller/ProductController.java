@@ -422,4 +422,40 @@ public class ProductController {
     public void clearFilterAndSort() throws ExceptionalMassage {
         communication("clearFilterAndSort", new JsonArray());
     }
+
+    public ArrayList<Supplier> getAllSuppliersThatHaveAvailableProduct(Product product) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        return Utils.convertJsonElementToSupplierArrayList(communication("getAllSuppliersThatHaveAvailableProduct",inputs));
+    }
+
+    public Product getProductByName(String name) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(name);
+        return Product.convertJsonStringToProduct(communication("getProductByName", inputs).getAsString());
+    }
+
+    public void convertProductIdToRequestId(String id) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        communication("convertProductIdToRequestId", inputs);
+    }
+
+    public void convertSaleIdToRequestId(String id) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        communication("convertSaleIdToRequestId", inputs);
+    }
+
+    public ArrayList<Product> getProductForSupplier(Supplier supplier) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(supplier));
+        return Utils.convertJsonElementToProductArrayList(communication("getProductForSupplier",inputs));
+    }
+
+    public Product getProductById(String id) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        return Product.convertJsonStringToProduct(communication("getProductById",inputs).getAsString());
+    }
 }

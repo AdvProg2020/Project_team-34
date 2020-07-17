@@ -328,4 +328,24 @@ public class AccountController {
     public void controlCreateCodedDiscountForLoggedInCustomer() throws ExceptionalMassage {
         communication("controlCreateCodedDiscountForLoggedInCustomer", new JsonArray());
     }
+
+    public Supplier getSupplierByCompanyName(String companyName) throws ExceptionalMassage {
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(companyName);
+        return Supplier.convertJsonStringToSupplier(communication("getSupplierByCompanyName",jsonArray).getAsString());
+    }
+
+    public Account getAccountByUsernameWithinAvailable(String username) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(username);
+        JsonElement jsonElement = communication("getAccountByUsernameWithinAvailable", inputs);
+        JsonArray jsonArray = jsonElement.getAsJsonArray();
+        if (jsonArray.get(0).getAsString().equals("Customer"))
+            return Customer.convertJsonStringToCustomer(jsonArray.get(1).getAsString());
+        if (jsonArray.get(0).getAsString().equals("Supervisor"))
+            return Supervisor.convertJsonStringToSupervisor(jsonArray.get(1).getAsString());
+        if (jsonArray.get(0).getAsString().equals("Supplier"))
+            return Supplier.convertJsonStringToSupplier(jsonArray.get(1).getAsString());
+        return null;
+    }
 }

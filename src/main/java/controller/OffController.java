@@ -147,4 +147,25 @@ public class OffController {
         inputs.add(String.valueOf(maxDiscountAmount));
         return inputs;
     }
+
+    public boolean isProductHasAnySale(Sale sale,Product product) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(sale));
+        inputs.add(Utils.convertObjectToJsonString(product));
+        return communication("isProductHasAnySale", inputs).getAsBoolean();
+    }
+
+    public boolean isProductInThisSuppliersSale(Product product, Supplier supplier) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(Utils.convertObjectToJsonString(supplier));
+        return communication("isProductInThisSuppliersSale", inputs).getAsBoolean();
+    }
+
+    public Sale getProductSale(Product product, Supplier supplier) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(Utils.convertObjectToJsonString(supplier));
+        return Sale.convertJsonStringToSale(communication("getProductSale",inputs).getAsString());
+    }
 }

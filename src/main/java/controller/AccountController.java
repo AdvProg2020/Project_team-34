@@ -11,6 +11,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import discount.CodedDiscount;
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import log.LogStatus;
@@ -564,5 +565,36 @@ public class AccountController {
     public Response getSupervisorObservableList() throws ExceptionalMassage {
         return new Response(RequestStatus.SUCCESSFUL,
                 Utils.convertSupervisorArrayListToJsonElement(Account.getSupervisorsList()).getAsString());
+    }
+
+    public Response getSupplierByCompanyName(String name){
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Supplier.getSupplierByCompanyName(name)));
+    }
+
+    public Response isProductInThisSuppliersSale(String productString,String supplierString){
+        Product product = Product.convertJsonStringToProduct(productString);
+        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Sale.isProductInThisSuppliersSale(product,supplier)));
+    }
+
+    public Response getAccountByUsernameWithinAvailable(String username){
+        Account account = Account.getAccountByUsernameWithinAvailable(username);
+        JsonArray jsonArray = new JsonArray();
+        if (account == null) {
+            jsonArray.add("null");
+            jsonArray.add("null");
+            return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
+        }
+        if (account instanceof Customer) {
+            jsonArray.add("Customer");
+        }
+        if (account instanceof Supplier) {
+            jsonArray.add("Supplier");
+        }
+        if (account instanceof Supervisor) {
+            jsonArray.add("Supervisor");
+        }
+        jsonArray.add(Utils.convertObjectToJsonString(account));
+        return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
     }
 }

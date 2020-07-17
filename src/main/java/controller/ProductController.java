@@ -214,7 +214,7 @@ public class ProductController {
         if (!(mainController.getAccount() instanceof Customer)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sign in as a customer first!"));
         }
-        new Comment((Customer) mainController.getAccount(), product, title, content, controlHasCustomerBoughtThisProduct((Customer)mainController.getAccount(),product));
+        new Comment((Customer) mainController.getAccount(), product, title, content, controlHasCustomerBoughtThisProductInternal((Customer)mainController.getAccount(),product));
         return Response.createSuccessResponse();
     }
 
@@ -235,7 +235,7 @@ public class ProductController {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No such product with id!"));
         } else if (!(mainController.getAccount() instanceof Customer)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sign in as customer first!"));
-        } else if (!controlHasCustomerBoughtThisProduct((Customer)mainController.getAccount(),Product.getProductById(id))) {
+        } else if (!controlHasCustomerBoughtThisProductInternal((Customer)mainController.getAccount(),Product.getProductById(id))) {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You haven't bought this product yet!"));
         } else if (Score.hasCustomerRateThisProduct(Product.getProductById(id),(Customer)mainController.getAccount())){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You can't rate again!"));
@@ -327,6 +327,10 @@ public class ProductController {
         Customer customer = Customer.convertJsonStringToCustomer(customerString);
         Product product = Product.convertJsonStringToProduct(productString);
         return new Response(RequestStatus.SUCCESSFUL,String.valueOf(CustomerLog.getAllCustomersBoughtProduct(product).contains(customer)));
+    }
+
+    public boolean controlHasCustomerBoughtThisProductInternal(Customer customer, Product product){
+        return CustomerLog.getAllCustomersBoughtProduct(product).contains(customer);
     }
 
     public Response controlViewThisProduct(String productString){

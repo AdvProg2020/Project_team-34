@@ -1,9 +1,11 @@
 package gui.profile;
 
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -20,13 +22,17 @@ public class ViewLogsForCustomerGMenu extends GMenu {
 
     @Override
     protected Scene createScene() {
-        VBox logsBox = new VBox();
-        for (String log : controller.getAccountController().getCustomerLogs()) {
-            logsBox.getChildren().add(customerLogBox(log));
+        try {
+            VBox logsBox = new VBox();
+            for (String log : controller.getAccountController().getCustomerLogs()) {
+                logsBox.getChildren().add(customerLogBox(log));
+            }
+            logsBox.setMaxHeight(720);
+            logsBox.setPadding(new Insets(10, 10, 10, 10));
+            return createLogScene(logsBox);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return new Scene(new Pane());
         }
-        logsBox.setMaxHeight(720);
-        logsBox.setPadding(new Insets(10, 10, 10, 10));
-        return createLogScene(logsBox);
     }
 
     private VBox customerLogBox(String customerLog) {

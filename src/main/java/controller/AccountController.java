@@ -39,65 +39,54 @@ public class AccountController {
                 communication(function, inputs, ControllerSource.ACCOUNT_CONTROLLER).getContent());
     }
 
-    public boolean hasSomeOneLoggedIn(){
-        return mainController.getAccount()!= null;
+    public boolean hasSomeOneLoggedIn() throws ExceptionalMassage{
+        JsonElement response = communication("hasSomeOneLoggedIn",new JsonArray());
+        return response.getAsBoolean();
+
     }
 
-    public String loggedInAccountType() {
-        Account account = mainController.getAccount();
-        if (account == null)
-            return null;
-        if (account instanceof Customer)
-            return "Customer";
-        if (account instanceof Supervisor)
-            return "Supervisor";
-        return "Supplier";
+    public String loggedInAccountType() throws ExceptionalMassage{
+        JsonElement jsonElement = communication("loggedInAccountType",new JsonArray());
+
+        return jsonElement.getAsString();
     }
 
-    public Account getAccount() {
-        return mainController.getAccount();
-    }
+   /* public Account getAccount() {
+        JsonElement account = communication("getAccount",new JsonArray());
+        return Utils.
+    } */
 
     public void controlCreateAccount(String username, String type, String name, String familyName, String email,
                                      String phoneNumber, String password, int credit, String nameOfCompany)
             throws ExceptionalMassage {
-        if (username.trim().length() == 0) throw new ExceptionalMassage("username can't be empty");
-        if (name.trim().length() == 0) throw new ExceptionalMassage("name can't be empty");
-        if (familyName.trim().length() == 0) throw new ExceptionalMassage("family name can't be empty");
-        if (email.trim().length() == 0) throw new ExceptionalMassage("email can't be empty");
-        if (phoneNumber.trim().length() == 0) throw new ExceptionalMassage("phone number can't be empty");
-        if (password.trim().length() == 0) throw new ExceptionalMassage("password can't be empty");
 
-        if (!Account.isUsernameAvailable(username))
-            throw new ExceptionalMassage("Duplicate username");
-        if (type.equals("customer")) {
-            if (credit == 0) throw new ExceptionalMassage("credit cannot be 0");
-            controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
-            controlLogin(username, password);
-        }
-        if (type.equals("supplier")) {
-            if (nameOfCompany.trim().length() == 0) throw new ExceptionalMassage("credit cannot be 0");
-            controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
-            controlLogin(username, password);
-        }
-        if (type.equals("supervisor"))
-            controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
+        JsonArray input = new JsonArray();
+        input.add(username);
+        input.add(type);
+        input.add(name);
+        input.add(familyName);
+        input.add(email);
+        input.add(phoneNumber);
+        input.add(password);
+        input.add(String.valueOf(credit));
+        input.add(nameOfCompany);
+        communication("controlCreateAccount",input);
     }
 
-    private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
+    /*private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
                                        String password, int credit) {
         new Customer(username, name, familyName, email, phoneNumber, password, credit);
-    }
+    }*/
 
-    private void controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber,
+    /*private void controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber,
                                        String password, int credit, String nameOfCompany) throws ExceptionalMassage {
         if (Supplier.getSupplierByCompanyName(nameOfCompany) != null) {
             throw new ExceptionalMassage("Duplicate company name.");
         }
         new Supplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
-    }
+    }*/
 
-    private void controlCreateSupervisor(String username, String name, String familyName, String email,
+    /*private void controlCreateSupervisor(String username, String name, String familyName, String email,
                                          String phoneNumber, String password, int credit) throws ExceptionalMassage {
         mainController.setIsFirstSupervisorCreated(Account.isSupervisorCreated());
         if (mainController.getIsFirstSupervisorCreated()) {
@@ -108,138 +97,79 @@ public class AccountController {
         }
         new Supervisor(username, name, familyName, email, phoneNumber, password, credit);
         mainController.setIsFirstSupervisorCreated(true);
-    }
+    }*/
 
     public void controlLogin(String username, String password) throws ExceptionalMassage {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(username);
         jsonArray.add(password);
-        Request request = new Request(mainController.getToken(), "controlLogin", jsonArray.toString(),
-                ControllerSource.ACCOUNT_CONTROLLER);
-        try {
-            mainController.getObjectOutputStream().writeUTF(Utils.convertObjectToJsonString(request));
-            try {
-                String responseString = mainController.getObjectInputStream().readUTF();
-                Response response = Response.convertJsonStringToResponse(responseString);
-                if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
-                    throw new ExceptionalMassage(response.getContent());
-                }
-            } catch (IOException e) {
-                throw new ExceptionalMassage("Response not received");
-            }
-        } catch (IOException e) {
-            throw new ExceptionalMassage("Request failed");
-        }
+        communication("controlLogin",jsonArray);
     }
 
-    public void controlLogout() {
-        mainController.setAccount(null);
-        mainController.setCart(new Cart(null));
-        mainController.getProductController().getFilterAndSort().clear();
+    public void controlLogout() throws ExceptionalMassage{
+        communication("controlLogout",new JsonArray());
     }
 
-    public String controlViewPersonalInfo() {
-        return String.valueOf(mainController.getAccount());
+    public String controlViewPersonalInfo() throws ExceptionalMassage{
+        JsonElement response = communication("controlViewPersonalInfo",new JsonArray());
+        return response.getAsString();
     }
 
-    public int controlViewBalance() {
-        return (mainController.getAccount()).getCredit();
+    public int controlViewBalance() throws ExceptionalMassage{
+        JsonElement response = communication("controlViewBalance",new JsonArray());
+        return response.getAsInt();
     }
 
     public void controlEditField(String field, String newValue) throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        switch (field) {
-            case "name":
-                account.setName(newValue);
-                break;
-            case "familyName":
-                account.setFamilyName(newValue);
-                break;
-            case "email":
-                account.setEmail(newValue);
-                break;
-            case "phoneNumber":
-                account.setPhoneNumber(newValue);
-                break;
-            case "credit":
-                int value;
-                try {
-                    value = Integer.parseInt(newValue);
-                } catch (Exception exception) {
-                    throw new ExceptionalMassage("You must enter a number for credit");
-                }
-                account.setCredit(value);
-                break;
-            case "nameOfCompany":
-                if (account instanceof Supplier)
-                    ((Supplier) account).setNameOfCompany(newValue);
-                else
-                    throw new ExceptionalMassage("You must login as a Supplier to edit company name");
-                break;
-            case  "username":
-                throw new ExceptionalMassage("You can not edit username");
-            case "password":
-                account.setPassword(newValue);
-                break;
-            default:
-                throw new ExceptionalMassage("No such field " + field);
-        }
-
+        JsonArray input = new JsonArray();
+        input.add(field);
+        input.add(newValue);
+        communication("controlEditField",input);
     }
 
     public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,
-                              int credit, String nameOfCompany) {
-        if (password == null || password.trim().length() == 0) {
-            password = getAccount().getPassword();
-        }
-        if (getAccount() instanceof Customer) {
-            ((Customer) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, credit);
-        } else if (getAccount() instanceof Supplier) {
-            ((Supplier) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
-        } else if (getAccount() instanceof Supervisor) {
-            ((Supervisor) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, credit);
-        }
+                              int credit, String nameOfCompany) throws ExceptionalMassage{
+        JsonArray input = new JsonArray();
+        input.add(name);
+        input.add(familyName);
+        input.add(email);
+        input.add(phoneNumber);
+        input.add(password);
+        input.add(String.valueOf(credit));
+        input.add(nameOfCompany);
+        communication("editAllFields",input);
     }
 
-    public String controlGetListOfAccounts() {
-        ArrayList<String> allUsername = Account.getAllUsername();
-        StringBuilder result = new StringBuilder();
-        for (String username : allUsername) {
-            result.append(username).append('\n');
-        }
-        return result.toString();
+    public String controlGetListOfAccounts() throws ExceptionalMassage{
+        JsonElement accounts = communication("controlFetListOfAccounts",new JsonArray());
+        return accounts.getAsString();
     }
 
-    public ArrayList<String> controlGetListOfAccountUserNames(){
-        ArrayList<String> allUsername = Account.getAllUsername();
+    public ArrayList<String> controlGetListOfAccountUserNames() throws ExceptionalMassage{
+        JsonElement response = communication("controlGetListOfAccountUserNames",new JsonArray());
+        ArrayList<String> allUsername = Utils.convertJasonObjectToStringArrayList(response);
         return allUsername;
     }
 
     public String controlViewUserInfo(String username) throws ExceptionalMassage {
-        Account account = Account.getAccountByUsernameWithinAvailable(username);
-        if (account == null)
-            throw new ExceptionalMassage("Account not found.");
-        return account.toString();
+        JsonArray input = new JsonArray();
+        input.add(username);
+        JsonElement account = communication("controlViewUserInfo",input);
+        return account.getAsString();
     }
 
     public void controlDeleteUser(String username) throws ExceptionalMassage {
-        Account accountGotByUsername = Account.getAccountByUsernameWithinAvailable(username);
-        if (accountGotByUsername == null)
-            throw new ExceptionalMassage("Account not found.");
-        if(username.equals(getAccount().getUserName()))
-            throw new ExceptionalMassage("You cannot delete Your self");
-        accountGotByUsername.removeAccount();
+        JsonArray input = new JsonArray();
+        input.add(username);
+        communication("controlDeleteUser", input);
     }
 
-    public String controlViewCompanyInfo() {
-        Account account = mainController.getAccount();
-        if (account instanceof Supplier) {
-            return ((Supplier) account).getNameOfCompany();
-        }
-        return null;
+    public String controlViewCompanyInfo() throws ExceptionalMassage{
+        JsonElement companyInfo = communication("controlViewCompanyInfo", new JsonArray());
+        return companyInfo.getAsString();
     }
 
-    public String controlGetListOfProductsForThisSupplier() throws  ExceptionalMassage{
+    /*public String controlGetListOfProductsForThisSupplier() throws  ExceptionalMassage{
         Account account = mainController.getAccount();
         if (!(account instanceof Supplier)) {
             throw new ExceptionalMassage("Sign in as a supplier");
@@ -253,42 +183,32 @@ public class AccountController {
             }
             return String.valueOf(result);
         }
-    }
+    }*/
 
     public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
-        if (getAccount() instanceof Supplier || getAccount() instanceof Supervisor) {
-            throw new ExceptionalMassage("logout, Supervisor and Supplier are denied");
-        }
-        Product product = Product.getProductById(productId);
-        if (product == null)
-            throw new ExceptionalMassage("Product not found.");
-        Supplier supplier = Supplier.getSupplierByCompanyName(supplierNameOfCompany);
-        if (supplier == null)
-            throw new ExceptionalMassage("Supplier not found.");
-        mainController.getCart().addProductToCart(product, supplier);
+        JsonArray input = new JsonArray();
+        input.add(productId);
+        input.add(supplierNameOfCompany);
+        communication("controlAddToCart",input);
     }
 
     public void increaseProductQuantity(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
-        Product product = Product.getProductById(productId);
-        if (product == null)
-            throw new ExceptionalMassage("Product not found.");
-        Supplier supplier = Supplier.getSupplierByCompanyName(supplierNameOfCompany);
-        if (supplier == null)
-            throw new ExceptionalMassage("Supplier not found.");
-        mainController.getCart().increaseProductCount(product, supplier);
+        JsonArray input = new JsonArray();
+        input.add(productId);
+        input.add(supplierNameOfCompany);
+        communication("increaseProductQuantity", input);
     }
 
     public void decreaseProductQuantity(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
-        Product product = Product.getProductById(productId);
-        if (product == null)
-            throw new ExceptionalMassage("Product not found.");
-        Supplier supplier = Supplier.getSupplierByCompanyName(supplierNameOfCompany);
-        if (supplier == null)
-            throw new ExceptionalMassage("Supplier not found.");
-        mainController.getCart().decreaseProductCount(product, supplier);
+        JsonArray input = new JsonArray();
+        input.add(productId);
+        input.add(supplierNameOfCompany);
+        communication("decreaseProductQuantity", input);
     }
 
-    public Cart controlViewCart() {
+    public Cart controlViewCart() throws ExceptionalMassage{
+        JsonElement cart = communication("controlViewCart",new JsonArray());
+        return Cart
         return mainController.getCart();
     }
 

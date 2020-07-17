@@ -1,6 +1,7 @@
 package communications;
 
 import account.Customer;
+import account.Supervisor;
 import account.Supplier;
 import com.google.gson.*;
 import discount.CodedDiscount;
@@ -93,6 +94,22 @@ public class Utils {
             saleArrayList.add(Sale.convertJsonStringToSale(element.getAsString()));
         }
         return saleArrayList;
+    }
+
+    public static JsonElement convertJsonElementToSupervisorArrayList(ArrayList<Supervisor> supervisorArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Supervisor supervisor : supervisorArrayList) {
+            jsonArray.add(convertObjectToJsonString(supervisor));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Supervisor> convertJsonElementToSupervisorArrayList(JsonElement jsonElement) {
+        ArrayList<Supervisor> supervisorArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            supervisorArrayList.add(Supervisor.convertJsonStringToSupervisor(element.getAsString()));
+        }
+        return supervisorArrayList;
     }
 
     public static JsonElement convertSupplierArrayListToJsonElement(ArrayList<Supplier> supplierArrayList) {

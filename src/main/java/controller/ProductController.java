@@ -274,8 +274,11 @@ public class ProductController {
         return Boolean.parseBoolean(communication("isThisCategoryClassifier", inputs).getAsString());
     }
 
-    public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) {
-        return Category.getCategoryByName(name).getSpecialFields();
+    public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) throws ExceptionalMassage{
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(name);
+        JsonElement jsonElement = communication("controlGetCategorySpecialFields",jsonArray);
+        return Utils.convertJasonElementToStringToStringArrayListHashMap(jsonElement);
     }
 
     //related to FilterAndSort

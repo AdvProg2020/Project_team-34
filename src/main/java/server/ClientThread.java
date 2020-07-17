@@ -7,6 +7,7 @@ import com.google.gson.JsonParser;
 import controller.Controller;
 import server.communications.ControllerSource;
 import server.communications.Request;
+import server.communications.RequestStatus;
 import server.communications.Response;
 
 import java.io.IOException;
@@ -89,15 +90,15 @@ public class ClientThread extends Thread {
     }
 
     private Response analyseRequest(String requestStringJson){
-        //This method needs modification!
-        //Parsing the requestJson to Request!
         Gson gson = new Gson();
         JsonParser jsonParser = new JsonParser();
         JsonElement requestJson = jsonParser.parse(requestStringJson);
         Request request = gson.fromJson(requestJson,Request.class);
         String functionName = request.getFunction();
         String token = request.getToken();
-        //Analysing the token and checking if it's valid
+        if(!token.equals(controller.getToken())){
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Token is not Valid!");
+        }
         ArrayList<Class> params = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
 
@@ -120,21 +121,21 @@ public class ClientThread extends Thread {
                 if (params.size() == 0) {
                     method = controller.getAccountController().getClass().getMethod(functionName);
                 } else {
-                    method = controller.getAccountController().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
+                    method = controller.getAccountController().getClass().getMethod(functionName, params.toArray(new Class[0]));
                 }
                 return (Response) method.invoke(controller.getAccountController(),values.toArray());
             } else if (request.getSource() == ControllerSource.OFF_CONTROLLER) {
                 if (params.size() == 0) {
                     method = controller.getOffController().getClass().getMethod(functionName);
                 } else {
-                    method = controller.getOffController().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
+                    method = controller.getOffController().getClass().getMethod(functionName, params.toArray(new Class[0]));
                 }
                 return (Response) method.invoke(controller.getOffController(),values.toArray());
             } else if (request.getSource() == ControllerSource.PRODUCT_CONTROLLER) {
                 if (params.size() == 0) {
                     method = controller.getProductController().getClass().getMethod(functionName);
                 } else {
-                    method = controller.getProductController().getClass().getMethod(functionName, params.toArray(new Class[params.size()]));
+                    method = controller.getProductController().getClass().getMethod(functionName, params.toArray(new Class[0]));
                 }
                 return (Response) method.invoke(controller.getProductController(),values.toArray());
             }

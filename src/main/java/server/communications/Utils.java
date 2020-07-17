@@ -5,6 +5,8 @@ import account.Supplier;
 import com.google.gson.*;
 import discount.CodedDiscount;
 import discount.Sale;
+import feedback.Comment;
+import product.Category;
 import product.Product;
 
 import java.util.ArrayList;
@@ -147,5 +149,25 @@ public class Utils {
             supplierArrayList.add(Supplier.convertJsonStringToSupplier(element.getAsString()));
         }
         return supplierArrayList;
+    }
+
+    public static JsonElement convertCategoriesToJsonElement(ArrayList<Category> categories){
+        JsonArray jsonArray = new JsonArray();
+        for (Category category : categories) {
+            jsonArray.add(convertObjectToJsonString(category));
+        }
+        return jsonArray;
+    }
+
+    public static JsonElement convertCommentsToJsonElement(ArrayList<Comment> comments){
+        JsonArray jsonArray = new JsonArray();
+        for (Comment comment : comments) {
+            jsonArray.add(convertObjectToJsonString(comment));
+        }
+        return jsonArray;
+    }
+
+    public static JsonElement convertStringToStringsHashMapToJsonElement(HashMap<String, ArrayList<String>> hashMap){
+        return null;
     }
 }

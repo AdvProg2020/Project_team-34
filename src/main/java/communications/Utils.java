@@ -5,6 +5,8 @@ import account.Supplier;
 import com.google.gson.*;
 import discount.CodedDiscount;
 import discount.Sale;
+import feedback.Comment;
+import product.Category;
 import product.Product;
 
 import java.util.ArrayList;
@@ -74,6 +76,14 @@ public class Utils {
         }
         return codedDiscountArrayList;
     }
+    
+    public static ArrayList<Category> convertJsonElementToCategoryArrayList(JsonElement jsonElement){
+        ArrayList<Category> categoryArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            categoryArrayList.add(Category.convertJsonStringToCategory(element.getAsString()));
+        }
+        return categoryArrayList;
+    }
 
     public static JsonElement convertSaleArrayListToJsonElement(ArrayList<Sale> saleArrayList) {
         JsonArray jsonArray = new JsonArray();
@@ -140,4 +150,13 @@ public class Utils {
         }
         return supplierArrayList;
     }
+
+    public static ArrayList<Comment> convertJsonElementToCommentList(JsonElement jsonElement){
+        ArrayList<Comment> commentArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            commentArrayList.add(Comment.convertJsonStringToComment(element.getAsString()));
+        }
+        return commentArrayList;
+    }
 }
+

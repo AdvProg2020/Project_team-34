@@ -7,6 +7,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import communications.ControllerSource;
+import communications.Response;
 import communications.Utils;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
@@ -96,114 +97,107 @@ public class ProductController {
     }
 
     //added by rpirayadi
-    public ArrayList<Category> controlGetAllCategoriesInACategory(Category rootCategory){
-        return rootCategory.getAllCategoriesIn();
+    public ArrayList<Category> controlGetAllCategoriesInACategory(Category rootCategory) throws ExceptionalMassage{
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(Utils.convertObjectToJsonString(rootCategory));
+        JsonElement categories = communication("controlGetAllCategoriesInACategory", jsonArray);
+        ArrayList<Category> categoryArrayList = Utils.convertJsonElementToCategoryArrayList(categories);
+        return categoryArrayList;
     }
     //added by rpirayadi
-    public Category controlGetAllProductCategory (){
-        return Category.getSuperCategory();
+    public Category controlGetAllProductCategory () throws ExceptionalMassage{
+        JsonElement category = communication("controlGetAllProductCategory",new JsonArray());
+        return Category.convertJsonStringToCategory(category.getAsString());
     }
 
     //related to feedback:
     public void controlAddCommentToProduct(String title, String content, Product product) throws ExceptionalMassage{
-        if (!(mainController.getAccount() instanceof Customer)){
-            throw new ExceptionalMassage("Sign in as a customer first!");
-        }
-        new Comment((Customer) mainController.getAccount(), product, title, content, controlHasCustomerBoughtThisProduct((Customer)mainController.getAccount(),product));
+        JsonArray inputs = new JsonArray();
+        inputs.add(title);
+        inputs.add(content);
+        inputs.add(Utils.convertObjectToJsonString(product));
+        communication("controlAddCommentToProduct", inputs);
     }
 
-    public ArrayList<Comment> controlGetCommentsOfAProduct(Product product) {
-        ArrayList<Comment> productComment = new ArrayList<>();
-        for (Comment comment : Comment.getComments()) {
-            if (comment.getProduct() == product) {
-                productComment.add(comment);
-            }
-        }
-        return productComment;
+    public ArrayList<Comment> controlGetCommentsOfAProduct(Product product) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        JsonElement comments = communication("controlGetCommentsOfAProduct",inputs);
+        ArrayList<Comment> commentArrayList = Utils.convertJsonElementToCommentList(comments);
+        return commentArrayList;
     }
 
     public void controlRateProductById(String id, float score) throws ExceptionalMassage {
-        if (Product.getProductById(id) == null) {
-            throw new ExceptionalMassage("No such product with id!");
-        } else if (!(mainController.getAccount() instanceof Customer)){
-            throw new ExceptionalMassage("Sign in as customer first!");
-        } else if (!controlHasCustomerBoughtThisProduct((Customer)mainController.getAccount(),Product.getProductById(id))) {
-            throw new ExceptionalMassage("You haven't bought this product yet!");
-        } else if (Score.hasCustomerRateThisProduct(Product.getProductById(id),(Customer)mainController.getAccount())){
-            throw new ExceptionalMassage("You can't rate again!");
-        }
-        new Score(score, (Customer) (mainController.getAccount()), Product.getProductById(id));
+        JsonArray jsonArray = new JsonArray();
+        jsonArray.add(id);
+        jsonArray.add(String.valueOf(score));
+        communication("controlRateProductById", jsonArray);
     }
 
-    public float controlGetAverageScoreByProduct(Product product) {
-        return Score.getAverageScoreForProduct(product);
+    public float controlGetAverageScoreByProduct(Product product) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        JsonElement score = communication("controlGetAverageScoreByProduct", inputs);
+        return score.getAsFloat();
     }
 
-    public ArrayList<Comment> controlGetConfirmedComments() {
-        ArrayList<Comment> confirmedComments = new ArrayList<>();
-        for (Comment comment : Comment.getComments()) {
-            if (comment.getState() == CommentState.CONFIRMED) {
-                confirmedComments.add(comment);
-            }
-        }
-        return confirmedComments;
+    public ArrayList<Comment> controlGetConfirmedComments() throws ExceptionalMassage{
+        JsonElement comments = communication("controlGetConfirmedComments", new JsonArray());
+        ArrayList<Comment> commentArrayList = Utils.convertJsonElementToCommentList(comments);
+        return commentArrayList;
     }
 
     //related to request:
-    public String controlGetListOfRequestId() {
-        ArrayList<String> allProductRequestId = Product.getAllProductRequestId();
-        StringBuilder result = new StringBuilder();
-        for (String requestId : allProductRequestId) {
-            result.append(requestId).append('\n');
-        }
-        for (String requestId : Sale.getAllSaleRequestId()) {
-            result.append(requestId).append('\n');
-        }
-        return result.toString();
+    public String controlGetListOfRequestId() throws  ExceptionalMassage{
+        return communication("controlGetListOfRequestId", new JsonArray()).getAsString();
     }
 
-    public ArrayList<String> controlGetArrayOfRequestId() {
-        ArrayList<String> allRequests = new ArrayList<>();
-        allRequests.addAll(Product.getAllProductRequestId());
-        allRequests.addAll(Sale.getAllSaleRequestId());
-        return allRequests;
+    public ArrayList<String> controlGetArrayOfRequestId() throws ExceptionalMassage{
+        JsonElement arrayOfString = communication("controlGetArrayOfRequestId", new JsonArray());
+        ArrayList<String> arrayList = Utils.convertJasonElementToStringArrayList(arrayOfString);
+        return arrayList;
     }
 
     public String controlShowDetailForRequest(String requestId) throws ExceptionalMassage {
-        if (requestId.charAt(3) == 'P') {
-            return Product.getDetailsForProductRequest(requestId);
-        } else {
-            return Sale.getDetailsForSaleRequest(requestId);
-        }
+        JsonArray input = new JsonArray();
+        input.add(requestId);
+        return communication("controlShowDetailForRequest",input).getAsString();
     }
 
     public State controlGetEnumForRequest(String requestId) throws ExceptionalMassage {
-        if(requestId.charAt(3) == 'P'){
-            return Product.getProductById(Product.convertRequestIdToProductId(requestId)).getProductState();
-        } else {
-            return Sale.getSaleById(Sale.convertRequestIdToSaleId(requestId)).getState();
-        }
+        JsonArray inputs = new JsonArray();
+        inputs.add(requestId);
+        return State.convertJsonStringToState(communication("controlGetEnumForRequest",inputs).getAsString());
+
     }
 
     public void controlAcceptOrDeclineRequest(String requestId, boolean isAccepted) throws ExceptionalMassage {
-        if (requestId.charAt(3) == 'P') {
-            Product.acceptOrDeclineRequest(requestId, isAccepted);
-        } else {
-            Sale.acceptOrDeclineRequest(requestId, isAccepted);
-        }
+        JsonArray inputs = new JsonArray();
+        inputs.add(requestId);
+        inputs.add(String.valueOf(isAccepted));
+        communication("controlAcceptOrDeclineRequest", inputs);
     }
 
-    public boolean controlHasCustomerBoughtThisProduct(Customer customer, Product product ){
-        return CustomerLog.getAllCustomersBoughtProduct(product).contains(customer);
+    public boolean controlHasCustomerBoughtThisProduct(Customer customer, Product product ) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(customer));
+        inputs.add(Utils.convertObjectToJsonString(product));
+        return communication("controlHasCustomerBoughtThisProduct", inputs).getAsBoolean();
     }
 
-    public void controlViewThisProduct(Product product){
-        product.setNumberOfViews(product.getNumberOfViews()+ 1);
+    public void controlViewThisProduct(Product product) throws ExceptionalMassage{
+        JsonArray input = new JsonArray();
+        input.add(Utils.convertObjectToJsonString(product));
+        communication("controlViewThisProduct", input);
     }
 
-    public ObservableList<Customer> getCustomersBoughtProductObservable(Product product, Supplier supplier) {
+    public ObservableList<Customer> getCustomersBoughtProductObservable(Product product, Supplier supplier) throws ExceptionalMassage{
         ObservableList<Customer> customers = FXCollections.observableArrayList();
-        customers.addAll(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(Utils.convertObjectToJsonString(supplier));
+        JsonElement customersJson = communication("getCustomersBoughtProductObservable", inputs);
+        customers.addAll(Utils.convertJsonElementToCustomerArrayList(customersJson));
         return customers;
     }
 

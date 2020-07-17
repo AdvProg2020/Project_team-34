@@ -32,7 +32,7 @@ public class ProductDataBase {
         content.put("specification", "String");
         content.put("rootProductId" , "String");
         content.put("futureCategoryName", "String");
-        content.put("imageUrl", "String");
+        content.put("imageInStringForm", "String");
 
         DataBase.createNewTable("Products", content);
     }
@@ -43,7 +43,7 @@ public class ProductDataBase {
            return;
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name,nameOfCompany,  priceForEachSupplier," +
-                "listOfSuppliers, remainedNumberForEachSupplier, description , specification, rootProductId,futureCategoryName, imageUrl)" +
+                "listOfSuppliers, remainedNumberForEachSupplier, description , specification, rootProductId,futureCategoryName, imageInStringForm)" +
                 "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?, ?)";
         try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
@@ -59,7 +59,7 @@ public class ProductDataBase {
             statement.setString(10, convertObjectToJsonString(product.getSpecification()));
             statement.setString(11, product.getRootProductId());
             statement.setString(12, product.getFutureCategoryName());
-            statement.setString(13, product.getImageUrl());
+            statement.setString(13, product.getImageInStringForm());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -144,8 +144,8 @@ public class ProductDataBase {
                 String rootProductId = resultSet.getString("rootProductId");
                 String futureCategoryName = resultSet.getString("futureCategoryName");
                 HashMap<String,String> specification = convertJsonToStringStringHashMap((resultSet.getString("specification")));
-                String imageUrl = resultSet.getString("imageUrl");
-                new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,remainedNumberForEachSupplier,description,numberOfViews,productId,state,rootProductId,futureCategoryName,specification, imageUrl);
+                String imageInStringForm = resultSet.getString("imageInStringForm");
+                new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,remainedNumberForEachSupplier,description,numberOfViews,productId,state,rootProductId,futureCategoryName,specification, imageInStringForm);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

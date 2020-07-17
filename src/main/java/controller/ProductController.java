@@ -165,7 +165,7 @@ public class ProductController {
                         newProduct.setDescription(value);
                         break;
                     case "imageUrl":
-                        newProduct.setImageUrl(value);
+                        newProduct.setImageInStringForm(value);
                     default:
                         newProduct.editSpecialField(field, value);
                 }

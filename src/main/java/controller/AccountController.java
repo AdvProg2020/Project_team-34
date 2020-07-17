@@ -29,15 +29,18 @@ public class AccountController {
 
     private static final int BOUND = 100;
 
-    private Controller mainController;
+    private final Controller mainController;
 
     public AccountController(Controller mainController) {
         this.mainController = mainController;
     }
 
+    public Account getAccount() {
+        return mainController.getAccount();
+    }
+
     private boolean hasSomeOneLoggedInInternal(){
         return mainController.getAccount()!= null;
-
     }
 
     public Response hasSomeOneLoggedIn(){
@@ -55,10 +58,6 @@ public class AccountController {
         if (account instanceof Supervisor)
             return new Response(RequestStatus.SUCCESSFUL,"Supervisor");
         return new Response(RequestStatus.SUCCESSFUL,"Supplier");
-    }
-
-    public Account getAccount() {
-        return mainController.getAccount();
     }
 
     public Response controlCreateAccount(String username, String type, String name, String familyName, String email,

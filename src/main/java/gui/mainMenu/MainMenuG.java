@@ -1,7 +1,9 @@
 package gui.mainMenu;
 
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import gui.allProductMenu.AllProductGMenu;
 import gui.loginMenu.LoginGMenu;
 import javafx.geometry.Pos;
@@ -85,16 +87,24 @@ public class MainMenuG extends GMenu {
 
 
         // Adding controller
-        if(controller.getAccountController().hasSomeOneLoggedIn()){
-            loginMenu.setText("Sign out");
-            loginMenu.setOnAction( e -> {
-                controller.getAccountController().controlLogout();
-                stage.setScene((new MainMenuG(null, stage,controller)).getScene());
-            });
-        } else {
-            loginMenu.setOnAction( e-> {
-                new LoginGMenu(this,stage,controller).showAndWait();
-            });
+        try {
+            if (controller.getAccountController().hasSomeOneLoggedIn()) {
+                loginMenu.setText("Sign out");
+                loginMenu.setOnAction(e -> {
+                    try {
+                        controller.getAccountController().controlLogout();
+                    } catch (ExceptionalMassage exceptionalMassage) {
+                        new AlertBox(this,exceptionalMassage,controller).showAndWait();
+                    }
+                    stage.setScene((new MainMenuG(null, stage, controller)).getScene());
+                });
+            } else {
+                loginMenu.setOnAction(e -> {
+                    new LoginGMenu(this, stage, controller).showAndWait();
+                });
+            }
+        } catch (ExceptionalMassage exceptionalMassage){
+            new AlertBox(this,exceptionalMassage,controller).showAndWait();
         }
 
 

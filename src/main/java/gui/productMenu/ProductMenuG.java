@@ -88,7 +88,11 @@ public class ProductMenuG extends GMenu {
         starRating.setMax(5);
         starRating.setLayoutX(131);
         starRating.setLayoutY(410);
-        starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+        try {
+            starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
         starRating.setEffect(new DropShadow());
         starRating.setPartialRating(true);
 
@@ -220,9 +224,13 @@ public class ProductMenuG extends GMenu {
         GridPane commentsGridPane = new GridPane();
         detailsScrollPane.setContent(createDetails());
         int i = 0;
-        for (Comment comment : controller.getProductController().controlGetCommentsOfAProduct(product)) {
-            commentsGridPane.add(commentBox(comment),0,i);
-            i++;
+        try {
+            for (Comment comment : controller.getProductController().controlGetCommentsOfAProduct(product)) {
+                commentsGridPane.add(commentBox(comment), 0, i);
+                i++;
+            }
+        } catch (ExceptionalMassage ex){
+            new AlertBox(this,ex,controller).showAndWait();
         }
         commentsGridPane.add(createAddComment(),0,i);
         commentsGridPane.setPadding(new Insets(10,10,10,10));
@@ -310,11 +318,19 @@ public class ProductMenuG extends GMenu {
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }
-            starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+            try {
+                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this,exceptionalMassage,controller).showAndWait();
+            }
         });
 
         starRating.setOnMouseExited( e -> {
-            starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+            try {
+                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this,exceptionalMassage,controller).showAndWait();
+            }
 
         });
 

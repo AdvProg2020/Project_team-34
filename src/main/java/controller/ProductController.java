@@ -679,4 +679,32 @@ public class ProductController {
         filterAndSort.clear();
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
+
+    public Response getAllSuppliersThatHaveAvailableProduct(String productString){
+        Product product = Product.convertJsonStringToProduct(productString);
+        ArrayList<Supplier> suppliers = product.getAllSuppliersThatHaveAvailableProduct();
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertSupplierArrayListToJsonElement(suppliers).getAsString());
+    }
+
+    public Response getProductByName(String name){
+        Product product = Product.getProductByName(name);
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(product));
+    }
+
+    public Response convertProductIdToRequestId(String id){
+        return new Response(RequestStatus.SUCCESSFUL,Product.convertProductIdToRequestId(id));
+    }
+
+    public Response convertSaleIdToRequestId(String id){
+        return new Response(RequestStatus.SUCCESSFUL,Sale.convertSaleIdToRequestId(id));
+    }
+
+    public Response getProductForSupplier(Supplier supplier){
+        ArrayList<Product> products = Product.getProductForSupplier(supplier);
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(products).getAsString());
+    }
+
+    public Response getProductById(String id){
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Product.getProductById(id)));
+    }
 }

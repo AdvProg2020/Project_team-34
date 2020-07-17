@@ -10,6 +10,7 @@ import cart.ShippingInfo;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import discount.CodedDiscount;
+import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import jdk.jshell.execution.Util;
 import log.CustomerLog;
@@ -529,4 +530,16 @@ public class AccountController {
         Date end = new Date(System.currentTimeMillis() + WEEK);
         new CodedDiscount(randomCode, start, end, percent, maxAmount, maxUsagePerCustomer);
     }
+
+    public Response getSupplierByCompanyName(String name){
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Supplier.getSupplierByCompanyName(name)));
+    }
+
+    public Response isProductInThisSuppliersSale(String productString,String supplierString){
+        Product product = Product.convertJsonStringToProduct(productString);
+        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Sale.isProductInThisSuppliersSale(product,supplier)));
+    }
+
+
 }

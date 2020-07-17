@@ -12,6 +12,7 @@ import server.communications.Response;
 import server.communications.Utils;
 import state.State;
 
+import java.time.format.ResolverStyle;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -210,5 +211,16 @@ public class OffController {
         CodedDiscount codedDiscount = CodedDiscount.convertJsonStringToCodedDiscount(codedDiscountStr);
         CodedDiscount.removeCodeFromList(codedDiscount);
         return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
+    public Response isProductHasAnySale(String productString){
+        Product product = Product.convertJsonStringToProduct(productString);
+        return new Response(RequestStatus.SUCCESSFUL,String.valueOf(Sale.isProductHasAnySale(product)));
+    }
+
+    public Response getProductSale(String productString,String supplierString){
+        Product product = Product.convertJsonStringToProduct(productString);
+        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Sale.getProductSale(product,supplier)));
     }
 }

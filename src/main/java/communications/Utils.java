@@ -1,13 +1,12 @@
 package communications;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
+import com.google.gson.*;
 import discount.CodedDiscount;
 import discount.Sale;
 import product.Product;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Utils {
 
@@ -34,7 +33,7 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<String> convertJasonObjectToStringArrayList(JsonElement jsonElement) {
+    public static ArrayList<String> convertJasonElementToStringArrayList(JsonElement jsonElement) {
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             stringArrayList.add(element.getAsString());
@@ -88,5 +87,23 @@ public class Utils {
             saleArrayList.add(Sale.convertJsonStringToSale(element.getAsString()));
         }
         return saleArrayList;
+    }
+
+    public static JsonElement convertStringToStringHashMapToJsonElement(HashMap<String, String> hashMap) {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        for (String key : hashMap.keySet()) {
+            jsonObject.add(key, jsonParser.parse(hashMap.get(key)));
+        }
+        return jsonObject;
+    }
+
+    public static HashMap<String, String> convertStringToStringHashMapToJsonElement(JsonElement jsonElement) {
+        HashMap<String, String> hashMap = new HashMap<>();
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        for (String key : jsonObject.keySet()) {
+            hashMap.put(key, jsonObject.get(key).getAsString());
+        }
+        return hashMap;
     }
 }

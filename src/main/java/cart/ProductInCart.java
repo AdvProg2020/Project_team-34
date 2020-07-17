@@ -1,6 +1,7 @@
 package cart;
 
 import account.Supplier;
+import communications.Utils;
 import product.Product;
 
 /**
@@ -35,5 +36,9 @@ public class ProductInCart {
 
     public void setSupplier(Supplier supplier) {
         this.supplier = supplier;
+    }
+
+    public static ProductInCart convertJsonStringToProdcutInCart(String jsonString){
+        return (ProductInCart) Utils.convertStringToObject(jsonString, "cart.ProductInCart");
     }
 }

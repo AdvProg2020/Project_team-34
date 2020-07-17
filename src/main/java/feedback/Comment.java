@@ -1,6 +1,7 @@
 package feedback;
 
 import account.Customer;
+import communications.Utils;
 import product.Product;
 
 /**
@@ -71,5 +72,9 @@ public class Comment {
 
     public void setCustomerBoughtThisProduct(boolean customerBoughtThisProduct) {
         this.customerBoughtThisProduct = customerBoughtThisProduct;
+    }
+
+    public static Comment convertJsonStringToComment(String jsonString){
+        return (Comment) Utils.convertStringToObject(jsonString, "feedback.Comment");
     }
 }

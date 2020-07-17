@@ -1,6 +1,7 @@
 package log;
 
 import account.Supplier;
+import communications.Utils;
 import discount.Sale;
 import product.Product;
 
@@ -104,5 +105,9 @@ public class SupplierLog {
 
     public void setProductsSale(HashMap<Product, Sale> productsSale) {
         this.productsSale = productsSale;
+    }
+
+    public static SupplierLog convertJsonStringToSupplierLog(String jsonString){
+        return (SupplierLog) Utils.convertStringToObject(jsonString, "log.SupplierLog");
     }
 }

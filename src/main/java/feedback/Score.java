@@ -1,6 +1,7 @@
 package feedback;
 
 import account.Customer;
+import communications.Utils;
 import product.Product;
 
 /**
@@ -44,5 +45,9 @@ public class Score {
 
     public void setScore(float score) {
         this.score = score;
+    }
+
+    public static Score convertJsonStringToScore(String jsonString){
+        return (Score) Utils.convertStringToObject(jsonString, "score.Score");
     }
 }

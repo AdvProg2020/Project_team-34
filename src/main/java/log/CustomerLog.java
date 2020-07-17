@@ -2,6 +2,7 @@ package log;
 
 import account.Customer;
 import cart.Cart;
+import communications.Utils;
 
 import java.util.Date;
 
@@ -49,5 +50,9 @@ public class CustomerLog {
 
     public void setDeliveryStatus(LogStatus deliveryStatus) {
         this.deliveryStatus = deliveryStatus;
+    }
+
+    public static CustomerLog convertJsonStringToCustomerLog(String jsonString) {
+        return (CustomerLog) Utils.convertStringToObject(jsonString, "log.CustomerLog");
     }
 }

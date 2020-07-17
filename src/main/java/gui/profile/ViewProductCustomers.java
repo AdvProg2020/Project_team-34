@@ -3,7 +3,9 @@ package gui.profile;
 import account.Customer;
 import account.Supplier;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.ScrollPane;
@@ -56,7 +58,11 @@ public class ViewProductCustomers extends GMenu {
         TableColumn<Customer, Integer> credit = new TableColumn<>("Credit");
         credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
         TableView<Customer> customerTableView = new TableView<>();
-        customerTableView.setItems(controller.getProductController().getCustomersBoughtProductObservable(product, supplier));
+        try {
+            customerTableView.setItems(controller.getProductController().getCustomersBoughtProductObservable(product, supplier));
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
         customerTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber, credit);
         customerTableView.setPrefWidth(800);
         return customerTableView;

@@ -95,31 +95,43 @@ public abstract class GMenu {
         hBox.setSpacing(20);
         hBox.getChildren().addAll(backView, logoView, allProducts, saleView, userMenuBar);
         hBox.setAlignment(Pos.CENTER);
-        if (!controller.getAccountController().hasSomeOneLoggedIn() ||
-                (controller.getAccountController().getAccount() instanceof Customer)) {
-            hBox.getChildren().addAll(cartView);
+        try {
+            if (!controller.getAccountController().hasSomeOneLoggedIn() ||
+                    (controller.getAccountController().getAccount() instanceof Customer)) {
+                hBox.getChildren().addAll(cartView);
+            }
+        } catch (ExceptionalMassage ex){
+            System.out.println(ex.getMessage());
         }
 
         signOut.setOnAction(e -> {
-            controller.getAccountController().controlLogout();
+            try {
+                controller.getAccountController().controlLogout();
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
             stage.setScene(new MainMenuG(this, stage, controller).getScene());
         });
 
-        if (!controller.getAccountController().hasSomeOneLoggedIn()) {
-            user.getItems().add(signIn);
-        } else if (controller.getAccountController().getAccount() instanceof Customer) {
-            user.getItems().addAll(viewPersonalInfo, logs, signOut);
-            viewPersonalInfo.setOnAction(e -> stage.setScene(new CustomerProfileGMenu(this, stage, controller).getScene()));
-            logs.setOnAction(e -> stage.setScene(new ViewLogsForCustomerGMenu(this, stage, controller).getScene()));
-        } else if (controller.getAccountController().getAccount() instanceof Supervisor) {
-            user.getItems().addAll(viewPersonalInfo, logs, manageCategories, manageUsers, signOut);
-            viewPersonalInfo.setOnAction(e -> stage.setScene(new SupervisorProfileGMenu(this, stage, controller).getScene()));
-            manageCategories.setOnAction(e -> stage.setScene(new ManageCategoriesGMenu(this, stage, controller).getScene()));
-            logs.setOnAction(e -> stage.setScene(new ViewLogsForSupervisorGMenu(this, stage, controller).getScene()));
-        } else if (controller.getAccountController().getAccount() instanceof Supplier) {
-            user.getItems().addAll(viewPersonalInfo, logs, signOut);
-            viewPersonalInfo.setOnAction(e -> stage.setScene(new SupplierProfileGMenu(this, stage, controller).getScene()));
-            logs.setOnAction(e -> stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).getScene()));
+        try {
+            if (!controller.getAccountController().hasSomeOneLoggedIn()) {
+                user.getItems().add(signIn);
+            } else if (controller.getAccountController().getAccount() instanceof Customer) {
+                user.getItems().addAll(viewPersonalInfo, logs, signOut);
+                viewPersonalInfo.setOnAction(e -> stage.setScene(new CustomerProfileGMenu(this, stage, controller).getScene()));
+                logs.setOnAction(e -> stage.setScene(new ViewLogsForCustomerGMenu(this, stage, controller).getScene()));
+            } else if (controller.getAccountController().getAccount() instanceof Supervisor) {
+                user.getItems().addAll(viewPersonalInfo, logs, manageCategories, manageUsers, signOut);
+                viewPersonalInfo.setOnAction(e -> stage.setScene(new SupervisorProfileGMenu(this, stage, controller).getScene()));
+                manageCategories.setOnAction(e -> stage.setScene(new ManageCategoriesGMenu(this, stage, controller).getScene()));
+                logs.setOnAction(e -> stage.setScene(new ViewLogsForSupervisorGMenu(this, stage, controller).getScene()));
+            } else if (controller.getAccountController().getAccount() instanceof Supplier) {
+                user.getItems().addAll(viewPersonalInfo, logs, signOut);
+                viewPersonalInfo.setOnAction(e -> stage.setScene(new SupplierProfileGMenu(this, stage, controller).getScene()));
+                logs.setOnAction(e -> stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).getScene()));
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            exceptionalMassage.printStackTrace();
         }
 
         hBox.setMinWidth(500);

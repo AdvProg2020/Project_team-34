@@ -129,11 +129,13 @@ public class ViewOffsGMenu extends GMenu {
         salesList.getColumns().addAll(saleId,percent, start, end);
 
 
-
-        for (Sale sale : controller.getOffController().controlGetAllSales()) {
-            salesList.getItems().add(sale);
+        try {
+            for (Sale sale : controller.getOffController().controlGetAllSales()) {
+                salesList.getItems().add(sale);
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            exceptionalMassage.printStackTrace();
         }
-
 
 
         detailsButton.setOnAction( e -> {
@@ -311,8 +313,12 @@ public class ViewOffsGMenu extends GMenu {
 
         newPercentField.setText(String.valueOf(sale.getPercent()));
 
-        for (Product product : Product.getProductForSupplier((Supplier) controller.getAccount())) {
-            addingProducts.getItems().add(product.getProductId());
+        try {
+            for (Product product : controller.getProductController().getProductForSupplier((Supplier) controller.getAccount())) {
+                addingProducts.getItems().add(product.getProductId());
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            exceptionalMassage.printStackTrace();
         }
 
         for (Product product : sale.getProducts()) {
@@ -328,12 +334,12 @@ public class ViewOffsGMenu extends GMenu {
                     ObservableList<String> adding = addingProducts.getSelectionModel().getSelectedItems();
                     ArrayList<Product> addingProductsArray = new ArrayList<>();
                     for (String s : adding) {
-                        addingProductsArray.add(Product.getProductById(s));
+                        addingProductsArray.add(controller.getProductController().getProductById(s));
                     }
                     ObservableList<String> removing = removingProducts.getSelectionModel().getSelectedItems();
                     ArrayList<Product> removingProductsArray = new ArrayList<>();
                     for (String s : removing) {
-                        removingProductsArray.add(Product.getProductById(s));
+                        removingProductsArray.add(controller.getProductController().getProductById(s));
                     }
                     controller.getOffController().controlEditSaleById(sale.getOffId(), newEnd, newStart, newPercent, addingProductsArray, removingProductsArray);
                     ((Stage) anchorPane0.getScene().getWindow()).close();
@@ -454,8 +460,12 @@ public class ViewOffsGMenu extends GMenu {
 // Adding child to parent
         anchorPane0.getChildren().add(createSaleButton);
 
-        for (Product product : Product.getProductForSupplier((Supplier) controller.getAccount())) {
-            productsList.getItems().add(product.getProductId());
+        try {
+            for (Product product : controller.getProductController().getProductForSupplier((Supplier) controller.getAccount())) {
+                productsList.getItems().add(product.getProductId());
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            exceptionalMassage.printStackTrace();
         }
 
         productsList.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
@@ -468,7 +478,11 @@ public class ViewOffsGMenu extends GMenu {
                 ArrayList<Product> arrayList = new ArrayList<>();
                 ObservableList<String> products = productsList.getSelectionModel().getSelectedItems();
                 for (String product : products) {
-                    arrayList.add(Product.getProductById(product));
+                    try {
+                        arrayList.add(controller.getProductController().getProductById(product));
+                    } catch (ExceptionalMassage exceptionalMassage) {
+                        exceptionalMassage.printStackTrace();
+                    }
                 }
                 try{
                     controller.getOffController().controlCreateSale(newStart,newEnd,percent,arrayList);

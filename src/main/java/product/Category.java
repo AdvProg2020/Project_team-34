@@ -60,4 +60,8 @@ public class Category {
     public static Category convertJsonStringToCategory(String jsonString) {
         return (Category) Utils.convertStringToObject(jsonString, "product.Category");
     }
+
+    public boolean isCategoryClassifier() {
+        return this.allProductsIn == null;
+    }
 }

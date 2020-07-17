@@ -399,7 +399,15 @@ public class AllProductGMenu extends GMenu {
                 }
                 stage.setScene(new ProductMenuG(this, stage, product, controller).getScene());
             });
-            if (Sale.isProductHasAnySale(product)) {
+            boolean doesProductHaveAnySale = false;
+            boolean isSizeOfSuppliersZero = false;
+            try {
+                doesProductHaveAnySale = controller.getOffController().isProductHasAnySale(product);
+                isSizeOfSuppliersZero  = controller.getProductController().getAllSuppliersThatHaveAvailableProduct(product).size() == 0;
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
+            if (doesProductHaveAnySale) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/Sale.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
@@ -410,7 +418,7 @@ public class AllProductGMenu extends GMenu {
 
                 gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
 //                gridPane.getChildren().add(soldOutImageView);
-            } else if (product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
+            } else if (isSizeOfSuppliersZero) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
@@ -445,7 +453,12 @@ public class AllProductGMenu extends GMenu {
             }
             priceLabel.setStyle("-fx-font-size: 18");
 
-            Sale sale = Sale.getMaxSaleForThisProduct(product);
+            Sale sale = null;
+            try {
+                sale = controller.getOffController().controlGetMaxSaleForThisProduct(product);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
 
             VBox saleVBox = new VBox();
             saleVBox.setAlignment(Pos.CENTER);
@@ -496,7 +509,11 @@ public class AllProductGMenu extends GMenu {
         rootLabel.setStyle("-fx-font-size: 14");
 
         rootLabel.setOnMouseClicked(e -> {
-            controller.getProductController().controlFilterSetCategoryFilter(rootCategory);
+            try {
+                controller.getProductController().controlFilterSetCategoryFilter(rootCategory.getName());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
             resetAllFilters(numberOfViews, saleCheck, availabilityCheck, rangeSlider);
             putNewProductsInProductGridPane(productGridPane);
             putNewSpecialFilters(specialFilterVBox, productGridPane);
@@ -504,7 +521,12 @@ public class AllProductGMenu extends GMenu {
         TreeItem<Label> rootTreeItem = new TreeItem<>(rootLabel);
         if (!rootCategory.isCategoryClassifier())
             return rootTreeItem;
-        ArrayList<Category> allCategoriesIn = controller.getProductController().controlGetAllCategoriesInACategory(rootCategory);
+        ArrayList<Category> allCategoriesIn =  null;
+        try {
+            allCategoriesIn = controller.getProductController().controlGetAllCategoriesInACategory(rootCategory);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
         for (Category categoryIn : allCategoriesIn) {
             rootTreeItem.getChildren().add(getTreeItem(categoryIn, controller, productGridPane, numberOfViews, saleCheck, availabilityCheck, rangeSlider, specialFilterVBox));
         }

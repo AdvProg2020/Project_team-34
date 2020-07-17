@@ -37,4 +37,9 @@ public abstract class Discount {
     public void setPercent(int percent) {
         this.percent = percent;
     }
+
+    public int discountAmountFor(int initialAmount) {
+        //Aryan
+        return (initialAmount * percent) / 100;
+    }
 }

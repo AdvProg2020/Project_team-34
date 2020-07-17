@@ -374,4 +374,8 @@ public class AccountController {
             return Supplier.convertJsonStringToSupplier(jsonArray.get(1).getAsString());
         return null;
     }
+
+    public void controlUpdateCart() throws ExceptionalMassage {
+        communication("controlUpdateCart", new JsonArray());
+    }
 }

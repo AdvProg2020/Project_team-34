@@ -21,4 +21,6 @@ public class Supplier extends Account{
     public static Supplier convertJsonStringToSupplier(String jsonString){
         return (Supplier) Utils.convertStringToObject(jsonString, "account.Supplier");
     }
+
+
 }

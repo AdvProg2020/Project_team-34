@@ -1,5 +1,7 @@
 package communications;
 
+import account.Customer;
+import account.Supplier;
 import com.google.gson.*;
 import discount.CodedDiscount;
 import discount.Sale;
@@ -98,7 +100,7 @@ public class Utils {
         return jsonObject;
     }
 
-    public static HashMap<String, String> convertStringToStringHashMapToJsonElement(JsonElement jsonElement) {
+    public static HashMap<String, String> convertJsonElementStringToStringToHashMap(JsonElement jsonElement) {
         HashMap<String, String> hashMap = new HashMap<>();
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         for (String key : jsonObject.keySet()) {
@@ -106,4 +108,21 @@ public class Utils {
         }
         return hashMap;
     }
+
+    public static ArrayList<Customer> convertJsonElementToCustomerArrayList(JsonElement jsonElement){
+        return null;
+    }
+
+    public static JsonElement convertCustomerToJsonElement(ArrayList<Customer> customers){
+        return null;
+    }
+
+    public static ArrayList<Supplier> convertJsonElementToSupplierArrayList(JsonElement jsonElement){
+        return null;
+    }
+
+    public static JsonElement convertSupplierToJsonElement(ArrayList<Supplier> suppliers){
+        return null;
+    }
+
 }

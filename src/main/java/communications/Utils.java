@@ -7,9 +7,12 @@ import discount.CodedDiscount;
 import discount.Sale;
 import feedback.Comment;
 import product.Category;
+import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.HashMap;
 
 public class Utils {
@@ -76,7 +79,7 @@ public class Utils {
         }
         return codedDiscountArrayList;
     }
-    
+
     public static ArrayList<Category> convertJsonElementToCategoryArrayList(JsonElement jsonElement){
         ArrayList<Category> categoryArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
@@ -151,6 +154,43 @@ public class Utils {
         return supplierArrayList;
     }
 
+    private static String encodeImage(byte[] imageByteArray) {
+        return Base64.getEncoder().encodeToString(imageByteArray);
+    }
+
+    private static byte[] decodeImage(String imageDataString) {
+        return Base64.getDecoder().decode(imageDataString);
+    }
+
+    public static JsonElement convertImageToJsonElement(String path) throws ExceptionalMassage {
+        try {
+            File file = new File(path);
+            FileInputStream imageInFile = new FileInputStream(file);
+            byte[] imageData = new byte[(int) file.length()];
+            imageInFile.read(imageData);
+            String imageDataString = encodeImage(imageData);
+            imageInFile.close();
+            return new JsonParser().parse(convertObjectToJsonString(imageDataString));
+        } catch (FileNotFoundException e) {
+            throw new ExceptionalMassage("File not found");
+        } catch (IOException e) {
+            throw new ExceptionalMassage("IOException");
+        }
+    }
+
+    public static void convertAndSaveJsonElementToFile(String imageBytes, String filePath) {
+        try {
+            byte[] imageByteArray = decodeImage(imageBytes);
+            FileOutputStream imageOutFile = new FileOutputStream(filePath);
+            imageOutFile.write(imageByteArray);
+            imageOutFile.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public static ArrayList<Comment> convertJsonElementToCommentList(JsonElement jsonElement){
         ArrayList<Comment> commentArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
@@ -159,4 +199,3 @@ public class Utils {
         return commentArrayList;
     }
 }
-

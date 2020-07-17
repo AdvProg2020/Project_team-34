@@ -7,15 +7,11 @@ import account.Supplier;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import com.sun.net.httpserver.Authenticator;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import jdk.jshell.execution.Util;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
@@ -182,12 +178,12 @@ public class ProductController {
 
     public Response controlGetAllSuppliersForAProduct(String productString) {
         Product product = Product.convertJsonStringToProduct(productString);
-        JsonElement suppliers = Utils.convertSupplierToJsonElement(product.getListOfSuppliers());
+        JsonElement suppliers = Utils.convertSupplierArrayListToJsonElement(product.getListOfSuppliers());
         return new Response(RequestStatus.SUCCESSFUL, suppliers.getAsString());
     }
 
     public Response controlViewBuyersOfProduct(String productId) {
-        JsonElement customers = Utils.convertCustomersToJsonElement(CustomerLog.getAllCustomersBoughtProduct(Product.getProductById(productId)));
+        JsonElement customers = Utils.convertCustomerArrayListToJsonElement(CustomerLog.getAllCustomersBoughtProduct(Product.getProductById(productId)));
         return new Response(RequestStatus.SUCCESSFUL, customers.getAsString());
     }
 
@@ -203,7 +199,7 @@ public class ProductController {
     //added by rpirayadi
     public Response controlGetAllCategoriesInACategory(String rootCategoryString){
         Category rootCategory = Category.convertJsonStringToCategory(rootCategoryString);
-        JsonElement categories = Utils.convertCategoriesToJsonElement(rootCategory.getAllCategoriesIn());
+        JsonElement categories = Utils.convertCategoryArrayListToJsonElement(rootCategory.getAllCategoriesIn());
         return new Response(RequestStatus.SUCCESSFUL,categories.getAsString());
     }
     //added by rpirayadi
@@ -230,7 +226,7 @@ public class ProductController {
                 productComment.add(comment);
             }
         }
-        JsonElement response = Utils.convertCommentsToJsonElement(productComment);
+        JsonElement response = Utils.convertCommentArrayListToJsonElement(productComment);
         return new Response(RequestStatus.SUCCESSFUL, response.getAsString());
     }
 
@@ -260,7 +256,7 @@ public class ProductController {
                 confirmedComments.add(comment);
             }
         }
-        JsonElement jsonComments = Utils.convertCommentsToJsonElement(confirmedComments);
+        JsonElement jsonComments = Utils.convertCommentArrayListToJsonElement(confirmedComments);
         return new Response(RequestStatus.SUCCESSFUL, jsonComments.getAsString());
     }
 
@@ -323,7 +319,7 @@ public class ProductController {
     }
 
     public Response controlGetCategorySpecialFields(String name) {
-        JsonElement jsonElement = Utils.convertStringToStringsHashMapToJsonElement(Category.getCategoryByName(name).getSpecialFields());
+        JsonElement jsonElement = Utils.convertStringToStringArrayListHashMapToJsonElement(Category.getCategoryByName(name).getSpecialFields());
         return new Response(RequestStatus.SUCCESSFUL, jsonElement.getAsString());
     }
 
@@ -342,7 +338,7 @@ public class ProductController {
     public Response getCustomersBoughtProductObservable(String productString ,String supplierString) {
         Product product = Product.convertJsonStringToProduct(productString);
         Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
-        JsonElement returning = Utils.convertCustomersToJsonElement(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
+        JsonElement returning = Utils.convertCustomerArrayListToJsonElement(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
         return new Response(RequestStatus.SUCCESSFUL,returning.getAsString());
     }
 

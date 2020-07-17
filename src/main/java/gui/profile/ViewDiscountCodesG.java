@@ -539,7 +539,7 @@ public class ViewDiscountCodesG extends GMenu {
 
         try {
             for (String username : controller.getAccountController().controlGetListOfAccountUserNames()) {
-                if(Account.getAccountByUsernameWithinAvailable(username) instanceof Customer) {
+                if(controller.getAccountController().getAccountByUsernameWithinAvailable(username) instanceof Customer) {
                     customers.getItems().add(username);
                 }
             }
@@ -561,7 +561,7 @@ public class ViewDiscountCodesG extends GMenu {
                 try {
                     ObservableList<String> userNames = customers.getSelectionModel().getSelectedItems();
                     for (String userName : userNames) {
-                        maxNumberOfUsage.put((Customer)Customer.getAccountByUsernameWithinAvailable(userName),maxNumber);
+                        maxNumberOfUsage.put((Customer)controller.getAccountController().getAccountByUsernameWithinAvailable(userName),maxNumber);
                     }
                     controller.getOffController().controlCreateCodedDiscount(code, startDate, endDate, percent, maxAmount,maxNumberOfUsage);
                     ((Stage)anchorPane0.getScene().getWindow()).close();

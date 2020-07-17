@@ -347,6 +347,13 @@ public class ProductController {
         //check
     }
 
+    public void controlFilterSetInSaleOnly(boolean inSaleOnly) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(inSaleOnly));
+        communication("controlFilterSetInSaleOnly", inputs);
+    }
+
+
     public void controlFilterSetCategoryFilter(String categoryName) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(Objects.requireNonNullElse(categoryName, "All Products"));
@@ -388,6 +395,19 @@ public class ProductController {
         inputs.add(name);
         communication("controlFilterRemoveNameFilter", inputs);
     }
+
+    public void controlFilterAddSupplierFilter(String supplierName) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(supplierName);
+        communication("controlFilterAddSupplierFilter", inputs);
+    }
+
+    public void controlFilterRemoveSupplierFilter(String supplierName) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(supplierName);
+        communication("controlFilterRemoveSupplierFilter", inputs);
+    }
+
 
     public void controlFilterAddBrandFilter(String brand) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();

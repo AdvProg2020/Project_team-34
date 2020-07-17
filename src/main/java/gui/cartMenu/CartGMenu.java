@@ -35,7 +35,11 @@ public class CartGMenu extends GMenu {
     Comparator<ProductInCart> byCountComparator = new Comparator<ProductInCart>() {
         @Override
         public int compare(ProductInCart o1, ProductInCart o2) {
-            return controller.getAccountController().numberOfProductInCart(o1) - controller.getAccountController().numberOfProductInCart(o2);
+            try {
+                return controller.getAccountController().numberOfProductInCart(o1) - controller.getAccountController().numberOfProductInCart(o2);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                return 0;
+            }
         }
 
         @Override
@@ -59,8 +63,12 @@ public class CartGMenu extends GMenu {
     Comparator<ProductInCart> byTotalPriceComparator = new Comparator<ProductInCart>() {
         @Override
         public int compare(ProductInCart o1, ProductInCart o2) {
-            return (o1.getProduct().getPrice(o1.getSupplier()) * controller.getAccountController().numberOfProductInCart(o1))
-                    - (o2.getProduct().getPrice(o2.getSupplier()) * controller.getAccountController().numberOfProductInCart(o2));
+            try {
+                return (o1.getProduct().getPrice(o1.getSupplier()) * controller.getAccountController().numberOfProductInCart(o1))
+                        - (o2.getProduct().getPrice(o2.getSupplier()) * controller.getAccountController().numberOfProductInCart(o2));
+            } catch (ExceptionalMassage exceptionalMassage) {
+                return 0;
+            }
         }
 
         @Override
@@ -92,7 +100,11 @@ public class CartGMenu extends GMenu {
         clearCart.setOnMouseClicked(e -> {
             VBox vBox = (VBox) productsInCartPane.getContent();
             vBox.getChildren().clear();
-            controller.getAccountController().controlClearCart();
+            try {
+                controller.getAccountController().controlClearCart();
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
         });
 
         Button placeOrder = new Button();
@@ -101,8 +113,18 @@ public class CartGMenu extends GMenu {
         buttonPane.add(placeOrder, 1, 3);
 
         placeOrder.setOnMouseClicked(e -> {
-            controller.getAccountController().controlViewCart().update();
-            if (controller.getAccountController().hasSomeOneLoggedIn()) {
+            try {
+                controller.getAccountController().controlUpdateCart();
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
+            boolean hasSomeOneLoggedInBoolean = false;
+            try {
+                hasSomeOneLoggedInBoolean = controller.getAccountController().hasSomeOneLoggedIn();
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
+            if (hasSomeOneLoggedInBoolean) {
                 stage.setScene(new PurchaseMenuG(this, stage, controller).getScene());
             } else {
                 stage.setScene(new LoginGMenu(this, stage, controller).getScene());
@@ -148,14 +170,28 @@ public class CartGMenu extends GMenu {
         productsInCartPane.setSpacing(20);
         productsInCartPane.setAlignment(Pos.CENTER);
 
-        Label billLabel = new Label("Bill : " + controller.getAccountController().controlViewCart().getBill());
+        Label billLabel = null;
+        try {
+            billLabel = new Label("Bill : " + controller.getAccountController().controlViewCart().getBill());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
         billLabel.setStyle("-fx-font-size: 20");
 
-        ArrayList<ProductInCart> productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
+        ArrayList<ProductInCart> productInCarts = null ;
+        try {
+            productInCarts = controller.getAccountController().controlViewCart().getProductsIn();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            exceptionalMassage.printStackTrace();
+        }
         productsInCartPane.setAlignment(Pos.CENTER);
         productInCarts.sort(sortType);
         for (ProductInCart productInCart : productInCarts) {
-            productsInCartPane.getChildren().add(createProductGridPane(productInCart, controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane, billLabel));
+            try {
+                productsInCartPane.getChildren().add(createProductGridPane(productInCart, controller.getAccountController().numberOfProductInCart(productInCart), controller, productsInCartPane, billLabel));
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
         }
 
         productsInCartPane.getChildren().add(billLabel);
@@ -170,7 +206,12 @@ public class CartGMenu extends GMenu {
         GridPane gridPane = new GridPane();
         Product product = productInCart.getProduct();
         int priceBeforeSale = product.getPrice(productInCart.getSupplier());
-        int priceAfterSale = controller.getOffController().controlGetPriceForEachProductAfterSale(product, productInCart.getSupplier());
+        int priceAfterSale = 0 ;
+        try {
+            priceAfterSale = controller.getOffController().controlGetPriceForEachProductAfterSale(product, productInCart.getSupplier());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
         Label IdLabel = new Label(product.getProductId());
         Label nameLabel = new Label(product.getName());
 
@@ -221,13 +262,14 @@ public class CartGMenu extends GMenu {
         column++;
         gridPane.add(lastPrice, column, 1);
 
+        int finalPriceAfterSale1 = priceAfterSale;
         increment.setOnMouseClicked(e -> {
             try {
                 controller.getAccountController().increaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) + 1));
-                updateLastPriceLabel(lastPrice, Integer.parseInt(countLabel.getText()), priceBeforeSale, priceAfterSale);
+                updateLastPriceLabel(lastPrice, Integer.parseInt(countLabel.getText()), priceBeforeSale, finalPriceAfterSale1);
                 updateBillLabel(billLabel, controller);
-                controller.getAccountController().controlViewCart().update();
+                controller.getAccountController().controlUpdateCart();
                 if (countLabel.getText().equals("0")) {
                     productInCartPane.getChildren().remove(hBox);
                 }
@@ -237,13 +279,14 @@ public class CartGMenu extends GMenu {
             }
         });
 
+        int finalPriceAfterSale = priceAfterSale;
         decrement.setOnMouseClicked(e -> {
             try {
                 controller.getAccountController().decreaseProductQuantity(productInCart.getProduct().getProductId(), productInCart.getSupplier().getNameOfCompany());
                 countLabel.setText(String.valueOf(Integer.parseInt(countLabel.getText()) - 1));
-                updateLastPriceLabel(lastPrice, Integer.parseInt(countLabel.getText()), priceBeforeSale, priceAfterSale);
+                updateLastPriceLabel(lastPrice, Integer.parseInt(countLabel.getText()), priceBeforeSale, finalPriceAfterSale);
                 updateBillLabel(billLabel, controller);
-                controller.getAccountController().controlViewCart().update();
+                controller.getAccountController().controlUpdateCart();
                 if (countLabel.getText().equals("0")) {
                     productInCartPane.getChildren().remove(hBox);
                 }
@@ -257,7 +300,11 @@ public class CartGMenu extends GMenu {
     }
 
     private static void updateBillLabel(Label billLabel, Controller controller) {
-        billLabel.setText("Bill : " + controller.getAccountController().controlViewCart().getBill());
+        try {
+            billLabel.setText("Bill : " + controller.getAccountController().controlViewCart().getBill());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            exceptionalMassage.printStackTrace();
+        }
     }
 
     private static void updateLastPriceLabel(Label lastPriceLabel, int count, int priceBeforeSale, int priceAfterSale) {

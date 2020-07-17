@@ -136,4 +136,21 @@ public class Product {
     public int getPrice(Supplier supplier) {
         return priceForEachSupplier.get(supplier);
     }
+
+    public boolean isProductAvailableNow() {
+        for (Supplier supplier : remainedNumberForEachSupplier.keySet()) {
+            if (remainedNumberForEachSupplier.get(supplier) > 0 && supplier.isAvailable())
+                return true;
+        }
+        return false;
+    }
+
+    public int getMinimumPrice() {
+        int minimumPrice = 100000;
+        for (Supplier supplier : priceForEachSupplier.keySet()) {
+            if (this.getRemainedNumberForEachSupplier().get(supplier) != 0 && this.getPrice(supplier) < minimumPrice)
+                minimumPrice = this.getPrice(supplier);
+        }
+        return minimumPrice;
+    }
 }

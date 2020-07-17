@@ -65,4 +65,34 @@ public class Cart {
     public static Cart convertJsonStringToCart(String jsonString){
         return (Cart) Utils.convertStringToObject(jsonString, "cart.Cart");
     }
+
+    public int getValueOfCartWithoutDiscounts() {
+        int totalAmount = 0;
+        for (ProductInCart productInCart : productsIn) {
+            totalAmount += (productInCart.getProduct()).getPrice(productInCart.getSupplier()) * (productInCount.get(productInCart));
+        }
+        return totalAmount;
+    }
+
+    public int getAmountOfSale() {
+        int saleAmount = 0;
+        for (ProductInCart productInCart : productsIn) {
+            Sale productSale = productInSale.get(productInCart);
+            if (productSale != null) {
+                saleAmount += productSale.discountAmountFor((productInCart.getProduct()).getPrice(productInCart.getSupplier())) *
+                        productInCount.get(productInCart);
+            }
+        }
+        return saleAmount;
+    }
+
+    public int getAmountOfCodedDiscount() {
+        if (codedDiscount == null)
+            return 0;
+        return codedDiscount.discountAmountFor(getValueOfCartWithoutDiscounts() - getAmountOfSale());
+    }
+
+    public int getBill() {
+        return getValueOfCartWithoutDiscounts() - (getAmountOfSale() + getAmountOfCodedDiscount());
+    }
 }

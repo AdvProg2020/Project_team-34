@@ -48,7 +48,11 @@ public class AllProductGMenu extends GMenu {
     public AllProductGMenu(GMenu parentMenu, Stage stage, Controller controller, boolean onlyProductInSale) {
         super("All products Menu", parentMenu, stage, controller);
         this.onlyProductInSale = onlyProductInSale;
-        controller.getProductController().clearFilterAndSort();
+        try {
+            controller.getProductController().clearFilterAndSort();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage,controller).showAndWait();
+        }
     }
 
     @Override
@@ -94,26 +98,46 @@ public class AllProductGMenu extends GMenu {
 
 
         numberOfViews.setOnMouseReleased(e -> {
-            controller.getProductController().controlFilterSetSortType("by number of views");
+            try {
+                controller.getProductController().controlFilterSetSortType("by number of views");
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+            }
             putNewProductsInProductGridPane(productGridPane);
         });
 
         score.setOnMouseClicked(e -> {
-            controller.getProductController().controlFilterSetSortType("by score");
+            try {
+                controller.getProductController().controlFilterSetSortType("by score");
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+            }
             putNewProductsInProductGridPane(productGridPane);
         });
 
         time.setOnMouseClicked(e -> {
-            controller.getProductController().controlFilterSetSortType("by time added");
+            try {
+                controller.getProductController().controlFilterSetSortType("by time added");
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+            }
             putNewProductsInProductGridPane(productGridPane);
         });
 
 
         CheckBox saleCheck = new CheckBox("Only Products On Sale");
         saleCheck.setSelected(onlyProductInSale);
-        controller.getProductController().getFilterAndSort().setInSaleOnly(onlyProductInSale);
+        try {
+            controller.getProductController().controlFilterSetInSaleOnly(onlyProductInSale);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage,controller).showAndWait();
+        }
         saleCheck.setOnMouseClicked(e -> {
-            controller.getProductController().getFilterAndSort().setInSaleOnly(saleCheck.isSelected());
+            try {
+                controller.getProductController().controlFilterSetInSaleOnly(saleCheck.isSelected());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+            }
             putNewProductsInProductGridPane(productGridPane);
         });
 
@@ -124,15 +148,14 @@ public class AllProductGMenu extends GMenu {
         rangeSlider.setShowTickLabels(true);
         rangeSlider.setOnMouseReleased(e -> {
             try {
-                controller.getProductController().getFilterAndSort().setPriceUpperBound((int) rangeSlider.getHighValue());
-                System.out.println(controller.getProductController().getFilterAndSort().getPriceUpperBound());
+                controller.getProductController().controlFilterSetPriceUpperBound((int) rangeSlider.getHighValue());
             } catch (ExceptionalMassage exceptionalMassage) {
-                exceptionalMassage.printStackTrace();
+                new AlertBox(this, exceptionalMassage,controller).showAndWait();
             }
             try {
-                controller.getProductController().getFilterAndSort().setPriceLowerBound((int) rangeSlider.getLowValue());
+                controller.getProductController().controlFilterSetPriceLowerBound((int) rangeSlider.getLowValue());
             } catch (ExceptionalMassage exceptionalMassage) {
-                exceptionalMassage.printStackTrace();
+                new AlertBox(this, exceptionalMassage,controller).showAndWait();
             }
             putNewProductsInProductGridPane(productGridPane);
         });
@@ -144,13 +167,22 @@ public class AllProductGMenu extends GMenu {
 
         availabilityCheck.setOnMouseReleased(e -> {
             rangeSlider.setDisable(!availabilityCheck.isSelected());
-            controller.getProductController().getFilterAndSort().setAvailabilityFilter(availabilityCheck.isSelected());
+            try {
+                controller.getProductController().controlFilterSetAvailabilityFilter(availabilityCheck.isSelected());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+            }
             putNewProductsInProductGridPane(productGridPane);
 
         });
 
 
-        boolean isAvailability = controller.getProductController().getFilterAndSort().getAvailabilityFilter();
+        boolean isAvailability = false;
+        try {
+            isAvailability = controller.getProductController().controlFilterGetAvailabilityFilter();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage,controller).showAndWait();
+        }
         rangeSlider.setDisable(!isAvailability);
 
         Label priceLabel = new Label("Price");
@@ -162,16 +194,20 @@ public class AllProductGMenu extends GMenu {
 
         putNewProductsInProductGridPane(productGridPane);
 
-//        VBox treeViewVBox = new VBox();
         Label treeViewLabel = new Label("Category");
         treeViewLabel.setStyle("-fx-font-size:  14");
-//        treeViewVBox.getChildren().add(treeViewLabel);
 
-        TreeView<Label> treeView = new TreeView<>(getTreeItem(controller.getProductController().controlGetAllProductCategory(), controller, productGridPane, numberOfViews, saleCheck, availabilityCheck, rangeSlider, specialFilterVBox));
-//        treeViewVBox.getChildren().add(treeView);
+        Category allProductCategory = null;
+        TreeView<Label> treeView = null;
+        try {
+            allProductCategory = controller.getProductController().controlGetAllProductCategory();
+            treeView = new TreeView<>(getTreeItem(allProductCategory, controller, productGridPane, numberOfViews, saleCheck, availabilityCheck, rangeSlider, specialFilterVBox));
 
-        treeView.setPrefHeight(250);
-        filterAndSort.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+            treeView.setPrefHeight(250);
+            filterAndSort.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage,controller).showAndWait();
+        }
 
         VBox nameFilter = new VBox();
         nameFilter.setAlignment(Pos.CENTER);
@@ -236,13 +272,13 @@ public class AllProductGMenu extends GMenu {
             if (!filterByNameOrBrandTextField.getText().equals("")  && choseBetweenNameAndBrand.getSelectionModel().getSelectedItem() != null) {
                 try {
                     if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Name")) {
-                        controller.getProductController().getFilterAndSort().addNameFilter(filterByNameOrBrandTextField.getText());
+                        controller.getProductController().controlFilterAddNameFilter(filterByNameOrBrandTextField.getText());
                         filterByNameListView.getItems().add(filterByNameOrBrandTextField.getText());
                     } else if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Brand")){
-                        controller.getProductController().getFilterAndSort().addBrandFilter(filterByNameOrBrandTextField.getText());
+                        controller.getProductController().controlFilterAddBrandFilter(filterByNameOrBrandTextField.getText());
                         filterByBrandListView.getItems().add(filterByNameOrBrandTextField.getText());
                     }else{
-                        controller.getProductController().getFilterAndSort().addSupplierFilter(filterByNameOrBrandTextField.getText());
+                        controller.getProductController().controlFilterAddSupplierFilter(filterByNameOrBrandTextField.getText());
                         filterByNameOfCompanyListView.getItems().add(filterByNameOrBrandTextField.getText());
                     }
                     filterByNameOrBrandTextField.setText("");
@@ -262,7 +298,7 @@ public class AllProductGMenu extends GMenu {
                         filterByNameListView.getSelectionModel().getSelectedItems().size() != 0) {
                     String itemWantedToBeRemoved = filterByNameListView.getSelectionModel().getSelectedItems().get(0);
                     try {
-                        controller.getProductController().getFilterAndSort().removeNameFilter(itemWantedToBeRemoved);
+                        controller.getProductController().controlFilterRemoveBrandFilter(itemWantedToBeRemoved);
                         filterByNameListView.getItems().remove(itemWantedToBeRemoved);
                         filterByNameOrBrandTextField.setText("");
                         putNewProductsInProductGridPane(productGridPane);
@@ -273,7 +309,7 @@ public class AllProductGMenu extends GMenu {
                         filterByBrandListView.getSelectionModel().getSelectedItems().size() != 0) {
                     String itemWantedToBeRemoved = filterByBrandListView.getSelectionModel().getSelectedItems().get(0);
                     try {
-                        controller.getProductController().getFilterAndSort().removeBrandFilter(itemWantedToBeRemoved);
+                        controller.getProductController().controlFilterRemoveBrandFilter(itemWantedToBeRemoved);
                         filterByBrandListView.getItems().remove(itemWantedToBeRemoved);
                         filterByNameOrBrandTextField.setText("");
                         putNewProductsInProductGridPane(productGridPane);
@@ -284,7 +320,7 @@ public class AllProductGMenu extends GMenu {
                         filterByNameOfCompanyListView.getSelectionModel().getSelectedItems().size() != 0) {
                     String itemWantedToBeRemoved = filterByNameOfCompanyListView.getSelectionModel().getSelectedItems().get(0);
                     try {
-                        controller.getProductController().getFilterAndSort().removeSupplierFilter(itemWantedToBeRemoved);
+                        controller.getProductController().controlFilterRemoveSupplierFilter(itemWantedToBeRemoved);
                         filterByNameOfCompanyListView.getItems().remove(itemWantedToBeRemoved);
                         filterByNameOrBrandTextField.setText("");
                         putNewProductsInProductGridPane(productGridPane);
@@ -334,7 +370,13 @@ public class AllProductGMenu extends GMenu {
 
     private void putNewProductsInProductGridPane(GridPane productGridPane) {
         productGridPane.getChildren().clear();
-        ArrayList<Product> products = controller.getProductController().getFilterAndSort().getProducts();
+        ArrayList<Product> products = null;
+        try {
+            products = controller.getProductController().controlFilterGetFilteredAndSortedProducts();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            return;
+        }
         int row = 0, column = 0;
         GridPane gridPane;
 
@@ -350,10 +392,22 @@ public class AllProductGMenu extends GMenu {
             ImageView productImageView = GMenu.getImageView(product.getImageUrl(), 200, 200);
 
             productImageView.setOnMouseClicked(e -> {
-                controller.getProductController().controlViewThisProduct(product);
+                try {
+                    controller.getProductController().controlViewThisProduct(product);
+                } catch (ExceptionalMassage exceptionalMassage) {
+                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
+                }
                 stage.setScene(new ProductMenuG(this, stage, product, controller).getScene());
             });
-            if (Sale.isProductHasAnySale(product)) {
+            boolean doesProductHaveAnySale = false;
+            boolean isSizeOfSuppliersZero = false;
+            try {
+                doesProductHaveAnySale = controller.getOffController().isProductHasAnySale(product);
+                isSizeOfSuppliersZero  = controller.getProductController().getAllSuppliersThatHaveAvailableProduct(product).size() == 0;
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
+            if (doesProductHaveAnySale) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/Sale.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
@@ -364,7 +418,7 @@ public class AllProductGMenu extends GMenu {
 
                 gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
 //                gridPane.getChildren().add(soldOutImageView);
-            } else if (product.getAllSuppliersThatHaveAvailableProduct().size() == 0) {
+            } else if (isSizeOfSuppliersZero) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
@@ -381,7 +435,11 @@ public class AllProductGMenu extends GMenu {
 
             Rating starRating = new Rating();
             starRating.setMax(5);
-            starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+            try {
+                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
             starRating.setEffect(new DropShadow());
             starRating.setPartialRating(true);
             starRating.setFocusTraversable(false);
@@ -395,7 +453,12 @@ public class AllProductGMenu extends GMenu {
             }
             priceLabel.setStyle("-fx-font-size: 18");
 
-            Sale sale = Sale.getMaxSaleForThisProduct(product);
+            Sale sale = null;
+            try {
+                sale = controller.getOffController().controlGetMaxSaleForThisProduct(product);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
 
             VBox saleVBox = new VBox();
             saleVBox.setAlignment(Pos.CENTER);
@@ -446,7 +509,11 @@ public class AllProductGMenu extends GMenu {
         rootLabel.setStyle("-fx-font-size: 14");
 
         rootLabel.setOnMouseClicked(e -> {
-            controller.getProductController().getFilterAndSort().setCategory(rootCategory);
+            try {
+                controller.getProductController().controlFilterSetCategoryFilter(rootCategory.getName());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
             resetAllFilters(numberOfViews, saleCheck, availabilityCheck, rangeSlider);
             putNewProductsInProductGridPane(productGridPane);
             putNewSpecialFilters(specialFilterVBox, productGridPane);
@@ -454,7 +521,12 @@ public class AllProductGMenu extends GMenu {
         TreeItem<Label> rootTreeItem = new TreeItem<>(rootLabel);
         if (!rootCategory.isCategoryClassifier())
             return rootTreeItem;
-        ArrayList<Category> allCategoriesIn = controller.getProductController().controlGetAllCategoriesInACategory(rootCategory);
+        ArrayList<Category> allCategoriesIn =  null;
+        try {
+            allCategoriesIn = controller.getProductController().controlGetAllCategoriesInACategory(rootCategory);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
         for (Category categoryIn : allCategoriesIn) {
             rootTreeItem.getChildren().add(getTreeItem(categoryIn, controller, productGridPane, numberOfViews, saleCheck, availabilityCheck, rangeSlider, specialFilterVBox));
         }
@@ -472,7 +544,12 @@ public class AllProductGMenu extends GMenu {
     }
 
     public void putNewSpecialFilters(VBox specialFiltersVBox, GridPane productGridPane) {
-        HashMap<String, ArrayList<String>> specialFilters = controller.getProductController().controlGetAllAvailableFilters();
+        HashMap<String, ArrayList<String>> specialFilters = null;
+        try {
+            specialFilters = controller.getProductController().controlGetAllAvailableFilters();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
         specialFiltersVBox.getChildren().clear();
         Label specialFieldsLabel = new Label("Special Fields");
         specialFieldsLabel.setStyle("-fx-font-size: 14");
@@ -489,7 +566,11 @@ public class AllProductGMenu extends GMenu {
             checkComboBox.getCheckModel().getCheckedItems().addListener(new ListChangeListener<String>() {
                 public void onChanged(ListChangeListener.Change<? extends String> c) {
 
-                    controller.getProductController().controlFilterRemoveAllSpecialFilter();
+                    try {
+                        controller.getProductController().controlFilterRemoveAllSpecialFilter();
+                    } catch (ExceptionalMassage exceptionalMassage) {
+                        exceptionalMassage.printStackTrace();
+                    }
 
                     for (String checkedItem : checkComboBox.getCheckModel().getCheckedItems()) {
                         try {

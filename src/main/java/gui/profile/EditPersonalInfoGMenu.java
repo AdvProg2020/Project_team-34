@@ -3,14 +3,13 @@ package gui.profile;
 import account.Supervisor;
 import account.Supplier;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -58,38 +57,38 @@ public class EditPersonalInfoGMenu extends GMenu {
         GridPane backgroundPane = new GridPane();
         Scene scene = new Scene(backgroundPane);
 
-        usernameField.setText(controller.getAccountController().getAccountUsername());
+        usernameField.setText(controller.getAccount().getUserName());
         usernameField.setDisable(true);
         layoutPane.add(usernameLabel, 0, row);
         layoutPane.add(usernameField, 1, row);
         row++;
 
-        nameField.setText(controller.getAccountController().getAccountName());
+        nameField.setText(controller.getAccount().getName());
         nameField.setOnKeyTyped(e -> buttonCheck(nameField, applyButton));
         layoutPane.add(nameLabel, 0, row);
         layoutPane.add(nameField, 1, row);
         row++;
 
-        familyNameField.setText(controller.getAccountController().getAccountFamilyName());
+        familyNameField.setText(controller.getAccount().getFamilyName());
         familyNameField.setOnKeyTyped(e -> buttonCheck(familyNameField, applyButton));
         layoutPane.add(familyNameLabel, 0, row);
         layoutPane.add(familyNameField, 1, row);
         row++;
 
-        emailField.setText(controller.getAccountController().getAccountEmail());
+        emailField.setText(controller.getAccount().getEmail());
         emailField.setOnKeyTyped(e -> buttonCheck(emailField, applyButton));
         layoutPane.add(emailLabel, 0, row);
         layoutPane.add(emailField, 1, row);
         row++;
 
-        phoneNumberField.setText(controller.getAccountController().getAccountPhoneNumber());
+        phoneNumberField.setText(controller.getAccount().getPhoneNumber());
         phoneNumberField.setOnKeyTyped(e -> buttonCheckInt(phoneNumberField, applyButton));
         layoutPane.add(phoneNumberLabel, 0, row);
         layoutPane.add(phoneNumberField, 1, row);
         row++;
 
         if (!(controller.getAccount() instanceof Supervisor)) {
-            creditField.setText(String.valueOf(controller.getAccountController().getAccountCredit()));
+            creditField.setText(String.valueOf(controller.getAccount().getCredit()));
             creditLabel.setOnKeyTyped(e -> buttonCheckInt(creditField, applyButton));
             layoutPane.add(creditLabel, 0, row);
             layoutPane.add(creditField, 1, row);
@@ -100,7 +99,7 @@ public class EditPersonalInfoGMenu extends GMenu {
         }
 
         if (controller.getAccount() instanceof Supplier) {
-            nameOfCompanyField.setText(controller.getAccountController().getAccountNameOfCompany());
+            nameOfCompanyField.setText(((Supplier) controller.getAccount()).getNameOfCompany());
             nameOfCompanyField.setOnKeyTyped(e -> buttonCheck(nameOfCompanyField, applyButton));
             layoutPane.add(nameOfCompanyLabel, 0, row);
             layoutPane.add(nameOfCompanyField, 1, row);
@@ -119,8 +118,11 @@ public class EditPersonalInfoGMenu extends GMenu {
             String password = passwordField.getText();
             String nameOfCompany = nameOfCompanyField.getText();
             int credit = Integer.parseInt(creditField.getText());
-            controller.getAccountController().editAllFields(name, familyName, email, phoneNumber, password,
-                    credit, nameOfCompany);
+            try {
+                controller.getAccountController().editAllFields(name, familyName, email, phoneNumber, password, credit, nameOfCompany);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
             stage.setScene(createScene());
         });
 

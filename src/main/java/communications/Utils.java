@@ -109,20 +109,35 @@ public class Utils {
         return hashMap;
     }
 
-    public static ArrayList<Customer> convertJsonElementToCustomerArrayList(JsonElement jsonElement){
-        return null;
+    public static JsonElement convertCustomerToJsonElement(ArrayList<Customer> customerArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Customer customer : customerArrayList) {
+            jsonArray.add(convertObjectToJsonString(customer));
+        }
+        return jsonArray;
     }
 
-    public static JsonElement convertCustomerToJsonElement(ArrayList<Customer> customers){
-        return null;
+    public static ArrayList<Customer> convertJsonElementToCustomerArrayList(JsonElement jsonElement) {
+        ArrayList<Customer> customerArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            customerArrayList.add(Customer.convertJsonStringToCustomer(element.getAsString()));
+        }
+        return customerArrayList;
     }
 
-    public static ArrayList<Supplier> convertJsonElementToSupplierArrayList(JsonElement jsonElement){
-        return null;
+    public static JsonElement convertSupplierToJsonElement(ArrayList<Supplier> supplierArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Supplier supplier : supplierArrayList) {
+            jsonArray.add(convertObjectToJsonString(supplier));
+        }
+        return jsonArray;
     }
 
-    public static JsonElement convertSupplierToJsonElement(ArrayList<Supplier> suppliers){
-        return null;
+    public static ArrayList<Supplier> convertJsonElementToSupplierArrayList(JsonElement jsonElement) {
+        ArrayList<Supplier> supplierArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            supplierArrayList.add(Supplier.convertJsonStringToSupplier(element.getAsString()));
+        }
+        return supplierArrayList;
     }
-
 }

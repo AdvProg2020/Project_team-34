@@ -7,8 +7,11 @@ import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonParser;
 import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
+import jdk.jshell.execution.Util;
 import log.CustomerLog;
 import log.LogStatus;
 import log.SupplierLog;
@@ -32,19 +35,26 @@ public class AccountController {
         this.mainController = mainController;
     }
 
-    public boolean hasSomeOneLoggedIn(){
+    private boolean hasSomeOneLoggedInInternal(){
         return mainController.getAccount()!= null;
+
     }
 
-    public String loggedInAccountType() {
+    public Response hasSomeOneLoggedIn(){
+        JsonParser jsonParser = new JsonParser();
+        JsonElement json = jsonParser.parse(String.valueOf(hasSomeOneLoggedInInternal()));
+        return new Response(RequestStatus.SUCCESSFUL, json.getAsString());
+    }
+
+    public Response loggedInAccountType() {
         Account account = mainController.getAccount();
         if (account == null)
-            return null;
+            return new Response(RequestStatus.SUCCESSFUL,"");
         if (account instanceof Customer)
-            return "Customer";
+            return new Response(RequestStatus.SUCCESSFUL,"Customer");
         if (account instanceof Supervisor)
-            return "Supervisor";
-        return "Supplier";
+            return new Response(RequestStatus.SUCCESSFUL,"Supervisor");
+        return new Response(RequestStatus.SUCCESSFUL,"Supplier");
     }
 
     public Account getAccount() {
@@ -111,7 +121,7 @@ public class AccountController {
     }
 
     public Response controlLogin(String username, String password){
-        if (hasSomeOneLoggedIn())
+        if (hasSomeOneLoggedInInternal())
             return  Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Logout first."));
         Account account = Account.getAccountByUsernameWithinAvailable(username);
         if (account == null)
@@ -193,59 +203,62 @@ public class AccountController {
         return Response.createSuccessResponse();
     }
 
-    public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,
-                              int credit, String nameOfCompany) {
+    public Response editAllFields(String name, String familyName, String email, String phoneNumber, String password,
+                              String credit, String nameOfCompany) {
         if (password == null || password.trim().length() == 0) {
             password = getAccount().getPassword();
         }
         if (getAccount() instanceof Customer) {
-            ((Customer) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, credit);
+            ((Customer) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
         } else if (getAccount() instanceof Supplier) {
             ((Supplier) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
         } else if (getAccount() instanceof Supervisor) {
-            ((Supervisor) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, credit);
+            ((Supervisor) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
         }
+        return Response.createSuccessResponse();
     }
 
-    public String controlGetListOfAccounts() {
+    /*public String controlGetListOfAccounts() {
         ArrayList<String> allUsername = Account.getAllUsername();
         StringBuilder result = new StringBuilder();
         for (String username : allUsername) {
             result.append(username).append('\n');
         }
         return result.toString();
-    }
+    }*/
 
-    public ArrayList<String> controlGetListOfAccountUserNames(){
+    public Response controlGetListOfAccountUserNames(){
         ArrayList<String> allUsername = Account.getAllUsername();
-        return allUsername;
+        JsonElement jsonElement = Utils.convertStringArrayListToJsonElement(allUsername);
+        return new Response(RequestStatus.SUCCESSFUL,jsonElement.getAsString());
     }
 
-    public String controlViewUserInfo(String username) throws ExceptionalMassage {
+    public Response controlViewUserInfo(String username) {
         Account account = Account.getAccountByUsernameWithinAvailable(username);
         if (account == null)
-            throw new ExceptionalMassage("Account not found.");
-        return account.toString();
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Account not found."));
+        return new Response(RequestStatus.SUCCESSFUL,account.toString());
     }
 
-    public void controlDeleteUser(String username) throws ExceptionalMassage {
+    public Response controlDeleteUser(String username) {
         Account accountGotByUsername = Account.getAccountByUsernameWithinAvailable(username);
         if (accountGotByUsername == null)
-            throw new ExceptionalMassage("Account not found.");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Account not found."));
         if(username.equals(getAccount().getUserName()))
-            throw new ExceptionalMassage("You cannot delete Your self");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You cannot delete Your self"));
         accountGotByUsername.removeAccount();
+        return Response.createSuccessResponse();
     }
 
-    public String controlViewCompanyInfo() {
+    public Response controlViewCompanyInfo() {
         Account account = mainController.getAccount();
         if (account instanceof Supplier) {
-            return ((Supplier) account).getNameOfCompany();
+            return new Response(RequestStatus.SUCCESSFUL,((Supplier) account).getNameOfCompany());
         }
-        return null;
+        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Sign in as a Supplier!");
     }
 
-    public String controlGetListOfProductsForThisSupplier() throws  ExceptionalMassage{
+    /*public String controlGetListOfProductsForThisSupplier() throws  ExceptionalMassage{
         Account account = mainController.getAccount();
         if (!(account instanceof Supplier)) {
             throw new ExceptionalMassage("Sign in as a supplier");
@@ -259,19 +272,24 @@ public class AccountController {
             }
             return String.valueOf(result);
         }
-    }
+    }*/
 
-    public void controlAddToCart(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+    public Response controlAddToCart(String productId, String supplierNameOfCompany)  {
         if (getAccount() instanceof Supplier || getAccount() instanceof Supervisor) {
-            throw new ExceptionalMassage("logout, Supervisor and Supplier are denied");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("logout, Supervisor and Supplier are denied"));
         }
         Product product = Product.getProductById(productId);
         if (product == null)
-            throw new ExceptionalMassage("Product not found.");
+            return Response.createResponseFromExceptionalMassage( new ExceptionalMassage("Product not found."));
         Supplier supplier = Supplier.getSupplierByCompanyName(supplierNameOfCompany);
         if (supplier == null)
-            throw new ExceptionalMassage("Supplier not found.");
-        mainController.getCart().addProductToCart(product, supplier);
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Supplier not found."));
+        try {
+            mainController.getCart().addProductToCart(product, supplier);
+        } catch (ExceptionalMassage ex){
+            return Response.createResponseFromExceptionalMassage(ex);
+        }
+        return Response.createSuccessResponse();
     }
 
     public Response increaseProductQuantity(String productId, String supplierNameOfCompany) {
@@ -300,19 +318,20 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public Cart controlViewCart() {
-        return mainController.getCart();
+    public Response controlViewCart() {
+        String cartJson = Utils.convertObjectToJsonString(mainController.getCart());
+        return new Response(RequestStatus.SUCCESSFUL,cartJson);
     }
 
-    public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address,
-                                          String postalCode, String phoneNumber) throws ExceptionalMassage {
+    public Response controlSubmitShippingInfo(String firstName, String lastName, String city, String address,
+                                          String postalCode, String phoneNumber)  {
         Account account = mainController.getAccount();
         if (account == null)
-            throw new ExceptionalMassage("Login First.");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login First."));
         if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as a customer."));
         mainController.getCart().submitShippingInfo(new ShippingInfo(firstName, lastName, city, address, postalCode, phoneNumber));
-        //Modification required
+        return Response.createSuccessResponse();
     }
 
     public void controlRemoveShippingInfo() throws ExceptionalMassage {

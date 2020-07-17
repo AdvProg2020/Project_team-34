@@ -133,6 +133,14 @@ public class Utils {
         return jsonArray;
     }
 
+    public static JsonElement convertCustomersToJsonElement(ArrayList<Customer> customerArrayList){
+        JsonArray jsonArray = new JsonArray();
+        for (Customer customer : customerArrayList) {
+            jsonArray.add(convertObjectToJsonString(customer));
+        }
+        return jsonArray;
+    }
+
     public static ArrayList<Supplier> convertJsonElementToSupplierArrayList(JsonElement jsonElement) {
         ArrayList<Supplier> supplierArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {

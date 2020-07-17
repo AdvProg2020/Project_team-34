@@ -25,7 +25,7 @@ public class Controller {
 
     public Controller() {
         try {
-            this.socket = new Socket("localhost", 8080);
+            this.socket = new Socket("localhost", 8088);
             try {
                 this.objectInputStream = new ObjectInputStream(socket.getInputStream());
                 this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());

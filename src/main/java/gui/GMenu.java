@@ -297,7 +297,7 @@ public abstract class GMenu {
             try {
                 controller.getAccountController().controlCreateAccount(usernameField.getText(), "supervisor",
                         firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
-                        passwordField.getText(), 0, null);
+                        passwordField.getText(), 0, "");
                 stage.setScene(gMenu.createScene());
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();

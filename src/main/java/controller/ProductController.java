@@ -45,8 +45,7 @@ public class ProductController {
         inputs.add(String.valueOf(remainedNumbers));
         inputs.add(category);
         inputs.add(description);
-        //hashmap
-//        inputs.add(specifications);
+        inputs.add(Utils.convertStringToStringHashMapToJsonElement(specifications));
         inputs.add(imageURL);
         communication("controlAddProduct",inputs);
     }
@@ -60,94 +59,40 @@ public class ProductController {
     public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(Utils.convertObjectToJsonString(product));
-        communication("controlGetDigestInfosOfProduct",inputs);
+        return communication("controlGetDigestInfosOfProduct",inputs).getAsString();
     }
 
     public String controlGetAttributesOfProduct(String productId) throws ExceptionalMassage {
-        Product product = Product.getProductById(productId);
-        if (product == null) {
-            throw new ExceptionalMassage("Invalid Id");
-        } else {
-            StringBuilder result = new StringBuilder();
-            result.append("name= ").append(product.getName()).append("\n");
-            result.append("numberOfViews= ").append(product.getNumberOfViews()).append("\n");
-            result.append("nameOfCompany= ").append(product.getNameOfCompany()).append("\n");
-            result.append("description= ").append(product.getDescription()).append("\n");
-            result.append("listOfSuppliers= ").append(product.getListOfSuppliers()).append("\n");
-            result.append("priceForEachSupplier= ").append(product.getPriceForEachSupplier()).append("\n");
-            result.append("category= ").append(Category.getProductCategory(product)).append("\n");
-            HashMap<String, String> specification = product.getSpecification();
-            for (String specialField : specification.keySet()) {
-                result.append(specialField).append("= ").append(specification.get(specialField)).append("\n");
-            }
-            return String.valueOf(result);
-        }
+        JsonArray inputs = new JsonArray();
+        inputs.add(productId);
+        return communication("controlGetAttributesOfProduct",inputs).getAsString();
     }
 
-    public String controlCompare(String firstProductId, String secondProductId) throws ExceptionalMassage {
-        Product firstProduct = Product.getProductById(firstProductId);
-        Product secondProduct = Product.getProductById(secondProductId);
-        if (firstProduct == null || secondProduct == null) {
-            throw new ExceptionalMassage("Invalid Id");
-        } else if (!(Category.getProductCategory(firstProduct).equals(Category.getProductCategory(secondProduct))))
-            throw new ExceptionalMassage("You can not compare products in different categories");
-        else {
-            StringBuilder result = new StringBuilder();
-            result.append("name= ").append(firstProduct.getName()).append(" , ").append(secondProduct.getName()).append("\n");
-            result.append("numberOfViews= ").append(firstProduct.getNumberOfViews()).append(" , ").append(secondProduct.getNumberOfViews()).append("\n");
-            result.append("nameOfCompany= ").append(firstProduct.getNameOfCompany()).append(" , ").append(secondProduct.getNameOfCompany()).append("\n");
-            result.append("description= ").append(firstProduct.getDescription()).append(" , ").append(secondProduct.getDescription()).append("\n");
-            HashMap<String, String> firstSpecification = firstProduct.getSpecification();
-            HashMap<String, String> secondSpecification = firstProduct.getSpecification();
-            for (String specialField : firstSpecification.keySet()) {
-                result.append(specialField).append("= ").append(firstSpecification.get(specialField)).append(" , ").append(secondSpecification.get(specialField)).append("\n");
-            }
-            return String.valueOf(result);
-        }
-    }
 
     public void controlEditProductById(String productId, HashMap<String, String> fieldsToChange) throws ExceptionalMassage {
-        Product product = Product.getProductById(productId);
-        if (product == null) {
-            throw new ExceptionalMassage("Invalid Id");
-        } else {
-            Product newProduct = new Product(product);
-            String value;
-            for (String field : fieldsToChange.keySet()) {
-                value = fieldsToChange.get(field);
-                switch (field) {
-                    case "name":
-                        newProduct.setName(value);
-                        break;
-                    case "nameOfCompany":
-                        newProduct.setNameOfCompany(value);
-                        break;
-                    case "description":
-                        newProduct.setDescription(value);
-                        break;
-                    case "imageUrl":
-                        newProduct.setImageUrl(value);
-                    default:
-                        newProduct.editSpecialField(field, value);
-                }
-            }
-            newProduct.getListOfSuppliers().clear();
-            newProduct.getListOfSuppliers().add((Supplier) mainController.getAccount());
-        }
+        JsonArray inputs = new JsonArray();
+        inputs.add(productId);
+        inputs.add(Utils.convertStringToStringHashMapToJsonElement(fieldsToChange));
+        communication("controlEditProductById",inputs);
     }
 
-    public ArrayList<Supplier> controlGetAllSuppliersForAProduct(Product product) {
-        return product.getListOfSuppliers();
+    public ArrayList<Supplier> controlGetAllSuppliersForAProduct(Product product) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        return Utils.convertJsonElementToSupplierArrayList(communication("controlGetAllSuppliersForAProduct",inputs));
     }
 
-    public ArrayList<Customer> controlViewBuyersOfProduct(String productId) {
-        return CustomerLog.getAllCustomersBoughtProduct(Product.getProductById(productId));
+    public ArrayList<Customer> controlViewBuyersOfProduct(String productId) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(productId);
+        return Utils.convertJsonElementToCustomerArrayList(communication("controlViewBuyersOfProduct",inputs));
     }
 
     public boolean doesThisSupplierSellThisProduct(Supplier seller, Product product) throws ExceptionalMassage {
-        if (mainController.getAccount() == null)
-            throw new ExceptionalMassage("Sing in first.");
-        return product.doesSupplierSellThisProduct(seller);
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(seller));
+        inputs.add(Utils.convertObjectToJsonString(product));
+        return communication("doesThisSupplierSellThisProduct",inputs).getAsBoolean();
     }
 
     //added by rpirayadi

@@ -237,144 +237,89 @@ public class AccountController {
     }
 
     public boolean finalizeOrder() throws ExceptionalMassage {
-        Account account = mainController.getAccount();
-        if (account == null)
-            throw new ExceptionalMassage("Login First.");
-        if (!(account instanceof Customer))
-            throw new ExceptionalMassage("Login as a customer.");
-        Cart cart = mainController.getCart();
-        Customer customer = (Customer) mainController.getAccount();
-        if (cart.isCartClear())
-            throw new ExceptionalMassage("Your cart is clear.");
-        if (account.getCredit() < cart.getBill())
-            throw new ExceptionalMassage("You don't have enough credit.");
-        HashMap<ProductInCart, Integer> productInCount = cart.getProductInCount();
-        for (ProductInCart productInCart : cart.getProductsIn()) {
-            if (productInCart.getProduct().getRemainedNumber(productInCart.getSupplier()) < productInCount.get(productInCart))
-                throw new ExceptionalMassage("Product " + productInCart.getProduct().getName() +
-                        " is not available in this amount, please reduce.");
-        }
-        if(cart.getCodedDiscount() != null){
-            cart.getCodedDiscount().addUsedCountForCustomer((Customer)mainController.getAccount());
-        }
-        customer.setCart(new Cart(customer));
-        mainController.setCart(customer.getCart());
-        CustomerLog customerLog = new CustomerLog(cart);
-        if (customerLog.getPaidAmount() >= BOUND) {
-            controlCreateCodedDiscountForLoggedInCustomer();
-        }
-        return customerLog.getPaidAmount() >= BOUND;
+        return Boolean.parseBoolean(communication("finalizeOrder", new JsonArray()).getAsString());
     }
 
-    public String getAccountUsername() {
-        return getAccount().getUserName();
+    public String getAccountUsername() throws ExceptionalMassage {
+        return communication("getAccountUsername", new JsonArray()).getAsString();
     }
 
-    public String getAccountName() {
-        return getAccount().getName();
+    public String getAccountName() throws ExceptionalMassage {
+        return communication("getAccountName", new JsonArray()).getAsString();
     }
 
-    public String getAccountFamilyName() {
-        return getAccount().getFamilyName();
+    public String getAccountFamilyName() throws ExceptionalMassage {
+        return communication("getAccountFamilyName", new JsonArray()).getAsString();
     }
 
-    public String getAccountEmail() {
-        return getAccount().getEmail();
+    public String getAccountEmail() throws ExceptionalMassage {
+        return communication("getAccountEmail", new JsonArray()).getAsString();
     }
 
-    public String getAccountPhoneNumber() {
-        return getAccount().getPhoneNumber();
+    public String getAccountPhoneNumber() throws ExceptionalMassage {
+        return communication("getAccountPhoneNumber", new JsonArray()).getAsString();
     }
 
-    public int getAccountCredit() {
-        return getAccount().getCredit();
+    public int getAccountCredit() throws ExceptionalMassage {
+        return Integer.parseInt(communication("getAccountCredit", new JsonArray()).getAsString());
     }
 
-    public String getAccountNameOfCompany() {
-        return ((Supplier) getAccount()).getNameOfCompany();
+    public String getAccountNameOfCompany() throws ExceptionalMassage {
+        return communication("", new JsonArray()).getAsString();
     }
 
-    public ArrayList<String> getCustomerLogs() {
-        ArrayList<CustomerLog> customerLogs = CustomerLog.getCustomerCustomerLogs((Customer) getAccount());
-        ArrayList<String> toStringLogs = new ArrayList<>();
-        for (CustomerLog customerLog : customerLogs) {
-            toStringLogs.add(customerLog.toString());
-        }
-        return toStringLogs;
+    public ArrayList<String> getCustomerLogs() throws ExceptionalMassage {
+        return Utils.convertJasonElementToStringArrayList(communication("getCustomerLogs", new JsonArray()));
     }
 
-    public ArrayList<String> getSupplierLogs() {
-        ArrayList<SupplierLog> supplierLogs = SupplierLog.getSupplierSupplierLog((Supplier) getAccount());
-        ArrayList<String> toStringLogs = new ArrayList<>();
-        for (SupplierLog supplierLog : supplierLogs) {
-            toStringLogs.add(supplierLog.toString());
-        }
-        return toStringLogs;
+    public ArrayList<String> getSupplierLogs() throws ExceptionalMassage {
+        return Utils.convertJasonElementToStringArrayList(communication("getSupplierLogs", new JsonArray()));
     }
 
-    public ArrayList<String> getSupervisorLogs() {
-        ArrayList<CustomerLog> supervisorLogs = CustomerLog.getAllCustomerLogs();
-        ArrayList<String> toStringLogs = new ArrayList<>();
-        for (CustomerLog customerLog : supervisorLogs) {
-            toStringLogs.add(customerLog.toString());
-        }
-        return toStringLogs;
+    public ArrayList<String> getSupervisorLogs() throws ExceptionalMassage {
+        return Utils.convertJasonElementToStringArrayList(communication("getSupervisorLogs", new JsonArray()));
     }
 
-    public String getCustomerLogById(String id) {
-        return CustomerLog.getCustomerLogById(id).toString();
+    public String getCustomerLogById(String id) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        return communication("getCustomerLogById", inputs).getAsString();
     }
 
-    public String getSupplierLogById(String id) {
-        return SupplierLog.getSupplierLogById(id).toString();
+    public String getSupplierLogById(String id) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        return communication("getSupplierLogById", inputs).getAsString();
     }
 
-    public boolean proceedCustomerLog(String id) {
-        try {
-            CustomerLog.getCustomerLogById(id).proceedToNextStep();
-        } catch (ExceptionalMassage exceptionalMassage) {
-            return false;
-        }
-        return true;
+    public boolean proceedCustomerLog(String id) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        return Boolean.parseBoolean(communication("proceedCustomerLog", inputs).getAsString());
     }
 
-    public boolean isLogProcessable(String id) {
-        return CustomerLog.getCustomerLogById(id).getDeliveryStatus() != LogStatus.DELIVERED;
+    public boolean isLogProcessable(String id) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        return Boolean.parseBoolean(communication("isLogProcessable", inputs).getAsString());
     }
 
-    public int numberOfProductInCart(ProductInCart productInCart){
-        try {
-            return mainController.getCart().getCountOfProductInCart(productInCart);
-        } catch (ExceptionalMassage exceptionalMassage) {
-            return 0;
-        }
+    public int numberOfProductInCart(ProductInCart productInCart) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(productInCart));
+        return Integer.parseInt(communication("numberOfProductInCart", inputs).getAsString());
     }
 
-    public void controlClearCart(){
-        mainController.getCart().clear();
+    public void controlClearCart() throws ExceptionalMassage {
+        communication("controlClearCart", new JsonArray());
     }
 
-    public ArrayList<Product> controlGetRequestForLoggedInSupplier(){
-        return Product.getRequestsForThisSupplier((Supplier) mainController.getAccount());
+    public ArrayList<Product> controlGetRequestForLoggedInSupplier() throws ExceptionalMassage {
+        return Utils.convertJasonElementToProductArrayList(communication("controlGetRequestForLoggedInSupplier",
+                new JsonArray()));
     }
 
-    public void controlCreateRandomCodesForCustomers(ArrayList<Customer> luckyCustomers,int percent, int maxAmount){
-        HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
-        String randomCode = CodedDiscount.codeGenerator();
-        for (Customer luckyCustomer : luckyCustomers) {
-            maxUsagePerCustomer.put(luckyCustomer, 1);
-        }
-        Date start = new Date(System.currentTimeMillis());
-        Date end = new Date(System.currentTimeMillis() + WEEK);
-        new CodedDiscount(randomCode,start, end,percent,maxAmount,maxUsagePerCustomer);
-    }
-
-    public void controlCreateCodedDiscountForLoggedInCustomer(){
-        Date start = new Date(System.currentTimeMillis());
-        Date end = new Date(System.currentTimeMillis() + WEEK);
-        String randomCode = CodedDiscount.codeGenerator();
-        HashMap<Customer, Integer> maxUsagePerCustomer = new HashMap<>();
-        maxUsagePerCustomer.put((Customer)mainController.getAccount(),1);
-        new CodedDiscount(randomCode,start,end, 15, 100,maxUsagePerCustomer);
+    public void controlCreateCodedDiscountForLoggedInCustomer() throws ExceptionalMassage {
+        communication("controlCreateCodedDiscountForLoggedInCustomer", new JsonArray());
     }
 }

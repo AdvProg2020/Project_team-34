@@ -4,8 +4,10 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.sun.net.httpserver.Authenticator;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
@@ -13,6 +15,7 @@ import feedback.CommentState;
 import feedback.Score;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import jdk.jshell.execution.Util;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
@@ -39,31 +42,22 @@ public class ProductController {
         return filterAndSort;
     }
 
-    public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers, String category,
-                                  String description, HashMap<String, String> specifications, String imageURL) throws ExceptionalMassage {
+    public Response controlAddProduct(String name, String nameOfCompany, String price, String remainedNumbers, String category,
+                                  String description, String specification, String imageURL) throws ExceptionalMassage {
+        JsonParser parser = new JsonParser();
+        HashMap<String, String> specifications = Utils.convertJsonElementStringToStringToHashMap(parser.parse(specification));
         if (mainController.getAccount() == null)
-            throw new ExceptionalMassage("Sing in first.");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sing in first."));
         if (!(mainController.getAccount() instanceof Supplier))
-            throw new ExceptionalMassage("Sign in as a Supplier");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sign in as a Supplier"));
         if(!specifications.keySet().containsAll(Category.getCategoryByName(category).getSpecialFields().keySet())){
             String error = "You have to enter a value for the category's special fields :\n";
             for (String s : Category.getCategoryByName(category).getSpecialFields().keySet()) {
                 error += s + "\n";
             }
-            throw new ExceptionalMassage(error);
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage(error));
         }
-        /*if(!Category.getCategoryByName(category).getSpecialFields().values().contains(specifications.values())){
-            String error = "You have to enter valid values for each field : \n";
-            HashMap<String, ArrayList<String>> map = Category.getCategoryByName(category).getSpecialFields();
-            for (String s : map.keySet()) {
-                error += s + " : ";
-                for (String s1 : map.get(s)) {
-                    error += s1 + " ";
-                }
-                error += "\n";
-            }
-            throw new ExceptionalMassage(error);
-        }*/
+
         Supplier supplier = (Supplier) mainController.getAccount();
         Product product;
         product = Product.getProductByName(name);
@@ -75,14 +69,15 @@ public class ProductController {
 //        else {
 //            product.addNewSupplierForProduct(supplier, price, remainedNumbers);
 //        }
-        Product product1 = new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications, imageURL);
+        Product product1 = new Product(supplier, name, nameOfCompany, Integer.parseInt(price), Integer.parseInt(remainedNumbers), description, null, category, specifications, imageURL);
         System.out.println(product1);
+        return Response.createSuccessResponse();
     }
 
-    public void controlRemoveProductById(String productId) throws ExceptionalMassage {
+    public Response controlRemoveProductById(String productId) {
         Product product = Product.getProductById(productId);
         if (product == null) {
-            throw new ExceptionalMassage("Invalid Id");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Invalid Id"));
         } else {
             Product newProduct = new Product(product);
             newProduct.setProductState(State.PREPARING_TO_BE_DELETED);
@@ -90,9 +85,10 @@ public class ProductController {
             newListOfSuppliers.add((Supplier)mainController.getAccount());
             newProduct.setListOfSuppliers(newListOfSuppliers);
         }
+        return Response.createSuccessResponse();
     }
 
-    public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage {
+    /*public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage {
         Product productGotById = Product.getProductById(product.getProductId());
         if (productGotById == null) {
             throw new ExceptionalMassage("Invalid Id");
@@ -106,9 +102,9 @@ public class ProductController {
                     "Score= " + Score.getAverageScoreForProduct(product) + "\n";
             return String.valueOf(result);
         }
-    }
+    }*/
 
-    public String controlGetAttributesOfProduct(String productId) throws ExceptionalMassage {
+    /*public String controlGetAttributesOfProduct(String productId) throws ExceptionalMassage {
         Product product = Product.getProductById(productId);
         if (product == null) {
             throw new ExceptionalMassage("Invalid Id");
@@ -127,9 +123,9 @@ public class ProductController {
             }
             return String.valueOf(result);
         }
-    }
+    }*/
 
-    public String controlCompare(String firstProductId, String secondProductId) throws ExceptionalMassage {
+    /*public String controlCompare(String firstProductId, String secondProductId) throws ExceptionalMassage {
         Product firstProduct = Product.getProductById(firstProductId);
         Product secondProduct = Product.getProductById(secondProductId);
         if (firstProduct == null || secondProduct == null) {
@@ -149,12 +145,14 @@ public class ProductController {
             }
             return String.valueOf(result);
         }
-    }
+    }*/
 
-    public void controlEditProductById(String productId, HashMap<String, String> fieldsToChange) throws ExceptionalMassage {
+    public Response controlEditProductById(String productId, String fieldToChange) throws ExceptionalMassage {
+        JsonParser parser = new JsonParser();
+        HashMap<String, String> fieldsToChange = Utils.convertJsonElementStringToStringToHashMap(parser.parse(fieldToChange));
         Product product = Product.getProductById(productId);
         if (product == null) {
-            throw new ExceptionalMassage("Invalid Id");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Invalid Id"));
         } else {
             Product newProduct = new Product(product);
             String value;
@@ -178,79 +176,96 @@ public class ProductController {
             }
             newProduct.getListOfSuppliers().clear();
             newProduct.getListOfSuppliers().add((Supplier) mainController.getAccount());
+            return Response.createSuccessResponse();
         }
     }
 
-    public ArrayList<Supplier> controlGetAllSuppliersForAProduct(Product product) {
-        return product.getListOfSuppliers();
+    public Response controlGetAllSuppliersForAProduct(String productString) {
+        Product product = Product.convertJsonStringToProduct(productString);
+        JsonElement suppliers = Utils.convertSupplierToJsonElement(product.getListOfSuppliers());
+        return new Response(RequestStatus.SUCCESSFUL, suppliers.getAsString());
     }
 
-    public ArrayList<Customer> controlViewBuyersOfProduct(String productId) {
-        return CustomerLog.getAllCustomersBoughtProduct(Product.getProductById(productId));
+    public Response controlViewBuyersOfProduct(String productId) {
+        JsonElement customers = Utils.convertCustomersToJsonElement(CustomerLog.getAllCustomersBoughtProduct(Product.getProductById(productId)));
+        return new Response(RequestStatus.SUCCESSFUL, customers.getAsString());
     }
 
-    public boolean doesThisSupplierSellThisProduct(Supplier seller, Product product) throws ExceptionalMassage {
+    public Response doesThisSupplierSellThisProduct(String sellerString, String productString) {
+        Supplier seller = Supplier.convertJsonStringToSupplier(sellerString);
+        Product product = Product.convertJsonStringToProduct(productString);
         if (mainController.getAccount() == null)
-            throw new ExceptionalMassage("Sing in first.");
-        return product.doesSupplierSellThisProduct(seller);
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sing in first."));
+        JsonParser parser = new JsonParser();
+        return new Response(RequestStatus.SUCCESSFUL,parser.parse(String.valueOf(product.doesSupplierSellThisProduct(seller))).getAsString());
     }
 
     //added by rpirayadi
-    public ArrayList<Category> controlGetAllCategoriesInACategory(Category rootCategory){
-        return rootCategory.getAllCategoriesIn();
+    public Response controlGetAllCategoriesInACategory(String rootCategoryString){
+        Category rootCategory = Category.convertJsonStringToCategory(rootCategoryString);
+        JsonElement categories = Utils.convertCategoriesToJsonElement(rootCategory.getAllCategoriesIn());
+        return new Response(RequestStatus.SUCCESSFUL,categories.getAsString());
     }
     //added by rpirayadi
-    public Category controlGetAllProductCategory (){
-        return Category.getSuperCategory();
+    public Response controlGetAllProductCategory (){
+        String category = Utils.convertObjectToJsonString(Category.getSuperCategory());
+        return new Response(RequestStatus.SUCCESSFUL,category);
     }
 
     //related to feedback:
-    public void controlAddCommentToProduct(String title, String content, Product product) throws ExceptionalMassage{
+    public Response controlAddCommentToProduct(String title, String content, String productString){
+        Product product = Product.convertJsonStringToProduct(productString);
         if (!(mainController.getAccount() instanceof Customer)){
-            throw new ExceptionalMassage("Sign in as a customer first!");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sign in as a customer first!"));
         }
         new Comment((Customer) mainController.getAccount(), product, title, content, controlHasCustomerBoughtThisProduct((Customer)mainController.getAccount(),product));
+        return Response.createSuccessResponse();
     }
 
-    public ArrayList<Comment> controlGetCommentsOfAProduct(Product product) {
+    public Response controlGetCommentsOfAProduct(String productString) {
+        Product product = Product.convertJsonStringToProduct(productString);
         ArrayList<Comment> productComment = new ArrayList<>();
         for (Comment comment : Comment.getComments()) {
             if (comment.getProduct() == product) {
                 productComment.add(comment);
             }
         }
-        return productComment;
+        JsonElement response = Utils.convertCommentsToJsonElement(productComment);
+        return new Response(RequestStatus.SUCCESSFUL, response.getAsString());
     }
 
-    public void controlRateProductById(String id, float score) throws ExceptionalMassage {
+    public Response controlRateProductById(String id, String score)  {
         if (Product.getProductById(id) == null) {
-            throw new ExceptionalMassage("No such product with id!");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No such product with id!"));
         } else if (!(mainController.getAccount() instanceof Customer)){
-            throw new ExceptionalMassage("Sign in as customer first!");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sign in as customer first!"));
         } else if (!controlHasCustomerBoughtThisProduct((Customer)mainController.getAccount(),Product.getProductById(id))) {
-            throw new ExceptionalMassage("You haven't bought this product yet!");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You haven't bought this product yet!"));
         } else if (Score.hasCustomerRateThisProduct(Product.getProductById(id),(Customer)mainController.getAccount())){
-            throw new ExceptionalMassage("You can't rate again!");
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You can't rate again!"));
         }
-        new Score(score, (Customer) (mainController.getAccount()), Product.getProductById(id));
+        new Score(Float.valueOf(score), (Customer) (mainController.getAccount()), Product.getProductById(id));
+        return Response.createSuccessResponse();
     }
 
-    public float controlGetAverageScoreByProduct(Product product) {
-        return Score.getAverageScoreForProduct(product);
+    public Response controlGetAverageScoreByProduct(String productString) {
+        Product product = Product.convertJsonStringToProduct(productString);
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Score.getAverageScoreForProduct(product)));
     }
 
-    public ArrayList<Comment> controlGetConfirmedComments() {
+    public Response controlGetConfirmedComments() {
         ArrayList<Comment> confirmedComments = new ArrayList<>();
         for (Comment comment : Comment.getComments()) {
             if (comment.getState() == CommentState.CONFIRMED) {
                 confirmedComments.add(comment);
             }
         }
-        return confirmedComments;
+        JsonElement jsonComments = Utils.convertCommentsToJsonElement(confirmedComments);
+        return new Response(RequestStatus.SUCCESSFUL, jsonComments.getAsString());
     }
 
     //related to request:
-    public String controlGetListOfRequestId() {
+    public Response controlGetListOfRequestId() {
         ArrayList<String> allProductRequestId = Product.getAllProductRequestId();
         StringBuilder result = new StringBuilder();
         for (String requestId : allProductRequestId) {
@@ -259,56 +274,76 @@ public class ProductController {
         for (String requestId : Sale.getAllSaleRequestId()) {
             result.append(requestId).append('\n');
         }
-        return result.toString();
+        return new Response(RequestStatus.SUCCESSFUL, result.toString());
     }
 
-    public ArrayList<String> controlGetArrayOfRequestId() {
+    public Response controlGetArrayOfRequestId() {
         ArrayList<String> allRequests = new ArrayList<>();
         allRequests.addAll(Product.getAllProductRequestId());
         allRequests.addAll(Sale.getAllSaleRequestId());
-        return allRequests;
+        JsonElement requestsJson = Utils.convertStringArrayListToJsonElement(allRequests);
+        return new Response(RequestStatus.SUCCESSFUL,requestsJson.getAsString());
     }
 
-    public String controlShowDetailForRequest(String requestId) throws ExceptionalMassage {
+    public Response controlShowDetailForRequest(String requestId) {
         if (requestId.charAt(3) == 'P') {
-            return Product.getDetailsForProductRequest(requestId);
+            return new Response(RequestStatus.SUCCESSFUL, Product.getDetailsForProductRequest(requestId));
         } else {
-            return Sale.getDetailsForSaleRequest(requestId);
+            try {
+                return new Response(RequestStatus.SUCCESSFUL,Sale.getDetailsForSaleRequest(requestId));
+            } catch (ExceptionalMassage exceptionalMassage) {
+                return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+            }
         }
     }
 
-    public State controlGetEnumForRequest(String requestId) throws ExceptionalMassage {
+    public Response controlGetEnumForRequest(String requestId)  {
         if(requestId.charAt(3) == 'P'){
-            return Product.getProductById(Product.convertRequestIdToProductId(requestId)).getProductState();
+            return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Product.getProductById(Product.convertRequestIdToProductId(requestId)).getProductState()));
         } else {
-            return Sale.getSaleById(Sale.convertRequestIdToSaleId(requestId)).getState();
+            return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Sale.getSaleById(Sale.convertRequestIdToSaleId(requestId)).getState()));
         }
     }
 
-    public void controlAcceptOrDeclineRequest(String requestId, boolean isAccepted) throws ExceptionalMassage {
+    public Response controlAcceptOrDeclineRequest(String requestId, String isAccepted) {
         if (requestId.charAt(3) == 'P') {
-            Product.acceptOrDeclineRequest(requestId, isAccepted);
+            try {
+                Product.acceptOrDeclineRequest(requestId, Boolean.parseBoolean(isAccepted));
+            } catch (ExceptionalMassage exceptionalMassage) {
+                return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+            }
         } else {
-            Sale.acceptOrDeclineRequest(requestId, isAccepted);
+            try {
+                Sale.acceptOrDeclineRequest(requestId, Boolean.parseBoolean(isAccepted));
+            } catch (ExceptionalMassage exceptionalMassage) {
+                return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+            }
         }
+        return Response.createSuccessResponse();
     }
 
-    public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) {
-        return Category.getCategoryByName(name).getSpecialFields();
+    public Response controlGetCategorySpecialFields(String name) {
+        JsonElement jsonElement = Utils.convertStringToStringsHashMapToJsonElement(Category.getCategoryByName(name).getSpecialFields());
+        return new Response(RequestStatus.SUCCESSFUL, jsonElement.getAsString());
     }
 
-    public boolean controlHasCustomerBoughtThisProduct(Customer customer, Product product ){
-        return CustomerLog.getAllCustomersBoughtProduct(product).contains(customer);
+    public Response controlHasCustomerBoughtThisProduct(String customerString, String productString){
+        Customer customer = Customer.convertJsonStringToCustomer(customerString);
+        Product product = Product.convertJsonStringToProduct(productString);
+        return new Response(RequestStatus.SUCCESSFUL,String.valueOf(CustomerLog.getAllCustomersBoughtProduct(product).contains(customer)));
     }
 
-    public void controlViewThisProduct(Product product){
+    public Response controlViewThisProduct(String productString){
+        Product product = Product.convertJsonStringToProduct(productString);
         product.setNumberOfViews(product.getNumberOfViews()+ 1);
+        return Response.createSuccessResponse();
     }
 
-    public ObservableList<Customer> getCustomersBoughtProductObservable(Product product, Supplier supplier) {
-        ObservableList<Customer> customers = FXCollections.observableArrayList();
-        customers.addAll(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
-        return customers;
+    public Response getCustomersBoughtProductObservable(String productString ,String supplierString) {
+        Product product = Product.convertJsonStringToProduct(productString);
+        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
+        JsonElement returning = Utils.convertCustomersToJsonElement(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
+        return new Response(RequestStatus.SUCCESSFUL,returning.getAsString());
     }
 
     //related to Category:

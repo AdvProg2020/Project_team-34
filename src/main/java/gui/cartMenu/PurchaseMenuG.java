@@ -249,7 +249,12 @@ public class PurchaseMenuG extends GMenu {
             }
         });
 
-        cartInfo.setText(controller.getAccountController().controlViewCart().toString());
+
+        try {
+            cartInfo.setText(controller.getAccountController().controlViewCart().toString());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
 
         submitDiscountCode.setOnAction( e -> {
             try{

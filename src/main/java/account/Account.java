@@ -197,8 +197,8 @@ public abstract class Account {
         return "Supplier";
     }
 
-    public static ObservableList<Supervisor> getSupervisorsObservableList() {
-        ObservableList<Supervisor> allSupervisors = FXCollections.observableArrayList();
+    public static ArrayList<Supervisor> getSupervisorsList() {
+        ArrayList<Supervisor> allSupervisors = new ArrayList<>();
         for (Account account: allAccounts) {
             if (account instanceof Supervisor && account.isAvailable) {
                 allSupervisors.add((Supervisor) account);
@@ -207,8 +207,8 @@ public abstract class Account {
         return allSupervisors;
     }
 
-    public static ObservableList<Supplier> getSuppliersObservableList() {
-        ObservableList<Supplier> allSuppliers = FXCollections.observableArrayList();
+    public static ArrayList<Supplier> getSuppliersList() {
+        ArrayList<Supplier> allSuppliers = new ArrayList<>();
         for (Account account: allAccounts) {
             if (account instanceof Supplier && account.isAvailable) {
                 allSuppliers.add((Supplier) account);
@@ -217,8 +217,8 @@ public abstract class Account {
         return allSuppliers;
     }
 
-    public static ObservableList<Customer> getCustomersObservableList() {
-        ObservableList<Customer> allCustomers = FXCollections.observableArrayList();
+    public static ArrayList<Customer> getCustomersList() {
+        ArrayList<Customer> allCustomers = new ArrayList<>();
         for (Account account: allAccounts) {
             if (account instanceof Customer && account.isAvailable) {
                 allCustomers.add((Customer) account);

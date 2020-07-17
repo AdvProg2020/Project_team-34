@@ -17,7 +17,7 @@ public class Controller {
     private ObjectOutputStream objectOutputStream;
 
     private String token;
-    private final boolean isFirstSupervisorCreated;
+    private boolean isFirstSupervisorCreated;
 
     private final AccountController accountController;
     private final ProductController productController;
@@ -40,7 +40,11 @@ public class Controller {
             System.err.println("Error, Socket Connection");
             System.exit(1);
         }
-        this.isFirstSupervisorCreated = false;
+        try {
+            this.isFirstSupervisorCreated = Boolean.parseBoolean(objectInputStream.readUTF());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         this.token = null;
         this.accountController = new AccountController(this);
         this.productController = new ProductController(this);

@@ -9,17 +9,10 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.skin.LabeledSkinBase;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-
-import java.io.File;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 public class CustomerProfileGMenu extends GMenu {
 
@@ -71,7 +64,7 @@ public class CustomerProfileGMenu extends GMenu {
 
 
 
-        mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccountController().getAccount()), buttonPane, viewPane);
+        mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccount()), buttonPane, viewPane);
         mainPane.setSpacing(10);
         mainPane.setPadding(new Insets(10, 10 , 10 , 10));
         mainPane.setAlignment(Pos.CENTER);

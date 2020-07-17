@@ -7,16 +7,11 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import communications.ControllerSource;
-import communications.Response;
 import communications.Utils;
-import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
-import feedback.CommentState;
-import feedback.Score;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import log.CustomerLog;
 import product.Category;
 import product.Product;
 import state.State;
@@ -154,7 +149,7 @@ public class ProductController {
 
     public ArrayList<String> controlGetArrayOfRequestId() throws ExceptionalMassage{
         JsonElement arrayOfString = communication("controlGetArrayOfRequestId", new JsonArray());
-        ArrayList<String> arrayList = Utils.convertJasonElementToStringArrayList(arrayOfString);
+        ArrayList<String> arrayList = Utils.convertJsonElementToStringArrayList(arrayOfString);
         return arrayList;
     }
 
@@ -256,15 +251,15 @@ public class ProductController {
     }
 
     public ArrayList<String> controlGetAllCategoriesName() throws ExceptionalMassage {
-        return Utils.convertJasonElementToStringArrayList(communication("controlGetAllCategoriesName", new JsonArray()));
+        return Utils.convertJsonElementToStringArrayList(communication("controlGetAllCategoriesName", new JsonArray()));
     }
 
     public ArrayList<String> controlGetAllProductCategoriesName() throws ExceptionalMassage {
-        return Utils.convertJasonElementToStringArrayList(communication("controlGetAllProductCategoriesName", new JsonArray()));
+        return Utils.convertJsonElementToStringArrayList(communication("controlGetAllProductCategoriesName", new JsonArray()));
     }
 
     public ArrayList<String> controlGetAllCategoryCategoriesName() throws ExceptionalMassage {
-        return Utils.convertJasonElementToStringArrayList(communication("controlGetAllCategoryCategoriesName", new JsonArray()));
+        return Utils.convertJsonElementToStringArrayList(communication("controlGetAllCategoryCategoriesName", new JsonArray()));
     }
 
     public String controlGetCategoryParentName(String name) throws ExceptionalMassage {
@@ -293,12 +288,12 @@ public class ProductController {
     }
 
     public ArrayList<String> controlFilterGetNameFilter() throws ExceptionalMassage {
-        return Utils.convertJasonElementToStringArrayList(communication("controlFilterGetNameFilter",
+        return Utils.convertJsonElementToStringArrayList(communication("controlFilterGetNameFilter",
                 new JsonArray()));
     }
 
     public ArrayList<String> controlFilterGetBrandFilter() throws ExceptionalMassage {
-        return Utils.convertJasonElementToStringArrayList(communication("controlFilterGetBrandFilter",
+        return Utils.convertJsonElementToStringArrayList(communication("controlFilterGetBrandFilter",
                 new JsonArray()));
     }
 
@@ -324,7 +319,7 @@ public class ProductController {
         JsonObject jsonObject = communication("controlFilterGetSpecialFilter", new JsonArray()).getAsJsonObject();
         HashMap<String, ArrayList<String>> specialFilters = new HashMap<>();
         for (String key : jsonObject.keySet()) {
-            specialFilters.put(key, Utils.convertJasonElementToStringArrayList(jsonObject.get(key)));
+            specialFilters.put(key, Utils.convertJsonElementToStringArrayList(jsonObject.get(key)));
         }
         return specialFilters;
     }
@@ -404,7 +399,7 @@ public class ProductController {
     }
 
     public ArrayList<Product> controlFilterGetFilteredAndSortedProducts() throws ExceptionalMassage {
-        return Utils.convertJasonElementToProductArrayList(communication(
+        return Utils.convertJsonElementToProductArrayList(communication(
                 "controlFilterGetFilteredAndSortedProducts", new JsonArray()));
     }
 
@@ -412,7 +407,7 @@ public class ProductController {
         JsonObject jsonObject = communication("controlGetAllAvailableFilters", new JsonArray()).getAsJsonObject();
         HashMap<String, ArrayList<String>> availableFilters = new HashMap<>();
         for (String key : jsonObject.keySet()) {
-            availableFilters.put(key, Utils.convertJasonElementToStringArrayList(jsonObject.get(key)));
+            availableFilters.put(key, Utils.convertJsonElementToStringArrayList(jsonObject.get(key)));
         }
         return availableFilters;
     }

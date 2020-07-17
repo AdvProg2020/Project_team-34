@@ -81,7 +81,7 @@ public class OffController {
 
     public ArrayList<Sale> controlGetAllSales() throws ExceptionalMassage {
         //check name
-        return Utils.convertJasonElementToSaleArrayList(communication("controlGetAllSales", new JsonArray()));
+        return Utils.convertJsonElementToSaleArrayList(communication("controlGetAllSales", new JsonArray()));
     }
 
     public Sale controlGetSaleById(String id) throws ExceptionalMassage {
@@ -110,7 +110,7 @@ public class OffController {
     }
 
     public ArrayList<CodedDiscount> controlGetCodedDiscountByCustomer() throws ExceptionalMassage {
-        return Utils.convertJasonElementToCodedDiscountArrayList(
+        return Utils.convertJsonElementToCodedDiscountArrayList(
                 communication("controlGetCodedDiscountByCustomer", new JsonArray()));
     }
 
@@ -121,7 +121,7 @@ public class OffController {
     }
 
     public ArrayList<Sale> getAllSaleRequestsIdForThisSupplier() throws ExceptionalMassage {
-        return Utils.convertJasonElementToSaleArrayList(communication("getAllSaleRequestsIdForThisSupplier",
+        return Utils.convertJsonElementToSaleArrayList(communication("getAllSaleRequestsIdForThisSupplier",
                 new JsonArray()));
     }
 

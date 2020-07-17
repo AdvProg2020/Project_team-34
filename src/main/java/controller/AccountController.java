@@ -1,27 +1,16 @@
 package controller;
 
-import account.Account;
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
-import cart.ShippingInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import communications.*;
-import discount.CodedDiscount;
+import communications.ControllerSource;
+import communications.Utils;
 import exceptionalMassage.ExceptionalMassage;
-import log.CustomerLog;
-import log.LogStatus;
-import log.SupplierLog;
 import product.Product;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
 
 public class AccountController {
     private static final long WEEK = 7*24*60*60000;
@@ -147,7 +136,7 @@ public class AccountController {
 
     public ArrayList<String> controlGetListOfAccountUserNames() throws ExceptionalMassage{
         JsonElement response = communication("controlGetListOfAccountUserNames",new JsonArray());
-        ArrayList<String> allUsername = Utils.convertJasonElementToStringArrayList(response);
+        ArrayList<String> allUsername = Utils.convertJsonElementToStringArrayList(response);
         return allUsername;
     }
 
@@ -269,15 +258,15 @@ public class AccountController {
     }
 
     public ArrayList<String> getCustomerLogs() throws ExceptionalMassage {
-        return Utils.convertJasonElementToStringArrayList(communication("getCustomerLogs", new JsonArray()));
+        return Utils.convertJsonElementToStringArrayList(communication("getCustomerLogs", new JsonArray()));
     }
 
     public ArrayList<String> getSupplierLogs() throws ExceptionalMassage {
-        return Utils.convertJasonElementToStringArrayList(communication("getSupplierLogs", new JsonArray()));
+        return Utils.convertJsonElementToStringArrayList(communication("getSupplierLogs", new JsonArray()));
     }
 
     public ArrayList<String> getSupervisorLogs() throws ExceptionalMassage {
-        return Utils.convertJasonElementToStringArrayList(communication("getSupervisorLogs", new JsonArray()));
+        return Utils.convertJsonElementToStringArrayList(communication("getSupervisorLogs", new JsonArray()));
     }
 
     public String getCustomerLogById(String id) throws ExceptionalMassage {
@@ -315,7 +304,7 @@ public class AccountController {
     }
 
     public ArrayList<Product> controlGetRequestForLoggedInSupplier() throws ExceptionalMassage {
-        return Utils.convertJasonElementToProductArrayList(communication("controlGetRequestForLoggedInSupplier",
+        return Utils.convertJsonElementToProductArrayList(communication("controlGetRequestForLoggedInSupplier",
                 new JsonArray()));
     }
 

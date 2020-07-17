@@ -5,9 +5,9 @@ import account.Supplier;
 import com.google.gson.*;
 import discount.CodedDiscount;
 import discount.Sale;
+import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import product.Category;
-import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 
 import java.io.*;
@@ -31,7 +31,6 @@ public class Utils {
         }
     }
 
-    //check
     public static JsonElement convertStringArrayListToJsonElement(ArrayList<String> stringArrayList) {
         JsonArray jsonArray = new JsonArray();
         for (String string : stringArrayList) {
@@ -40,7 +39,7 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<String> convertJasonElementToStringArrayList(JsonElement jsonElement) {
+    public static ArrayList<String> convertJsonElementToStringArrayList(JsonElement jsonElement) {
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             stringArrayList.add(element.getAsString());
@@ -56,7 +55,7 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<Product> convertJasonElementToProductArrayList(JsonElement jsonElement) {
+    public static ArrayList<Product> convertJsonElementToProductArrayList(JsonElement jsonElement) {
         ArrayList<Product> productArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             productArrayList.add(Product.convertJsonStringToProduct(element.getAsString()));
@@ -72,20 +71,12 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<CodedDiscount> convertJasonElementToCodedDiscountArrayList(JsonElement jsonElement) {
+    public static ArrayList<CodedDiscount> convertJsonElementToCodedDiscountArrayList(JsonElement jsonElement) {
         ArrayList<CodedDiscount> codedDiscountArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             codedDiscountArrayList.add(CodedDiscount.convertJsonStringToCodedDiscount(element.getAsString()));
         }
         return codedDiscountArrayList;
-    }
-
-    public static ArrayList<Category> convertJsonElementToCategoryArrayList(JsonElement jsonElement){
-        ArrayList<Category> categoryArrayList = new ArrayList<>();
-        for (JsonElement element : jsonElement.getAsJsonArray()) {
-            categoryArrayList.add(Category.convertJsonStringToCategory(element.getAsString()));
-        }
-        return categoryArrayList;
     }
 
     public static JsonElement convertSaleArrayListToJsonElement(ArrayList<Sale> saleArrayList) {
@@ -96,12 +87,76 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<Sale> convertJasonElementToSaleArrayList(JsonElement jsonElement) {
+    public static ArrayList<Sale> convertJsonElementToSaleArrayList(JsonElement jsonElement) {
         ArrayList<Sale> saleArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             saleArrayList.add(Sale.convertJsonStringToSale(element.getAsString()));
         }
         return saleArrayList;
+    }
+
+    public static JsonElement convertSupplierArrayListToJsonElement(ArrayList<Supplier> supplierArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Supplier supplier : supplierArrayList) {
+            jsonArray.add(convertObjectToJsonString(supplier));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Supplier> convertJsonElementToSupplierArrayList(JsonElement jsonElement) {
+        ArrayList<Supplier> supplierArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            supplierArrayList.add(Supplier.convertJsonStringToSupplier(element.getAsString()));
+        }
+        return supplierArrayList;
+    }
+
+    public static JsonElement convertCustomerArrayListToJsonElement(ArrayList<Customer> customerArrayList){
+        JsonArray jsonArray = new JsonArray();
+        for (Customer customer : customerArrayList) {
+            jsonArray.add(convertObjectToJsonString(customer));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Customer> convertJsonElementToCustomerArrayList(JsonElement jsonElement) {
+        ArrayList<Customer> customerArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            customerArrayList.add(Customer.convertJsonStringToCustomer(element.getAsString()));
+        }
+        return customerArrayList;
+    }
+
+    public static JsonElement convertCategoryArrayListToJsonElement(ArrayList<Category> categories) {
+        JsonArray jsonArray = new JsonArray();
+        for (Category category : categories) {
+            jsonArray.add(convertObjectToJsonString(category));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Category> convertJsonElementToCategoryArrayList(JsonElement jsonElement) {
+        ArrayList<Category> categoryArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            categoryArrayList.add(Category.convertJsonStringToCategory(element.getAsString()));
+        }
+        return categoryArrayList;
+    }
+
+    public static JsonElement convertCommentArrayListToJsonElement(ArrayList<Comment> comments) {
+        JsonArray jsonArray = new JsonArray();
+        for (Comment comment : comments) {
+            jsonArray.add(convertObjectToJsonString(comment));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Comment> convertJsonElementToCommentArrayList(JsonElement jsonElement) {
+        ArrayList<Comment> commentArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            commentArrayList.add(Comment.convertJsonStringToComment(element.getAsString()));
+        }
+        return commentArrayList;
     }
 
     public static JsonElement convertStringToStringHashMapToJsonElement(HashMap<String, String> hashMap) {
@@ -122,36 +177,21 @@ public class Utils {
         return hashMap;
     }
 
-    public static JsonElement convertCustomerToJsonElement(ArrayList<Customer> customerArrayList) {
-        JsonArray jsonArray = new JsonArray();
-        for (Customer customer : customerArrayList) {
-            jsonArray.add(convertObjectToJsonString(customer));
+    public static JsonElement convertStringToStringArrayListHashMapToJsonElement(HashMap<String, ArrayList<String>> hashMap){
+        JsonObject jsonObject = new JsonObject();
+        for (String key : hashMap.keySet()) {
+            jsonObject.add(key, Utils.convertStringArrayListToJsonElement(hashMap.get(key)));
         }
-        return jsonArray;
+        return jsonObject;
     }
 
-    public static ArrayList<Customer> convertJsonElementToCustomerArrayList(JsonElement jsonElement) {
-        ArrayList<Customer> customerArrayList = new ArrayList<>();
-        for (JsonElement element : jsonElement.getAsJsonArray()) {
-            customerArrayList.add(Customer.convertJsonStringToCustomer(element.getAsString()));
+    public static HashMap<String, ArrayList<String>> convertJasonElementToStringToStringArrayListHashMap(JsonElement jsonElement) {
+        HashMap<String, ArrayList<String>> hashMap = new HashMap<>();
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        for (String key : jsonObject.keySet()) {
+            hashMap.put(key, Utils.convertJsonElementToStringArrayList(jsonObject.get(key)));
         }
-        return customerArrayList;
-    }
-
-    public static JsonElement convertSupplierToJsonElement(ArrayList<Supplier> supplierArrayList) {
-        JsonArray jsonArray = new JsonArray();
-        for (Supplier supplier : supplierArrayList) {
-            jsonArray.add(convertObjectToJsonString(supplier));
-        }
-        return jsonArray;
-    }
-
-    public static ArrayList<Supplier> convertJsonElementToSupplierArrayList(JsonElement jsonElement) {
-        ArrayList<Supplier> supplierArrayList = new ArrayList<>();
-        for (JsonElement element : jsonElement.getAsJsonArray()) {
-            supplierArrayList.add(Supplier.convertJsonStringToSupplier(element.getAsString()));
-        }
-        return supplierArrayList;
+        return hashMap;
     }
 
     private static String encodeImage(byte[] imageByteArray) {
@@ -167,7 +207,7 @@ public class Utils {
             File file = new File(path);
             FileInputStream imageInFile = new FileInputStream(file);
             byte[] imageData = new byte[(int) file.length()];
-            imageInFile.read(imageData);
+            int status = imageInFile.read(imageData);
             String imageDataString = encodeImage(imageData);
             imageInFile.close();
             return new JsonParser().parse(convertObjectToJsonString(imageDataString));
@@ -178,16 +218,16 @@ public class Utils {
         }
     }
 
-    public static void convertAndSaveJsonElementToFile(String imageBytes, String filePath) {
+    public static void convertAndSaveJsonElementToFile(String imageBytes, String filePath) throws ExceptionalMassage {
         try {
             byte[] imageByteArray = decodeImage(imageBytes);
             FileOutputStream imageOutFile = new FileOutputStream(filePath);
             imageOutFile.write(imageByteArray);
             imageOutFile.close();
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            throw new ExceptionalMassage("File not found");
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new ExceptionalMassage("IOException");
         }
     }
 

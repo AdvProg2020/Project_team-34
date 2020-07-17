@@ -73,4 +73,12 @@ public abstract class Account {
     public void setAvailable(boolean available) {
         isAvailable = available;
     }
+
+    public String getAccountType(){
+        if(this instanceof Customer)
+            return "Customer";
+        if(this instanceof Supervisor)
+            return "Supervisor";
+        return "Supplier";
+    }
 }

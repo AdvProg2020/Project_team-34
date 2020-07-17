@@ -38,6 +38,12 @@ public class ClientThread extends Thread {
 
     @Override
     public void run() {
+        try {
+            objectOutputStream.writeUTF(String.valueOf(controller.getIsFirstSupervisorCreated()));
+            objectOutputStream.flush();
+        } catch (IOException e) {
+            System.err.println("Error, Initializing Client");
+        }
         while (true) {
             try {
                 String requestString = objectInputStream.readUTF();
@@ -96,9 +102,9 @@ public class ClientThread extends Thread {
         Request request = gson.fromJson(requestJson,Request.class);
         String functionName = request.getFunction();
         String token = request.getToken();
-        if(!token.equals(controller.getToken())){
-            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Token is not Valid!");
-        }
+//        if(!token.equals(controller.getToken())){
+//            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Token is not Valid!");
+//        }
         ArrayList<Class> params = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
 

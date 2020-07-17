@@ -84,7 +84,8 @@ public class AccountController {
     }
 
     public Response controlCreateAccount(String username, String type, String name, String familyName, String email,
-                                     String phoneNumber, String password, int credit, String nameOfCompany) {
+                                     String phoneNumber, String password, String creditStr, String nameOfCompany) {
+        int credit = Integer.parseInt(creditStr);
         if (username.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("username can't be empty"));
         if (name.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("name can't be empty"));
         if (familyName.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("family name can't be empty"));

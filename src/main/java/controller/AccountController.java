@@ -1,5 +1,9 @@
 package controller;
 
+import account.Account;
+import account.Customer;
+import account.Supervisor;
+import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import com.google.gson.JsonArray;
@@ -13,7 +17,7 @@ import product.Product;
 import java.util.ArrayList;
 
 public class AccountController {
-    private static final long WEEK = 7*24*60*60000;
+    private static final long WEEK = 7 * 24 * 60 * 60000;
 
     private static final int BOUND = 100;
 
@@ -28,14 +32,26 @@ public class AccountController {
                 communication(function, inputs, ControllerSource.ACCOUNT_CONTROLLER).getContent());
     }
 
-    public boolean hasSomeOneLoggedIn() throws ExceptionalMassage{
-        JsonElement response = communication("hasSomeOneLoggedIn",new JsonArray());
+    public Account getAccount() throws ExceptionalMassage {
+        JsonElement jsonElement = communication("getAccount", new JsonArray());
+        JsonArray jsonArray = jsonElement.getAsJsonArray();
+        if (jsonArray.get(0).getAsString().equals("Customer"))
+            return Customer.convertJsonStringToCustomer(jsonArray.get(1).getAsString());
+        if (jsonArray.get(0).getAsString().equals("Supervisor"))
+            return Supervisor.convertJsonStringToSupervisor(jsonArray.get(1).getAsString());
+        if (jsonArray.get(0).getAsString().equals("Supplier"))
+            return Supplier.convertJsonStringToSupplier(jsonArray.get(1).getAsString());
+        return null;
+    }
+
+    public boolean hasSomeOneLoggedIn() throws ExceptionalMassage {
+        JsonElement response = communication("hasSomeOneLoggedIn", new JsonArray());
         return response.getAsBoolean();
 
     }
 
-    public String loggedInAccountType() throws ExceptionalMassage{
-        JsonElement jsonElement = communication("loggedInAccountType",new JsonArray());
+    public String loggedInAccountType() throws ExceptionalMassage {
+        JsonElement jsonElement = communication("loggedInAccountType", new JsonArray());
 
         return jsonElement.getAsString();
     }
@@ -59,7 +75,7 @@ public class AccountController {
         input.add(password);
         input.add(String.valueOf(credit));
         input.add(nameOfCompany);
-        communication("controlCreateAccount",input);
+        communication("controlCreateAccount", input);
     }
 
     /*private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
@@ -92,20 +108,20 @@ public class AccountController {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(username);
         jsonArray.add(password);
-        communication("controlLogin",jsonArray);
+        communication("controlLogin", jsonArray);
     }
 
-    public void controlLogout() throws ExceptionalMassage{
-        communication("controlLogout",new JsonArray());
+    public void controlLogout() throws ExceptionalMassage {
+        communication("controlLogout", new JsonArray());
     }
 
-    public String controlViewPersonalInfo() throws ExceptionalMassage{
-        JsonElement response = communication("controlViewPersonalInfo",new JsonArray());
+    public String controlViewPersonalInfo() throws ExceptionalMassage {
+        JsonElement response = communication("controlViewPersonalInfo", new JsonArray());
         return response.getAsString();
     }
 
-    public int controlViewBalance() throws ExceptionalMassage{
-        JsonElement response = communication("controlViewBalance",new JsonArray());
+    public int controlViewBalance() throws ExceptionalMassage {
+        JsonElement response = communication("controlViewBalance", new JsonArray());
         return response.getAsInt();
     }
 
@@ -113,11 +129,11 @@ public class AccountController {
         JsonArray input = new JsonArray();
         input.add(field);
         input.add(newValue);
-        communication("controlEditField",input);
+        communication("controlEditField", input);
     }
 
     public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,
-                              int credit, String nameOfCompany) throws ExceptionalMassage{
+                              int credit, String nameOfCompany) throws ExceptionalMassage {
         JsonArray input = new JsonArray();
         input.add(name);
         input.add(familyName);
@@ -126,16 +142,16 @@ public class AccountController {
         input.add(password);
         input.add(String.valueOf(credit));
         input.add(nameOfCompany);
-        communication("editAllFields",input);
+        communication("editAllFields", input);
     }
 
-    public String controlGetListOfAccounts() throws ExceptionalMassage{
-        JsonElement accounts = communication("controlGetListOfAccounts",new JsonArray());
+    public String controlGetListOfAccounts() throws ExceptionalMassage {
+        JsonElement accounts = communication("controlGetListOfAccounts", new JsonArray());
         return accounts.getAsString();
     }
 
-    public ArrayList<String> controlGetListOfAccountUserNames() throws ExceptionalMassage{
-        JsonElement response = communication("controlGetListOfAccountUserNames",new JsonArray());
+    public ArrayList<String> controlGetListOfAccountUserNames() throws ExceptionalMassage {
+        JsonElement response = communication("controlGetListOfAccountUserNames", new JsonArray());
         ArrayList<String> allUsername = Utils.convertJsonElementToStringArrayList(response);
         return allUsername;
     }
@@ -143,7 +159,7 @@ public class AccountController {
     public String controlViewUserInfo(String username) throws ExceptionalMassage {
         JsonArray input = new JsonArray();
         input.add(username);
-        JsonElement account = communication("controlViewUserInfo",input);
+        JsonElement account = communication("controlViewUserInfo", input);
         return account.getAsString();
     }
 
@@ -153,7 +169,7 @@ public class AccountController {
         communication("controlDeleteUser", input);
     }
 
-    public String controlViewCompanyInfo() throws ExceptionalMassage{
+    public String controlViewCompanyInfo() throws ExceptionalMassage {
         JsonElement companyInfo = communication("controlViewCompanyInfo", new JsonArray());
         return companyInfo.getAsString();
     }
@@ -178,7 +194,7 @@ public class AccountController {
         JsonArray input = new JsonArray();
         input.add(productId);
         input.add(supplierNameOfCompany);
-        communication("controlAddToCart",input);
+        communication("controlAddToCart", input);
     }
 
     public void increaseProductQuantity(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
@@ -195,8 +211,8 @@ public class AccountController {
         communication("decreaseProductQuantity", input);
     }
 
-    public Cart controlViewCart() throws ExceptionalMassage{
-        JsonElement cart = communication("controlViewCart",new JsonArray());
+    public Cart controlViewCart() throws ExceptionalMassage {
+        JsonElement cart = communication("controlViewCart", new JsonArray());
         return Cart.convertJsonStringToCart(cart.getAsString());
     }
 
@@ -209,12 +225,13 @@ public class AccountController {
         inputs.add(address);
         inputs.add(postalCode);
         inputs.add(phoneNumber);
-        communication("controlSubmitShippingInfo",inputs);
+        communication("controlSubmitShippingInfo", inputs);
     }
 
     public void controlRemoveShippingInfo() throws ExceptionalMassage {
-        communication("controlRemoveShippingInfo",new JsonArray());
+        communication("controlRemoveShippingInfo", new JsonArray());
     }
+
     public void controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
         JsonArray input = new JsonArray();
         input.add(discountCode);
@@ -222,7 +239,7 @@ public class AccountController {
     }
 
     public void controlRemoveDiscountCode() throws ExceptionalMassage {
-        communication("controlRemoveDiscountCode",new JsonArray());
+        communication("controlRemoveDiscountCode", new JsonArray());
     }
 
     public boolean finalizeOrder() throws ExceptionalMassage {

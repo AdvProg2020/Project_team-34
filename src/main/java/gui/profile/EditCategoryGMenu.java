@@ -30,7 +30,11 @@ public class EditCategoryGMenu extends GMenu {
     public EditCategoryGMenu(GMenu parentMenu, Stage stage, Controller controller, String editingCatName) {
         super("Edit Category", parentMenu, stage, controller);
         this.editingCatName = editingCatName;
-        this.fields = controller.getProductController().controlGetCategorySpecialFields(editingCatName);
+        try {
+            this.fields = controller.getProductController().controlGetCategorySpecialFields(editingCatName);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            this.fields = new HashMap<>();
+        }
     }
 
     @Override
@@ -101,8 +105,11 @@ public class EditCategoryGMenu extends GMenu {
         addRemoveFieldBox.setPadding(new Insets(10, 10, 10, 10));
 
         mainLayout.getChildren().addAll(createHeader(), editNameBox);
-        if (!controller.getProductController().isThisCategoryClassifier(editingCatName)) {
-            mainLayout.getChildren().addAll(addRemoveFieldBox, categoryFields());
+        try {
+            if (!controller.getProductController().isThisCategoryClassifier(editingCatName)) {
+                mainLayout.getChildren().addAll(addRemoveFieldBox, categoryFields());
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
         }
 
         backgroundLayout.setAlignment(Pos.CENTER);

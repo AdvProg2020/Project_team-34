@@ -550,4 +550,19 @@ public class AccountController {
         Date end = new Date(System.currentTimeMillis() + WEEK);
         new CodedDiscount(randomCode, start, end, percent, maxAmount, maxUsagePerCustomer);
     }
+
+    public Response getCustomerObservableList() {
+        return new Response(RequestStatus.SUCCESSFUL,
+                Utils.convertCustomerArrayListToJsonElement(Account.getCustomersList()).getAsString());
+    }
+
+    public Response getSupplierObservableList() throws ExceptionalMassage {
+        return new Response(RequestStatus.SUCCESSFUL,
+                Utils.convertSupplierArrayListToJsonElement(Account.getSuppliersList()).getAsString());
+    }
+
+    public Response getSupervisorObservableList() throws ExceptionalMassage {
+        return new Response(RequestStatus.SUCCESSFUL,
+                Utils.convertSupervisorArrayListToJsonElement(Account.getSupervisorsList()).getAsString());
+    }
 }

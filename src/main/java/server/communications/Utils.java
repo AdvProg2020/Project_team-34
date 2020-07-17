@@ -96,7 +96,7 @@ public class Utils {
         return saleArrayList;
     }
 
-    public static JsonElement convertJsonElementToSupervisorArrayList(ArrayList<Supervisor> supervisorArrayList) {
+    public static JsonElement convertSupervisorArrayListToJsonElement(ArrayList<Supervisor> supervisorArrayList) {
         JsonArray jsonArray = new JsonArray();
         for (Supervisor supervisor : supervisorArrayList) {
             jsonArray.add(convertObjectToJsonString(supervisor));

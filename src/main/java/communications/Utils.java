@@ -96,7 +96,7 @@ public class Utils {
         return saleArrayList;
     }
 
-    public static JsonElement convertJsonElementToSupervisorArrayList(ArrayList<Supervisor> supervisorArrayList) {
+    public static JsonElement convertSupervisorArrayListToJsonElement(ArrayList<Supervisor> supervisorArrayList) {
         JsonArray jsonArray = new JsonArray();
         for (Supervisor supervisor : supervisorArrayList) {
             jsonArray.add(convertObjectToJsonString(supervisor));
@@ -246,13 +246,5 @@ public class Utils {
         } catch (IOException e) {
             throw new ExceptionalMassage("IOException");
         }
-    }
-
-    public static ArrayList<Comment> convertJsonElementToCommentList(JsonElement jsonElement){
-        ArrayList<Comment> commentArrayList = new ArrayList<>();
-        for (JsonElement element : jsonElement.getAsJsonArray()) {
-            commentArrayList.add(Comment.convertJsonStringToComment(element.getAsString()));
-        }
-        return commentArrayList;
     }
 }

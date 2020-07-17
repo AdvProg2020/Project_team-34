@@ -34,7 +34,7 @@ public class Utils {
         return jsonArray;
     }
 
-    public static ArrayList<String> convertJasonObjectToStringArrayList(JsonElement jsonElement) {
+    public static ArrayList<String> convertJasonElementToStringArrayList(JsonElement jsonElement) {
         ArrayList<String> stringArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
             stringArrayList.add(element.getAsString());

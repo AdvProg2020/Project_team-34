@@ -132,4 +132,8 @@ public class Product {
     public static Product convertJsonStringToProduct(String jsonString){
         return (Product) Utils.convertStringToObject(jsonString, "product.Product");
     }
+
+    public int getPrice(Supplier supplier) {
+        return priceForEachSupplier.get(supplier);
+    }
 }

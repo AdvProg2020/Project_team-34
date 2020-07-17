@@ -7,11 +7,11 @@ import account.Supplier;
 import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
-import jdk.jshell.execution.Util;
 import log.CustomerLog;
 import log.LogStatus;
 import log.SupplierLog;
@@ -35,8 +35,29 @@ public class AccountController {
         this.mainController = mainController;
     }
 
-    public Account getAccount() {
+    public Account getInternalAccount() {
         return mainController.getAccount();
+    }
+
+    public Response getAccount() {
+        Account account = getInternalAccount();
+        JsonArray jsonArray = new JsonArray();
+        if (account == null) {
+            jsonArray.add("null");
+            jsonArray.add("null");
+            return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
+        }
+        if (account instanceof Customer) {
+            jsonArray.add("Customer");
+        }
+        if (account instanceof Supplier) {
+            jsonArray.add("Supplier");
+        }
+        if (account instanceof Supervisor) {
+            jsonArray.add("Supervisor");
+        }
+        jsonArray.add(Utils.convertObjectToJsonString(account));
+        return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
     }
 
     private boolean hasSomeOneLoggedInInternal(){
@@ -205,14 +226,14 @@ public class AccountController {
     public Response editAllFields(String name, String familyName, String email, String phoneNumber, String password,
                               String credit, String nameOfCompany) {
         if (password == null || password.trim().length() == 0) {
-            password = getAccount().getPassword();
+            password = getInternalAccount().getPassword();
         }
-        if (getAccount() instanceof Customer) {
-            ((Customer) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
-        } else if (getAccount() instanceof Supplier) {
-            ((Supplier) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
-        } else if (getAccount() instanceof Supervisor) {
-            ((Supervisor) getAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
+        if (getInternalAccount() instanceof Customer) {
+            ((Customer) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
+        } else if (getInternalAccount() instanceof Supplier) {
+            ((Supplier) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
+        } else if (getInternalAccount() instanceof Supervisor) {
+            ((Supervisor) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
         }
         return Response.createSuccessResponse();
     }
@@ -243,7 +264,7 @@ public class AccountController {
         Account accountGotByUsername = Account.getAccountByUsernameWithinAvailable(username);
         if (accountGotByUsername == null)
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Account not found."));
-        if(username.equals(getAccount().getUserName()))
+        if(username.equals(getInternalAccount().getUserName()))
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You cannot delete Your self"));
         accountGotByUsername.removeAccount();
         return Response.createSuccessResponse();
@@ -274,7 +295,7 @@ public class AccountController {
     }*/
 
     public Response controlAddToCart(String productId, String supplierNameOfCompany)  {
-        if (getAccount() instanceof Supplier || getAccount() instanceof Supervisor) {
+        if (getInternalAccount() instanceof Supplier || getInternalAccount() instanceof Supervisor) {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("logout, Supervisor and Supplier are denied"));
         }
         Product product = Product.getProductById(productId);
@@ -394,35 +415,35 @@ public class AccountController {
     }
 
     public Response getAccountUsername() {
-        return new Response(RequestStatus.SUCCESSFUL, getAccount().getUserName());
+        return new Response(RequestStatus.SUCCESSFUL, getInternalAccount().getUserName());
     }
 
     public Response getAccountName() {
-        return new Response(RequestStatus.SUCCESSFUL, getAccount().getName());
+        return new Response(RequestStatus.SUCCESSFUL, getInternalAccount().getName());
     }
 
     public Response getAccountFamilyName() {
-        return new Response(RequestStatus.SUCCESSFUL,  getAccount().getFamilyName());
+        return new Response(RequestStatus.SUCCESSFUL,  getInternalAccount().getFamilyName());
     }
 
     public Response getAccountEmail() {
-        return new Response(RequestStatus.SUCCESSFUL, getAccount().getEmail());
+        return new Response(RequestStatus.SUCCESSFUL, getInternalAccount().getEmail());
     }
 
     public Response getAccountPhoneNumber() {
-        return new Response(RequestStatus.SUCCESSFUL, getAccount().getPhoneNumber());
+        return new Response(RequestStatus.SUCCESSFUL, getInternalAccount().getPhoneNumber());
     }
 
     public Response getAccountCredit() {
-        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(getAccount().getCredit()));
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(getInternalAccount().getCredit()));
     }
 
     public Response getAccountNameOfCompany() {
-        return new Response(RequestStatus.SUCCESSFUL, ((Supplier) getAccount()).getNameOfCompany());
+        return new Response(RequestStatus.SUCCESSFUL, ((Supplier) getInternalAccount()).getNameOfCompany());
     }
 
     public Response getCustomerLogs() {
-        ArrayList<CustomerLog> customerLogs = CustomerLog.getCustomerCustomerLogs((Customer) getAccount());
+        ArrayList<CustomerLog> customerLogs = CustomerLog.getCustomerCustomerLogs((Customer) getInternalAccount());
         ArrayList<String> toStringLogs = new ArrayList<>();
         for (CustomerLog customerLog : customerLogs) {
             toStringLogs.add(customerLog.toString());
@@ -431,7 +452,7 @@ public class AccountController {
     }
 
     public Response getSupplierLogs() {
-        ArrayList<SupplierLog> supplierLogs = SupplierLog.getSupplierSupplierLog((Supplier) getAccount());
+        ArrayList<SupplierLog> supplierLogs = SupplierLog.getSupplierSupplierLog((Supplier) getInternalAccount());
         ArrayList<String> toStringLogs = new ArrayList<>();
         for (SupplierLog supplierLog : supplierLogs) {
             toStringLogs.add(supplierLog.toString());

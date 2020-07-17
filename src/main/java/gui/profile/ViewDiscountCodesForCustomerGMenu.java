@@ -4,6 +4,7 @@ import controller.Controller;
 import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -33,8 +34,11 @@ public class ViewDiscountCodesForCustomerGMenu extends GMenu{
         mainPane.setMinWidth(800);
         Text  resultLabel = new Text();
         resultLabel.setWrappingWidth(600);
-        ArrayList<CodedDiscount> codedDiscounts = controller.getOffController().controlGetCodedDiscountByCustomer();
-
+        try {
+            ArrayList<CodedDiscount> codedDiscounts = controller.getOffController().controlGetCodedDiscountByCustomer();
+        } catch (ExceptionalMassage ex){
+            new AlertBox(this, ex, controller).showAndWait();
+        }
 
         for (CodedDiscount codedDiscount : codedDiscounts) {
             mainPane.getChildren().add(createCodedDiscountLabel(codedDiscount, resultLabel));

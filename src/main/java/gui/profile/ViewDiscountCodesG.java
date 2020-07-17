@@ -128,10 +128,13 @@ public class ViewDiscountCodesG extends GMenu {
         end.setCellValueFactory(new PropertyValueFactory<>("end"));
         listView3.getColumns().addAll(discountCode,percent, start, end);
 
-        for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-            listView3.getItems().add(codedDiscount);
+        try {
+            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                listView3.getItems().add(codedDiscount);
+            }
+        } catch (ExceptionalMassage ex){
+            new AlertBox(this, ex, controller).showAndWait();
         }
-
         detailsButton.setOnAction( e -> {
             ObservableList<CodedDiscount> codes = listView3.getSelectionModel().getSelectedItems();
             for (CodedDiscount code : codes) {
@@ -140,8 +143,12 @@ public class ViewDiscountCodesG extends GMenu {
                 newStage.showAndWait();
             }
             listView3.getItems().clear();
-            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-                listView3.getItems().add(codedDiscount);
+            try {
+                for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                    listView3.getItems().add(codedDiscount);
+                }
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
         });
 
@@ -168,8 +175,12 @@ public class ViewDiscountCodesG extends GMenu {
                 }
             }
             listView3.getItems().clear();
-            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-                listView3.getItems().add(codedDiscount);
+            try {
+                for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                    listView3.getItems().add(codedDiscount);
+                }
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
         });
 
@@ -188,19 +199,27 @@ public class ViewDiscountCodesG extends GMenu {
             newStage.showAndWait();
 
             listView3.getItems().clear();
-            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-                listView3.getItems().add(codedDiscount);
+            try {
+                for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                    listView3.getItems().add(codedDiscount);
+                }
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
         });
 
         removeButton.setOnAction( e -> {
             ObservableList<CodedDiscount> codes = listView3.getSelectionModel().getSelectedItems();
-            for (CodedDiscount code : codes) {
-                controller.getOffController().removeCodedDiscount(code);
-            }
-            listView3.getItems().clear();
-            for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
-                listView3.getItems().add(codedDiscount);
+            try {
+                for (CodedDiscount code : codes) {
+                    controller.getOffController().removeCodedDiscount(code);
+                }
+                listView3.getItems().clear();
+                for (CodedDiscount codedDiscount : controller.getOffController().controlGetAllCodedDiscounts()) {
+                    listView3.getItems().add(codedDiscount);
+                }
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
             }
 
         });
@@ -517,10 +536,15 @@ public class ViewDiscountCodesG extends GMenu {
         customers.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         //Adding controller
-        for (String username : controller.getAccountController().controlGetListOfAccountUserNames()) {
-            if(Account.getAccountByUsernameWithinAvailable(username) instanceof Customer) {
-                customers.getItems().add(username);
+
+        try {
+            for (String username : controller.getAccountController().controlGetListOfAccountUserNames()) {
+                if(Account.getAccountByUsernameWithinAvailable(username) instanceof Customer) {
+                    customers.getItems().add(username);
+                }
             }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
         }
 
         createButton.setDisable(true);

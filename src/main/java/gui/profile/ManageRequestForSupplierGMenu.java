@@ -86,11 +86,15 @@ public class ManageRequestForSupplierGMenu extends GMenu{
 
         // Adding controller
 
-        for (Product product : controller.getAccountController().controlGetRequestForLoggedInSupplier()) {
-            products.getItems().add(Product.convertProductIdToRequestId(product.getProductId()));
-        }
-        for (Sale sale : controller.getOffController().getAllSaleRequestsIdForThisSupplier()) {
-            products.getItems().add(Sale.convertSaleIdToRequestId(sale.getOffId()));
+        try {
+            for (Product product : controller.getAccountController().controlGetRequestForLoggedInSupplier()) {
+                products.getItems().add(Product.convertProductIdToRequestId(product.getProductId()));
+            }
+            for (Sale sale : controller.getOffController().getAllSaleRequestsIdForThisSupplier()) {
+                products.getItems().add(Sale.convertSaleIdToRequestId(sale.getOffId()));
+            }
+        }catch (ExceptionalMassage ex){
+            new AlertBox(this, ex, controller).showAndWait();
         }
 
 

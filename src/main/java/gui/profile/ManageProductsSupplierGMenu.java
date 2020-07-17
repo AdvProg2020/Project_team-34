@@ -623,7 +623,11 @@ public class ManageProductsSupplierGMenu extends GMenu {
 
     private ComboBox<String> allProductClassifierCategoriesChoiceBox() {
         ComboBox<String> choiceBox = new ComboBox<>();
-        choiceBox.getItems().addAll(controller.getProductController().controlGetAllProductCategoriesName());
+        try {
+            choiceBox.getItems().addAll(controller.getProductController().controlGetAllProductCategoriesName());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
         choiceBox.setPromptText("Choose Category");
         return choiceBox;
     }

@@ -102,8 +102,12 @@ public class ManageRequestsG extends GMenu {
         requests.getSelectionModel().setSelectionMode(SelectionMode.MULTIPLE);
 
         // Adding controller
-        for (String s : controller.getProductController().controlGetArrayOfRequestId()) {
-            requests.getItems().add(s);
+        try {
+            for (String s : controller.getProductController().controlGetArrayOfRequestId()) {
+                requests.getItems().add(s);
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this,exceptionalMassage,controller).showAndWait();
         }
 
         acceptButton.setOnAction( e -> {

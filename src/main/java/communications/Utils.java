@@ -20,6 +20,9 @@ import java.util.HashMap;
 public class Utils {
 
     public static String convertObjectToJsonString(Object object) {
+        if (object instanceof Product) {
+            return ((Product) object).toJson();
+        }
         Gson gson = new Gson();
         return gson.toJson(object);
     }
@@ -203,11 +206,30 @@ public class Utils {
         return jsonObject;
     }
 
-    public static HashMap<String, ArrayList<String>> convertJasonElementToStringToStringArrayListHashMap(JsonElement jsonElement) {
+    public static HashMap<String, ArrayList<String>> convertJsonElementToStringToStringArrayListHashMap(JsonElement jsonElement) {
         HashMap<String, ArrayList<String>> hashMap = new HashMap<>();
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         for (String key : jsonObject.keySet()) {
             hashMap.put(key, Utils.convertJsonElementToStringArrayList(jsonObject.get(key)));
+        }
+        return hashMap;
+    }
+
+    public static JsonElement convertSupplierToIntegerHashMapToJsonElement(HashMap<Supplier, Integer> hashMap){
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        for (Supplier key : hashMap.keySet()) {
+            jsonObject.add(Utils.convertObjectToJsonString(key), jsonParser.parse(Utils.
+                    convertObjectToJsonString(hashMap.get(key))));
+        }
+        return jsonObject;
+    }
+
+    public static HashMap<Supplier, Integer> convertJsonElementSupplierToIntegerHashMap(JsonElement jsonElement) {
+        HashMap<Supplier, Integer> hashMap = new HashMap<>();
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        for (String key : jsonObject.keySet()) {
+            hashMap.put(Supplier.convertJsonStringToSupplier(key), (Integer) convertStringToObject(jsonObject.get(key).getAsString(), "java.lang.Integer"));
         }
         return hashMap;
     }

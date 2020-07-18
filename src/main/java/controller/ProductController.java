@@ -283,7 +283,7 @@ public class ProductController {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(name);
         JsonElement jsonElement = communication("controlGetCategorySpecialFields",jsonArray);
-        return Utils.convertJasonElementToStringToStringArrayListHashMap(jsonElement);
+        return Utils.convertJsonElementToStringToStringArrayListHashMap(jsonElement);
     }
 
     //related to FilterAndSort

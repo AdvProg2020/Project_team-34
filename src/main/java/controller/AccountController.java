@@ -403,4 +403,20 @@ public class AccountController {
     public int controlGetMinimum() throws ExceptionalMassage {
         return Integer.parseInt(communication("controlGetMinimum", new JsonArray()).getAsString());
     }
+
+    public ArrayList<Customer> getOnlineCustomers() throws ExceptionalMassage {
+        return Utils.convertJsonElementToCustomerArrayList(communication("getOnlineCustomers", new JsonArray()));
+    }
+
+    public ArrayList<Supplier> getOnlineSuppliers() throws ExceptionalMassage {
+        return Utils.convertJsonElementToSupplierArrayList(communication("getOnlineSuppliers", new JsonArray()));
+    }
+
+    public ArrayList<Supervisor> getOnlineSupervisors() throws ExceptionalMassage {
+        return Utils.convertJsonElementToSupervisorArrayList(communication("getOnlineSupervisors", new JsonArray()));
+    }
+
+    public ArrayList<Supporter> getOnlineSupporters() throws ExceptionalMassage {
+        return Utils.convertJsonElementToSupporterArrayList(communication("getOnlineSupporters", new JsonArray()));
+    }
 }

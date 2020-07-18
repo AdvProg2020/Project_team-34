@@ -200,7 +200,7 @@ public class ProductController {
     public Response controlGetAllCategoriesInACategory(String rootCategoryString){
         Category rootCategory = Category.convertJsonStringToCategory(rootCategoryString);
         JsonElement categories = Utils.convertCategoryArrayListToJsonElement(rootCategory.getAllCategoriesIn());
-        return new Response(RequestStatus.SUCCESSFUL,categories.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL,categories.toString());
     }
     //added by rpirayadi
     public Response controlGetAllProductCategory (){
@@ -688,11 +688,11 @@ public class ProductController {
 
     public Response controlFilterGetFilteredAndSortedProducts() {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(filterAndSort.
-                getProducts()).getAsString());
+                getProducts()).toString());
     }
 
-    public HashMap<String, ArrayList<String>> controlGetAllAvailableFilters() {
-        return filterAndSort.getCategory().getAvailableSpecialFilters();
+    public Response controlGetAllAvailableFilters() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringToStringArrayListHashMapToJsonElement(filterAndSort.getCategory().getAvailableSpecialFilters()).toString());
     }
 
     public Response controlCurrentFilters() {

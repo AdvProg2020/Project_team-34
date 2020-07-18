@@ -236,7 +236,7 @@ public class CartGMenu extends GMenu {
         hBox.setStyle("-fx-border-color: orange");
         hBox.setSpacing(20);
         hBox.setPadding(new Insets(10, 30, 10, 30));
-        ImageView imageView = getImageView(product.getImageUrl(), 70, 70);
+        ImageView imageView = getImageViewFromImage(product.getImage(), 70, 70);
         imageView.setOnMouseClicked(e ->
                 stage.setScene(new ProductMenuG(this, stage, product, controller).getScene()));
         hBox.getChildren().addAll(imageView, gridPane);

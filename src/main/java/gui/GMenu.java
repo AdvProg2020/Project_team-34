@@ -150,7 +150,13 @@ public abstract class GMenu {
         ImageView imageView = new ImageView(logoImage);
         imageView.setFitHeight(height);
         imageView.setFitWidth(width);
-//        imageView.setPreserveRatio(true);
+        return imageView;
+    }
+
+    public static ImageView getImageViewFromImage(Image image , int height, int width){
+        ImageView imageView = new ImageView(image);
+        imageView.setFitHeight(height);
+        imageView.setFitWidth(width);
         return imageView;
     }
 

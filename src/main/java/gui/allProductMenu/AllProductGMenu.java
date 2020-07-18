@@ -389,7 +389,7 @@ public class AllProductGMenu extends GMenu {
             nameLabel.setStyle("-fx-font-size: 20");
 
 
-            ImageView productImageView = GMenu.getImageView(product.getImageUrl(), 200, 200);
+            ImageView productImageView = GMenu.getImageViewFromImage(product.getImage(), 200, 200);
 
             productImageView.setOnMouseClicked(e -> {
                 try {

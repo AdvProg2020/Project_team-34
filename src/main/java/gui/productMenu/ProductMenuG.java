@@ -195,13 +195,9 @@ public class ProductMenuG extends GMenu {
 
         // Adding Controller
         // adding image!
-        File file = new File(product.getImageUrl());
         Image[] productImage = new Image[1];
-        try {
-            productImage[0] = new Image(file.toURI().toURL().toExternalForm());
-        } catch (Exception ex){
-            System.out.println(ex.getMessage());
-        }
+        productImage[0] = product.getImage();
+
         imageViewBox.setImage(productImage[0]);
         ImageView zoomedImageView = new ImageView();
         imageViewGridPane.add(zoomedImageView,1,0);

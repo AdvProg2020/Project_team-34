@@ -6,6 +6,8 @@ import com.google.gson.JsonParser;
 import communications.Utils;
 import product.Product;
 
+import java.util.Objects;
+
 /**
  * @author Aryan Ahadinia
  * @since 0.0.1
@@ -59,5 +61,18 @@ public class ProductInCart {
     public static ProductInCart convertJsonStringToProductInCart(String jsonString){
         //return (ProductInCart) Utils.convertStringToObject(jsonString, "cart.ProductInCart");
         return new ProductInCart(jsonString);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductInCart that = (ProductInCart) o;
+        return Objects.equals(identifier, that.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier);
     }
 }

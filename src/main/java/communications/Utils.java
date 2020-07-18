@@ -242,7 +242,7 @@ public class Utils {
         HashMap<ProductInCart, Sale> hashMap = new HashMap<>();
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         for (String key : jsonObject.keySet()) {
-            hashMap.put(ProductInCart.convertJsonStringToProductInCart(key), Sale.convertJsonStringToSale(jsonObject.get(key).getAsString()));
+            hashMap.put(ProductInCart.convertJsonStringToProductInCart(key), Sale.convertJsonStringToSale(jsonObject.get(key).toString()));
         }
         return hashMap;
     }

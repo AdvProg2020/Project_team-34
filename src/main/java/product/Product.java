@@ -155,4 +155,8 @@ public class Product {
     public ImageView getImageView() {
         return new ImageView(getImage());
     }
+
+    public static String convertProductIdToRequestId(String requestId) {
+        return "T34PR" + requestId.substring(4);
+    }
 }

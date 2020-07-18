@@ -59,6 +59,11 @@ public class Sale extends Discount {
         this.supplier = supplier;
     }
 
+    public static String convertSaleIdToRequestId(String requestId) {
+        return "T34SR" + requestId.substring(4);
+    }
+
+
     public static Sale convertJsonStringToSale(String jsonString){
         return (Sale) Utils.convertStringToObject(jsonString, "discount.Sale");
     }

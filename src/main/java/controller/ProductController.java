@@ -455,18 +455,6 @@ public class ProductController {
         return Product.convertJsonStringToProduct(communication("getProductByName", inputs).toString());
     }
 
-    public String convertProductIdToRequestId(String id) throws ExceptionalMassage{
-        JsonArray inputs = new JsonArray();
-        inputs.add(id);
-        return communication("convertProductIdToRequestId", inputs).toString();
-    }
-
-    public String convertSaleIdToRequestId(String id) throws ExceptionalMassage{
-        JsonArray inputs = new JsonArray();
-        inputs.add(id);
-        return communication("convertSaleIdToRequestId", inputs).toString();
-    }
-
     public ArrayList<Product> getProductForSupplier(Supplier supplier) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
         inputs.add(Utils.convertObjectToJsonString(supplier));

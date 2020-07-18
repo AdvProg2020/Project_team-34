@@ -1,6 +1,9 @@
 package product;
 
 import account.Supplier;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import database.ProductDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import server.communications.Utils;
@@ -30,6 +33,47 @@ public class Product {
     private String futureCategoryName;
     private String imageInStringForm;
     private int numberOfViews;
+
+    public Product(String json) {
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        this.productId = jsonObject.get("productId").getAsString();
+        this.name = jsonObject.get("name").getAsString();
+        this.nameOfCompany = jsonObject.get("nameOfCompany").getAsString();
+        this.productState = State.valueOf(jsonObject.get("productState").getAsString());
+        this.listOfSuppliers = Utils.convertJsonElementToSupplierArrayList(jsonObject.get("listOfSuppliers"));
+        this.priceForEachSupplier = Utils.convertJsonElementSupplierToIntegerHashMap(jsonObject.get("priceForEachSupplier"));
+        this.remainedNumberForEachSupplier = Utils.convertJsonElementSupplierToIntegerHashMap(jsonObject.
+                get("remainedNumberForEachSupplier"));
+        this.description = jsonObject.get("description").getAsString();
+        this.specification = Utils.convertJsonElementStringToStringToHashMap(jsonObject.get("specification"));
+        this.rootProductId = jsonObject.get("rootProductId").getAsString();
+        this.futureCategoryName = jsonObject.get("futureCategoryName").getAsString();
+        this.imageInStringForm = jsonObject.get("imageInStringForm").getAsString();
+        this.numberOfViews = jsonObject.get("numberOfViews").getAsInt();
+    }
+
+    public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        jsonObject.add("productId", jsonParser.parse(Utils.convertObjectToJsonString(productId)));
+        jsonObject.add("name", jsonParser.parse(Utils.convertObjectToJsonString(name)));
+        jsonObject.add("nameOfCompany", jsonParser.parse(Utils.convertObjectToJsonString(nameOfCompany)));
+        jsonObject.add("productState", jsonParser.parse(Utils.convertObjectToJsonString(String.
+                valueOf(productState))));
+        jsonObject.add("listOfSuppliers", Utils.convertSupplierArrayListToJsonElement(listOfSuppliers));
+        jsonObject.add("priceForEachSupplier", jsonParser.parse(Utils.
+                convertSupplierToIntegerHashMapToJsonElement(priceForEachSupplier).toString()));
+        jsonObject.add("remainedNumberForEachSupplier", jsonParser.parse(Utils.
+                convertSupplierToIntegerHashMapToJsonElement(remainedNumberForEachSupplier).toString()));
+        jsonObject.add("description", jsonParser.parse(Utils.convertObjectToJsonString(description)));
+        jsonObject.add("specification", jsonParser.parse(Utils.
+                convertStringToStringHashMapToJsonElement(specification).toString()));
+        jsonObject.add("rootProductId", jsonParser.parse(Utils.convertObjectToJsonString(rootProductId)));
+        jsonObject.add("futureCategoryName", jsonParser.parse(Utils.convertObjectToJsonString(futureCategoryName)));
+        jsonObject.add("imageInStringForm", jsonParser.parse(Utils.convertObjectToJsonString(imageInStringForm)));
+        jsonObject.add("numberOfViews", jsonParser.parse(Utils.convertObjectToJsonString(numberOfViews)));
+        return jsonObject.toString();
+    }
 
     public Product(Product product) {
         this.productId = generateIdentifier();

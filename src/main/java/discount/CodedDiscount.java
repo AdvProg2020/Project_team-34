@@ -9,10 +9,7 @@ import server.communications.Response;
 import server.communications.Utils;
 import state.State;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Random;
+import java.util.*;
 
 /**
  * @author soheil
@@ -178,6 +175,18 @@ public class CodedDiscount extends Discount{
 //        return (CodedDiscount) Utils.convertStringToObject(jsonString, "discount.CodedDiscount");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CodedDiscount that = (CodedDiscount) o;
+        return Objects.equals(discountCode, that.discountCode);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(discountCode);
+    }
 
     @Override
     public String toString() {

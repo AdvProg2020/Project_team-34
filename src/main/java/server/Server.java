@@ -42,11 +42,11 @@ public class Server extends Thread {
     public String generateRandomToken() {
         Random rand = new Random();
         int upperBound = LETTERS_SET.length()-1;
-        String code = "";
+        StringBuilder code = new StringBuilder();
         for(int i = 0;i < 10;i++){
-            code += LETTERS_SET.charAt(rand.nextInt(upperBound));
+            code.append(LETTERS_SET.charAt(rand.nextInt(upperBound)));
         }
-        return code;
+        return code.toString();
     }
 
     public void setUnlocked(boolean unlocked) {

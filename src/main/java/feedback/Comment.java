@@ -1,6 +1,8 @@
 package feedback;
 
 import account.Customer;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import database.CommentDataBase;
 import discount.CodedDiscount;
 import product.Product;
@@ -8,10 +10,11 @@ import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author soheil
- * @since 0.01
+ * @since 0.0.1
  */
 
 public class Comment {
@@ -25,6 +28,30 @@ public class Comment {
     private final CommentState state;
     private final boolean customerBoughtThisProduct;
 
+    public Comment(String json) {
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        this.commentId = jsonObject.get("commentId").getAsString();
+        this.customer = Customer.convertJsonStringToCustomer(jsonObject.get("customer").toString());
+        this.product = Product.convertJsonStringToProduct(jsonObject.get("product").toString());
+        this.title = jsonObject.get("title").getAsString();
+        this.content = jsonObject.get("content").getAsString();
+        this.state = CommentState.valueOf(jsonObject.get("state").getAsString());
+        this.customerBoughtThisProduct = Boolean.parseBoolean(jsonObject.get("customerBoughtThisProduct").getAsString());
+    }
+
+    public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        jsonObject.add("commentId", jsonParser.parse(Utils.convertObjectToJsonString(commentId)));
+        jsonObject.add("customer", jsonParser.parse(Utils.convertObjectToJsonString(customer)));
+        jsonObject.add("product", jsonParser.parse(Utils.convertObjectToJsonString(product)));
+        jsonObject.add("title", jsonParser.parse(Utils.convertObjectToJsonString(title)));
+        jsonObject.add("content", jsonParser.parse(Utils.convertObjectToJsonString(content)));
+        jsonObject.add("state", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(state))));
+        jsonObject.add("customerBoughtThisProduct", jsonParser.parse(Utils.convertObjectToJsonString(
+                String.valueOf(customerBoughtThisProduct))));
+        return jsonObject.toString();
+    }
 
     public Comment(Customer customer, Product product, String title, String content, CommentState state,
                    boolean customerBoughtThisProduct, String commentId) {
@@ -111,8 +138,9 @@ public class Comment {
         return null;
     }
 
-    public static Comment convertJsonStringToComment(String jsonString){
-        return (Comment) Utils.convertStringToObject(jsonString, "feedback.Comment");
+    public static Comment convertJsonStringToComment(String jsonString) {
+        return new Comment(jsonString);
+        //return (Comment) Utils.convertStringToObject(jsonString, "feedback.Comment");
     }
 
     @Override
@@ -126,4 +154,16 @@ public class Comment {
                 '}';
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Comment comment = (Comment) o;
+        return Objects.equals(commentId, comment.commentId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(commentId);
+    }
 }

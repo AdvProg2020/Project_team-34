@@ -104,9 +104,9 @@ public class ClientThread extends Thread {
         Request request = gson.fromJson(requestJson,Request.class);
         String functionName = request.getFunction();
         String token = request.getToken();
-//        if(!token.equals(controller.getToken())){
-//            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Token is not Valid!");
-//        }
+        if(!token.equals(controller.getToken())){
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Token is not Valid!");
+        }
         ArrayList<Class> params = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
 

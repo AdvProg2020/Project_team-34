@@ -13,62 +13,23 @@ import java.util.HashMap;
  * @author rpirayadi
  * @since 0.0.1
  */
+
 public class Product {
-    private static ArrayList<Product> allProduct = new ArrayList<>();
+    private static final ArrayList<Product> allProduct = new ArrayList<>();
     private static int allCreatedProductNum = 0;
-    private int numberOfViews;
-    private String productId;
+    private final String productId;
+    private String name;
+    private String nameOfCompany;
     private State productState;
-    private String name, nameOfCompany;
-    private HashMap<Supplier, Integer> priceForEachSupplier;
     private ArrayList<Supplier> listOfSuppliers;
+    private HashMap<Supplier, Integer> priceForEachSupplier;
     private HashMap<Supplier, Integer> remainedNumberForEachSupplier;
     private String description;
     private HashMap<String, String> specification; //method check
     private String rootProductId;
     private String futureCategoryName;
     private String imageInStringForm;
-
-
-    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description, String rootProductId, String futureCategoryName, HashMap<String, String> specification) {
-        numberOfViews = 0;
-        this.productState = State.PREPARING_TO_BUILD;
-        this.productId = generateIdentifier();
-        this.name = name;
-        this.nameOfCompany = nameOfCompany;
-        this.priceForEachSupplier = new HashMap<>();
-        this.priceForEachSupplier.put(supplier, price);
-        this.listOfSuppliers = new ArrayList<>();
-        listOfSuppliers.add(supplier);
-        this.remainedNumberForEachSupplier = new HashMap<>();
-        this.remainedNumberForEachSupplier.put(supplier, remainedNumber);
-        this.description = description;
-        this.rootProductId = rootProductId;
-        this.futureCategoryName = futureCategoryName;
-        this.specification = specification;
-        allCreatedProductNum++;
-        allProduct.add(this);
-        ProductDataBase.add(this);
-    }
-
-    public Product(String name, String nameOfCompany, HashMap<Supplier, Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
-                   HashMap<Supplier, Integer> remainedNumberForEachSupplier, String description,
-                   int numberOfViews, String productId, State state, String rootProductId, String futureCategoryName, HashMap<String, String> specification) {
-        this.productState = state;
-        this.productId = productId;
-        this.name = name;
-        this.nameOfCompany = nameOfCompany;
-        this.priceForEachSupplier = priceForEachSupplier;
-        this.listOfSuppliers = listOfSuppliers;
-        this.remainedNumberForEachSupplier = remainedNumberForEachSupplier;
-        this.description = description;
-        this.numberOfViews = numberOfViews;
-        this.rootProductId = rootProductId;
-        this.futureCategoryName = futureCategoryName;
-        this.specification = specification;
-        allCreatedProductNum++;
-        allProduct.add(this);
-    }
+    private int numberOfViews;
 
     public Product(Product product) {
         this.productId = generateIdentifier();
@@ -89,8 +50,10 @@ public class Product {
         ProductDataBase.add(this);
     }
 
-    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description, String rootProductId, String futureCategoryName, HashMap<String, String> specification, String imageInStringForm) {
-        numberOfViews = 0;
+    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,
+                   String rootProductId, String futureCategoryName, HashMap<String, String> specification,
+                   String imageInStringForm) {
+        this.numberOfViews = 0;
         this.productState = State.PREPARING_TO_BUILD;
         this.productId = generateIdentifier();
         this.name = name;
@@ -98,22 +61,23 @@ public class Product {
         this.priceForEachSupplier = new HashMap<>();
         this.priceForEachSupplier.put(supplier, price);
         this.listOfSuppliers = new ArrayList<>();
-        listOfSuppliers.add(supplier);
+        this.listOfSuppliers.add(supplier);
         this.remainedNumberForEachSupplier = new HashMap<>();
         this.remainedNumberForEachSupplier.put(supplier, remainedNumber);
         this.description = description;
         this.rootProductId = rootProductId;
         this.futureCategoryName = futureCategoryName;
         this.specification = specification;
+        this.imageInStringForm = imageInStringForm;
         allCreatedProductNum++;
         allProduct.add(this);
-        this.imageInStringForm = imageInStringForm;
         ProductDataBase.add(this);
     }
 
-    public Product(String name, String nameOfCompany, HashMap<Supplier, Integer> priceForEachSupplier, ArrayList<Supplier> listOfSuppliers,
-                   HashMap<Supplier, Integer> remainedNumberForEachSupplier, String description,
-                   int numberOfViews, String productId, State state, String rootProductId, String futureCategoryName, HashMap<String, String> specification, String imageInStringForm) {
+    public Product(String name, String nameOfCompany, HashMap<Supplier, Integer> priceForEachSupplier,
+                   ArrayList<Supplier> listOfSuppliers, HashMap<Supplier, Integer> remainedNumberForEachSupplier,
+                   String description, int numberOfViews, String productId, State state, String rootProductId,
+                   String futureCategoryName, HashMap<String, String> specification, String imageInStringForm) {
         this.productState = state;
         this.productId = productId;
         this.name = name;
@@ -126,31 +90,12 @@ public class Product {
         this.rootProductId = rootProductId;
         this.futureCategoryName = futureCategoryName;
         this.specification = specification;
-        allCreatedProductNum++;
         this.imageInStringForm = imageInStringForm;
+        allCreatedProductNum++;
         allProduct.add(this);
     }
 
-    public Product(Product product, String imageInStringForm) {
-        this.productId = generateIdentifier();
-        this.name = product.getName();
-        this.nameOfCompany = product.getNameOfCompany();
-        this.priceForEachSupplier = new HashMap<>(product.getPriceForEachSupplier());
-        this.listOfSuppliers = new ArrayList<>(listOfSuppliers);
-        this.remainedNumberForEachSupplier = new HashMap<>(product.getRemainedNumberForEachSupplier());
-        this.description = product.getDescription();
-        this.numberOfViews = product.getNumberOfViews();
-        this.rootProductId = product.getProductId();
-        this.productState = State.PREPARING_TO_EDIT;
-        this.specification = new HashMap<>(product.getSpecification());
-        this.futureCategoryName = product.getFutureCategoryName();
-        allCreatedProductNum++;
-        allProduct.add(this);
-        this.imageInStringForm = imageInStringForm;
-        ProductDataBase.add(this);
-    }
-
-    private String generateIdentifier() {
+    private static String generateIdentifier() {
         return "T34P" + String.format("%015d", allCreatedProductNum + 1);
     }
 
@@ -215,6 +160,10 @@ public class Product {
         return imageInStringForm;
     }
 
+    public ArrayList<Supplier> getListOfSuppliers() {
+        return listOfSuppliers;
+    }
+
     public void setNumberOfViews(int numberOfViews) {
         this.numberOfViews = numberOfViews;
         ProductDataBase.update(this);
@@ -267,10 +216,6 @@ public class Product {
         this.rootProductId = rootProductId;
     }
 
-    public ArrayList<Supplier> getListOfSuppliers() {
-        return listOfSuppliers;
-    }
-
     private static ArrayList<Product> getShouldBeShownProducts() {
         ArrayList<Product> confirmedProducts = new ArrayList<>();
         for (Product eachProduct : allProduct) {
@@ -279,7 +224,6 @@ public class Product {
         }
         return confirmedProducts;
     }
-
 
     public static Product getProductById(String productId) {
         for (Product eachProduct : allProduct) {
@@ -297,7 +241,6 @@ public class Product {
         }
         return null;
     }
-
 
     public void removeProduct() {
         setProductState(State.PREPARING_TO_BE_DELETED);
@@ -341,7 +284,6 @@ public class Product {
         specification.put(field, value);
 
     }
-
 
     public void addNewSupplierForProduct(Supplier supplier, int price, int remainedNumber) {
         Product newProduct = new Product(this);
@@ -520,23 +462,6 @@ public class Product {
         return "T34P" + productId.substring(5);
     }
 
-    @Override
-    public String toString() {
-        String returning = "Product{" +
-                "numberOfViews=" + numberOfViews +
-                ", productId='" + productId + '\'' +
-                ", name='" + name + '\'' +
-                ", nameOfCompany='" + nameOfCompany + '\'' +
-                ", ListOfSuppliersUserName=" + getStringListOfSuppliers()+  '\'' +
-                ", description='" + description + '\'' +
-                ", specification=" + specification +
-                '}' + '\'';
-        for (Supplier listOfSupplier : listOfSuppliers) {
-            returning += listOfSupplier.getUserName() + '\n';
-        }
-        return returning;
-    }
-
     public String getStringListOfSuppliers() {
         StringBuilder result = new StringBuilder();
         for (Supplier supplier : listOfSuppliers) {
@@ -559,10 +484,90 @@ public class Product {
     }
 
     @Override
+    public String toString() {
+        StringBuilder returning = new StringBuilder("Product{" +
+                "numberOfViews=" + numberOfViews +
+                ", productId='" + productId + '\'' +
+                ", name='" + name + '\'' +
+                ", nameOfCompany='" + nameOfCompany + '\'' +
+                ", ListOfSuppliersUserName=" + getStringListOfSuppliers() + '\'' +
+                ", description='" + description + '\'' +
+                ", specification=" + specification +
+                '}' + '\'');
+        for (Supplier listOfSupplier : listOfSuppliers) {
+            returning.append(listOfSupplier.getUserName()).append('\n');
+        }
+        return returning.toString();
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (!(o instanceof Product)) {
             return false;
         }
         return getProductId().equals(((Product) o).getProductId());
     }
+
+    /*
+    public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,
+                   String rootProductId, String futureCategoryName, HashMap<String, String> specification) {
+        this.numberOfViews = 0;
+        this.productState = State.PREPARING_TO_BUILD;
+        this.productId = generateIdentifier();
+        this.name = name;
+        this.nameOfCompany = nameOfCompany;
+        this.priceForEachSupplier = new HashMap<>();
+        this.priceForEachSupplier.put(supplier, price);
+        this.listOfSuppliers = new ArrayList<>();
+        this.listOfSuppliers.add(supplier);
+        this.remainedNumberForEachSupplier = new HashMap<>();
+        this.remainedNumberForEachSupplier.put(supplier, remainedNumber);
+        this.description = description;
+        this.rootProductId = rootProductId;
+        this.futureCategoryName = futureCategoryName;
+        this.specification = specification;
+        allCreatedProductNum++;
+        allProduct.add(this);
+        ProductDataBase.add(this);
+    }
+
+    public Product(String name, String nameOfCompany, HashMap<Supplier, Integer> priceForEachSupplier,
+                   ArrayList<Supplier> listOfSuppliers, HashMap<Supplier, Integer> remainedNumberForEachSupplier,
+                   String description, int numberOfViews, String productId, State state, String rootProductId,
+                   String futureCategoryName, HashMap<String, String> specification) {
+        this.productState = state;
+        this.productId = productId;
+        this.name = name;
+        this.nameOfCompany = nameOfCompany;
+        this.priceForEachSupplier = priceForEachSupplier;
+        this.listOfSuppliers = listOfSuppliers;
+        this.remainedNumberForEachSupplier = remainedNumberForEachSupplier;
+        this.description = description;
+        this.numberOfViews = numberOfViews;
+        this.rootProductId = rootProductId;
+        this.futureCategoryName = futureCategoryName;
+        this.specification = specification;
+        allCreatedProductNum++;
+        allProduct.add(this);
+    }
+
+    public Product(Product product, String imageInStringForm) {
+        this.productId = generateIdentifier();
+        this.name = product.getName();
+        this.nameOfCompany = product.getNameOfCompany();
+        this.priceForEachSupplier = new HashMap<>(product.getPriceForEachSupplier());
+        this.listOfSuppliers = new ArrayList<>(listOfSuppliers);
+        this.remainedNumberForEachSupplier = new HashMap<>(product.getRemainedNumberForEachSupplier());
+        this.description = product.getDescription();
+        this.numberOfViews = product.getNumberOfViews();
+        this.rootProductId = product.getProductId();
+        this.productState = State.PREPARING_TO_EDIT;
+        this.specification = new HashMap<>(product.getSpecification());
+        this.futureCategoryName = product.getFutureCategoryName();
+        allCreatedProductNum++;
+        allProduct.add(this);
+        this.imageInStringForm = imageInStringForm;
+        ProductDataBase.add(this);
+    }
+     */
 }

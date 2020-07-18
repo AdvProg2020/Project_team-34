@@ -8,6 +8,7 @@ import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
+import javafx.scene.image.Image;
 import product.Category;
 import product.Product;
 
@@ -233,6 +234,10 @@ public class Utils {
         } catch (IOException e) {
             throw new ExceptionalMassage("IOException");
         }
+    }
+
+    public static Image convertStringToImage(String imageBytes) {
+        return new Image(new ByteArrayInputStream(decodeImage(imageBytes)));
     }
 
     public static void convertAndSaveJsonElementToFile(String imageBytes, String filePath) throws ExceptionalMassage {

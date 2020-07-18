@@ -59,7 +59,7 @@ public class AccountController {
             jsonArray.add("Supervisor");
         }
         jsonArray.add(Utils.convertObjectToJsonString(account));
-        return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, jsonArray.toString());
     }
 
     private boolean hasSomeOneLoggedInInternal(){
@@ -585,7 +585,7 @@ public class AccountController {
         if (account == null) {
             jsonArray.add("null");
             jsonArray.add("null");
-            return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
+            return new Response(RequestStatus.SUCCESSFUL, jsonArray.toString());
         }
         if (account instanceof Customer) {
             jsonArray.add("Customer");
@@ -597,7 +597,7 @@ public class AccountController {
             jsonArray.add("Supervisor");
         }
         jsonArray.add(Utils.convertObjectToJsonString(account));
-        return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, jsonArray.toString());
     }
 
     public Response controlUpdateCart(){

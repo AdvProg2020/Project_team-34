@@ -545,7 +545,7 @@ public class ProductController {
         for (String key : hashMap.keySet()) {
             jsonHashMap.add(key, Utils.convertStringArrayListToJsonElement(hashMap.get(key)));
         }
-        return new Response(RequestStatus.SUCCESSFUL, jsonHashMap.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, jsonHashMap.toString());
     }
 
     public Response controlFilterSetAvailabilityFilter(String availabilityFilterStr) {

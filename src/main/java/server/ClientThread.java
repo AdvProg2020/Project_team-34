@@ -121,6 +121,8 @@ public class ClientThread extends Thread {
             }
         }
 
+        System.out.println(params);
+        System.out.println(values);
         Method method;
         try {
             if (request.getSource() == ControllerSource.ACCOUNT_CONTROLLER) {
@@ -147,7 +149,7 @@ public class ClientThread extends Thread {
             }
         } catch (Exception ex){
             System.out.println("Can't call the method...; Error type:");
-            System.out.println(ex.getMessage());
+            ex.printStackTrace();
         }
         return null;
     }

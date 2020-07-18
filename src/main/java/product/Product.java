@@ -524,7 +524,8 @@ public class Product {
     }
 
     public static Product convertJsonStringToProduct(String jsonString){
-        return (Product) Utils.convertStringToObject(jsonString, "product.Product");
+        return new Product(jsonString);
+        //return (Product) Utils.convertStringToObject(jsonString, "product.Product");
     }
 
     @Override

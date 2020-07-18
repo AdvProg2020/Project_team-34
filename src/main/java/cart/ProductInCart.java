@@ -1,8 +1,12 @@
 package cart;
 
 import account.Supplier;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import communications.Utils;
 import product.Product;
+
+import java.util.Objects;
 
 /**
  * @author Aryan Ahadinia
@@ -13,6 +17,22 @@ public class ProductInCart {
     private String identifier;
     private Product product;
     private Supplier supplier;
+
+    public ProductInCart(String json) {
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        this.identifier = jsonObject.get("identifier").getAsString();
+        this.product = Product.convertJsonStringToProduct(jsonObject.get("product").toString());
+        this.supplier = Supplier.convertJsonStringToSupplier(jsonObject.get("supplier").toString());
+    }
+
+    public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        jsonObject.add("identifier", jsonParser.parse(Utils.convertObjectToJsonString(identifier)));
+        jsonObject.add("product", jsonParser.parse(product.toJson()));
+        jsonObject.add("supplier", jsonParser.parse(Utils.convertObjectToJsonString(supplier)));
+        return jsonObject.toString();
+    }
 
     public String getIdentifier() {
         return identifier;
@@ -38,7 +58,21 @@ public class ProductInCart {
         this.supplier = supplier;
     }
 
-    public static ProductInCart convertJsonStringToProdcutInCart(String jsonString){
-        return (ProductInCart) Utils.convertStringToObject(jsonString, "cart.ProductInCart");
+    public static ProductInCart convertJsonStringToProductInCart(String jsonString){
+        //return (ProductInCart) Utils.convertStringToObject(jsonString, "cart.ProductInCart");
+        return new ProductInCart(jsonString);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductInCart that = (ProductInCart) o;
+        return Objects.equals(identifier, that.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier);
     }
 }

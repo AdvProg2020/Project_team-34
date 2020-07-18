@@ -212,7 +212,7 @@ public class AccountController {
 
     public Cart controlViewCart() throws ExceptionalMassage {
         JsonElement cart = communication("controlViewCart", new JsonArray());
-        return Cart.convertJsonStringToCart(cart.getAsString());
+        return Cart.convertJsonStringToCart(cart.toString());
     }
 
     public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address,
@@ -355,7 +355,7 @@ public class AccountController {
     public Supplier getSupplierByCompanyName(String companyName) throws ExceptionalMassage {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(companyName);
-        return Supplier.convertJsonStringToSupplier(communication("getSupplierByCompanyName",jsonArray).getAsString());
+        return Supplier.convertJsonStringToSupplier(communication("getSupplierByCompanyName",jsonArray).toString());
     }
 
     public Account getAccountByUsernameWithinAvailable(String username) throws ExceptionalMassage{

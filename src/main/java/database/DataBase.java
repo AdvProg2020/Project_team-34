@@ -174,5 +174,6 @@ public class DataBase {
         ShippingInfoDataBase.createNewTable();
         CartDataBase.createNewTable();
         CustomerLogDataBase.createNewTable();
+        WageDataBase.createNewTable();
     }
 }

@@ -54,16 +54,22 @@ public class CustomerProfileGMenu extends GMenu {
             stage.setScene(new EditPersonalInfoGMenu(this, stage, controller).createScene());
         });
 
+        Button chooseSupporterButton = new Button("Choose Supporter");
+        GMenu.addStyleToButton(chooseSupporterButton);
+        chooseSupporterButton.setOnAction(e->{
+            stage.setScene(new ChooseSupporterGMenu(this, stage,controller).createScene());
+        });
+
 
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setSpacing(10);
         buttonPane.setPadding(new Insets(10, 10 , 10 , 10));
-        buttonPane.getChildren().addAll(viewCartButton, viewOrdersButton, viewDiscountCodesButton,editPersonalInfoButton );
+        buttonPane.getChildren().addAll(viewCartButton, viewOrdersButton, viewDiscountCodesButton,editPersonalInfoButton,chooseSupporterButton);
 
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
 
-
+        System.out.println(controller.getAccount().getUserName());
         mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccount()), buttonPane, viewPane);
         mainPane.setSpacing(10);
         mainPane.setPadding(new Insets(10, 10 , 10 , 10));

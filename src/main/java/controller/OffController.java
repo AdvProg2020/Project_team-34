@@ -230,4 +230,10 @@ public class OffController {
         Sale sale = Sale.getMaxSaleForThisProduct(product);
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(sale));
     }
+
+    public Response isProductInThisSuppliersSale(String productString,String supplierString){
+        Product product = Product.convertJsonStringToProduct(productString);
+        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
+        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Sale.isProductInThisSuppliersSale(product,supplier)));
+    }
 }

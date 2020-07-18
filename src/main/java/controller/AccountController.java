@@ -170,7 +170,7 @@ public class AccountController {
 
     public Response controlLogout() {
         mainController.setAccount(null);
-        mainController.setCart(new Cart(null));
+        mainController.setCart(new Cart((Customer) null));
         mainController.getProductController().getFilterAndSort().clear();
         return Response.createSuccessResponse();
     }
@@ -571,12 +571,6 @@ public class AccountController {
 
     public Response getSupplierByCompanyName(String name){
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Supplier.getSupplierByCompanyName(name)));
-    }
-
-    public Response isProductInThisSuppliersSale(String productString,String supplierString){
-        Product product = Product.convertJsonStringToProduct(productString);
-        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
-        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Sale.isProductInThisSuppliersSale(product,supplier)));
     }
 
     public Response getAccountByUsernameWithinAvailable(String username){

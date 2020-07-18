@@ -1,6 +1,8 @@
 package cart;
 
 import account.Supplier;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import database.ProductInCartDataBase;
 import product.Product;
 import server.communications.Response;
@@ -20,6 +22,22 @@ public class ProductInCart {
     private final String identifier;
     private final Product product;
     private final Supplier supplier;
+
+    public ProductInCart(String json) {
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        this.identifier = jsonObject.get("identifier").getAsString();
+        this.product = Product.convertJsonStringToProduct(jsonObject.get("product").toString());
+        this.supplier = Supplier.convertJsonStringToSupplier(jsonObject.get("supplier").toString());
+    }
+
+    public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        jsonObject.add("identifier", jsonParser.parse(Utils.convertObjectToJsonString(identifier)));
+        jsonObject.add("product", jsonParser.parse(product.toJson()));
+        jsonObject.add("supplier", jsonParser.parse(Utils.convertObjectToJsonString(supplier)));
+        return jsonObject.toString();
+    }
 
     public ProductInCart(Product product, Supplier supplier) {
         this.identifier = generateIdentifier();
@@ -68,8 +86,9 @@ public class ProductInCart {
         return null;
     }
 
-    public static ProductInCart convertJsonStringToProdcutInCart(String jsonString){
-        return (ProductInCart) Utils.convertStringToObject(jsonString, "cart.ProductInCart");
+    public static ProductInCart convertJsonStringToProductInCart(String jsonString){
+        return new ProductInCart(jsonString);
+//        return (ProductInCart) Utils.convertStringToObject(jsonString, "cart.ProductInCart");
     }
 
 }

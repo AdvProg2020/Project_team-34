@@ -24,7 +24,9 @@ public class Utils {
             return ((Product) object).toJson();
         }
         Gson gson = new Gson();
-        return gson.toJson(object);
+        String result = gson.toJson(object);
+        System.out.println(result);
+        return result;
     }
 
     public static Object convertStringToObject(String jsonString, String completeClassName) {
@@ -63,7 +65,11 @@ public class Utils {
     public static ArrayList<Product> convertJsonElementToProductArrayList(JsonElement jsonElement) {
         ArrayList<Product> productArrayList = new ArrayList<>();
         for (JsonElement element : jsonElement.getAsJsonArray()) {
-            productArrayList.add(Product.convertJsonStringToProduct(element.getAsString()));
+            System.out.println(element.getAsString());
+            Product product = Product.convertJsonStringToProduct(element.getAsString());
+            System.out.println(product);
+            productArrayList.add(product);
+
         }
         return productArrayList;
     }

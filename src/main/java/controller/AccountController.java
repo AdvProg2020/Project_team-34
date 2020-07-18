@@ -63,7 +63,6 @@ public class AccountController {
     public void controlCreateAccount(String username, String type, String name, String familyName, String email,
                                      String phoneNumber, String password, int credit, String nameOfCompany)
             throws ExceptionalMassage {
-
         JsonArray input = new JsonArray();
         input.add(username);
         input.add(type);
@@ -74,7 +73,10 @@ public class AccountController {
         input.add(password);
         input.add(String.valueOf(credit));
         input.add(nameOfCompany);
-        communication("controlCreateAccount", input);
+        JsonElement response = communication("controlCreateAccount", input);
+        if (type.equals("customer") || type.equals("supplier")) {
+            mainController.setToken(response.getAsString());
+        }
     }
 
     /*private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
@@ -107,11 +109,11 @@ public class AccountController {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(username);
         jsonArray.add(password);
-        communication("controlLogin", jsonArray);
+        mainController.setToken(communication("controlLogin", jsonArray).getAsString());
     }
 
     public void controlLogout() throws ExceptionalMassage {
-        communication("controlLogout", new JsonArray());
+        mainController.setToken(communication("controlLogout", new JsonArray()).getAsString());
     }
 
     public String controlViewPersonalInfo() throws ExceptionalMassage {

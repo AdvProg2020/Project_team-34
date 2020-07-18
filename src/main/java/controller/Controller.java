@@ -42,10 +42,11 @@ public class Controller {
         }
         try {
             this.isFirstSupervisorCreated = Boolean.parseBoolean(objectInputStream.readUTF());
+            this.token = objectInputStream.readUTF();
+            System.out.println(token);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        this.token = null;
         this.accountController = new AccountController(this);
         this.productController = new ProductController(this);
         this.offController = new OffController(this);

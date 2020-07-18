@@ -4,6 +4,8 @@ import database.AccountDataBase;
 import server.communications.Response;
 import server.communications.Utils;
 
+import java.util.Objects;
+
 /**
  * @author rpirayadi
  * @since 0.0.1
@@ -70,9 +72,14 @@ public class Supplier extends Account{
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Supplier)) {
-            return false;
-        }
-        return this.getUserName().equals(((Supplier) o).getUserName());
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Supplier supplier = (Supplier) o;
+        return Objects.equals(nameOfCompany, supplier.nameOfCompany);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(nameOfCompany);
     }
 }

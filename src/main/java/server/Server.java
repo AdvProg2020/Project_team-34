@@ -5,8 +5,10 @@ import discount.PeriodicCodedDiscountGenerator;
 import java.io.IOException;
 import java.net.*;
 import java.util.HashMap;
+import java.util.Random;
 
 public class Server extends Thread {
+    private static final String LETTERS_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private final ServerSocket serverSocket;
     private final HashMap<String, ClientThread> tokenToClientThreadHashMap;
     private boolean unlocked;
@@ -38,7 +40,13 @@ public class Server extends Thread {
     }
 
     public String generateRandomToken() {
-        return "";
+        Random rand = new Random();
+        int upperBound = LETTERS_SET.length()-1;
+        String code = "";
+        for(int i = 0;i < 10;i++){
+            code += LETTERS_SET.charAt(rand.nextInt(upperBound));
+        }
+        return code;
     }
 
     public void setUnlocked(boolean unlocked) {

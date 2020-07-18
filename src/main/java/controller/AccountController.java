@@ -1,15 +1,13 @@
 package controller;
 
-import account.Account;
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
+import account.*;
 import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.sun.javafx.collections.NonIterableChange;
 import database.WageDataBase;
 import discount.CodedDiscount;
 import discount.Sale;
@@ -171,7 +169,7 @@ public class AccountController {
 
     public Response controlLogout() {
         mainController.setAccount(null);
-        mainController.setCart(new Cart(null));
+        mainController.setCart(new Cart((Customer) null));
         mainController.getProductController().getFilterAndSort().clear();
         return Response.createSuccessResponse();
     }
@@ -508,7 +506,8 @@ public class AccountController {
                 getDeliveryStatus() != LogStatus.DELIVERED));
     }
 
-    public Response numberOfProductInCart(ProductInCart productInCart) {
+    public Response numberOfProductInCart(String productInCartStr) {
+        ProductInCart productInCart = ProductInCart.convertJsonStringToProductInCart(productInCartStr);
         int c;
         try {
             c = mainController.getCart().getCountOfProductInCart(productInCart);
@@ -574,12 +573,6 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Supplier.getSupplierByCompanyName(name)));
     }
 
-    public Response isProductInThisSuppliersSale(String productString,String supplierString){
-        Product product = Product.convertJsonStringToProduct(productString);
-        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
-        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Sale.isProductInThisSuppliersSale(product,supplier)));
-    }
-
     public Response getAccountByUsernameWithinAvailable(String username){
         Account account = Account.getAccountByUsernameWithinAvailable(username);
         JsonArray jsonArray = new JsonArray();
@@ -603,6 +596,25 @@ public class AccountController {
 
     public Response controlUpdateCart(){
         mainController.getCart().update();
+        return Response.createSuccessResponse();
+    }
+
+    //Supporter methods!
+    public Response createChatRoomBetweenSupporterAndCustomer(String supporterString,String customerString){
+        Supporter supporter = Supporter.convertJsonStringToSupporter(supporterString);
+        Customer customer = Customer.convertJsonStringToCustomer(customerString);
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.joinChatRoom(supporter);
+        chatRoom.joinChatRoom(customer);
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(chatRoom.getChatRoomId()));
+    }
+
+    public Response addMessageToChatRoom(String senderUsername,String content,String chatRoomId){
+        try {
+            new Message(senderUsername, content, chatRoomId);
+        } catch (ExceptionalMassage ex){
+            return Response.createResponseFromExceptionalMassage(ex);
+        }
         return Response.createSuccessResponse();
     }
 

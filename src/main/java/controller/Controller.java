@@ -1,6 +1,7 @@
 package controller;
 
 import account.Account;
+import account.Customer;
 import cart.Cart;
 import database.WageDataBase;
 import server.ClientThread;
@@ -23,7 +24,7 @@ public class Controller {
         this.clientThread = clientThread;
         this.token = firstToken;
         this.account = null;
-        this.cart = new Cart(null);
+        this.cart = new Cart((Customer) null);
         this.isFirstSupervisorCreated = Account.isFirstSupervisorCreated();
         this.accountController = new AccountController(this);
         this.productController = new ProductController(this);

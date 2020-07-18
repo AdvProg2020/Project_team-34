@@ -51,14 +51,4 @@ public class Customer extends Account {
                 "password=\'" + password + "\'" + "\n" +
                 "credit=\'" + credit + "\'" + "\n";
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Customer)) {
-            return false;
-        }
-        return this.getUserName().equals(((Customer) o).getUserName());
-    }
-
-
 }

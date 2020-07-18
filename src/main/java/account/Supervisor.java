@@ -34,12 +34,4 @@ public class Supervisor extends Account {
                 "password=\'" + password + '\'' + "\n"+
                 "credit=\'" + credit + '\'' + "\n";
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (!(o instanceof Supervisor)) {
-            return false;
-        }
-        return this.getUserName().equals(((Supervisor) o).getUserName());
-    }
 }

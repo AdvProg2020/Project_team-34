@@ -3,6 +3,9 @@ package server.communications;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
+import account.Supporter;
+import cart.Cart;
+import cart.ProductInCart;
 import com.google.gson.*;
 import discount.CodedDiscount;
 import discount.Sale;
@@ -24,6 +27,14 @@ public class Utils {
             return ((Product) object).toJson();
         if (object instanceof Category)
             return ((Category) object).toJson();
+        if (object instanceof Cart)
+            return ((Cart) object).toJson();
+        if (object instanceof ProductInCart)
+            return ((ProductInCart) object).toJson();
+        if (object instanceof Sale)
+            return ((Sale) object).toJson();
+        if (object instanceof CodedDiscount)
+            return ((CodedDiscount) object).toJson();
         Gson gson = new Gson();
         String result = gson.toJson(object);
         System.out.println(result);
@@ -135,7 +146,7 @@ public class Utils {
         return supplierArrayList;
     }
 
-    public static JsonElement convertCustomerArrayListToJsonElement(ArrayList<Customer> customerArrayList){
+    public static JsonElement convertCustomerArrayListToJsonElement(ArrayList<Customer> customerArrayList) {
         JsonArray jsonArray = new JsonArray();
         for (Customer customer : customerArrayList) {
             jsonArray.add(convertObjectToJsonString(customer));
@@ -149,6 +160,22 @@ public class Utils {
             customerArrayList.add(Customer.convertJsonStringToCustomer(element.getAsString()));
         }
         return customerArrayList;
+    }
+
+    public static JsonElement convertSupporterArrayListToJsonElement(ArrayList<Supporter> supporterArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Supporter supporter : supporterArrayList) {
+            jsonArray.add(convertObjectToJsonString(supporter));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Supporter> convertJsonElementToSupporterArrayList(JsonElement jsonElement) {
+        ArrayList<Supporter> supporterArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            supporterArrayList.add(Supporter.convertJsonStringToSupporter(element.getAsString()));
+        }
+        return supporterArrayList;
     }
 
     public static JsonElement convertCategoryArrayListToJsonElement(ArrayList<Category> categories) {
@@ -183,6 +210,60 @@ public class Utils {
         return commentArrayList;
     }
 
+    public static JsonElement convertProductInCartArrayListToJsonElement(ArrayList<ProductInCart> array) {
+        JsonArray jsonArray = new JsonArray();
+        for (ProductInCart productInCart : array) {
+            jsonArray.add(convertObjectToJsonString(productInCart));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<ProductInCart> convertJsonElementToProductInCartArrayList(JsonElement jsonElement) {
+        ArrayList<ProductInCart> productInCartArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            productInCartArrayList.add(ProductInCart.convertJsonStringToProductInCart(element.getAsString()));
+        }
+        return productInCartArrayList;
+    }
+
+    public static JsonElement convertProductInCartToIntegerHashMapToJsonElement(HashMap<ProductInCart, Integer> hashMap) {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        for (ProductInCart key : hashMap.keySet()) {
+            jsonObject.add(Utils.convertObjectToJsonString(key), jsonParser.parse(Utils.
+                    convertObjectToJsonString(hashMap.get(key))));
+        }
+        return jsonObject;
+    }
+
+    public static HashMap<ProductInCart, Integer> convertJsonElementToProductInCartToIntegerHashMap(JsonElement jsonElement) {
+        HashMap<ProductInCart, Integer> hashMap = new HashMap<>();
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        for (String key : jsonObject.keySet()) {
+            hashMap.put(ProductInCart.convertJsonStringToProductInCart(key), (Integer) convertStringToObject(jsonObject.get(key).getAsString(), "java.lang.Integer"));
+        }
+        return hashMap;
+    }
+
+    public static JsonElement convertProductInCartToSaleHashMapToJsonElement(HashMap<ProductInCart, Sale> hashMap) {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        for (ProductInCart key : hashMap.keySet()) {
+            jsonObject.add(Utils.convertObjectToJsonString(key), jsonParser.parse(Utils.
+                    convertObjectToJsonString(hashMap.get(key))));
+        }
+        return jsonObject;
+    }
+
+    public static HashMap<ProductInCart, Sale> convertJsonElementToProductInCartToSaleHashMap(JsonElement jsonElement) {
+        HashMap<ProductInCart, Sale> hashMap = new HashMap<>();
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        for (String key : jsonObject.keySet()) {
+            hashMap.put(ProductInCart.convertJsonStringToProductInCart(key), Sale.convertJsonStringToSale(jsonObject.get(key).toString()));
+        }
+        return hashMap;
+    }
+
     public static JsonElement convertStringToStringHashMapToJsonElement(HashMap<String, String> hashMap) {
         JsonObject jsonObject = new JsonObject();
         JsonParser jsonParser = new JsonParser();
@@ -201,7 +282,7 @@ public class Utils {
         return hashMap;
     }
 
-    public static JsonElement convertStringToStringArrayListHashMapToJsonElement(HashMap<String, ArrayList<String>> hashMap){
+    public static JsonElement convertStringToStringArrayListHashMapToJsonElement(HashMap<String, ArrayList<String>> hashMap) {
         JsonObject jsonObject = new JsonObject();
         for (String key : hashMap.keySet()) {
             jsonObject.add(key, Utils.convertStringArrayListToJsonElement(hashMap.get(key)));
@@ -218,7 +299,7 @@ public class Utils {
         return hashMap;
     }
 
-    public static JsonElement convertSupplierToIntegerHashMapToJsonElement(HashMap<Supplier, Integer> hashMap){
+    public static JsonElement convertSupplierToIntegerHashMapToJsonElement(HashMap<Supplier, Integer> hashMap) {
         JsonObject jsonObject = new JsonObject();
         JsonParser jsonParser = new JsonParser();
         for (Supplier key : hashMap.keySet()) {
@@ -233,6 +314,25 @@ public class Utils {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         for (String key : jsonObject.keySet()) {
             hashMap.put(Supplier.convertJsonStringToSupplier(key), (Integer) convertStringToObject(jsonObject.get(key).getAsString(), "java.lang.Integer"));
+        }
+        return hashMap;
+    }
+
+    public static JsonElement convertCustomerToIntegerHashMapToJsonElement(HashMap<Customer, Integer> hashMap) {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        for (Customer key : hashMap.keySet()) {
+            jsonObject.add(Utils.convertObjectToJsonString(key), jsonParser.parse(Utils.
+                    convertObjectToJsonString(hashMap.get(key))));
+        }
+        return jsonObject;
+    }
+
+    public static HashMap<Customer, Integer> convertJsonElementCustomerToIntegerHashMap(JsonElement jsonElement) {
+        HashMap<Customer, Integer> hashMap = new HashMap<>();
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        for (String key : jsonObject.keySet()) {
+            hashMap.put(Customer.convertJsonStringToCustomer(key), (Integer) convertStringToObject(jsonObject.get(key).getAsString(), "java.lang.Integer"));
         }
         return hashMap;
     }

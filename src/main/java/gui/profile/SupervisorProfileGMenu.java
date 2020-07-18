@@ -47,7 +47,13 @@ public class SupervisorProfileGMenu extends GMenu {
         Button manageRequestButton = new Button("Manage Request");
         GMenu.addStyleToButton(manageRequestButton);
         manageRequestButton.setOnMouseClicked(e->{
-            stage.setScene(new ManageRequestsG(this, stage, controller).getScene());
+            stage.setScene(new ManageRequestsG(this, stage, controller).createScene());
+        });
+
+        Button manageWageButton = new Button("Manage Wage & Minimum");
+        GMenu.addStyleToButton(manageWageButton);
+        manageWageButton.setOnMouseClicked(e->{
+            stage.setScene(new ManageWageGMenu(this, stage, controller).createScene());
         });
 
         Button editPersonalInfoButton = new Button("Edit Personal Info");
@@ -59,7 +65,7 @@ public class SupervisorProfileGMenu extends GMenu {
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setSpacing(10);
         buttonPane.setPadding(new Insets(10, 10 , 10 , 10));
-        buttonPane.getChildren().addAll(manageCodedDiscountButton, manageAccountButton, manageCategoryButton, manageRequestButton,editPersonalInfoButton);
+        buttonPane.getChildren().addAll(manageCodedDiscountButton, manageAccountButton, manageCategoryButton, manageRequestButton,manageWageButton , editPersonalInfoButton);
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
         try {

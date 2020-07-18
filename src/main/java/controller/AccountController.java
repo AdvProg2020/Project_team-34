@@ -388,4 +388,19 @@ public class AccountController {
         inputs.add(chatRoomId);
         communication("addMessageToChatRoom",inputs);
     }
+
+    public void controlSetWageAndMinimum(int wage , int minimum ) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(wage);
+        inputs.add(minimum);
+        communication("controlSetWageAndMinimum",inputs);
+    }
+
+    public int controlGetWage() throws ExceptionalMassage {
+        return Integer.parseInt(communication("controlGetWage", new JsonArray()).getAsString());
+    }
+
+    public int controlGetMinimum() throws ExceptionalMassage {
+        return Integer.parseInt(communication("controlGetMinimum", new JsonArray()).getAsString());
+    }
 }

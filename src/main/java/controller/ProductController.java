@@ -52,17 +52,17 @@ public class ProductController {
         communication("controlRemoveProductById",inputs);
     }
 
-    public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage {
-        JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
-        return communication("controlGetDigestInfosOfProduct",inputs).getAsString();
-    }
+//    public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage {
+//        JsonArray inputs = new JsonArray();
+//        inputs.add(Utils.convertObjectToJsonString(product));
+//        return communication("controlGetDigestInfosOfProduct",inputs).getAsString();
+//    }
 
-    public String controlGetAttributesOfProduct(String productId) throws ExceptionalMassage {
-        JsonArray inputs = new JsonArray();
-        inputs.add(productId);
-        return communication("controlGetAttributesOfProduct",inputs).getAsString();
-    }
+//    public String controlGetAttributesOfProduct(String productId) throws ExceptionalMassage {
+//        JsonArray inputs = new JsonArray();
+//        inputs.add(productId);
+//        return communication("controlGetAttributesOfProduct",inputs).getAsString();
+//    }
 
 
     public void controlEditProductById(String productId, HashMap<String, String> fieldsToChange) throws ExceptionalMassage {
@@ -143,9 +143,9 @@ public class ProductController {
     }
 
     //related to request:
-    public String controlGetListOfRequestId() throws  ExceptionalMassage{
-        return communication("controlGetListOfRequestId", new JsonArray()).getAsString();
-    }
+//    public String controlGetListOfRequestId() throws  ExceptionalMassage{
+//        return communication("controlGetListOfRequestId", new JsonArray()).getAsString();
+//    }
 
     public ArrayList<String> controlGetArrayOfRequestId() throws ExceptionalMassage{
         JsonElement arrayOfString = communication("controlGetArrayOfRequestId", new JsonArray());
@@ -156,13 +156,13 @@ public class ProductController {
     public String controlShowDetailForRequest(String requestId) throws ExceptionalMassage {
         JsonArray input = new JsonArray();
         input.add(requestId);
-        return communication("controlShowDetailForRequest",input).getAsString();
+        return communication("controlShowDetailForRequest",input).toString();
     }
 
     public State controlGetEnumForRequest(String requestId) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(requestId);
-        return State.convertJsonStringToState(communication("controlGetEnumForRequest",inputs).getAsString());
+        return State.convertJsonStringToState(communication("controlGetEnumForRequest",inputs).toString());
 
     }
 
@@ -265,13 +265,13 @@ public class ProductController {
     public String controlGetCategoryParentName(String name) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(name);
-        return communication("controlGetCategoryParentName", inputs).getAsString();
+        return communication("controlGetCategoryParentName", inputs).toString();
     }
 
     public boolean isThisCategoryClassifier(String name) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(name);
-        return Boolean.parseBoolean(communication("isThisCategoryClassifier", inputs).getAsString());
+        return Boolean.parseBoolean(communication("isThisCategoryClassifier", inputs).toString());
     }
 
     public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) throws ExceptionalMassage{
@@ -287,7 +287,7 @@ public class ProductController {
     }
 
     public SortType controlFilterGetSortType() throws ExceptionalMassage {
-        return SortType.valueOf(communication("controlFilterGetSortType", new JsonArray()).getAsString());
+        return SortType.valueOf(communication("controlFilterGetSortType", new JsonArray()).toString());
     }
 
     public ArrayList<String> controlFilterGetNameFilter() throws ExceptionalMassage {
@@ -315,7 +315,7 @@ public class ProductController {
     }
 
     public Category controlFilterGetCategory() throws ExceptionalMassage {
-        return Category.convertJsonStringToCategory(communication("controlFilterGetCategory", new JsonArray()).getAsString());
+        return Category.convertJsonStringToCategory(communication("controlFilterGetCategory", new JsonArray()).toString());
     }
 
     public HashMap<String, ArrayList<String>> controlFilterGetSpecialFilter() throws ExceptionalMassage {
@@ -436,7 +436,7 @@ public class ProductController {
     }
 
     public String controlCurrentFilters() throws ExceptionalMassage {
-        return communication("controlCurrentFilters", new JsonArray()).getAsString();
+        return communication("controlCurrentFilters", new JsonArray()).toString();
     }
 
     public void clearFilterAndSort() throws ExceptionalMassage {
@@ -452,19 +452,19 @@ public class ProductController {
     public Product getProductByName(String name) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
         inputs.add(name);
-        return Product.convertJsonStringToProduct(communication("getProductByName", inputs).getAsString());
+        return Product.convertJsonStringToProduct(communication("getProductByName", inputs).toString());
     }
 
     public String convertProductIdToRequestId(String id) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
         inputs.add(id);
-        return communication("convertProductIdToRequestId", inputs).getAsString();
+        return communication("convertProductIdToRequestId", inputs).toString();
     }
 
     public String convertSaleIdToRequestId(String id) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
         inputs.add(id);
-        return communication("convertSaleIdToRequestId", inputs).getAsString();
+        return communication("convertSaleIdToRequestId", inputs).toString();
     }
 
     public ArrayList<Product> getProductForSupplier(Supplier supplier) throws ExceptionalMassage{
@@ -476,6 +476,6 @@ public class ProductController {
     public Product getProductById(String id) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
         inputs.add(id);
-        return Product.convertJsonStringToProduct(communication("getProductById",inputs).getAsString());
+        return Product.convertJsonStringToProduct(communication("getProductById",inputs).toString());
     }
 }

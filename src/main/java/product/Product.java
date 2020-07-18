@@ -16,18 +16,19 @@ import java.util.HashMap;
  * @since 0.0.1
  */
 public class Product {
-    private int numberOfViews;
     private String productId;
+    private String name;
+    private String nameOfCompany;
     private State productState;
-    private String name, nameOfCompany;
-    private HashMap<Supplier, Integer> priceForEachSupplier;
     private ArrayList<Supplier> listOfSuppliers;
+    private HashMap<Supplier, Integer> priceForEachSupplier;
     private HashMap<Supplier, Integer> remainedNumberForEachSupplier;
     private String description;
     private HashMap<String, String> specification; //method check
     private String rootProductId;
     private String futureCategoryName;
     private String imageInStringForm;
+    private int numberOfViews;
 
     public int getNumberOfViews() {
         return numberOfViews;

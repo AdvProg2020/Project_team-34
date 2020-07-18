@@ -55,11 +55,6 @@ public class AccountController {
         return jsonElement.getAsString();
     }
 
-   /* public Account getAccount() {
-        JsonElement account = communication("getAccount",new JsonArray());
-        return Utils.
-    } */
-
     public void controlCreateAccount(String username, String type, String name, String familyName, String email,
                                      String phoneNumber, String password, int credit, String nameOfCompany)
             throws ExceptionalMassage {

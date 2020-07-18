@@ -85,11 +85,10 @@ public class Controller {
 
     public Account getAccount() {
         try {
-            accountController.getAccount();
+            return accountController.getAccount();
         } catch (ExceptionalMassage exceptionalMassage) {
             return null;
         }
-        return null;
     }
 
     public void setToken(String token) {

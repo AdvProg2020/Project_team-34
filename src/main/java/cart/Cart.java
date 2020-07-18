@@ -45,7 +45,7 @@ public class Cart {
         if (jsonObject.get("shippingInfo") instanceof JsonNull) {
             this.shippingInfo = null;
         } else {
-            this.shippingInfo = ShippingInfo.convertJsonStringToShippingInfo(jsonObject.get("shippingInfo").getAsString());
+            this.shippingInfo = ShippingInfo.convertJsonStringToShippingInfo(jsonObject.get("shippingInfo").toString());
         }
     }
 

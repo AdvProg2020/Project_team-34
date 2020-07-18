@@ -20,12 +20,12 @@ public class CodedDiscount extends Discount{
     private ArrayList<Customer> customers;
 
     public CodedDiscount(String json) {
-        super(new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("start").toString())),
-                new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("end").toString())),
+        super(new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("start").getAsString())),
+                new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("end").getAsString())),
                 Integer.parseInt((new JsonParser().parse(json).getAsJsonObject()).get("percent").getAsString()));
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
-        this.discountCode = jsonObject.get("discountCode").toString();
-        this.maxDiscountAmount = Integer.parseInt(jsonObject.get("maxDiscountAmount").toString());
+        this.discountCode = jsonObject.get("discountCode").getAsString();
+        this.maxDiscountAmount = Integer.parseInt(jsonObject.get("maxDiscountAmount").getAsString());
         this.usedDiscountPerCustomer = Utils.convertJsonElementCustomerToIntegerHashMap(jsonObject.get("usedDiscountPerCustomer"));
         this.maximumNumberOfUsagePerCustomer = Utils.convertJsonElementCustomerToIntegerHashMap(jsonObject.get("maximumNumberOfUsagePerCustomer"));
         this.customers = Utils.convertJsonElementToCustomerArrayList(jsonObject.get("customers"));

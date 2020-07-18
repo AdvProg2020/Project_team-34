@@ -1,6 +1,7 @@
 package main;
 
 import database.DataBase;
+import database.WageDataBase;
 import server.Server;
 
 import java.io.IOException;

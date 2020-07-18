@@ -36,7 +36,7 @@ public class CustomerLog {
     //Suppliers Name Saved In a variable: <cart: cart.Cart>
 
     //Constructors:
-    public CustomerLog(Cart cart) {
+    public CustomerLog(Cart cart, int wage) {
         this.customer = cart.getOwner();
         this.cart = cart;
         this.identifier = generateIdentifier();
@@ -50,7 +50,7 @@ public class CustomerLog {
         }
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
-        addSubLogForSuppliersMainConstructorCall();
+        addSubLogForSuppliersMainConstructorCall(wage);
         CustomerLogDataBase.add(this);
     }
 
@@ -138,10 +138,10 @@ public class CustomerLog {
         }
     }
 
-    public void addSubLogForSuppliersMainConstructorCall() {
+    public void addSubLogForSuppliersMainConstructorCall(int wage) {
         ArrayList<Supplier> allSupplierInThisLog = cart.getAllSupplier();
         for (Supplier supplier : allSupplierInThisLog) {
-            supplier.setCredit(supplier.getCredit() + getSupplierEarnedMoney(supplier));
+            supplier.setCredit(supplier.getCredit() + (getSupplierEarnedMoney(supplier) * (100- wage)/100));
             addSubLogForSupplier(supplier);
         }
     }

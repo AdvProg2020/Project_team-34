@@ -54,6 +54,9 @@ public class AccountController {
         if (account instanceof Supervisor) {
             jsonArray.add("Supervisor");
         }
+        if (account instanceof Supporter) {
+            jsonArray.add("Supporter");
+        }
         jsonArray.add(Utils.convertObjectToJsonString(account));
         return new Response(RequestStatus.SUCCESSFUL, jsonArray.toString());
     }
@@ -71,12 +74,14 @@ public class AccountController {
     public Response loggedInAccountType() {
         Account account = mainController.getAccount();
         if (account == null)
-            return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(""));
+            return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(""));
         if (account instanceof Customer)
-            return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString("Customer"));
+            return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString("Customer"));
         if (account instanceof Supervisor)
-            return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString("Supervisor"));
-        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString("Supplier"));
+            return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString("Supervisor"));
+        if (account instanceof Supporter)
+            return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString("Supporter"));
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString("Supplier"));
     }
 
     public Response controlCreateAccount(String username, String type, String name, String familyName, String email,
@@ -105,7 +110,17 @@ public class AccountController {
         }
         if (type.equals("supervisor"))
             return controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
+        if (type.equals("supporter"))
+            return controlCreateSupporter(username, name, familyName, email, phoneNumber, password, credit);
         return null;
+    }
+
+    private Response controlCreateSupporter(String username, String name, String familyName, String email,
+                                             String phoneNumber, String password, int credit) {
+        if (!(mainController.getAccount() instanceof Supervisor))
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "You must be a supervisor to create supporter account.");
+        new Supporter(username, name, familyName, email, phoneNumber, password, credit, true);
+        return Response.createSuccessResponse();
     }
 
     private Response controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
@@ -227,12 +242,10 @@ public class AccountController {
         if (password == null || password.trim().length() == 0) {
             password = getInternalAccount().getPassword();
         }
-        if (getInternalAccount() instanceof Customer) {
-            ((Customer) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
-        } else if (getInternalAccount() instanceof Supplier) {
+        if (getInternalAccount() instanceof Supplier) {
             ((Supplier) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
-        } else if (getInternalAccount() instanceof Supervisor) {
-            ((Supervisor) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
+        } else {
+            (getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
         }
         return Response.createSuccessResponse();
     }
@@ -586,6 +599,9 @@ public class AccountController {
         }
         if (account instanceof Supervisor) {
             jsonArray.add("Supervisor");
+        }
+        if (account instanceof Supporter) {
+            jsonArray.add("Supporter");
         }
         jsonArray.add(Utils.convertObjectToJsonString(account));
         return new Response(RequestStatus.SUCCESSFUL, jsonArray.toString());

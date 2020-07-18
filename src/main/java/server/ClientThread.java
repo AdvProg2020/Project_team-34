@@ -121,8 +121,7 @@ public class ClientThread extends Thread {
             }
         }
 
-        System.out.println(params);
-        System.out.println(values);
+        System.out.println(functionName);
         Method method;
         try {
             if (request.getSource() == ControllerSource.ACCOUNT_CONTROLLER) {

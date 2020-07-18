@@ -1,6 +1,9 @@
 package feedback;
 
 import account.Customer;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import database.DataBase;
 import database.ScoreDataBase;
 import discount.CodedDiscount;
@@ -9,6 +12,7 @@ import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author soheil
@@ -23,6 +27,23 @@ public class Score {
     private Product product;
     private float score;
 
+    public Score(String json) {
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        this.identifier = jsonObject.get("identifier").getAsString();
+        this.customer = Customer.convertJsonStringToCustomer(jsonObject.get("customer").toString());
+        this.product = Product.convertJsonStringToProduct(jsonObject.get("product").toString());
+        this.score = Float.parseFloat(jsonObject.get("score").getAsString());
+    }
+
+    public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        jsonObject.add("identifier", jsonParser.parse(Utils.convertObjectToJsonString(identifier)));
+        jsonObject.add("customer", jsonParser.parse(Utils.convertObjectToJsonString(customer)));
+        jsonObject.add("product", jsonParser.parse(Utils.convertObjectToJsonString(product)));
+        jsonObject.add("score", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(score))));
+        return jsonObject.toString();
+    }
 
     public Score(float score, Customer customer, Product product) {
         this.score = score;
@@ -99,8 +120,9 @@ public class Score {
     }
 
 
-    public static Score convertJsonStringToScore(String jsonString){
-        return (Score) Utils.convertStringToObject(jsonString, "score.Score");
+    public static Score convertJsonStringToScore(String jsonString) {
+        return new Score(jsonString);
+//        return (Score) Utils.convertStringToObject(jsonString, "score.Score");
     }
 
     /**
@@ -114,5 +136,18 @@ public class Score {
                 ", product=" + product +
                 ", score=" + score +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Score score = (Score) o;
+        return Objects.equals(identifier, score.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier);
     }
 }

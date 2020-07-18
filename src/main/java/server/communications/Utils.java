@@ -11,6 +11,7 @@ import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
+import feedback.Score;
 import javafx.scene.image.Image;
 import product.Category;
 import product.Product;
@@ -35,6 +36,10 @@ public class Utils {
             return ((Sale) object).toJson();
         if (object instanceof CodedDiscount)
             return ((CodedDiscount) object).toJson();
+        if (object instanceof Comment)
+            return ((Comment) object).toJson();
+        if (object instanceof Score)
+            return ((Score) object).toJson();
         Gson gson = new Gson();
         String result = gson.toJson(object);
         System.out.println(result);

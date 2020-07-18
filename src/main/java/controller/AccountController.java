@@ -1,9 +1,6 @@
 package controller;
 
-import account.Account;
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
+import account.*;
 import cart.Cart;
 import cart.ProductInCart;
 import com.google.gson.JsonArray;
@@ -377,5 +374,21 @@ public class AccountController {
 
     public void controlUpdateCart() throws ExceptionalMassage {
         communication("controlUpdateCart", new JsonArray());
+    }
+
+    public String createChatRoomBetweenSupporterAndCustomer(Supporter supporter,Customer customer) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(supporter));
+        inputs.add(Utils.convertObjectToJsonString(customer));
+        return communication("createChatRoomBetweenSupporterAndCustomer", inputs).toString();
+
+    }
+
+    public void addMessageToChatRoom(String senderUsername,String content,String chatRoomId) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(senderUsername);
+        inputs.add(content);
+        inputs.add(chatRoomId);
+        communication("addMessageToChatRoom",inputs);
     }
 }

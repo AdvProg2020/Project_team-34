@@ -62,6 +62,15 @@ public class DataBase {
         }
     }
 
+    public static void deleteAll(String nameOfTable){
+        String sql = "DELETE FROM " + nameOfTable;
+        try (PreparedStatement preparedStatement = DataBase.getConnection().prepareStatement(sql)) {
+            preparedStatement.executeUpdate();
+        }catch (SQLException e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public static boolean doesIdAlreadyExist(String nameOfTable, String nameOfColumn , String identifier){
         StringBuilder sql = new StringBuilder("SELECT ");
         sql.append(nameOfColumn).append(" FROM ").append(nameOfTable);

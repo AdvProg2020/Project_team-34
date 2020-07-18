@@ -10,6 +10,7 @@ import cart.ShippingInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import database.WageDataBase;
 import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
@@ -603,5 +604,22 @@ public class AccountController {
     public Response controlUpdateCart(){
         mainController.getCart().update();
         return Response.createSuccessResponse();
+    }
+
+    public Response controlSetWageAndMinimum(String wageString , String minimumString ){
+        int wage = Integer.parseInt(wageString);
+        int minimum = Integer.parseInt(minimumString);
+        WageDataBase.update(wage, minimum);
+        return Response.createSuccessResponse();
+    }
+
+    public Response controlGetWage(){
+        String wageString = String.valueOf(WageDataBase.getWage());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(wageString));
+    }
+
+    public Response controlGetMinimum() {
+        String minimumString = String.valueOf(WageDataBase.getMinimum());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(minimumString));
     }
 }

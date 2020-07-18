@@ -178,7 +178,7 @@ public class OffController {
             }
         }
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertCodedDiscountArrayListToJsonElement(codedDiscounts).
-                getAsString());
+                toString());
     }
 
     public Response controlGetRemainedNumberInCodedDiscountForCustomer(String codedDiscountStr) {
@@ -192,7 +192,7 @@ public class OffController {
 
     public Response getAllSaleRequestsIdForThisSupplier() {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertSaleArrayListToJsonElement(Sale.
-                getAllSaleRequestsBySupplier((Supplier) mainController.getAccount())).getAsString());
+                getAllSaleRequestsBySupplier((Supplier) mainController.getAccount())).toString());
     }
 
     public Response controlGetPriceForEachProductAfterSale(String productStr, String supplierStr) {

@@ -184,7 +184,7 @@ public class ProductController {
 
     public Response controlViewBuyersOfProduct(String productId) {
         JsonElement customers = Utils.convertCustomerArrayListToJsonElement(CustomerLog.getAllCustomersBoughtProduct(Product.getProductById(productId)));
-        return new Response(RequestStatus.SUCCESSFUL, customers.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, customers.toString());
     }
 
     public Response doesThisSupplierSellThisProduct(String sellerString, String productString) {
@@ -227,7 +227,7 @@ public class ProductController {
             }
         }
         JsonElement response = Utils.convertCommentArrayListToJsonElement(productComment);
-        return new Response(RequestStatus.SUCCESSFUL, response.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, response.toString());
     }
 
     public Response controlRateProductById(String id, String score)  {
@@ -257,7 +257,7 @@ public class ProductController {
             }
         }
         JsonElement jsonComments = Utils.convertCommentArrayListToJsonElement(confirmedComments);
-        return new Response(RequestStatus.SUCCESSFUL, jsonComments.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, jsonComments.toString());
     }
 
     //related to request:
@@ -278,7 +278,7 @@ public class ProductController {
         allRequests.addAll(Product.getAllProductRequestId());
         allRequests.addAll(Sale.getAllSaleRequestId());
         JsonElement requestsJson = Utils.convertStringArrayListToJsonElement(allRequests);
-        return new Response(RequestStatus.SUCCESSFUL,requestsJson.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL,requestsJson.toString());
     }
 
     public Response controlShowDetailForRequest(String requestId) {
@@ -320,7 +320,7 @@ public class ProductController {
 
     public Response controlGetCategorySpecialFields(String name) {
         JsonElement jsonElement = Utils.convertStringToStringArrayListHashMapToJsonElement(Category.getCategoryByName(name).getSpecialFields());
-        return new Response(RequestStatus.SUCCESSFUL, jsonElement.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, jsonElement.toString());
     }
 
     public Response controlHasCustomerBoughtThisProduct(String customerString, String productString){
@@ -343,7 +343,7 @@ public class ProductController {
         Product product = Product.convertJsonStringToProduct(productString);
         Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
         JsonElement returning = Utils.convertCustomerArrayListToJsonElement(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
-        return new Response(RequestStatus.SUCCESSFUL,returning.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL,returning.toString());
     }
 
     //related to Category:
@@ -471,7 +471,7 @@ public class ProductController {
 
     public Response controlGetAllCategoriesName() {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(
-                Category.getAllCategoriesName()).getAsString());
+                Category.getAllCategoriesName()).toString());
     }
 
     public Response controlGetAllProductCategoriesName() {
@@ -482,7 +482,7 @@ public class ProductController {
             }
         }
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(
-                allProductCategoriesName).getAsString());
+                allProductCategoriesName).toString());
     }
 
     public Response controlGetAllCategoryCategoriesName() {
@@ -493,7 +493,7 @@ public class ProductController {
             }
         }
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(
-                allCategoryCategoriesName).getAsString());
+                allCategoryCategoriesName).toString());
 
     }
 
@@ -517,12 +517,12 @@ public class ProductController {
 
     public Response controlFilterGetNameFilter() {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(filterAndSort.
-                getNameFilter()).getAsString());
+                getNameFilter()).toString());
     }
 
     public Response controlFilterGetBrandFilter() {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(filterAndSort.
-                getBrandFilter()).getAsString());
+                getBrandFilter()).toString());
     }
 
     public Response controlFilterGetPriceLowerBound() {
@@ -707,7 +707,7 @@ public class ProductController {
     public Response getAllSuppliersThatHaveAvailableProduct(String productString){
         Product product = Product.convertJsonStringToProduct(productString);
         ArrayList<Supplier> suppliers = product.getAllSuppliersThatHaveAvailableProduct();
-        return new Response(RequestStatus.SUCCESSFUL, Utils.convertSupplierArrayListToJsonElement(suppliers).getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertSupplierArrayListToJsonElement(suppliers).toString());
     }
 
     public Response getProductByName(String name){

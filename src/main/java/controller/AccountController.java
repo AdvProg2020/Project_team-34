@@ -253,7 +253,7 @@ public class AccountController {
     public Response controlGetListOfAccountUserNames(){
         ArrayList<String> allUsername = Account.getAllUsername();
         JsonElement jsonElement = Utils.convertStringArrayListToJsonElement(allUsername);
-        return new Response(RequestStatus.SUCCESSFUL,jsonElement.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL,jsonElement.toString());
     }
 
     public Response controlViewUserInfo(String username) {
@@ -451,7 +451,7 @@ public class AccountController {
         for (CustomerLog customerLog : customerLogs) {
             toStringLogs.add(customerLog.toString());
         }
-        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(toStringLogs).getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(toStringLogs).toString());
     }
 
     public Response getSupplierLogs() {
@@ -460,7 +460,7 @@ public class AccountController {
         for (SupplierLog supplierLog : supplierLogs) {
             toStringLogs.add(supplierLog.toString());
         }
-        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(toStringLogs).getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(toStringLogs).toString());
     }
 
     public Response getSupervisorLogs() {
@@ -469,7 +469,7 @@ public class AccountController {
         for (CustomerLog customerLog : supervisorLogs) {
             toStringLogs.add(customerLog.toString());
         }
-        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(toStringLogs).getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(toStringLogs).toString());
     }
 
     public Response getCustomerLogById(String id) {
@@ -524,7 +524,7 @@ public class AccountController {
 
     public Response controlGetRequestForLoggedInSupplier() {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(Product.
-                getRequestsForThisSupplier((Supplier) mainController.getAccount())).getAsString());
+                getRequestsForThisSupplier((Supplier) mainController.getAccount())).toString());
     }
 
     private void controlInternalCreateCodedDiscountForLoggedInCustomer() {
@@ -556,17 +556,17 @@ public class AccountController {
 
     public Response getCustomerObservableList() {
         return new Response(RequestStatus.SUCCESSFUL,
-                Utils.convertCustomerArrayListToJsonElement(Account.getCustomersList()).getAsString());
+                Utils.convertCustomerArrayListToJsonElement(Account.getCustomersList()).toString());
     }
 
     public Response getSupplierObservableList() throws ExceptionalMassage {
         return new Response(RequestStatus.SUCCESSFUL,
-                Utils.convertSupplierArrayListToJsonElement(Account.getSuppliersList()).getAsString());
+                Utils.convertSupplierArrayListToJsonElement(Account.getSuppliersList()).toString());
     }
 
     public Response getSupervisorObservableList() throws ExceptionalMassage {
         return new Response(RequestStatus.SUCCESSFUL,
-                Utils.convertSupervisorArrayListToJsonElement(Account.getSupervisorsList()).getAsString());
+                Utils.convertSupervisorArrayListToJsonElement(Account.getSupervisorsList()).toString());
     }
 
     public Response getSupplierByCompanyName(String name){

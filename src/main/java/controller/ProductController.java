@@ -12,6 +12,7 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
+import jdk.jshell.execution.Util;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
@@ -39,7 +40,7 @@ public class ProductController {
     }
 
     public Response controlAddProduct(String name, String nameOfCompany, String price, String remainedNumbers, String category,
-                                  String description, String specification, String imageURL) throws ExceptionalMassage {
+                                  String description, String specification, String imageURL) {
         JsonParser parser = new JsonParser();
         HashMap<String, String> specifications = Utils.convertJsonElementStringToStringToHashMap(parser.parse(specification));
         if (mainController.getAccount() == null)
@@ -58,7 +59,7 @@ public class ProductController {
         Product product;
         product = Product.getProductByName(name);
         if (Category.getCategoryByName(category) == null) {
-            throw new ExceptionalMassage("Category not found.");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Category not found.");
         }
 //        if (product == null)
 //            new Product(supplier, name, nameOfCompany, price, remainedNumbers, description, null, category, specifications, imageURL);
@@ -143,7 +144,7 @@ public class ProductController {
         }
     }*/
 
-    public Response controlEditProductById(String productId, String fieldToChange) throws ExceptionalMassage {
+    public Response controlEditProductById(String productId, String fieldToChange) {
         JsonParser parser = new JsonParser();
         HashMap<String, String> fieldsToChange = Utils.convertJsonElementStringToStringToHashMap(parser.parse(fieldToChange));
         Product product = Product.getProductById(productId);
@@ -167,7 +168,11 @@ public class ProductController {
                     case "imageUrl":
                         newProduct.setImageInStringForm(value);
                     default:
-                        newProduct.editSpecialField(field, value);
+                        try {
+                            newProduct.editSpecialField(field, value);
+                        } catch (ExceptionalMassage exceptionalMassage) {
+                            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+                        }
                 }
             }
             newProduct.getListOfSuppliers().clear();
@@ -192,8 +197,8 @@ public class ProductController {
         Product product = Product.convertJsonStringToProduct(productString);
         if (mainController.getAccount() == null)
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sing in first."));
-        JsonParser parser = new JsonParser();
-        return new Response(RequestStatus.SUCCESSFUL,parser.parse(String.valueOf(product.doesSupplierSellThisProduct(seller))).getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(product.
+                doesSupplierSellThisProduct(seller))));
     }
 
     //added by rpirayadi
@@ -205,7 +210,7 @@ public class ProductController {
     //added by rpirayadi
     public Response controlGetAllProductCategory (){
         String category = Utils.convertObjectToJsonString(Category.getSuperCategory());
-        return new Response(RequestStatus.SUCCESSFUL,category);
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(category));
     }
 
     //related to feedback:
@@ -246,7 +251,8 @@ public class ProductController {
 
     public Response controlGetAverageScoreByProduct(String productString) {
         Product product = Product.convertJsonStringToProduct(productString);
-        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Score.getAverageScoreForProduct(product)));
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(Score.
+                getAverageScoreForProduct(product))));
     }
 
     public Response controlGetConfirmedComments() {
@@ -270,7 +276,7 @@ public class ProductController {
         for (String requestId : Sale.getAllSaleRequestId()) {
             result.append(requestId).append('\n');
         }
-        return new Response(RequestStatus.SUCCESSFUL, result.toString());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(result.toString()));
     }
 
     public Response controlGetArrayOfRequestId() {
@@ -326,7 +332,8 @@ public class ProductController {
     public Response controlHasCustomerBoughtThisProduct(String customerString, String productString){
         Customer customer = Customer.convertJsonStringToCustomer(customerString);
         Product product = Product.convertJsonStringToProduct(productString);
-        return new Response(RequestStatus.SUCCESSFUL,String.valueOf(CustomerLog.getAllCustomersBoughtProduct(product).contains(customer)));
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(CustomerLog.
+                getAllCustomersBoughtProduct(product).contains(customer))));
     }
 
     public boolean controlHasCustomerBoughtThisProductInternal(Customer customer, Product product){
@@ -509,7 +516,8 @@ public class ProductController {
     }
 
     public Response isThisCategoryClassifier(String name) {
-        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Category.getCategoryByName(name).isCategoryClassifier()));
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(Category.
+                getCategoryByName(name).isCategoryClassifier())));
     }
 
     //related to FilterAndSort
@@ -519,7 +527,8 @@ public class ProductController {
     }
 
     public Response controlFilterGetSortType() {
-        return new Response(RequestStatus.SUCCESSFUL, String.valueOf(filterAndSort.getSortType()));
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(filterAndSort.
+                getSortType())));
     }
 
     public Response controlFilterGetNameFilter() {
@@ -720,14 +729,6 @@ public class ProductController {
     public Response getProductByName(String name){
         Product product = Product.getProductByName(name);
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(product));
-    }
-
-    public Response convertProductIdToRequestId(String id){
-        return new Response(RequestStatus.SUCCESSFUL,Product.convertProductIdToRequestId(id));
-    }
-
-    public Response convertSaleIdToRequestId(String id){
-        return new Response(RequestStatus.SUCCESSFUL,Sale.convertSaleIdToRequestId(id));
     }
 
     public Response getProductForSupplier(String supplierString){

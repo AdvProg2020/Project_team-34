@@ -63,7 +63,7 @@ public class CustomerProfileGMenu extends GMenu {
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
 
-
+        System.out.println(controller.getAccount().getUserName());
         mainPane.getChildren().addAll( GMenu.createViewPersonalInfo(controller.getAccount()), buttonPane, viewPane);
         mainPane.setSpacing(10);
         mainPane.setPadding(new Insets(10, 10 , 10 , 10));

@@ -20,6 +20,9 @@ import java.util.HashMap;
 public class Utils {
 
     public static String convertObjectToJsonString(Object object) {
+        if (object instanceof Product) {
+            return ((Product) object).toJson();
+        }
         Gson gson = new Gson();
         return gson.toJson(object);
     }

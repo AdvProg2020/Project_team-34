@@ -1,13 +1,12 @@
 package product;
 
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import database.CategoryDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import server.communications.Utils;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author Aryan Ahadinia
@@ -25,6 +24,27 @@ public class Category {
     private final HashMap<String, ArrayList<String>> specialFields;
 
     //Constructors:
+
+    public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        jsonObject.add("name", jsonParser.parse(Utils.convertObjectToJsonString(name)));
+        jsonObject.add("parentCategoryName", jsonParser.parse(Utils.convertObjectToJsonString(parentCategoryName)));
+        jsonObject.add("allCategoriesInName", jsonParser.parse(Utils.convertStringArrayListToJsonElement(allCategoriesInName).getAsString()));
+        jsonObject.add("allProductsIn", jsonParser.parse(Utils.convertProductArrayListToJsonElement(allProductsIn).getAsString()));
+        jsonObject.add("specialFields", jsonParser.parse(Utils.convertStringToStringArrayListHashMapToJsonElement(specialFields).getAsString()));
+        return jsonObject.toString();
+    }
+
+    public Category(String json) {
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        this.name = jsonObject.get("name").getAsString();
+        this.parentCategoryName = jsonObject.get("parentCategoryName").getAsString();
+        this.allCategoriesInName = Utils.convertJsonElementToStringArrayList(jsonObject.get("allCategoriesInName"));
+        this.allProductsIn = Utils.convertJsonElementToProductArrayList(jsonObject.get("allProductsIn"));
+        this.specialFields = Utils.convertJsonElementToStringToStringArrayListHashMap(jsonObject.get("specialFields"));
+    }
+
     private Category() {
         this.name = "All Products";
         this.parentCategoryName = null;
@@ -371,6 +391,21 @@ public class Category {
     }
 
     public static Category convertJsonStringToCategory(String jsonString) {
-        return (Category) Utils.convertStringToObject(jsonString, "product.Category");
+        return new Category(jsonString);
+        //return (Category) Utils.convertStringToObject(jsonString, "product.Category");
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Category category = (Category) o;
+        return Objects.equals(name, category.name);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(name, parentCategoryName);
+        //check
     }
 }

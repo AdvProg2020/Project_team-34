@@ -47,7 +47,7 @@ public class AccountController {
         if (account == null) {
             jsonArray.add("null");
             jsonArray.add("null");
-            return new Response(RequestStatus.SUCCESSFUL, jsonArray.getAsString());
+            return new Response(RequestStatus.SUCCESSFUL, jsonArray.toString());
         }
         if (account instanceof Customer) {
             jsonArray.add("Customer");
@@ -84,8 +84,8 @@ public class AccountController {
     }
 
     public Response controlCreateAccount(String username, String type, String name, String familyName, String email,
-                                     String phoneNumber, String password, String creditStr, String nameOfCompany) {
-        int credit = Integer.parseInt(creditStr);
+                                     String phoneNumber, String password, String creditString, String nameOfCompany) {
+        int credit = Integer.parseInt(creditString);
         if (username.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("username can't be empty"));
         if (name.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("name can't be empty"));
         if (familyName.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("family name can't be empty"));

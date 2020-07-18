@@ -41,6 +41,8 @@ public class ClientThread extends Thread {
         try {
             objectOutputStream.writeUTF(String.valueOf(controller.getIsFirstSupervisorCreated()));
             objectOutputStream.flush();
+            objectOutputStream.writeUTF(String.valueOf(controller.getToken()));
+            objectOutputStream.flush();
         } catch (IOException e) {
             System.err.println("Error, Initializing Client");
         }

@@ -96,16 +96,14 @@ public class AccountController {
         if (type.equals("customer")) {
             if (credit == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
             Response response = controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
-            controlLogin(username, password);
-            return response;
+            return controlLogin(username, password);
         }
         if (type.equals("supplier")) {
             if (nameOfCompany.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
             Response response = controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
             if(response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
                 return response;
-            controlLogin(username, password);
-            return response;
+            return controlLogin(username, password);
         }
         if (type.equals("supervisor"))
             return controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
@@ -163,14 +161,16 @@ public class AccountController {
                 }
             }
         }
-        return new Response(RequestStatus.SUCCESSFUL,"");
+        mainController.renewToken();
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(mainController.getToken()));
     }
 
     public Response controlLogout() {
         mainController.setAccount(null);
         mainController.setCart(new Cart((Customer) null));
         mainController.getProductController().getFilterAndSort().clear();
-        return Response.createSuccessResponse();
+        mainController.renewToken();
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(mainController.getToken()));
     }
 
     public Response controlViewPersonalInfo() {

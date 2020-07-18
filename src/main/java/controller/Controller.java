@@ -41,6 +41,10 @@ public class Controller {
         this.token = token;
     }
 
+    public void renewToken() {
+        setToken(clientThread.getNewToken());
+    }
+
     public Account getAccount() {
         return account;
     }

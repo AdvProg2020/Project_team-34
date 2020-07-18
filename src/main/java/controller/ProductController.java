@@ -723,7 +723,8 @@ public class ProductController {
         return new Response(RequestStatus.SUCCESSFUL,Sale.convertSaleIdToRequestId(id));
     }
 
-    public Response getProductForSupplier(Supplier supplier){
+    public Response getProductForSupplier(String supplierString){
+        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
         ArrayList<Product> products = Product.getProductForSupplier(supplier);
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(products).getAsString());
     }

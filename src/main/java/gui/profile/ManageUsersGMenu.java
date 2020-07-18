@@ -59,7 +59,7 @@ public class ManageUsersGMenu extends GMenu {
         deleteUserBox.getChildren().addAll(deletingUsername, deleteButton);
 
         mainLayout.setSpacing(10);
-        mainLayout.getChildren().addAll(createHeader(), createSupervisorBox(this), deleteUserBox, new Label("Supervisors:"),
+        mainLayout.getChildren().addAll(createHeader(), createSupervisorBox(this, true), deleteUserBox, new Label("Supervisors:"),
                 supervisorTableView, new Label("Suppliers:"), supplierTableView, new Label("Customers"),
                 customerTableView);
 

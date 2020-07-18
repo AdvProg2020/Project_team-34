@@ -40,18 +40,18 @@ public class AccountController {
             return Supervisor.convertJsonStringToSupervisor(jsonArray.get(1).getAsString());
         if (jsonArray.get(0).getAsString().equals("Supplier"))
             return Supplier.convertJsonStringToSupplier(jsonArray.get(1).getAsString());
+        if (jsonArray.get(0).getAsString().equals("Supporter"))
+            return Supporter.convertJsonStringToSupporter(jsonArray.get(1).getAsString());
         return null;
     }
 
     public boolean hasSomeOneLoggedIn() throws ExceptionalMassage {
         JsonElement response = communication("hasSomeOneLoggedIn", new JsonArray());
         return response.getAsBoolean();
-
     }
 
     public String loggedInAccountType() throws ExceptionalMassage {
         JsonElement jsonElement = communication("loggedInAccountType", new JsonArray());
-
         return jsonElement.getAsString();
     }
 
@@ -73,32 +73,6 @@ public class AccountController {
             mainController.setToken(response.getAsString());
         }
     }
-
-    /*private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
-                                       String password, int credit) {
-        new Customer(username, name, familyName, email, phoneNumber, password, credit);
-    }*/
-
-    /*private void controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber,
-                                       String password, int credit, String nameOfCompany) throws ExceptionalMassage {
-        if (Supplier.getSupplierByCompanyName(nameOfCompany) != null) {
-            throw new ExceptionalMassage("Duplicate company name.");
-        }
-        new Supplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
-    }*/
-
-    /*private void controlCreateSupervisor(String username, String name, String familyName, String email,
-                                         String phoneNumber, String password, int credit) throws ExceptionalMassage {
-        mainController.setIsFirstSupervisorCreated(Account.isSupervisorCreated());
-        if (mainController.getIsFirstSupervisorCreated()) {
-            if (mainController.getAccount() == null)
-                throw new ExceptionalMassage("You must login as supervisor before create a supervisor account.");
-            if (!(mainController.getAccount() instanceof Supervisor))
-                throw new ExceptionalMassage("You must be a supervisor to create supervisor account.");
-        }
-        new Supervisor(username, name, familyName, email, phoneNumber, password, credit);
-        mainController.setIsFirstSupervisorCreated(true);
-    }*/
 
     public void controlLogin(String username, String password) throws ExceptionalMassage {
         JsonArray jsonArray = new JsonArray();
@@ -366,6 +340,8 @@ public class AccountController {
             return Supervisor.convertJsonStringToSupervisor(jsonArray.get(1).getAsString());
         if (jsonArray.get(0).getAsString().equals("Supplier"))
             return Supplier.convertJsonStringToSupplier(jsonArray.get(1).getAsString());
+        if (jsonArray.get(0).getAsString().equals("Supporter"))
+            return Supporter.convertJsonStringToSupporter(jsonArray.get(1).getAsString());
         return null;
     }
 

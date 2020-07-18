@@ -73,9 +73,9 @@ public class Category {
         JsonParser jsonParser = new JsonParser();
         jsonObject.add("name", jsonParser.parse(Utils.convertObjectToJsonString(name)));
         jsonObject.add("parentCategoryName", jsonParser.parse(Utils.convertObjectToJsonString(parentCategoryName)));
-        jsonObject.add("allCategoriesInName", jsonParser.parse(Utils.convertStringArrayListToJsonElement(allCategoriesInName).getAsString()));
-        jsonObject.add("allProductsIn", jsonParser.parse(Utils.convertProductArrayListToJsonElement(allProductsIn).getAsString()));
-        jsonObject.add("specialFields", jsonParser.parse(Utils.convertStringToStringArrayListHashMapToJsonElement(specialFields).getAsString()));
+        jsonObject.add("allCategoriesInName", jsonParser.parse(Utils.convertStringArrayListToJsonElement(allCategoriesInName).toString()));
+        jsonObject.add("allProductsIn", jsonParser.parse(Utils.convertProductArrayListToJsonElement(allProductsIn).toString()));
+        jsonObject.add("specialFields", jsonParser.parse(Utils.convertStringToStringArrayListHashMapToJsonElement(specialFields).toString()));
         return jsonObject.toString();
     }
 

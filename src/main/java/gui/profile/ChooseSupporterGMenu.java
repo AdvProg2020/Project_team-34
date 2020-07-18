@@ -1,7 +1,10 @@
 package gui.profile;
 
+import account.Supporter;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -25,6 +28,9 @@ public class ChooseSupporterGMenu extends GMenu {
         hBox1.setPrefHeight(102.0);
         hBox1.setPrefWidth(850.0);
         hBox1.setStyle("-fx-background-color: #4477c8;");
+
+        HBox hbox = createHeader();
+        hBox1.getChildren().add(hbox);
 
         // Adding child to parent
         anchorPane0.getChildren().add(hBox1);
@@ -75,7 +81,30 @@ public class ChooseSupporterGMenu extends GMenu {
         anchorPane0.getChildren().add(chatButton);
 
         // Adding controller!
+        try {
+            for (Supporter onlineSupporter : controller.getAccountController().getOnlineSupporters()) {
+                onlineSupporters.getItems().add(onlineSupporter.getUserName());
+            }
+        } catch (ExceptionalMassage ex){
+            new AlertBox(this,ex, controller).showAndWait();
+        }
 
+        refreshButton.setOnAction(e -> {
+            onlineSupporters.getItems().clear();
+            try {
+                for (Supporter onlineSupporter : controller.getAccountController().getOnlineSupporters()) {
+                    onlineSupporters.getItems().add(onlineSupporter.getUserName());
+                }
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this,ex, controller).showAndWait();
+            }
+        });
+
+        chatButton.setOnAction(e->{
+            //need modification!
+        });
+
+        return new Scene(anchorPane0);
 
     }
 }

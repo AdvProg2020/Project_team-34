@@ -17,7 +17,7 @@ import java.util.HashMap;
 public class Product {
     private static final ArrayList<Product> allProduct = new ArrayList<>();
     private static int allCreatedProductNum = 0;
-    private final String productId;
+    private String productId;
     private String name;
     private String nameOfCompany;
     private State productState;

@@ -112,6 +112,7 @@ public class ClientThread extends Thread {
 
         if(argumentsArray != null){
             for (JsonElement jsonElement : argumentsArray) {
+                System.out.println(jsonElement.getAsString());
                 values.add(jsonElement.getAsString());
                 try {
                     params.add(Class.forName("java.lang.String"));

@@ -2,6 +2,8 @@ package product;
 
 import account.Supplier;
 import communications.Utils;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import state.State;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ public class Product {
     private HashMap<String, String> specification; //method check
     private String rootProductId;
     private String futureCategoryName;
-    private String imageUrl;
+    private String imageInStringForm;
 
     public int getNumberOfViews() {
         return numberOfViews;
@@ -121,14 +123,6 @@ public class Product {
         this.futureCategoryName = futureCategoryName;
     }
 
-    public String getImageUrl() {
-        return imageUrl;
-    }
-
-    public void setImageUrl(String imageUrl) {
-        this.imageUrl = imageUrl;
-    }
-
     public static Product convertJsonStringToProduct(String jsonString){
         return (Product) Utils.convertStringToObject(jsonString, "product.Product");
     }
@@ -152,5 +146,13 @@ public class Product {
                 minimumPrice = this.getPrice(supplier);
         }
         return minimumPrice;
+    }
+
+    public Image getImage() {
+        return Utils.convertStringToImage(imageInStringForm);
+    }
+
+    public ImageView getImageView() {
+        return new ImageView(getImage());
     }
 }

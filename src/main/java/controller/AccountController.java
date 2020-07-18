@@ -1,15 +1,13 @@
 package controller;
 
-import account.Account;
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
+import account.*;
 import cart.Cart;
 import cart.ProductInCart;
 import cart.ShippingInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.sun.javafx.collections.NonIterableChange;
 import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
@@ -597,6 +595,25 @@ public class AccountController {
 
     public Response controlUpdateCart(){
         mainController.getCart().update();
+        return Response.createSuccessResponse();
+    }
+
+    //Supporter methods!
+    public Response createChatRoomBetweenSupporterAndCustomer(String supporterString,String customerString){
+        Supporter supporter = Supporter.convertJsonStringToSupporter(supporterString);
+        Customer customer = Customer.convertJsonStringToCustomer(customerString);
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.joinChatRoom(supporter);
+        chatRoom.joinChatRoom(customer);
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(chatRoom.getChatRoomId()));
+    }
+
+    public Response addMessageToChatRoom(String senderUsername,String content,String chatRoomId){
+        try {
+            new Message(senderUsername, content, chatRoomId);
+        } catch (ExceptionalMassage ex){
+            return Response.createResponseFromExceptionalMassage(ex);
+        }
         return Response.createSuccessResponse();
     }
 }

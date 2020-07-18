@@ -75,12 +75,12 @@ public class AccountController {
     public Response loggedInAccountType() {
         Account account = mainController.getAccount();
         if (account == null)
-            return new Response(RequestStatus.SUCCESSFUL,"");
+            return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(""));
         if (account instanceof Customer)
-            return new Response(RequestStatus.SUCCESSFUL,"Customer");
+            return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString("Customer"));
         if (account instanceof Supervisor)
-            return new Response(RequestStatus.SUCCESSFUL,"Supervisor");
-        return new Response(RequestStatus.SUCCESSFUL,"Supplier");
+            return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString("Supervisor"));
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString("Supplier"));
     }
 
     public Response controlCreateAccount(String username, String type, String name, String familyName, String email,
@@ -476,7 +476,7 @@ public class AccountController {
         CustomerLog customerLog = CustomerLog.getCustomerLogById(id);
         if (customerLog == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Log not found");
-        return new Response(RequestStatus.SUCCESSFUL, customerLog.toString());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(customerLog.toString()));
     }
 
     public Response getSupplierLogById(String id) {

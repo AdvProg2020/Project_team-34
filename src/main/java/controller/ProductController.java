@@ -283,10 +283,10 @@ public class ProductController {
 
     public Response controlShowDetailForRequest(String requestId) {
         if (requestId.charAt(3) == 'P') {
-            return new Response(RequestStatus.SUCCESSFUL, Product.getDetailsForProductRequest(requestId));
+            return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Product.getDetailsForProductRequest(requestId)));
         } else {
             try {
-                return new Response(RequestStatus.SUCCESSFUL,Sale.getDetailsForSaleRequest(requestId));
+                return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Sale.getDetailsForSaleRequest(requestId)));
             } catch (ExceptionalMassage exceptionalMassage) {
                 return Response.createResponseFromExceptionalMassage(exceptionalMassage);
             }
@@ -696,7 +696,7 @@ public class ProductController {
     }
 
     public Response controlCurrentFilters() {
-        return new Response(RequestStatus.SUCCESSFUL, filterAndSort.toString());
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(filterAndSort.toString()));
     }
 
     public Response clearFilterAndSort() {

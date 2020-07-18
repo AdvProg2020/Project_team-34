@@ -30,6 +30,10 @@ public class Utils {
             return ((Cart) object).toJson();
         if (object instanceof ProductInCart)
             return ((ProductInCart) object).toJson();
+        if (object instanceof Sale)
+            return ((Sale) object).toJson();
+        if (object instanceof CodedDiscount)
+            return ((CodedDiscount) object).toJson();
         Gson gson = new Gson();
         String result = gson.toJson(object);
         System.out.println(result);
@@ -293,6 +297,25 @@ public class Utils {
         JsonObject jsonObject = jsonElement.getAsJsonObject();
         for (String key : jsonObject.keySet()) {
             hashMap.put(Supplier.convertJsonStringToSupplier(key), (Integer) convertStringToObject(jsonObject.get(key).getAsString(), "java.lang.Integer"));
+        }
+        return hashMap;
+    }
+
+    public static JsonElement convertCustomerToIntegerHashMapToJsonElement(HashMap<Customer, Integer> hashMap){
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        for (Customer key : hashMap.keySet()) {
+            jsonObject.add(Utils.convertObjectToJsonString(key), jsonParser.parse(Utils.
+                    convertObjectToJsonString(hashMap.get(key))));
+        }
+        return jsonObject;
+    }
+
+    public static HashMap<Customer, Integer> convertJsonElementCustomerToIntegerHashMap(JsonElement jsonElement) {
+        HashMap<Customer, Integer> hashMap = new HashMap<>();
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+        for (String key : jsonObject.keySet()) {
+            hashMap.put(Customer.convertJsonStringToCustomer(key), (Integer) convertStringToObject(jsonObject.get(key).getAsString(), "java.lang.Integer"));
         }
         return hashMap;
     }

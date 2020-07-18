@@ -1,6 +1,9 @@
 package discount;
 
 import account.Supplier;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import database.ProductDataBase;
 import database.SaleDataBase;
 import exceptionalMassage.ExceptionalMassage;
@@ -11,6 +14,7 @@ import state.State;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  * @author soheil
@@ -52,6 +56,32 @@ public class Sale extends Discount {
         this.rootSaleId = rootSaleId;
         allCreatedSalesNum++;
         sales.add(this);
+    }
+
+    public Sale(String json) {
+        super(new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("start").toString())),
+                new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("end").toString())),
+                Integer.parseInt((new JsonParser().parse(json).getAsJsonObject()).get("percent").getAsString()));
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        this.offId = jsonObject.get("offId").toString();
+        this.rootSaleId = jsonObject.get("rootSaleId").toString();
+        this.products = Utils.convertJsonElementToProductArrayList(jsonObject.get("rootSaleId"));
+        this.state = State.valueOf(jsonObject.get("state").toString());
+        this.supplier = Supplier.convertJsonStringToSupplier(jsonObject.get("supplier").toString());
+    }
+
+    public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        jsonObject.add("start", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(start.getTime()))));
+        jsonObject.add("end", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(end.getTime()))));
+        jsonObject.add("percent", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(percent))));
+        jsonObject.add("offId", jsonParser.parse(Utils.convertObjectToJsonString(offId)));
+        jsonObject.add("rootSaleId", jsonParser.parse(Utils.convertObjectToJsonString(rootSaleId)));
+        jsonObject.add("products", Utils.convertProductArrayListToJsonElement(products));
+        jsonObject.add("state", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(state))));
+        jsonObject.add("supplier", jsonParser.parse(Utils.convertObjectToJsonString(supplier)));
+        return jsonObject.toString();
     }
 
     private String generateOffId() {
@@ -291,7 +321,8 @@ public class Sale extends Discount {
     }
 
     public static Sale convertJsonStringToSale(String jsonString){
-        return (Sale) Utils.convertStringToObject(jsonString, "discount.Sale");
+        return new Sale(jsonString);
+//        return (Sale) Utils.convertStringToObject(jsonString, "discount.Sale");
     }
 
     @Override
@@ -306,5 +337,18 @@ public class Sale extends Discount {
             returning += product.getName() + '\n';
         }
         return returning;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Sale sale = (Sale) o;
+        return Objects.equals(offId, sale.offId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(offId);
     }
 }

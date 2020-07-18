@@ -179,7 +179,7 @@ public class ProductController {
     public Response controlGetAllSuppliersForAProduct(String productString) {
         Product product = Product.convertJsonStringToProduct(productString);
         JsonElement suppliers = Utils.convertSupplierArrayListToJsonElement(product.getListOfSuppliers());
-        return new Response(RequestStatus.SUCCESSFUL, suppliers.getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, suppliers.toString());
     }
 
     public Response controlViewBuyersOfProduct(String productId) {
@@ -726,7 +726,7 @@ public class ProductController {
     public Response getProductForSupplier(String supplierString){
         Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
         ArrayList<Product> products = Product.getProductForSupplier(supplier);
-        return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(products).getAsString());
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(products).toString());
     }
 
     public Response getProductById(String id){

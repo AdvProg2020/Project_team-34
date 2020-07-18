@@ -20,9 +20,10 @@ import java.util.HashMap;
 public class Utils {
 
     public static String convertObjectToJsonString(Object object) {
-        if (object instanceof Product) {
+        if (object instanceof Product)
             return ((Product) object).toJson();
-        }
+        if (object instanceof Category)
+            return ((Category) object).toJson();
         Gson gson = new Gson();
         String result = gson.toJson(object);
         System.out.println(result);

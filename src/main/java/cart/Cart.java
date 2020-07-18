@@ -73,8 +73,16 @@ public class Cart {
         this.productsIn = Utils.convertJsonElementToProductInCartArrayList(jsonObject.get("productsIn"));
         this.productInCount = Utils.convertJsonElementToProductInCartToIntegerHashMap(jsonObject.get("productInCount"));
         this.productInSale = Utils.convertJsonElementToProductInCartToSaleHashMap(jsonObject.get("productInSale"));
-        this.codedDiscount = CodedDiscount.convertJsonStringToCodedDiscount(jsonObject.get("codedDiscount").getAsString());
-        this.shippingInfo = ShippingInfo.convertJsonStringToShippingInfo(jsonObject.get("shippingInfo").getAsString());
+        if (jsonObject.get("codedDiscount") instanceof JsonNull) {
+            this.codedDiscount = null;
+        } else {
+            this.codedDiscount = CodedDiscount.convertJsonStringToCodedDiscount(jsonObject.get("codedDiscount").getAsString());
+        }
+        if (jsonObject.get("shippingInfo") instanceof JsonNull) {
+            this.shippingInfo = null;
+        } else {
+            this.shippingInfo = ShippingInfo.convertJsonStringToShippingInfo(jsonObject.get("shippingInfo").getAsString());
+        }
     }
 
     //Getters:

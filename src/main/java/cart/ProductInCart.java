@@ -9,6 +9,7 @@ import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author Aryan Ahadinia
@@ -91,4 +92,16 @@ public class ProductInCart {
 //        return (ProductInCart) Utils.convertStringToObject(jsonString, "cart.ProductInCart");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductInCart that = (ProductInCart) o;
+        return Objects.equals(identifier, that.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier);
+    }
 }

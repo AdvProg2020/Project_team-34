@@ -321,6 +321,8 @@ public class Sale extends Discount {
     }
 
     public static Sale convertJsonStringToSale(String jsonString){
+        if (new JsonParser().parse(jsonString) instanceof JsonNull)
+            return null;
         return new Sale(jsonString);
 //        return (Sale) Utils.convertStringToObject(jsonString, "discount.Sale");
     }

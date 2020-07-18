@@ -507,7 +507,8 @@ public class AccountController {
                 getDeliveryStatus() != LogStatus.DELIVERED));
     }
 
-    public Response numberOfProductInCart(ProductInCart productInCart) {
+    public Response numberOfProductInCart(String productInCartStr) {
+        ProductInCart productInCart = ProductInCart.convertJsonStringToProductInCart(productInCartStr);
         int c;
         try {
             c = mainController.getCart().getCountOfProductInCart(productInCart);

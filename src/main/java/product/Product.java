@@ -199,7 +199,7 @@ public class Product {
                 get("remainedNumberForEachSupplier"));
         this.description = jsonObject.get("description").getAsString();
         this.specification = Utils.convertJsonElementStringToStringToHashMap(jsonObject.get("specification"));
-        this.rootProductId = jsonObject.get("rootProductId").getAsString();
+        this.rootProductId = jsonObject.get("rootProductId").toString();
         this.futureCategoryName = jsonObject.get("futureCategoryName").getAsString();
         this.imageInStringForm = jsonObject.get("imageInStringForm").getAsString();
         this.numberOfViews = jsonObject.get("numberOfViews").getAsInt();

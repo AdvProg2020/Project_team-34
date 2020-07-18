@@ -171,6 +171,6 @@ public class OffController {
     public Sale controlGetMaxSaleForThisProduct(Product product) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(Utils.convertObjectToJsonString(product));
-        return  Sale.convertJsonStringToSale(communication("controlGetMaxSaleForThisProduct", inputs).getAsString());
+        return  Sale.convertJsonStringToSale(communication("controlGetMaxSaleForThisProduct", inputs).toString());
     }
 }

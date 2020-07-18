@@ -1,9 +1,6 @@
 package controller;
 
-import account.Account;
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
+import account.*;
 import cart.Cart;
 import cart.ProductInCart;
 import com.google.gson.JsonArray;
@@ -66,7 +63,6 @@ public class AccountController {
     public void controlCreateAccount(String username, String type, String name, String familyName, String email,
                                      String phoneNumber, String password, int credit, String nameOfCompany)
             throws ExceptionalMassage {
-
         JsonArray input = new JsonArray();
         input.add(username);
         input.add(type);
@@ -77,7 +73,10 @@ public class AccountController {
         input.add(password);
         input.add(String.valueOf(credit));
         input.add(nameOfCompany);
-        communication("controlCreateAccount", input);
+        JsonElement response = communication("controlCreateAccount", input);
+        if (type.equals("customer") || type.equals("supplier")) {
+            mainController.setToken(response.getAsString());
+        }
     }
 
     /*private void controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
@@ -110,11 +109,11 @@ public class AccountController {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(username);
         jsonArray.add(password);
-        communication("controlLogin", jsonArray);
+        mainController.setToken(communication("controlLogin", jsonArray).getAsString());
     }
 
     public void controlLogout() throws ExceptionalMassage {
-        communication("controlLogout", new JsonArray());
+        mainController.setToken(communication("controlLogout", new JsonArray()).getAsString());
     }
 
     public String controlViewPersonalInfo() throws ExceptionalMassage {
@@ -215,7 +214,7 @@ public class AccountController {
 
     public Cart controlViewCart() throws ExceptionalMassage {
         JsonElement cart = communication("controlViewCart", new JsonArray());
-        return Cart.convertJsonStringToCart(cart.getAsString());
+        return Cart.convertJsonStringToCart(cart.toString());
     }
 
     public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address,
@@ -358,7 +357,7 @@ public class AccountController {
     public Supplier getSupplierByCompanyName(String companyName) throws ExceptionalMassage {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(companyName);
-        return Supplier.convertJsonStringToSupplier(communication("getSupplierByCompanyName",jsonArray).getAsString());
+        return Supplier.convertJsonStringToSupplier(communication("getSupplierByCompanyName",jsonArray).toString());
     }
 
     public Account getAccountByUsernameWithinAvailable(String username) throws ExceptionalMassage{
@@ -377,6 +376,22 @@ public class AccountController {
 
     public void controlUpdateCart() throws ExceptionalMassage {
         communication("controlUpdateCart", new JsonArray());
+    }
+
+    public String createChatRoomBetweenSupporterAndCustomer(Supporter supporter,Customer customer) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(supporter));
+        inputs.add(Utils.convertObjectToJsonString(customer));
+        return communication("createChatRoomBetweenSupporterAndCustomer", inputs).toString();
+
+    }
+
+    public void addMessageToChatRoom(String senderUsername,String content,String chatRoomId) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(senderUsername);
+        inputs.add(content);
+        inputs.add(chatRoomId);
+        communication("addMessageToChatRoom",inputs);
     }
 
     public void controlSetWageAndMinimum(int wage , int minimum ) throws ExceptionalMassage {

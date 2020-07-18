@@ -14,6 +14,12 @@ public abstract class Discount {
     protected Date end;
     protected int percent;
 
+    public Discount(Date start, Date end, int percent) {
+        this.start = start;
+        this.end = end;
+        this.percent = percent;
+    }
+
     public Date getStart() {
         return start;
     }

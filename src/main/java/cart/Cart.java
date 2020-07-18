@@ -1,12 +1,16 @@
 package cart;
 
 import account.Customer;
+import com.google.gson.JsonNull;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import communications.Utils;
 import discount.CodedDiscount;
 import discount.Sale;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Objects;
 
 /**
  * @author Aryan Ahadinia
@@ -21,6 +25,29 @@ public class Cart {
     private HashMap<ProductInCart, Sale> productInSale;
     private CodedDiscount codedDiscount;
     private ShippingInfo shippingInfo;
+
+    public Cart(String json) {
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        this.identifier = jsonObject.get("identifier").getAsString();
+        if (jsonObject.get("owner") instanceof JsonNull) {
+            this.owner = null;
+        } else {
+            this.owner = Customer.convertJsonStringToCustomer(jsonObject.get("owner").toString());
+        }
+        this.productsIn = Utils.convertJsonElementToProductInCartArrayList(jsonObject.get("productsIn"));
+        this.productInCount = Utils.convertJsonElementToProductInCartToIntegerHashMap(jsonObject.get("productInCount"));
+        this.productInSale = Utils.convertJsonElementToProductInCartToSaleHashMap(jsonObject.get("productInSale"));
+        if (jsonObject.get("codedDiscount") instanceof JsonNull) {
+            this.codedDiscount = null;
+        } else {
+            this.codedDiscount = CodedDiscount.convertJsonStringToCodedDiscount(jsonObject.get("codedDiscount").getAsString());
+        }
+        if (jsonObject.get("shippingInfo") instanceof JsonNull) {
+            this.shippingInfo = null;
+        } else {
+            this.shippingInfo = ShippingInfo.convertJsonStringToShippingInfo(jsonObject.get("shippingInfo").toString());
+        }
+    }
 
     public String getIdentifier() {
         return identifier;
@@ -63,7 +90,8 @@ public class Cart {
     }
 
     public static Cart convertJsonStringToCart(String jsonString){
-        return (Cart) Utils.convertStringToObject(jsonString, "cart.Cart");
+        return new Cart(jsonString);
+        //return (Cart) Utils.convertStringToObject(jsonString, "cart.Cart");
     }
 
     public int getValueOfCartWithoutDiscounts() {
@@ -94,5 +122,31 @@ public class Cart {
 
     public int getBill() {
         return getValueOfCartWithoutDiscounts() - (getAmountOfSale() + getAmountOfCodedDiscount());
+    }
+
+    public String toJson() {
+        JsonObject jsonObject = new JsonObject();
+        JsonParser jsonParser = new JsonParser();
+        jsonObject.add("identifier", jsonParser.parse(Utils.convertObjectToJsonString(identifier)));
+        jsonObject.add("owner", jsonParser.parse(Utils.convertObjectToJsonString(owner)));
+        jsonObject.add("productsIn", Utils.convertProductInCartArrayListToJsonElement(productsIn));
+        jsonObject.add("productInCount", Utils.convertProductInCartToIntegerHashMapToJsonElement(productInCount));
+        jsonObject.add("productInSale", Utils.convertProductInCartToSaleHashMapToJsonElement(productInSale));
+        jsonObject.add("codedDiscount", jsonParser.parse(Utils.convertObjectToJsonString(codedDiscount)));
+        jsonObject.add("shippingInfo", jsonParser.parse(Utils.convertObjectToJsonString(shippingInfo)));
+        return jsonObject.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Cart cart = (Cart) o;
+        return Objects.equals(identifier, cart.identifier);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier);
     }
 }

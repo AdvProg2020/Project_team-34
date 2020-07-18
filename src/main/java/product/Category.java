@@ -1,5 +1,6 @@
 package product;
 
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import communications.Utils;
@@ -73,19 +74,31 @@ public class Category {
         JsonParser jsonParser = new JsonParser();
         jsonObject.add("name", jsonParser.parse(Utils.convertObjectToJsonString(name)));
         jsonObject.add("parentCategoryName", jsonParser.parse(Utils.convertObjectToJsonString(parentCategoryName)));
-        jsonObject.add("allCategoriesInName", jsonParser.parse(Utils.convertStringArrayListToJsonElement(allCategoriesInName).toString()));
-        jsonObject.add("allProductsIn", jsonParser.parse(Utils.convertProductArrayListToJsonElement(allProductsIn).toString()));
-        jsonObject.add("specialFields", jsonParser.parse(Utils.convertStringToStringArrayListHashMapToJsonElement(specialFields).toString()));
+        if (isCategoryClassifier()) {
+            jsonObject.add("allCategoriesInName", jsonParser.parse(Utils.convertStringArrayListToJsonElement(allCategoriesInName).toString()));
+            jsonObject.add("allProductsIn", jsonParser.parse(""));
+            jsonObject.add("specialFields", jsonParser.parse(""));
+        } else {
+            jsonObject.add("allCategoriesInName", jsonParser.parse(""));
+            jsonObject.add("allProductsIn", jsonParser.parse(Utils.convertProductArrayListToJsonElement(allProductsIn).toString()));
+            jsonObject.add("specialFields", jsonParser.parse(Utils.convertStringToStringArrayListHashMapToJsonElement(specialFields).toString()));
+        }
         return jsonObject.toString();
     }
 
     public Category(String json) {
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
-        this.name = jsonObject.get("name").getAsString();
-        this.parentCategoryName = jsonObject.get("parentCategoryName").getAsString();
-        this.allCategoriesInName = Utils.convertJsonElementToStringArrayList(jsonObject.get("allCategoriesInName"));
-        this.allProductsIn = Utils.convertJsonElementToProductArrayList(jsonObject.get("allProductsIn"));
-        this.specialFields = Utils.convertJsonElementToStringToStringArrayListHashMap(jsonObject.get("specialFields"));
+        this.name = jsonObject.get("name").toString();
+        this.parentCategoryName = jsonObject.get("parentCategoryName").toString();
+        if (jsonObject.get("allCategoriesInName") instanceof JsonNull) {
+            this.allCategoriesInName = null;
+            this.allProductsIn = Utils.convertJsonElementToProductArrayList(jsonObject.get("allProductsIn"));
+            this.specialFields = Utils.convertJsonElementToStringToStringArrayListHashMap(jsonObject.get("specialFields"));
+        } else {
+            this.allCategoriesInName = Utils.convertJsonElementToStringArrayList(jsonObject.get("allCategoriesInName"));
+            this.allProductsIn = null;
+            this.specialFields = null;
+        }
     }
 
     public static Category convertJsonStringToCategory(String jsonString) {

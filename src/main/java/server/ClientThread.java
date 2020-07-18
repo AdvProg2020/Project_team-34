@@ -36,6 +36,10 @@ public class ClientThread extends Thread {
         return server.changeToken(controller.getToken());
     }
 
+    public Controller getController() {
+        return controller;
+    }
+
     @Override
     public void run() {
         try {

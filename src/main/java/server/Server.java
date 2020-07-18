@@ -1,9 +1,11 @@
 package server;
 
+import account.*;
 import discount.PeriodicCodedDiscountGenerator;
 
 import java.io.IOException;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -37,6 +39,61 @@ public class Server extends Thread {
 
     public void clientGoodbye(String token) {
         tokenToClientThreadHashMap.remove(token);
+    }
+
+    public ArrayList<Account> getOnlineAccounts() {
+        ArrayList<Account> onlineAccounts = new ArrayList<>();
+        for (String token : tokenToClientThreadHashMap.keySet()) {
+            Account account = tokenToClientThreadHashMap.get(token).getController().getAccount();
+            if (account != null) {
+                onlineAccounts.add(account);
+            }
+        }
+        return onlineAccounts;
+    }
+
+    public ArrayList<Customer> getOnlineCustomers() {
+        ArrayList<Customer> onlineCustomers = new ArrayList<>();
+        for (String token : tokenToClientThreadHashMap.keySet()) {
+            Account account = tokenToClientThreadHashMap.get(token).getController().getAccount();
+            if (account instanceof Customer) {
+                onlineCustomers.add((Customer) account);
+            }
+        }
+        return onlineCustomers;
+    }
+
+    public ArrayList<Supplier> getOnlineSuppliers() {
+        ArrayList<Supplier> onlineSuppliers = new ArrayList<>();
+        for (String token : tokenToClientThreadHashMap.keySet()) {
+            Account account = tokenToClientThreadHashMap.get(token).getController().getAccount();
+            if (account instanceof Supplier) {
+                onlineSuppliers.add((Supplier) account);
+            }
+        }
+        return onlineSuppliers;
+    }
+
+    public ArrayList<Supervisor> getOnlineSupervisors() {
+        ArrayList<Supervisor> onlineSupervisors = new ArrayList<>();
+        for (String token : tokenToClientThreadHashMap.keySet()) {
+            Account account = tokenToClientThreadHashMap.get(token).getController().getAccount();
+            if (account instanceof Supervisor) {
+                onlineSupervisors.add((Supervisor) account);
+            }
+        }
+        return onlineSupervisors;
+    }
+
+    public ArrayList<Supporter> getOnlineSupporters() {
+        ArrayList<Supporter> onlineSupporters = new ArrayList<>();
+        for (String token : tokenToClientThreadHashMap.keySet()) {
+            Account account = tokenToClientThreadHashMap.get(token).getController().getAccount();
+            if (account instanceof Supporter) {
+                onlineSupporters.add((Supporter) account);
+            }
+        }
+        return onlineSupporters;
     }
 
     public String generateRandomToken() {

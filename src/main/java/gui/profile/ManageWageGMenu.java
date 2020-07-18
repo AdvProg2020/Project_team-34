@@ -60,8 +60,12 @@ public class ManageWageGMenu extends GMenu {
                 int wageAmount = Integer.parseInt(wageTextField.getText());
                 int minimumAmount = Integer.parseInt(minimumTextField.getText());
                 try {
-                    controller.getAccountController().controlSetWageAndMinimum(wageAmount, minimumAmount);
-                    stage.setScene(new SupervisorProfileGMenu(this, stage, controller).createScene());
+                    if(wageAmount < 0 || wageAmount > 100){
+                        new AlertBox(this, "Enter Valid Percent", "OK", controller).showAndWait();
+                    }else {
+                        controller.getAccountController().controlSetWageAndMinimum(wageAmount, minimumAmount);
+                        stage.setScene(new SupervisorProfileGMenu(this, stage, controller).createScene());
+                    }
                 } catch (ExceptionalMassage exceptionalMassage) {
                     new AlertBox(this, exceptionalMassage, controller).showAndWait();
                 }

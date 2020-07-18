@@ -102,7 +102,7 @@ public class ProductController {
     //added by rpirayadi
     public Category controlGetAllProductCategory () throws ExceptionalMassage{
         JsonElement category = communication("controlGetAllProductCategory",new JsonArray());
-        return Category.convertJsonStringToCategory(category.getAsString());
+        return Category.convertJsonStringToCategory(category.toString());
     }
 
     //related to feedback:

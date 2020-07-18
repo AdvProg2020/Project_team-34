@@ -265,7 +265,11 @@ public class ProductController {
     public String controlGetCategoryParentName(String name) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(name);
-        return communication("controlGetCategoryParentName", inputs).toString();
+        String result =  communication("controlGetCategoryParentName", inputs).toString();
+        if(result.equals("ap"))
+            return null;
+        else
+            return result;
     }
 
     public boolean isThisCategoryClassifier(String name) throws ExceptionalMassage {

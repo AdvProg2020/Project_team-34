@@ -215,7 +215,8 @@ public class OffController {
 
     public Response isProductHasAnySale(String productString){
         Product product = Product.convertJsonStringToProduct(productString);
-        return new Response(RequestStatus.SUCCESSFUL,String.valueOf(Sale.isProductHasAnySale(product)));
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(String.valueOf(Sale.
+                isProductHasAnySale(product))));
     }
 
     public Response getProductSale(String productString,String supplierString){

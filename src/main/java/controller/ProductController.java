@@ -498,7 +498,14 @@ public class ProductController {
     }
 
     public Response controlGetCategoryParentName(String name) {
-        return new Response(RequestStatus.SUCCESSFUL, Category.getCategoryByName(name).getParentCategoryName());
+//        String parentCategoryName = Category.getCategoryByName(name).getParentCategoryName();
+//        Response response ;
+//        if(parentCategoryName == null)
+//            response = new Response(RequestStatus.SUCCESSFUL,"ap" );
+//        else
+//            response = new Response(RequestStatus.SUCCESSFUL, parentCategoryName);
+//        return response;
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Category.getCategoryByName(name).getParentCategoryName()));
     }
 
     public Response isThisCategoryClassifier(String name) {

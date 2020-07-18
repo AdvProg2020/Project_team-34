@@ -3,6 +3,7 @@ package server.communications;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
+import account.Supporter;
 import cart.Cart;
 import cart.ProductInCart;
 import com.google.gson.*;
@@ -145,7 +146,7 @@ public class Utils {
         return supplierArrayList;
     }
 
-    public static JsonElement convertCustomerArrayListToJsonElement(ArrayList<Customer> customerArrayList){
+    public static JsonElement convertCustomerArrayListToJsonElement(ArrayList<Customer> customerArrayList) {
         JsonArray jsonArray = new JsonArray();
         for (Customer customer : customerArrayList) {
             jsonArray.add(convertObjectToJsonString(customer));
@@ -159,6 +160,22 @@ public class Utils {
             customerArrayList.add(Customer.convertJsonStringToCustomer(element.getAsString()));
         }
         return customerArrayList;
+    }
+
+    public static JsonElement convertSupporterArrayListToJsonElement(ArrayList<Supporter> supporterArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Supporter supporter : supporterArrayList) {
+            jsonArray.add(convertObjectToJsonString(supporter));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Supporter> convertJsonElementToSupporterArrayList(JsonElement jsonElement) {
+        ArrayList<Supporter> supporterArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            supporterArrayList.add(Supporter.convertJsonStringToSupporter(element.getAsString()));
+        }
+        return supporterArrayList;
     }
 
     public static JsonElement convertCategoryArrayListToJsonElement(ArrayList<Category> categories) {
@@ -265,7 +282,7 @@ public class Utils {
         return hashMap;
     }
 
-    public static JsonElement convertStringToStringArrayListHashMapToJsonElement(HashMap<String, ArrayList<String>> hashMap){
+    public static JsonElement convertStringToStringArrayListHashMapToJsonElement(HashMap<String, ArrayList<String>> hashMap) {
         JsonObject jsonObject = new JsonObject();
         for (String key : hashMap.keySet()) {
             jsonObject.add(key, Utils.convertStringArrayListToJsonElement(hashMap.get(key)));
@@ -282,7 +299,7 @@ public class Utils {
         return hashMap;
     }
 
-    public static JsonElement convertSupplierToIntegerHashMapToJsonElement(HashMap<Supplier, Integer> hashMap){
+    public static JsonElement convertSupplierToIntegerHashMapToJsonElement(HashMap<Supplier, Integer> hashMap) {
         JsonObject jsonObject = new JsonObject();
         JsonParser jsonParser = new JsonParser();
         for (Supplier key : hashMap.keySet()) {
@@ -301,7 +318,7 @@ public class Utils {
         return hashMap;
     }
 
-    public static JsonElement convertCustomerToIntegerHashMapToJsonElement(HashMap<Customer, Integer> hashMap){
+    public static JsonElement convertCustomerToIntegerHashMapToJsonElement(HashMap<Customer, Integer> hashMap) {
         JsonObject jsonObject = new JsonObject();
         JsonParser jsonParser = new JsonParser();
         for (Customer key : hashMap.keySet()) {

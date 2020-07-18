@@ -1,5 +1,7 @@
 package account;
 
+import java.util.Objects;
+
 /**
  * @author rpirayadi
  * @since 0.0.1
@@ -80,5 +82,18 @@ public abstract class Account {
         if(this instanceof Supervisor)
             return "Supervisor";
         return "Supplier";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Account account = (Account) o;
+        return Objects.equals(userName, account.userName);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(userName);
     }
 }

@@ -40,6 +40,10 @@ public class ClientThread extends Thread {
         return controller;
     }
 
+    public Server getServer() {
+        return server;
+    }
+
     @Override
     public void run() {
         try {

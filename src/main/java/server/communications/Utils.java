@@ -1,9 +1,6 @@
 package server.communications;
 
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
-import account.Supporter;
+import account.*;
 import cart.Cart;
 import cart.ProductInCart;
 import com.google.gson.*;

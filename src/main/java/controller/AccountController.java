@@ -7,16 +7,13 @@ import cart.ShippingInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
-import com.sun.javafx.collections.NonIterableChange;
 import database.WageDataBase;
 import discount.CodedDiscount;
-import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import log.LogStatus;
 import log.SupplierLog;
 import product.Product;
-import server.communications.Request;
 import server.communications.RequestStatus;
 import server.communications.Response;
 import server.communications.Utils;
@@ -633,5 +630,25 @@ public class AccountController {
     public Response controlGetMinimum() {
         String minimumString = String.valueOf(WageDataBase.getMinimum());
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(minimumString));
+    }
+
+    public Response getOnlineCustomers() {
+       return new Response(RequestStatus.SUCCESSFUL, Utils.convertCustomerArrayListToJsonElement(mainController.
+               getClientThread().getServer().getOnlineCustomers()).toString());
+    }
+
+    public Response getOnlineSuppliers() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertSupplierArrayListToJsonElement(mainController.
+                getClientThread().getServer().getOnlineSuppliers()).toString());
+    }
+
+    public Response getOnlineSupervisors() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertSupervisorArrayListToJsonElement(mainController.
+                getClientThread().getServer().getOnlineSupervisors()).toString());
+    }
+
+    public Response getOnlineSupporters() {
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertSupporterArrayListToJsonElement(mainController.
+                getClientThread().getServer().getOnlineSupporters()).toString());
     }
 }

@@ -41,17 +41,6 @@ public class Server extends Thread {
         tokenToClientThreadHashMap.remove(token);
     }
 
-    public ArrayList<Account> getOnlineAccounts() {
-        ArrayList<Account> onlineAccounts = new ArrayList<>();
-        for (String token : tokenToClientThreadHashMap.keySet()) {
-            Account account = tokenToClientThreadHashMap.get(token).getController().getAccount();
-            if (account != null) {
-                onlineAccounts.add(account);
-            }
-        }
-        return onlineAccounts;
-    }
-
     public ArrayList<Customer> getOnlineCustomers() {
         ArrayList<Customer> onlineCustomers = new ArrayList<>();
         for (String token : tokenToClientThreadHashMap.keySet()) {

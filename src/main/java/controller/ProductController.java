@@ -40,7 +40,7 @@ public class ProductController {
     }
 
     public Response controlAddProduct(String name, String nameOfCompany, String price, String remainedNumbers, String category,
-                                  String description, String specification, String imageURL) {
+                                  String description, String specification, String imageInStringForm) {
         JsonParser parser = new JsonParser();
         HashMap<String, String> specifications = Utils.convertJsonElementStringToStringToHashMap(parser.parse(specification));
         if (mainController.getAccount() == null)
@@ -66,7 +66,7 @@ public class ProductController {
 //        else {
 //            product.addNewSupplierForProduct(supplier, price, remainedNumbers);
 //        }
-        Product product1 = new Product(supplier, name, nameOfCompany, Integer.parseInt(price), Integer.parseInt(remainedNumbers), description, null, category, specifications, imageURL);
+        Product product1 = new Product(supplier, name, nameOfCompany, Integer.parseInt(price), Integer.parseInt(remainedNumbers), description, null, category, specifications, imageInStringForm);
         System.out.println(product1);
         return Response.createSuccessResponse();
     }
@@ -210,7 +210,7 @@ public class ProductController {
     //added by rpirayadi
     public Response controlGetAllProductCategory (){
         String category = Utils.convertObjectToJsonString(Category.getSuperCategory());
-        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(category));
+        return new Response(RequestStatus.SUCCESSFUL,category);
     }
 
     //related to feedback:

@@ -24,7 +24,9 @@ public class Utils {
             return ((Product) object).toJson();
         }
         Gson gson = new Gson();
-        return gson.toJson(object);
+        String result = gson.toJson(object);
+        System.out.println(result);
+        return result;
     }
 
     public static Object convertStringToObject(String jsonString, String completeClassName) {

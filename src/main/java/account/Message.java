@@ -8,20 +8,21 @@ public class Message {
     private String contentOfMessage;
     private String chatRoomId;
 
-    public Message(String senderUsername, String contentOfMessage, String chatRoomId) throws ExceptionalMassage {
+    private Message(String senderUsername, String contentOfMessage, ChatRoom chatRoom) {
         this.senderUsername = senderUsername;
         this.contentOfMessage = contentOfMessage;
-        this.chatRoomId = chatRoomId;
-        if(ChatRoom.getChatRoomById(chatRoomId) == null){
-            throw new ExceptionalMassage("Invalid Chat Room Id");
-        } else {
-            ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
-            chatRoom.addMessage(this);
-        }
+        this.chatRoomId = chatRoom.getChatRoomId();
+        chatRoom.addMessage(this);
+    }
+
+    public static Message getInstance(String senderUsername, String contentOfMessage, String chatRoomId) throws ExceptionalMassage {
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
+        if (chatRoom == null)
+            throw new ExceptionalMassage("Chatroom not found");
+        return new Message(senderUsername, contentOfMessage, chatRoom);
     }
 
     public static Message convertJsonStringToMessage(String jsonString){
         return (Message) Utils.convertStringToObject(jsonString, "account.Message");
     }
-
 }

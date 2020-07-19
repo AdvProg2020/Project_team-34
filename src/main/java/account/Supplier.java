@@ -74,12 +74,13 @@ public class Supplier extends Account{
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
         Supplier supplier = (Supplier) o;
         return Objects.equals(nameOfCompany, supplier.nameOfCompany);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(nameOfCompany);
+        return Objects.hash(super.hashCode(), nameOfCompany);
     }
 }

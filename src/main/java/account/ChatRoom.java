@@ -1,6 +1,7 @@
 package account;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class ChatRoom {
     private static ArrayList<ChatRoom> allChatRooms = new ArrayList<>();
@@ -56,5 +57,18 @@ public class ChatRoom {
 
     public ArrayList<Message> getMessages() {
         return messages;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ChatRoom chatRoom = (ChatRoom) o;
+        return Objects.equals(chatRoomId, chatRoom.chatRoomId);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(chatRoomId);
     }
 }

@@ -633,7 +633,7 @@ public class AccountController {
 
     public Response addMessageToChatRoom(String senderUsername,String content,String chatRoomId){
         try {
-            new Message(senderUsername, content, chatRoomId);
+            Message.getInstance(senderUsername, content, chatRoomId);
             return Response.createSuccessResponse();
         } catch (ExceptionalMassage ex){
             return Response.createResponseFromExceptionalMassage(ex);

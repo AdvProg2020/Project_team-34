@@ -5,16 +5,15 @@ import com.google.gson.JsonArray;
 import communications.*;
 import exceptionalMassage.ExceptionalMassage;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 
 public class Controller {
     private Socket socket;
-    private ObjectInputStream objectInputStream;
-    private ObjectOutputStream objectOutputStream;
+    private DataInputStream inputStream;
+    private DataOutputStream outputStream;
 
     private String token;
     private boolean isFirstSupervisorCreated;
@@ -27,8 +26,8 @@ public class Controller {
         try {
             this.socket = new Socket("localhost", 8088);
             try {
-                this.objectInputStream = new ObjectInputStream(socket.getInputStream());
-                this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
+                this.inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+                this.outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
             } catch (IOException e) {
                 System.err.println("Error, IOStream can't connect");
                 System.exit(1);
@@ -41,8 +40,8 @@ public class Controller {
             System.exit(1);
         }
         try {
-            this.isFirstSupervisorCreated = Boolean.parseBoolean(objectInputStream.readUTF());
-            this.token = objectInputStream.readUTF();
+            this.isFirstSupervisorCreated = Boolean.parseBoolean(inputStream.readUTF());
+            this.token = inputStream.readUTF();
             System.out.println(token);
         } catch (IOException e) {
             e.printStackTrace();
@@ -72,12 +71,12 @@ public class Controller {
         return socket;
     }
 
-    public ObjectOutputStream getObjectOutputStream() {
-        return objectOutputStream;
+    public DataInputStream getInputStream() {
+        return inputStream;
     }
 
-    public ObjectInputStream getObjectInputStream() {
-        return objectInputStream;
+    public DataOutputStream getOutputStream() {
+        return outputStream;
     }
 
     public String getToken() {
@@ -97,9 +96,9 @@ public class Controller {
     }
 
     public void disconnect() throws IOException {
-        objectOutputStream.writeUTF("goodbye");
-        objectOutputStream.close();
-        objectInputStream.close();
+        outputStream.writeUTF("goodbye");
+        outputStream.close();
+        inputStream.close();
         socket.close();
         System.exit(0);
     }
@@ -107,10 +106,14 @@ public class Controller {
     public Response communication(String function, JsonArray inputs, ControllerSource source) throws ExceptionalMassage {
         Request request = new Request(getToken(), function, inputs.toString(), source);
         try {
-            objectOutputStream.writeUTF(Utils.convertObjectToJsonString(request));
-            objectOutputStream.flush();
+            String sendingString = Utils.convertObjectToJsonString(request);
+            ArrayList<String> sendingArray = Utils.separate(sendingString, 50000);
+            for (String subString : sendingArray) {
+                outputStream.writeUTF(subString);
+                outputStream.flush();
+            }
             try {
-                String responseString = objectInputStream.readUTF();
+                String responseString = inputStream.readUTF();
                 Response response = Response.convertJsonStringToResponse(responseString);
                 if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
                     throw new ExceptionalMassage(response.getContent());

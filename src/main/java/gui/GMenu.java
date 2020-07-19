@@ -1,9 +1,6 @@
 package gui;
 
-import account.Account;
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
+import account.*;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
@@ -327,5 +324,13 @@ public abstract class GMenu {
         mainLayout.add(done, 3, 1);
         mainLayout.setAlignment(Pos.CENTER);
         return mainLayout;
+    }
+
+    protected Label createLabelFromMessage(Message message){
+        Label label = new Label();
+        String string;
+        string = message.getSenderUsername() + " says: " + message.getContentOfMessage();
+        label.setText(string);
+        return label;
     }
 }

@@ -1,16 +1,18 @@
 package gui.profile;
 
+import account.Message;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
@@ -97,5 +99,20 @@ public class ChatRoomGMenu extends GMenu {
         });
 
         return new Scene(anchorPane0);
+    }
+
+    private VBox allMessagesGridPane(){
+        VBox allMessages = new VBox();
+        allMessages.setMinWidth(600);
+        ArrayList<Message> messages = controller.getAccountController().getAllMessagesOfChatRoomById(chatRoomId);
+        for (Message message : messages) {
+            allMessages.getChildren().add(createLabelFromMessage(message));
+        }
+
+        allMessages.setSpacing(10);
+        allMessages.setPadding(new Insets(10, 10 , 10 , 10));
+        allMessages.setAlignment(Pos.BASELINE_LEFT);
+
+        return allMessages;
     }
 }

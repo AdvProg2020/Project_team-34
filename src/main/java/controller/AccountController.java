@@ -402,4 +402,9 @@ public class AccountController {
     public ArrayList<Supporter> getOnlineSupporters() throws ExceptionalMassage {
         return Utils.convertJsonElementToSupporterArrayList(communication("getOnlineSupporters", new JsonArray()));
     }
+
+    public ArrayList<Message> getAllMessagesOfChatRoomById(String chatRoomId){
+        //Need modification!
+        return null;
+    }
 }

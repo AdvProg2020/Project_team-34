@@ -801,4 +801,12 @@ public class ProductController {
         new Auction(product,supplier,date,wage);
         return Response.createSuccessResponse();
     }
+
+    public Response controlGetAuctionById(String id){
+        Auction auction = Auction.getAuctionByIdentifier(id);
+        if(auction == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Auction not found!"));
+        }
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(auction));
+    }
 }

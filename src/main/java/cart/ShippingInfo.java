@@ -6,6 +6,7 @@ import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * @author Aryan Ahadinia
@@ -100,6 +101,24 @@ public class ShippingInfo {
         return (ShippingInfo) Utils.convertStringToObject(jsonString, "cart.ShippingInfo");
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ShippingInfo that = (ShippingInfo) o;
+        return Objects.equals(identifier, that.identifier) &&
+                Objects.equals(firstName, that.firstName) &&
+                Objects.equals(lastName, that.lastName) &&
+                Objects.equals(city, that.city) &&
+                Objects.equals(address, that.address) &&
+                Objects.equals(postalCode, that.postalCode) &&
+                Objects.equals(phoneNumber, that.phoneNumber);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(identifier, firstName, lastName, city, address, postalCode, phoneNumber);
+    }
 
     @Override
     public String toString() {

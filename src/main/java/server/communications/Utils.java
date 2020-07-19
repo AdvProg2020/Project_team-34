@@ -1,6 +1,7 @@
 package server.communications;
 
 import account.*;
+import auction.Auction;
 import cart.Cart;
 import cart.ProductInCart;
 import com.google.gson.*;
@@ -37,6 +38,8 @@ public class Utils {
             return ((Comment) object).toJson();
         if (object instanceof Score)
             return ((Score) object).toJson();
+        if (object instanceof Auction)
+            return ((Auction) object).toJson();
         Gson gson = new Gson();
         String result = gson.toJson(object);
         System.out.println(result);

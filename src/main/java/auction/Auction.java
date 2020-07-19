@@ -3,7 +3,6 @@ package auction;
 import account.ChatRoom;
 import account.Customer;
 import account.Supplier;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -194,7 +193,14 @@ public class Auction {
     public String toJson() {
         JsonObject jsonObject = new JsonObject();
         JsonParser jsonParser = new JsonParser();
-
+        jsonObject.add("identifier", jsonParser.parse(Utils.convertObjectToJsonString(identifier)));
+        jsonObject.add("chatRoomIdentifier", jsonParser.parse(Utils.convertObjectToJsonString(chatRoomIdentifier)));
+        jsonObject.add("product", jsonParser.parse(Utils.convertObjectToJsonString(product)));
+        jsonObject.add("supplier", jsonParser.parse(Utils.convertObjectToJsonString(supplier)));
+        jsonObject.add("highestPromoter", jsonParser.parse(Utils.convertObjectToJsonString(highestPromoter)));
+        jsonObject.add("highestPromotion", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(highestPromotion))));
+        jsonObject.add("end", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(end.getTime()))));
+        jsonObject.add("wage", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(wage))));
         return jsonObject.toString();
     }
 

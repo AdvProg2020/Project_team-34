@@ -2,6 +2,7 @@ package log;
 
 import account.Customer;
 import account.Supplier;
+import auction.Auction;
 import cart.Cart;
 import cart.ProductInCart;
 import database.CustomerLogDataBase;
@@ -51,6 +52,24 @@ public class CustomerLog {
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
         addSubLogForSuppliersMainConstructorCall(wage);
+        CustomerLogDataBase.add(this);
+    }
+
+    public CustomerLog(Auction auction, int wage) throws ExceptionalMassage {
+        this.customer = auction.getHighestPromoter();
+        this.cart = new Cart(customer);
+        this.cart.addProductToCart(auction.getProduct(), auction.getSupplier());
+        this.identifier = generateIdentifier();
+        this.date = new Date(System.currentTimeMillis());
+        this.paidAmount = auction.getHighestPromotion();
+        this.codedDiscountAmount = 0;
+        this.deliveryStatus = LogStatus.PENDING;
+        for (ProductInCart productInCart : cart.getProductsIn()) {
+            productInCart.getProduct().reduceRemainedNumber(productInCart.getSupplier(), cart.getProductInCount().get(productInCart));
+        }
+        addSubLogForSuppliersMainConstructorCall(wage);
+        allCustomerLogs.add(this);
+        allCustomerLogCreatedCount++;
         CustomerLogDataBase.add(this);
     }
 

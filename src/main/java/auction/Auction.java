@@ -5,24 +5,44 @@ import account.Customer;
 import account.Supplier;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import exceptionalMassage.ExceptionalMassage;
+import log.CustomerLog;
 import product.Product;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.3
+ */
+
 public class Auction {
     private static final ArrayList<Auction> ALL_AUCTIONS = new ArrayList<>();
     private static int allAuctionsCount = 0;
+
+    private static final Runnable END_CHECKER = () -> {
+        for (Auction auction : ALL_AUCTIONS) {
+            auction.checkForEnd();
+        }
+        try {
+            Thread.sleep(300000);
+        } catch (InterruptedException e) {
+            System.err.println("Auction checker thread interrupted");
+        }
+    };
+
     private final String identifier;
     private final String chatRoomIdentifier;
     private final Product product;
     private final Supplier supplier;
-    private final Customer highestPromoter;
-    private final Integer highestPromotion;
+    private Customer highestPromoter;
+    private Integer highestPromotion;
     private final Date end;
+    private int wage;
 
-    public Auction(Product product, Supplier supplier, long endLong) {
+    public Auction(Product product, Supplier supplier, long endLong, int wage) {
         this.identifier = Auction.generateIdentifier();
         this.chatRoomIdentifier = new ChatRoom().getChatRoomId();
         this.product = product;
@@ -30,12 +50,13 @@ public class Auction {
         this.highestPromoter = null;
         this.highestPromotion = null;
         this.end = new Date(endLong);
+        this.wage = wage;
         ALL_AUCTIONS.add(this);
         allAuctionsCount++;
     }
 
     public Auction(String identifier, String chatRoomIdentifier, Product product, Supplier supplier,
-                   Customer highestPromoter, Integer highestPromotion, Date end) {
+                   Customer highestPromoter, Integer highestPromotion, Date end, int wage) {
         this.identifier = identifier;
         this.chatRoomIdentifier = chatRoomIdentifier;
         this.product = product;
@@ -43,6 +64,7 @@ public class Auction {
         this.highestPromoter = highestPromoter;
         this.highestPromotion = highestPromotion;
         this.end = end;
+        this.wage = wage;
         ALL_AUCTIONS.add(this);
         allAuctionsCount++;
     }
@@ -55,6 +77,10 @@ public class Auction {
         this.highestPromoter = highestPromoter;
         this.highestPromotion = highestPromotion;
         this.end = end;
+    }
+
+    public static Runnable getEndChecker() {
+        return END_CHECKER;
     }
 
     public String getIdentifier() {
@@ -85,6 +111,10 @@ public class Auction {
         return end;
     }
 
+    public int getWage() {
+        return wage;
+    }
+
     private static String generateIdentifier() {
         return "T34AC" + String.format("%015d", allAuctionsCount + 1);
     }
@@ -98,12 +128,51 @@ public class Auction {
         return null;
     }
 
-    public void promote(Customer customer, int promotionAmount) {
+    public static boolean isThisProductInAuction(Product product, Supplier supplier) {
+        for (Auction auction : ALL_AUCTIONS) {
+            if (auction.getProduct().equals(product) && auction.getSupplier().equals(supplier) &&
+                    System.currentTimeMillis() < auction.getEnd().getTime()) {
+                return true;
+            }
+        }
+        return false;
+    }
 
+    public void promote(Customer customer, int promotionAmount, int minimumCreditRequired) throws ExceptionalMassage {
+        if (System.currentTimeMillis() >= end.getTime()) {
+            throw new ExceptionalMassage("Auction ended.");
+        }
+        if (customer.getCredit() < promotionAmount + minimumCreditRequired) {
+            throw new ExceptionalMassage("You don't have enough money. required" + promotionAmount + " + " +
+                    minimumCreditRequired + ".");
+        }
+        if (highestPromoter != null) {
+            if (highestPromotion >= promotionAmount) {
+                throw new ExceptionalMassage("You must promote higher than " + highestPromotion + ".");
+            }
+            highestPromoter.setCredit(highestPromoter.getCredit() + highestPromotion);
+        }
+        customer.setCredit(customer.getCredit() - promotionAmount);
+        highestPromoter = customer;
+        highestPromotion = promotionAmount;
+        Objects.requireNonNull(ChatRoom.getChatRoomById(chatRoomIdentifier)).getJoinedAccounts().add(customer);
     }
 
     public void end() {
+        if (highestPromoter != null) {
+            try {
+                new CustomerLog(this, wage);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                System.err.println("Couldn't add log.");
+            }
+        }
+        //product out
+    }
 
+    public void checkForEnd() {
+        if (System.currentTimeMillis() >= end.getTime()) {
+            end();
+        }
     }
 
     public String toJson() {

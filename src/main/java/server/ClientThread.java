@@ -5,10 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import controller.Controller;
-import server.communications.ControllerSource;
-import server.communications.Request;
-import server.communications.RequestStatus;
-import server.communications.Response;
+import server.communications.*;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -56,7 +53,12 @@ public class ClientThread extends Thread {
         }
         while (true) {
             try {
-                String requestString = objectInputStream.readUTF();
+                int requestSize = Integer.parseInt(objectInputStream.readUTF());
+                ArrayList<String> receiving = new ArrayList<>();
+                for (int i = 0; i < requestSize; i++) {
+                    receiving.add(objectInputStream.readUTF());
+                }
+                String requestString = Utils.join(receiving);
                 if (requestString.equals("goodbye")) {
                     disconnect();
                     break;

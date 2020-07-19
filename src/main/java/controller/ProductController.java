@@ -4,6 +4,7 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
+import auction.Auction;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -739,5 +740,21 @@ public class ProductController {
 
     public Response getProductById(String id){
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Product.getProductById(id)));
+    }
+
+    public Response promoteAuctionPrice(String newPrice,String minimum,String auctionString){
+        if(mainController.getAccount() instanceof Customer){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Customer!"));
+        }
+        Customer customer = (Customer) mainController.getAccount();
+        int minimumAmountOfCredit = Integer.parseInt(minimum);
+        int price = Integer.parseInt(newPrice);
+        Auction auction = Auction.convertJsonStringToAuction(auctionString);
+        try {
+            auction.promote(customer, price, minimumAmountOfCredit);
+            return Response.createSuccessResponse();
+        } catch (ExceptionalMassage ex){
+            return Response.createResponseFromExceptionalMassage(ex);
+        }
     }
 }

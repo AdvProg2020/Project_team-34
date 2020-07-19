@@ -7,7 +7,10 @@ import java.sql.Statement;
 import java.util.HashMap;
 
 
-
+/**
+ * @author rpirayadi
+ * @since 0.0.3
+ */
 public class WageDataBase {
     public static void createNewTable() {
         HashMap<String, String> content = new HashMap<>();

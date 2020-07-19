@@ -2,21 +2,18 @@ package database;
 
 import account.*;
 import auction.Auction;
-import controller.AccountController;
-import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
  * @author rpirayadi
- * @since 0.0.1
+ * @since 0.0.3
  */
 public class AuctionDataBase {
     public static void createNewTable() {

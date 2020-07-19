@@ -18,6 +18,7 @@ import product.Product;
 import state.State;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -479,5 +480,20 @@ public class ProductController {
         inputs.add(String.valueOf(minimumCredit));
         inputs.add(Utils.convertObjectToJsonString(auction));
         communication("promoteAuctionPrice",inputs);
+    }
+
+    public ArrayList<String> controlGetAuctionsForASupplier() throws ExceptionalMassage {
+        return Utils.convertJsonElementToStringArrayList(communication("controlGetAuctionsForASupplier", new JsonArray()));
+    }
+
+    public ArrayList<Product> controlGetNotAuctionedProductsOfSupplier() throws ExceptionalMassage{
+        return Utils.convertJsonElementToProductArrayList(communication("controlGetNotAuctionedProductsOfSupplier",new JsonArray()));
+    }
+
+    public void controlAddAuction(Product product, Date date) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(String.valueOf(date.getTime()));
+        communication("controlAddAuction", inputs);
     }
 }

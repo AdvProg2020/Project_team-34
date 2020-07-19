@@ -5,11 +5,6 @@ module java.gui.loginMenu{
     requires java.sql;
     requires gson;
     requires org.controlsfx.controls;
-
-    opens gui.loginMenu to javafx.fxml;
-    exports gui.loginMenu;
-
-    opens main to javafx.fxml;
-    exports main;
-
+    requires tornadofx.controls;
+    requires com.jfoenix;
 }

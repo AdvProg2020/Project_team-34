@@ -60,7 +60,16 @@
             <artifactId>controlsfx</artifactId>
             <version>11.0.1</version>
         </dependency>
-
+        <dependency>
+            <groupId>no.tornado</groupId>
+            <artifactId>tornadofx-controls</artifactId>
+            <version>1.0.3</version>
+        </dependency>
+        <dependency>
+            <groupId>com.jfoenix</groupId>
+            <artifactId>jfoenix</artifactId>
+            <version>9.0.4</version>
+        </dependency>
     </dependencies>
 
 </project>

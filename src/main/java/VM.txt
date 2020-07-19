@@ -1,1 +1,11 @@
---add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=org.controlsfx.controls --add-exports=javafx.controls/com.sun.javafx.scene.control.inputmap=org.controlsfx.controls --add-exports=javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls --add-opens=java.gui.loginMenu/account=javafx.base--add-opens=java.gui.loginMenu/discount=javafx.base
+--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=org.controlsfx.controls
+--add-exports=javafx.controls/com.sun.javafx.scene.control.inputmap=org.controlsfx.controls
+--add-exports=javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls
+--add-opens=java.gui.loginMenu/account=javafx.base
+--add-opens=java.gui.loginMenu/discount=javafx.base
+--add-exports=java.gui.loginMenu/communications=gson
+--add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=com.jfoenix
+--add-exports=javafx.base/com.sun.javafx.binding=com.jfoenix
+--add-exports=javafx.graphics/com.sun.javafx.stage=com.jfoenix
+--add-exports=java.gui.loginMenu/main=javafx.graphics
+--add-exports=javafx.base/com.sun.javafx.event=com.jfoenix

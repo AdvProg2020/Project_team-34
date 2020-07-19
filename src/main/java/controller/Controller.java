@@ -107,16 +107,21 @@ public class Controller {
         Request request = new Request(getToken(), function, inputs.toString(), source);
         try {
             String sendingString = Utils.convertObjectToJsonString(request);
-            System.out.println(sendingString);
             ArrayList<String> sendingArray = Utils.separate(sendingString, 50000);
-            System.err.println(sendingArray);
+            System.out.println(sendingArray);
             outputStream.writeUTF(String.valueOf(sendingArray.size()));
+            outputStream.flush();
             for (String subString : sendingArray) {
                 outputStream.writeUTF(subString);
                 outputStream.flush();
             }
             try {
-                String responseString = inputStream.readUTF();
+                int responseSize = Integer.parseInt(inputStream.readUTF());
+                ArrayList<String> receiving = new ArrayList<>();
+                for (int i = 0; i < responseSize; i++) {
+                    receiving.add(inputStream.readUTF());
+                }
+                String responseString = Utils.join(receiving);
                 Response response = Response.convertJsonStringToResponse(responseString);
                 if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
                     throw new ExceptionalMassage(response.getContent());

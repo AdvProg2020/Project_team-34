@@ -1,1 +1,0 @@
---add-exports=javafx.controls/com.sun.javafx.scene.control.behavior=org.controlsfx.controls --add-exports=javafx.controls/com.sun.javafx.scene.control.inputmap=org.controlsfx.controls --add-exports=javafx.graphics/com.sun.javafx.scene.traversal=org.controlsfx.controls --add-opens=java.gui.loginMenu/account=javafx.base--add-opens=java.gui.loginMenu/discount=javafx.base

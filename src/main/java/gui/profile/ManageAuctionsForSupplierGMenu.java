@@ -55,6 +55,7 @@ public class ManageAuctionsForSupplierGMenu extends GMenu {
         GMenu.addStyleToButton(viewDetailsButton);
         viewDetailsButton.setOnMouseClicked(e->{
 //            controller.getProductController()
+//        controller.getProductController().controlGetAu
         auctionsListView.getSelectionModel().getSelectedItems().get(0);
 
         });

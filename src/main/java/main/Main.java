@@ -7,6 +7,7 @@ import gui.mainMenu.MainMenuG;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
@@ -16,6 +17,8 @@ import com.jfoenix.controls.JFXTimePicker;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Main extends Application {
 
@@ -42,15 +45,4 @@ public class Main extends Application {
         stage.show();
     }
 
-    //        JFXTimePicker jfxTimePicker = new JFXTimePicker();
-//        JFXDatePicker jfxDatePicker = new JFXDatePicker();
-//        DateTimePicker dateTimePicker = new DateTimePicker();
-//        HBox hBox = new HBox();
-//        hBox.getChildren().addAll(dateTimePicker, jfxTimePicker, jfxDatePicker);
-//        hBox.setSpacing(20);
-//        hBox.setPadding(new Insets(100, 100, 100, 100));
-//        stage.setScene(new Scene(hBox));
-//        jfxTimePicker.setOnAction(e -> System.out.println(
-//        jfxTimePicker.getValue().getHour()));
-//        stage.show();
 }

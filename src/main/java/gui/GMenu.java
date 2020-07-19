@@ -1,6 +1,8 @@
 package gui;
 
 import account.*;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
@@ -27,6 +29,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.text.SimpleDateFormat;
+import java.time.ZoneId;
+import java.util.Date;
 
 public abstract class GMenu {
     public final static SimpleDateFormat FORMAT = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
@@ -332,5 +336,11 @@ public abstract class GMenu {
         string = message.getSenderUsername() + " says: " + message.getContentOfMessage();
         label.setText(string);
         return label;
+    }
+
+    public static long getTime(JFXDatePicker datePicker, JFXTimePicker timePicker) {
+        Date fromDatePicker = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
+        long fromTimePicker = (timePicker.getValue().getHour() * 60 + timePicker.getValue().getMinute()) * 60000;
+        return fromDatePicker.getTime() + fromTimePicker;
     }
 }

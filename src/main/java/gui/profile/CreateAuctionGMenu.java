@@ -1,7 +1,9 @@
 package gui.profile;
 
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,6 +17,7 @@ import javafx.stage.Stage;
 import product.Product;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class CreateAuctionGMenu extends GMenu {
 
@@ -32,7 +35,12 @@ public class CreateAuctionGMenu extends GMenu {
         DatePicker datePicker = new DatePicker();
 
         ListView<String> productsListView = new ListView<>();
-        ArrayList<Product> allProductsNotInAuction = new ArrayList<>(); //controller must be;
+        ArrayList<Product> allProductsNotInAuction = new ArrayList<>();
+        try {
+            allProductsNotInAuction = controller.getProductController().controlGetNotAuctionedProductsOfSupplier();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller);
+        }
         for (Product product : allProductsNotInAuction) {
             productsListView.getItems().add(product.getProductId());
         }
@@ -40,6 +48,14 @@ public class CreateAuctionGMenu extends GMenu {
         Button createAuctionButton = new Button("Create Auction");
         GMenu.addStyleToButton(createAuctionButton);
         createAuctionButton.setOnMouseClicked(e->{
+            Product product ;
+            try {
+                product = controller.getProductController().getProductById(productsListView.getSelectionModel().getSelectedItems().get(0));
+                controller.getProductController().controlAddAuction(product,new Date());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                exceptionalMassage.printStackTrace();
+            }
+            
             stage.setScene(new CreateAuctionGMenu(this, stage, controller).createScene());
         });
         sidePane.getChildren().addAll(datePicker, createAuctionButton);

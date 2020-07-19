@@ -3,7 +3,10 @@ package gui.profile;
 import account.Supplier;
 import auction.Auction;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -39,7 +42,12 @@ public class ManageAuctionsForSupplierGMenu extends GMenu {
 //        auctionsTableView.getColumns().addAll(identifier,product_id, highestPromotion);
 
         ListView<String> auctionsListView = new ListView<>();
-        ArrayList<String> allAuctions = new ArrayList<>(); //controller must be;
+        ArrayList<String> allAuctions = new ArrayList<>();
+        try {
+            allAuctions = controller.getProductController().controlGetAuctionsForASupplier();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage,controller).showAndWait();
+        }
         for (String auction : allAuctions) {
             auctionsListView.getItems().add(auction);
         }
@@ -48,7 +56,7 @@ public class ManageAuctionsForSupplierGMenu extends GMenu {
         GMenu.addStyleToButton(viewDetailsButton);
         viewDetailsButton.setOnMouseClicked(e->{
             auctionsListView.getSelectionModel().getSelectedItems();
-            //modification
+
         });
 
         Button createAuctionButton = new Button("Create Auction");
@@ -62,6 +70,7 @@ public class ManageAuctionsForSupplierGMenu extends GMenu {
         buttonPane.getChildren().addAll( viewDetailsButton, createAuctionButton);
         mainPane.setSpacing(30);
         mainPane.setAlignment(Pos.CENTER);
+        mainPane.setPadding(new Insets(15, 15, 15, 15));
         mainPane.getChildren().addAll(auctionsListView,buttonPane);
 
         VBox headerBackground = new VBox();

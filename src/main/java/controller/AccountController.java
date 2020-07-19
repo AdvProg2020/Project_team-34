@@ -18,6 +18,7 @@ import server.communications.RequestStatus;
 import server.communications.Response;
 import server.communications.Utils;
 
+import java.security.interfaces.RSAKey;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -618,9 +619,12 @@ public class AccountController {
     }
 
     //Supporter methods!
-    public Response createChatRoomBetweenSupporterAndCustomer(String supporterString,String customerString){
+    public Response createChatRoomBetweenSupporterAndCustomer(String supporterString){
         Supporter supporter = Supporter.convertJsonStringToSupporter(supporterString);
-        Customer customer = Customer.convertJsonStringToCustomer(customerString);
+        if(!(mainController.getAccount() instanceof Customer)){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as customer!"));
+        }
+        Customer customer = (Customer) mainController.getAccount();
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.joinChatRoom(supporter);
         chatRoom.joinChatRoom(customer);
@@ -630,10 +634,19 @@ public class AccountController {
     public Response addMessageToChatRoom(String senderUsername,String content,String chatRoomId){
         try {
             new Message(senderUsername, content, chatRoomId);
+            return Response.createSuccessResponse();
         } catch (ExceptionalMassage ex){
             return Response.createResponseFromExceptionalMassage(ex);
         }
-        return Response.createSuccessResponse();
+    }
+
+    public Response getAllMessagesOfChatRoomById(String chatRoomId){
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
+        if(chatRoom == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room id invalid!"));
+        }
+        //Need modification!
+        return null;
     }
 
     public Response controlSetWageAndMinimum(String wageString , String minimumString ){

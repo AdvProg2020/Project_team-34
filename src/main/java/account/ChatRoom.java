@@ -53,4 +53,8 @@ public class ChatRoom {
     public void addMessage(Message message){
         messages.add(message);
     }
+
+    public ArrayList<Message> getMessages() {
+        return messages;
+    }
 }

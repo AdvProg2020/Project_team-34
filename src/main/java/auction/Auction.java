@@ -21,9 +21,15 @@ import java.util.Objects;
 public class Auction {
     private static final ArrayList<Auction> ALL_AUCTIONS = new ArrayList<>();
     private static int allAuctionsCount = 0;
-    public static Runnable endChecker = () -> {
+
+    private static final Runnable END_CHECKER = () -> {
         for (Auction auction : ALL_AUCTIONS) {
             auction.checkForEnd();
+        }
+        try {
+            Thread.sleep(300000);
+        } catch (InterruptedException e) {
+            System.err.println("Auction checker thread interrupted");
         }
     };
 
@@ -74,7 +80,7 @@ public class Auction {
     }
 
     public static Runnable getEndChecker() {
-        return endChecker;
+        return END_CHECKER;
     }
 
     public String getIdentifier() {
@@ -124,7 +130,8 @@ public class Auction {
 
     public static boolean isThisProductInAuction(Product product, Supplier supplier) {
         for (Auction auction : ALL_AUCTIONS) {
-            if (auction.getProduct().equals(product) && auction.getSupplier().equals(supplier)) {
+            if (auction.getProduct().equals(product) && auction.getSupplier().equals(supplier) &&
+                    System.currentTimeMillis() < auction.getEnd().getTime()) {
                 return true;
             }
         }

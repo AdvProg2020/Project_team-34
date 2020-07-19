@@ -5,25 +5,31 @@ import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import javafx.application.Platform;
+import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.Window;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Stream;
 
 public class ChatRoomGMenu extends GMenu {
     private String chatRoomId;
+    private ScrollPane messagesScrollPane;
     //private ArrayList<String> joinedUsers;
 
     public ChatRoomGMenu(GMenu parentMenu, Stage stage, Controller controller, String chatRoomId) {
         super("Chat Room", parentMenu, stage, controller);
         this.chatRoomId = chatRoomId;
+        this.messagesScrollPane = new ScrollPane();
         //this.joinedUsers = joinedUsers;
     }
 
@@ -33,14 +39,13 @@ public class ChatRoomGMenu extends GMenu {
         anchorPane0.setPrefHeight(647.0);
         anchorPane0.setPrefWidth(600.0);
         anchorPane0.setStyle("-fx-background-color: #f5f5f2;");
-        ScrollPane scrollPane1 = new ScrollPane();
-        scrollPane1.setPrefHeight(513.0);
-        scrollPane1.setPrefWidth(600.0);
-        scrollPane1.setStyle("-fx-background-color: #9cbfe3;");
-        scrollPane1.setLayoutY(51.0);
+        messagesScrollPane.setPrefHeight(513.0);
+        messagesScrollPane.setPrefWidth(600.0);
+        messagesScrollPane.setStyle("-fx-background-color: #9cbfe3;");
+        messagesScrollPane.setLayoutY(51.0);
 
         // Adding child to parent
-        anchorPane0.getChildren().add(scrollPane1);
+        anchorPane0.getChildren().add(messagesScrollPane);
         Button sendButton = new Button();
         sendButton.setPrefHeight(51.0);
         sendButton.setPrefWidth(192.0);
@@ -95,24 +100,68 @@ public class ChatRoomGMenu extends GMenu {
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }
+            updateScrollPane();
             messageBox.clear();
         });
 
+        messagesScrollPane.setVvalue(1);
+
+        Task task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                while (isThisStageOpen()){
+                    System.out.println(1);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            updateScrollPane();
+                        }
+                    });
+                    Thread.sleep(3000);
+                }
+                System.out.println("Chat room thread closed!");
+                return null;
+            }
+        };
+        new Thread(task).start();
         return new Scene(anchorPane0);
     }
 
-    private VBox allMessagesGridPane(){
+    private void updateScrollPane(){
         VBox allMessages = new VBox();
         allMessages.setMinWidth(600);
-        ArrayList<Message> messages = controller.getAccountController().getAllMessagesOfChatRoomById(chatRoomId);
-        for (Message message : messages) {
-            allMessages.getChildren().add(createLabelFromMessage(message));
+        ArrayList<Message> messages = null;
+        try {
+            messages = controller.getAccountController().getAllMessagesOfChatRoomById(chatRoomId);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            messagesScrollPane.getScene().getWindow().hide();
+            return;
+        }
+        if(messages.size() != 0) {
+            for (Message message : messages) {
+                allMessages.getChildren().add(createLabelFromMessage(message));
+            }
         }
 
         allMessages.setSpacing(10);
         allMessages.setPadding(new Insets(10, 10 , 10 , 10));
         allMessages.setAlignment(Pos.BASELINE_LEFT);
 
-        return allMessages;
+        messagesScrollPane.setContent(allMessages);
+
     }
+
+    private boolean isThisStageOpen(){
+        Stream<Window> open = Stage.getWindows().stream().filter(Window::isShowing);
+        Object[] opens = open.toArray();
+        for (Object o : opens) {
+            if(((Stage)o).getTitle().equals(chatRoomId)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+
 }

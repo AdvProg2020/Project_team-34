@@ -360,7 +360,7 @@ public class AccountController {
     public String createChatRoomBetweenSupporterAndCustomer(Supporter supporter) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(Utils.convertObjectToJsonString(supporter));
-        return communication("createChatRoomBetweenSupporterAndCustomer", inputs).toString();
+        return communication("createChatRoomBetweenSupporterAndCustomer", inputs).getAsString();
 
     }
 
@@ -403,8 +403,25 @@ public class AccountController {
         return Utils.convertJsonElementToSupporterArrayList(communication("getOnlineSupporters", new JsonArray()));
     }
 
-    public ArrayList<Message> getAllMessagesOfChatRoomById(String chatRoomId){
-        //Need modification!
-        return null;
+    public ArrayList<Message> getAllMessagesOfChatRoomById(String chatRoomId) throws ExceptionalMassage{
+        JsonArray input = new JsonArray();
+        input.add(chatRoomId);
+        return Utils.convertJsonElementToMessageArrayList(communication("getAllMessagesOfChatRoomById",input));
+    }
+
+    public ArrayList<String> getRequestingCustomersBySupporter() throws ExceptionalMassage{
+        return Utils.convertJsonElementToStringArrayList(communication("getRequestingCustomersBySupporter",new JsonArray()));
+    }
+
+    public Customer getCustomerOfAChatRoom(String id) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        return Customer.convertJsonStringToCustomer(communication("getCustomerOfAChatRoom", inputs).toString());
+    }
+
+    public void controlCloseChatRoomById(String id) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        communication("controlCloseChatRoomById", inputs);
     }
 }

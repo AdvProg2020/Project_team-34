@@ -104,13 +104,23 @@ public class ChooseSupporterGMenu extends GMenu {
         chatButton.setOnAction(e->{
             ObservableList<String> username = onlineSupporters.getSelectionModel().getSelectedItems();
             for (String s : username) {
-                String chatRoomId = "";
+                String[] chatRoomId = new String[1];
                 try {
-                    chatRoomId = controller.getAccountController().createChatRoomBetweenSupporterAndCustomer((Supporter) controller.getAccountController().getAccountByUsernameWithinAvailable(s));
+                    chatRoomId[0] = controller.getAccountController().createChatRoomBetweenSupporterAndCustomer((Supporter) controller.getAccountController().getAccountByUsernameWithinAvailable(s));
                 } catch (ExceptionalMassage exceptionalMassage){
                     new AlertBox(this, exceptionalMassage, controller).showAndWait();
                 }
-                stage.setScene(new ChatRoomGMenu(this, stage, controller, chatRoomId).createScene());
+                Stage stage1 = new Stage();
+                stage1.setTitle(chatRoomId[0]);
+                stage1.show();
+                stage1.setScene(new ChatRoomGMenu(this, stage, controller, chatRoomId[0]).createScene());
+                stage1.setOnCloseRequest( e1 -> {
+                    try{
+                        controller.getAccountController().controlCloseChatRoomById(chatRoomId[0]);
+                    } catch (ExceptionalMassage ex){
+                        new AlertBox(this, ex, controller).showAndWait();
+                    }
+                });
             }
 
         });

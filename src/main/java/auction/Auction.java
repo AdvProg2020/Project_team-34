@@ -35,7 +35,7 @@ public class Auction {
         if (jsonObject.get("highestPromotion") instanceof JsonNull) {
             this.highestPromotion = null;
         } else {
-            this.highestPromotion = Integer.parseInt(jsonObject.get("highestPromotion").toString());
+            this.highestPromotion = Integer.parseInt(jsonObject.get("highestPromotion").getAsString());
         }
         this.end = new Date(Long.parseLong(jsonObject.get("end").getAsString()));
     }

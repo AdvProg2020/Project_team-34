@@ -500,6 +500,6 @@ public class ProductController {
     public Auction controlGetAuctionById(String id) throws ExceptionalMassage{
         JsonArray input = new JsonArray();
         input.add(id);
-        return Auction.convertJsonStringToAuction(communication("controlGetAuctionById",input).getAsString());
+        return Auction.convertJsonStringToAuction(communication("controlGetAuctionById",input).toString());
     }
 }

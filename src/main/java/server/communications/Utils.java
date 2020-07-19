@@ -379,4 +379,23 @@ public class Utils {
             throw new ExceptionalMassage("IOException");
         }
     }
+
+    public static ArrayList<String> separate(String sendingString, int by) {
+        ArrayList<String> separated = new ArrayList<>();
+        int length = sendingString.length();
+        int sent = 0;
+        while (sent <= length) {
+            separated.add(sendingString.substring(sent, Integer.min(sent + by, length)));
+            sent += by;
+        }
+        return separated;
+    }
+
+    public static String join(ArrayList<String> received) {
+        StringBuilder string = new StringBuilder();
+        for (String s : received) {
+            string.append(s);
+        }
+        return string.toString();
+    }
 }

@@ -496,4 +496,10 @@ public class ProductController {
         inputs.add(String.valueOf(date.getTime()));
         communication("controlAddAuction", inputs);
     }
+
+    public Auction controlGetAuctionById(String id) throws ExceptionalMassage{
+        JsonArray input = new JsonArray();
+        input.add(id);
+        return Auction.convertJsonStringToAuction(communication("controlGetAuctionById",input).getAsString());
+    }
 }

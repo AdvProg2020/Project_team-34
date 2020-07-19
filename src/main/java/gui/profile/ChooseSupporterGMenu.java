@@ -5,6 +5,7 @@ import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -101,7 +102,17 @@ public class ChooseSupporterGMenu extends GMenu {
         });
 
         chatButton.setOnAction(e->{
-            //need modification!
+            ObservableList<String> username = onlineSupporters.getSelectionModel().getSelectedItems();
+            for (String s : username) {
+                String chatRoomId = "";
+                try {
+                    chatRoomId = controller.getAccountController().createChatRoomBetweenSupporterAndCustomer((Supporter) controller.getAccountController().getAccountByUsernameWithinAvailable(s));
+                } catch (ExceptionalMassage exceptionalMassage){
+                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
+                }
+                stage.setScene(new ChatRoomGMenu(this, stage, controller, chatRoomId).createScene());
+            }
+
         });
 
         return new Scene(anchorPane0);

@@ -357,10 +357,9 @@ public class AccountController {
         communication("controlUpdateCart", new JsonArray());
     }
 
-    public String createChatRoomBetweenSupporterAndCustomer(Supporter supporter,Customer customer) throws ExceptionalMassage {
+    public String createChatRoomBetweenSupporterAndCustomer(Supporter supporter) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(Utils.convertObjectToJsonString(supporter));
-        inputs.add(Utils.convertObjectToJsonString(customer));
         return communication("createChatRoomBetweenSupporterAndCustomer", inputs).toString();
 
     }

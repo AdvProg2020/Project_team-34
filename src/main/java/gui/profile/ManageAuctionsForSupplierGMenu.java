@@ -1,5 +1,6 @@
 package gui.profile;
 
+import auction.Auction;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
@@ -58,22 +59,25 @@ public class ManageAuctionsForSupplierGMenu extends GMenu {
         GMenu.addStyleToButton(viewDetailsButton);
         viewDetailsButton.setOnMouseClicked(e -> {
             try {
-                if (auctionsListView.getSelectionModel().getSelectedItems().size() != 0)
-                    controller.getProductController().controlGetAuctionById(auctionsListView.getSelectionModel().getSelectedItems().get(0));
+                if (auctionsListView.getSelectionModel().getSelectedItems().size() != 0) {
+                    Auction auction = controller.getProductController().controlGetAuctionById(auctionsListView.getSelectionModel().getSelectedItems().get(0));
+                    Scene scene = createNewScene(auction.toString());
+                    Image logoImage = null;
+                    try {
+                        logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
+                    } catch (FileNotFoundException exc) {
+                    }
+                    Stage newStage = new Stage();
+                    newStage.getIcons().add(logoImage);
+                    newStage.setTitle("Product details");
+                    newStage.setScene(scene);
+                    newStage.showAndWait();
+                }else {
+                    new AlertBox(this, "Please Select Product", "OK", controller).showAndWait();
+                }
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
-            Scene scene = createNewScene("hiihihdfsj");
-            Image logoImage = null;
-            try {
-                logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
-            } catch (FileNotFoundException exc) {
-            }
-            Stage newStage = new Stage();
-            newStage.getIcons().add(logoImage);
-            newStage.setTitle("Product details");
-            newStage.setScene(scene);
-            newStage.showAndWait();
 
         });
 

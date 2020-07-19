@@ -55,7 +55,7 @@ public class CreateAuctionGMenu extends GMenu {
             } catch (ExceptionalMassage exceptionalMassage) {
                 exceptionalMassage.printStackTrace();
             }
-            
+
             stage.setScene(new CreateAuctionGMenu(this, stage, controller).createScene());
         });
         sidePane.getChildren().addAll(datePicker, createAuctionButton);

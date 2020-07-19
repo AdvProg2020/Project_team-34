@@ -62,6 +62,9 @@ public class CreateAuctionGMenu extends GMenu {
                 if (productsListView.getSelectionModel().getSelectedItems().size() != 0) {
                     product = controller.getProductController().getProductById(productsListView.getSelectionModel().getSelectedItems().get(0));
                     controller.getProductController().controlAddAuction(product, new Date());
+
+                }else {
+                    new AlertBox(this, "Please Select Product", "OK", controller).showAndWait();
                 }
             } catch (ExceptionalMassage exceptionalMassage) {
                 exceptionalMassage.printStackTrace();

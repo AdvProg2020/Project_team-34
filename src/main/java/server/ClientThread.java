@@ -64,8 +64,14 @@ public class ClientThread extends Thread {
                     break;
                 }
                 try {
-                    objectOutputStream.writeUTF(analyseRequest(requestString).convertResponseToJsonString());
+                    String response = analyseRequest(requestString).convertResponseToJsonString();
+                    ArrayList<String> sendingArray = Utils.separate(response, 50000);
+                    objectOutputStream.writeUTF(String.valueOf(sendingArray.size()));
                     objectOutputStream.flush();
+                    for (String subString : sendingArray) {
+                        objectOutputStream.writeUTF(subString);
+                        objectOutputStream.flush();
+                    }
                 } catch (IOException e) {
                     System.err.println("Error, OutputStream");
                     break;

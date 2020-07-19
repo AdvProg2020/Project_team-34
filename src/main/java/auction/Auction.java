@@ -3,7 +3,6 @@ package auction;
 import account.ChatRoom;
 import account.Customer;
 import account.Supplier;
-import cart.Cart;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import exceptionalMassage.ExceptionalMassage;
@@ -13,6 +12,11 @@ import product.Product;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
+
+/**
+ * @author Aryan Ahadinia
+ * @since 0.0.3
+ */
 
 public class Auction {
     private static final ArrayList<Auction> ALL_AUCTIONS = new ArrayList<>();

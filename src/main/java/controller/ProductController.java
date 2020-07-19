@@ -4,6 +4,7 @@ import account.Account;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
+import auction.Auction;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -12,6 +13,7 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
+import jdk.jshell.UnresolvedReferenceException;
 import jdk.jshell.execution.Util;
 import log.CustomerLog;
 import product.Category;
@@ -22,6 +24,7 @@ import server.communications.Utils;
 import state.State;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 
@@ -739,5 +742,71 @@ public class ProductController {
 
     public Response getProductById(String id){
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Product.getProductById(id)));
+    }
+
+    public Response promoteAuctionPrice(String newPrice,String minimum,String auctionString){
+        if(!(mainController.getAccount() instanceof Customer)){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Customer!"));
+        }
+        Customer customer = (Customer) mainController.getAccount();
+        int minimumAmountOfCredit = Integer.parseInt(minimum);
+        int price = Integer.parseInt(newPrice);
+        Auction auction = Auction.convertJsonStringToAuction(auctionString);
+        try {
+            auction.promote(customer, price, minimumAmountOfCredit);
+            return Response.createSuccessResponse();
+        } catch (ExceptionalMassage ex){
+            return Response.createResponseFromExceptionalMassage(ex);
+        }
+    }
+
+    public Response controlGetAuctionsForASupplier(){
+        if(!(mainController.getAccount() instanceof Supplier)){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Supplier!"));
+        }
+        Supplier supplier =(Supplier) mainController.getAccount();
+        ArrayList<Auction> allAuctions = Auction.getAllAuctions();
+        ArrayList<String> auctionsIds = new ArrayList<>();
+        for (Auction allAuction : allAuctions) {
+            if(allAuction.getSupplier().equals(supplier)){
+                auctionsIds.add(allAuction.getIdentifier());
+            }
+        }
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(auctionsIds).toString());
+    }
+
+    public Response controlGetNotAuctionedProductsOfSupplier(){
+        if(!(mainController.getAccount() instanceof Supplier)){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Supplier!"));
+        }
+        Supplier supplier = (Supplier) mainController.getAccount();
+        ArrayList<Product> products = Product.getProductForSupplier(supplier);
+        ArrayList<Product> notAuctionedProducts = new ArrayList<>();
+        for (Product product : products) {
+            if(!Auction.isThisProductInAuction(product,supplier)){
+                notAuctionedProducts.add(product);
+            }
+        }
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertProductArrayListToJsonElement(notAuctionedProducts).toString());
+    }
+
+    public Response controlAddAuction(String productString,String dateString){
+        if(!(mainController.getAccount() instanceof Supplier)){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Supplier!"));
+        }
+        Supplier supplier = (Supplier) mainController.getAccount();
+        Product product = Product.convertJsonStringToProduct(productString);
+        Long date = Long.parseLong(dateString);
+        int wage = mainController.getAccountController().controlGetWageInternal();
+        new Auction(product,supplier,date,wage);
+        return Response.createSuccessResponse();
+    }
+
+    public Response controlGetAuctionById(String id){
+        Auction auction = Auction.getAuctionByIdentifier(id);
+        if(auction == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Auction not found!"));
+        }
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(auction));
     }
 }

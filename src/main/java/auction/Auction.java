@@ -122,6 +122,10 @@ public class Auction {
         return end;
     }
 
+    public static ArrayList<Auction> getAllAuctions() {
+        return ALL_AUCTIONS;
+    }
+
     public int getWage() {
         return wage;
     }

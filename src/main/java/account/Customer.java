@@ -24,7 +24,6 @@ public class Customer extends Account {
                     int credit,  String cartIdentifier, boolean isAvailable) {
         super(userName, name, familyName, email, phoneNumber, password, credit,isAvailable);
         this.cartIdentifier = cartIdentifier;
-
     }
 
     public Cart getCart() {

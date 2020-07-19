@@ -119,7 +119,7 @@ public class AccountController {
                                              String phoneNumber, String password, int credit) {
         if (!(mainController.getAccount() instanceof Supervisor))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "You must be a supervisor to create supporter account.");
-        new Supporter(username, name, familyName, email, phoneNumber, password, credit, true);
+        new Supporter(username, name, familyName, email, phoneNumber, password, credit);
         return Response.createSuccessResponse();
     }
 

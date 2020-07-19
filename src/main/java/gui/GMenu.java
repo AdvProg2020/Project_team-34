@@ -252,7 +252,7 @@ public abstract class GMenu {
     }
 
     public static void addStyleToButton(Button button){
-        button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+        button.getStylesheets().add(new File("src/main/resources/cssInsider/Style.css").toURI().toString());
         button.getStyleClass().add("button");
         button.setMinHeight(28);
         button.setMinWidth(170);
@@ -260,7 +260,7 @@ public abstract class GMenu {
     }
 
     public static void addStyleToSmallButton(Button button){
-        button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+        button.getStylesheets().add(new File("src/main/resources/cssInsider/Style.css").toURI().toString());
         button.getStyleClass().add("button");
         button.setMinHeight(25);
         button.setMinWidth(100);

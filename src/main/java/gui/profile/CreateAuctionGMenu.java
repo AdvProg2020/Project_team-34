@@ -1,5 +1,7 @@
 package gui.profile;
 
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
@@ -8,7 +10,6 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -32,7 +33,15 @@ public class CreateAuctionGMenu extends GMenu {
         HBox mainPane = new HBox();
         VBox sidePane = new VBox();
 
-        DatePicker datePicker = new DatePicker();
+        JFXTimePicker jfxTimePicker = new JFXTimePicker();
+        JFXDatePicker jfxDatePicker = new JFXDatePicker();
+//        HBox hBox = new HBox();
+//        hBox.getChildren().addAll(jfxTimePicker, jfxDatePicker);
+//        hBox.setSpacing(20);
+//        hBox.setPadding(new Insets(100, 100, 100, 100));
+//        stage.setScene(new Scene(hBox));
+        jfxTimePicker.setOnAction(e -> System.out.println(
+        jfxTimePicker.getValue().getHour()));
 
         ListView<String> productsListView = new ListView<>();
         ArrayList<Product> allProductsNotInAuction = new ArrayList<>();
@@ -58,9 +67,9 @@ public class CreateAuctionGMenu extends GMenu {
 
             stage.setScene(new CreateAuctionGMenu(this, stage, controller).createScene());
         });
-        sidePane.getChildren().addAll(datePicker, createAuctionButton);
+        sidePane.getChildren().addAll(jfxDatePicker, jfxTimePicker ,createAuctionButton);
         sidePane.setAlignment(Pos.CENTER);
-        sidePane.setSpacing(30);
+        sidePane.setSpacing(40);
 
         mainPane.setSpacing(30);
         mainPane.setPadding(new Insets(15, 15, 15, 15));

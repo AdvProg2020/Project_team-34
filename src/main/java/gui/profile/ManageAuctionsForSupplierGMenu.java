@@ -20,7 +20,6 @@ import product.Product;
 import java.util.ArrayList;
 
 public class ManageAuctionsForSupplierGMenu extends GMenu {
-    private Supplier supplier;
     public ManageAuctionsForSupplierGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Manage Auctions", parentMenu, stage, controller);
     }

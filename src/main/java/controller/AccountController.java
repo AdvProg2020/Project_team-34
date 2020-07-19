@@ -661,6 +661,10 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(wageString));
     }
 
+    public int controlGetWageInternal(){
+        return WageDataBase.getWage();
+    }
+
     public Response controlGetMinimum() {
         String minimumString = String.valueOf(WageDataBase.getMinimum());
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(minimumString));

@@ -135,6 +135,22 @@ public class Utils {
         return supervisorArrayList;
     }
 
+    public static JsonElement convertSupporterArrayListToJsonElement(ArrayList<Supporter> supporterArrayList) {
+        JsonArray jsonArray = new JsonArray();
+        for (Supporter supporter : supporterArrayList) {
+            jsonArray.add(convertObjectToJsonString(supporter));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Supporter> convertJsonElementToSupporterArrayList(JsonElement jsonElement) {
+        ArrayList<Supporter> supporterArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            supporterArrayList.add(Supporter.convertJsonStringToSupporter(element.getAsString()));
+        }
+        return supporterArrayList;
+    }
+
     public static JsonElement convertSupplierArrayListToJsonElement(ArrayList<Supplier> supplierArrayList) {
         JsonArray jsonArray = new JsonArray();
         for (Supplier supplier : supplierArrayList) {
@@ -165,22 +181,6 @@ public class Utils {
             customerArrayList.add(Customer.convertJsonStringToCustomer(element.getAsString()));
         }
         return customerArrayList;
-    }
-
-    public static JsonElement convertSupporterArrayListToJsonElement(ArrayList<Supporter> supporterArrayList) {
-        JsonArray jsonArray = new JsonArray();
-        for (Supporter supporter : supporterArrayList) {
-            jsonArray.add(convertObjectToJsonString(supporter));
-        }
-        return jsonArray;
-    }
-
-    public static ArrayList<Supporter> convertJsonElementToSupporterArrayList(JsonElement jsonElement) {
-        ArrayList<Supporter> supporterArrayList = new ArrayList<>();
-        for (JsonElement element : jsonElement.getAsJsonArray()) {
-            supporterArrayList.add(Supporter.convertJsonStringToSupporter(element.getAsString()));
-        }
-        return supporterArrayList;
     }
 
     public static JsonElement convertCategoryArrayListToJsonElement(ArrayList<Category> categories) {

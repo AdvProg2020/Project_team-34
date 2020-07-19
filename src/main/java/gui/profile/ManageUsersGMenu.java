@@ -3,6 +3,7 @@ package gui.profile;
 import account.Customer;
 import account.Supervisor;
 import account.Supplier;
+import account.Supporter;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
@@ -35,6 +36,7 @@ public class ManageUsersGMenu extends GMenu {
         TableView<Supplier> supplierTableView = supplierTable();
         TableView<Customer> customerTableView = customerTable();
         TableView<Supervisor> supervisorTableView = supervisorTable();
+        TableView<Supporter> supporterTableView = supporterTable();
         HBox deleteUserBox = new HBox();
         TextField deletingUsername = new TextField();
         Button deleteButton = new Button("Delete");
@@ -60,7 +62,7 @@ public class ManageUsersGMenu extends GMenu {
 
         mainLayout.setSpacing(10);
         mainLayout.getChildren().addAll(createHeader(), createSupervisorBox(this, true), deleteUserBox, new Label("Supervisors:"),
-                supervisorTableView, new Label("Suppliers:"), supplierTableView, new Label("Customers"),
+                supervisorTableView,new Label("Supporters"), supporterTableView,  new Label("Suppliers:"), supplierTableView, new Label("Customers"),
                 customerTableView);
 
         ScrollPane scrollPane = new ScrollPane(mainLayout);
@@ -92,6 +94,28 @@ public class ManageUsersGMenu extends GMenu {
         supervisorTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber);
         supervisorTableView.setPrefWidth(800);
         return supervisorTableView;
+    }
+
+    private TableView<Supporter> supporterTable() {
+        TableColumn<Supporter, String> username = new TableColumn<>("Username");
+        username.setCellValueFactory(new PropertyValueFactory<>("userName"));
+        TableColumn<Supporter, String> firstName = new TableColumn<>("First Name");
+        firstName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        TableColumn<Supporter, String> lastName = new TableColumn<>("Last Name");
+        lastName.setCellValueFactory(new PropertyValueFactory<>("familyName"));
+        TableColumn<Supporter, String> email = new TableColumn<>("Email");
+        email.setCellValueFactory(new PropertyValueFactory<>("email"));
+        TableColumn<Supporter, String> phoneNumber = new TableColumn<>("Phone Number");
+        phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        TableView<Supporter> supporterTableView = new TableView<>();
+        try {
+            supporterTableView.setItems(controller.getAccountController().getSupporterObservableList());
+        } catch (ExceptionalMassage exceptionalMassage) {
+            supporterTableView.setItems(FXCollections.observableArrayList());
+        }
+        supporterTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber);
+        supporterTableView.setPrefWidth(800);
+        return supporterTableView;
     }
 
     private TableView<Supplier> supplierTable() {

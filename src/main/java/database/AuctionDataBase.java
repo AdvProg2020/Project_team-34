@@ -2,21 +2,18 @@ package database;
 
 import account.*;
 import auction.Auction;
-import controller.AccountController;
-import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
 /**
  * @author rpirayadi
- * @since 0.0.1
+ * @since 0.0.3
  */
 public class AuctionDataBase {
     public static void createNewTable() {
@@ -28,6 +25,7 @@ public class AuctionDataBase {
         content.put("highestPromoterUsername", "String");
         content.put("highestPromotion", "int");
         content.put("endDate", "long");
+        content.put("wage", "int");
 
         DataBase.createNewTable("Auctions", content);
     }
@@ -38,8 +36,8 @@ public class AuctionDataBase {
             return;
         }
         String sql = "INSERT into Auctions (identifier, chatRoomIdentifier, productId, supplierUsername, " +
-                "highestPromoterUsername, highestPromotion, endDate)" +
-                "VALUES (?, ? , ? , ? , ?, ? ,?)";
+                "highestPromoterUsername, highestPromotion, endDate, wage)" +
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?)";
         try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
             statement.setString(1, auction.getIdentifier());
             statement.setString(2, auction.getChatRoomIdentifier());
@@ -48,6 +46,7 @@ public class AuctionDataBase {
             statement.setString(5, auction.getHighestPromoter().getUserName());
             statement.setInt(6, auction.getHighestPromotion());
             statement.setLong(7, auction.getEnd().getTime());
+            statement.setInt(8, auction.getWage());
 
             statement.executeUpdate();
 
@@ -80,8 +79,9 @@ public class AuctionDataBase {
                 Customer highestPromoter = (Customer) Account.getAccountByUsernameWithinAll(resultSet.getString("highestPromoterUsername"));
                 int highestPromotion = resultSet.getInt("highestPromotion");
                 Date endDate = new Date(resultSet.getLong("credit"));
+                int wage = resultSet.getInt("wage");
 
-                new Auction(identifier, chatRoomIdentifier,product, supplier,highestPromoter,highestPromotion, endDate);
+                new Auction(identifier, chatRoomIdentifier,product, supplier,highestPromoter,highestPromotion, endDate, wage);
 
             }
         } catch (SQLException e) {

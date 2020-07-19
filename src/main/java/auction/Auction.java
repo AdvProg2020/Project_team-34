@@ -3,11 +3,14 @@ package auction;
 import account.ChatRoom;
 import account.Customer;
 import account.Supplier;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import product.Product;
+import server.communications.Utils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -70,13 +73,22 @@ public class Auction {
     }
 
     public Auction(String json) {
-        this.identifier = identifier;
-        this.chatRoomIdentifier = chatRoomIdentifier;
-        this.product = product;
-        this.supplier = supplier;
-        this.highestPromoter = highestPromoter;
-        this.highestPromotion = highestPromotion;
-        this.end = end;
+        JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
+        this.identifier = jsonObject.get("identifier").getAsString();
+        this.chatRoomIdentifier = jsonObject.get("chatRoomIdentifier").getAsString();
+        this.product = Product.convertJsonStringToProduct(jsonObject.get("product").toString());
+        this.supplier = Supplier.convertJsonStringToSupplier(jsonObject.get("supplier").toString());
+        if (jsonObject.get("highestPromoter") instanceof JsonNull) {
+            this.highestPromoter = null;
+        } else {
+            this.highestPromoter = Customer.convertJsonStringToCustomer(jsonObject.get("highestPromoter").toString());
+        }
+        if (jsonObject.get("highestPromotion") instanceof JsonNull) {
+            this.highestPromotion = null;
+        } else {
+            this.highestPromotion = Integer.parseInt(jsonObject.get("highestPromotion").toString());
+        }
+        this.end = new Date(Long.parseLong(jsonObject.get("end").getAsString()));
     }
 
     public static Runnable getEndChecker() {

@@ -1,5 +1,6 @@
 package database;
 
+import auction.Auction;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import product.Category;
@@ -160,6 +161,7 @@ public class DataBase {
         ShippingInfoDataBase.importAllShippingInfos();
         CartDataBase.importAllCarts();
         CustomerLogDataBase.importAllCustomerLogs();
+        AuctionDataBase.importAllAuctions();
     }
 
     public static void createNewTablesToStart(){
@@ -174,6 +176,7 @@ public class DataBase {
         ShippingInfoDataBase.createNewTable();
         CartDataBase.createNewTable();
         CustomerLogDataBase.createNewTable();
+        AuctionDataBase.createNewTable();
         WageDataBase.createNewTable();
     }
 }

@@ -58,7 +58,7 @@ public class SupplierProfileGMenu extends GMenu {
         Button manageAuctionsButton = new Button("Manage Auctions");
         GMenu.addStyleToButton(manageAuctionsButton);
         manageAuctionsButton.setOnMouseClicked(e->{
-            stage.setScene(new ViewOffsGMenu(this, stage, controller).getScene());
+            stage.setScene(new ManageAuctionsForSupplierGMenu(this, stage, controller).getScene());
         });
 
         buttonPane.setAlignment(Pos.CENTER);

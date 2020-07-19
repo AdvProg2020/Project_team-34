@@ -1,21 +1,23 @@
 package gui.profile;
 
+import account.Supplier;
 import auction.Auction;
 import controller.Controller;
 import gui.GMenu;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import product.Product;
+
+import java.util.ArrayList;
 
 public class ManageAuctionsForSupplierGMenu extends GMenu {
+    private Supplier supplier;
     public ManageAuctionsForSupplierGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Manage Auctions", parentMenu, stage, controller);
     }
@@ -25,23 +27,28 @@ public class ManageAuctionsForSupplierGMenu extends GMenu {
         GridPane backgroundLayout = new GridPane();
         HBox mainPane = new HBox();
         VBox buttonPane = new VBox();
-        VBox viewPane = new VBox();
 
-        TableView<String> auctionsTableView = new TableView<>();
+//        TableView<String> auctionsTableView = new TableView<>();
+//
+//        TableColumn<String, Auction> identifier = new TableColumn<>("identifier");
+//        identifier.setCellValueFactory(new PropertyValueFactory<>("identifier"));
+//        TableColumn<String, Auction> product_id = new TableColumn<>("product id");
+////        product_id.setCellValueFactory(new PropertyValueFactory<>("percent"));
+//        TableColumn<String, Auction> highestPromotion = new TableColumn<>("highest Promotion");
+//        highestPromotion.setCellValueFactory(new PropertyValueFactory<>("highestPromotion"));
+//        auctionsTableView.getColumns().addAll(identifier,product_id, highestPromotion);
 
-        TableColumn<String, Auction> identifier = new TableColumn<>("identifier");
-        identifier.setCellValueFactory(new PropertyValueFactory<>("identifier"));
-        TableColumn<String, Auction> product_id = new TableColumn<>("product id");
-//        product_id.setCellValueFactory(new PropertyValueFactory<>("percent"));
-        TableColumn<String, Auction> highestPromotion = new TableColumn<>("highest Promotion");
-        highestPromotion.setCellValueFactory(new PropertyValueFactory<>("highestPromotion"));
-        auctionsTableView.getColumns().addAll(identifier,product_id, highestPromotion);
-
+        ListView<String> auctionsListView = new ListView<>();
+        ArrayList<String> allAuctions = new ArrayList<>(); //controller must be;
+        for (String auction : allAuctions) {
+            auctionsListView.getItems().add(auction);
+        }
 
         Button viewDetailsButton = new Button("View details");
         GMenu.addStyleToButton(viewDetailsButton);
         viewDetailsButton.setOnMouseClicked(e->{
-            stage.setScene(new ManageProductsSupplierGMenu(this, stage, controller).createScene());
+            auctionsListView.getSelectionModel().getSelectedItems();
+            //modification
         });
 
         Button createAuctionButton = new Button("Create Auction");
@@ -50,8 +57,12 @@ public class ManageAuctionsForSupplierGMenu extends GMenu {
             stage.setScene(new CreateAuctionGMenu(this, stage, controller).createScene());
         });
 
-
-        mainPane.getChildren().add(auctionsTableView);
+        buttonPane.setSpacing(30);
+        buttonPane.setAlignment(Pos.CENTER);
+        buttonPane.getChildren().addAll( viewDetailsButton, createAuctionButton);
+        mainPane.setSpacing(30);
+        mainPane.setAlignment(Pos.CENTER);
+        mainPane.getChildren().addAll(auctionsListView,buttonPane);
 
         VBox headerBackground = new VBox();
         headerBackground.setStyle("-fx-background-color: #4677c8");

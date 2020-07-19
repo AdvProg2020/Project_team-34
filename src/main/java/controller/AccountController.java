@@ -323,6 +323,14 @@ public class AccountController {
         return observableList;
     }
 
+    public ObservableList<Supporter> getSupporterObservableList() throws ExceptionalMassage{
+        ArrayList<Supporter> arrayList = Utils.convertJsonElementToSupporterArrayList(communication(
+                "getSupporterObservableList", new JsonArray()));
+        ObservableList<Supporter> observableList = FXCollections.observableArrayList();
+        observableList.addAll(arrayList);
+        return observableList;
+    }
+
     public Supplier getSupplierByCompanyName(String companyName) throws ExceptionalMassage {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(companyName);

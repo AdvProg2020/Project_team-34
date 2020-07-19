@@ -745,7 +745,7 @@ public class ProductController {
     }
 
     public Response promoteAuctionPrice(String newPrice,String minimum,String auctionString){
-        if(mainController.getAccount() instanceof Customer){
+        if(!(mainController.getAccount() instanceof Customer)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Customer!"));
         }
         Customer customer = (Customer) mainController.getAccount();
@@ -761,7 +761,7 @@ public class ProductController {
     }
 
     public Response controlGetAuctionsForASupplier(){
-        if(mainController.getAccount() instanceof Supplier){
+        if(!(mainController.getAccount() instanceof Supplier)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Supplier!"));
         }
         Supplier supplier =(Supplier) mainController.getAccount();
@@ -776,7 +776,7 @@ public class ProductController {
     }
 
     public Response controlGetNotAuctionedProductsOfSupplier(){
-        if(mainController.getAccount() instanceof Supplier){
+        if(!(mainController.getAccount() instanceof Supplier)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Supplier!"));
         }
         Supplier supplier = (Supplier) mainController.getAccount();
@@ -791,7 +791,7 @@ public class ProductController {
     }
 
     public Response controlAddAuction(String productString,String dateString){
-        if(mainController.getAccount() instanceof Supplier){
+        if(!(mainController.getAccount() instanceof Supplier)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Supplier!"));
         }
         Supplier supplier = (Supplier) mainController.getAccount();

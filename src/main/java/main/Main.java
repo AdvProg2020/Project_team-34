@@ -5,8 +5,14 @@ import gui.GMenu;
 import gui.loginMenu.FirstSupervisorMenu;
 import gui.mainMenu.MainMenuG;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import tornadofx.control.DateTimePicker;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -35,4 +41,16 @@ public class Main extends Application {
         stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
         stage.show();
     }
+
+    //        JFXTimePicker jfxTimePicker = new JFXTimePicker();
+//        JFXDatePicker jfxDatePicker = new JFXDatePicker();
+//        DateTimePicker dateTimePicker = new DateTimePicker();
+//        HBox hBox = new HBox();
+//        hBox.getChildren().addAll(dateTimePicker, jfxTimePicker, jfxDatePicker);
+//        hBox.setSpacing(20);
+//        hBox.setPadding(new Insets(100, 100, 100, 100));
+//        stage.setScene(new Scene(hBox));
+//        jfxTimePicker.setOnAction(e -> System.out.println(
+//        jfxTimePicker.getValue().getHour()));
+//        stage.show();
 }

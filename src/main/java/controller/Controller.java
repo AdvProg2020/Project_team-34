@@ -12,8 +12,8 @@ import java.util.ArrayList;
 
 public class Controller {
     private Socket socket;
-    private DataInputStream inputStream;
-    private DataOutputStream outputStream;
+    private ObjectInputStream inputStream;
+    private ObjectOutputStream outputStream;
 
     private String token;
     private boolean isFirstSupervisorCreated;
@@ -26,8 +26,8 @@ public class Controller {
         try {
             this.socket = new Socket("localhost", 8088);
             try {
-                this.inputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
-                this.outputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+                this.inputStream = new ObjectInputStream(socket.getInputStream());
+                this.outputStream = new ObjectOutputStream(socket.getOutputStream());
             } catch (IOException e) {
                 System.err.println("Error, IOStream can't connect");
                 System.exit(1);
@@ -71,11 +71,11 @@ public class Controller {
         return socket;
     }
 
-    public DataInputStream getInputStream() {
+    public ObjectInputStream getInputStream() {
         return inputStream;
     }
 
-    public DataOutputStream getOutputStream() {
+    public ObjectOutputStream getOutputStream() {
         return outputStream;
     }
 
@@ -107,7 +107,10 @@ public class Controller {
         Request request = new Request(getToken(), function, inputs.toString(), source);
         try {
             String sendingString = Utils.convertObjectToJsonString(request);
+            System.out.println(sendingString);
             ArrayList<String> sendingArray = Utils.separate(sendingString, 50000);
+            System.err.println(sendingArray);
+            outputStream.writeUTF(String.valueOf(sendingArray.size()));
             for (String subString : sendingArray) {
                 outputStream.writeUTF(subString);
                 outputStream.flush();

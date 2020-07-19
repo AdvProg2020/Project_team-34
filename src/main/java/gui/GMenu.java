@@ -283,7 +283,7 @@ public abstract class GMenu {
         stage.showAndWait();
     }
 
-    protected GridPane createSupervisorBox(GMenu gMenu) {
+    protected GridPane createSupervisorBox(GMenu gMenu, boolean alsoSupporter) {
         GridPane mainLayout = new GridPane();
         TextField usernameField = new TextField();
         usernameField.setPromptText("Username");
@@ -298,10 +298,13 @@ public abstract class GMenu {
         TextField phoneNumber = new TextField();
         phoneNumber.setPromptText("Phone number");
         Button done = new Button("Create");
+        ComboBox<String> type = new ComboBox<>();
+        type.getItems().addAll("Supervisor", "Supporter");
+        type.setValue("Supervisor");
 
         done.setOnAction(e -> {
             try {
-                controller.getAccountController().controlCreateAccount(usernameField.getText(), "supervisor",
+                controller.getAccountController().controlCreateAccount(usernameField.getText(), type.getValue().toLowerCase(),
                         firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
                         passwordField.getText(), 0, "");
                 stage.setScene(gMenu.createScene());
@@ -318,6 +321,9 @@ public abstract class GMenu {
         mainLayout.add(lastName, 3, 0);
         mainLayout.add(email, 0, 1);
         mainLayout.add(phoneNumber, 1, 1);
+        if (alsoSupporter) {
+            mainLayout.add(type, 2, 1);
+        }
         mainLayout.add(done, 3, 1);
         mainLayout.setAlignment(Pos.CENTER);
         return mainLayout;

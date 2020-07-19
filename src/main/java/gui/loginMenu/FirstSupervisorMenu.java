@@ -19,7 +19,7 @@ public class FirstSupervisorMenu extends GMenu {
         GridPane backgroundLayout = new GridPane();
         backgroundLayout.setAlignment(Pos.CENTER);
         backgroundLayout.setPadding(new Insets(10, 10, 10, 10));
-        backgroundLayout.getChildren().add(createSupervisorBox(new MainMenuG(null, stage, controller)));
+        backgroundLayout.getChildren().add(createSupervisorBox(new MainMenuG(null, stage, controller), false));
         Scene scene = new Scene(backgroundLayout);
         return scene;
     }

@@ -3,9 +3,7 @@ package controller;
 import account.Account;
 import account.Customer;
 import cart.Cart;
-import database.WageDataBase;
 import server.ClientThread;
-import server.communications.Response;
 
 public class Controller {
     private final ClientThread clientThread;

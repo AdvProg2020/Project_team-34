@@ -2,6 +2,7 @@ package controller;
 
 import account.Customer;
 import account.Supplier;
+import auction.Auction;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -470,5 +471,13 @@ public class ProductController {
         JsonArray inputs = new JsonArray();
         inputs.add(id);
         return Product.convertJsonStringToProduct(communication("getProductById",inputs).toString());
+    }
+
+    public void promoteAuctionPrice(int price, int minimumCredit, Auction auction) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(price));
+        inputs.add(String.valueOf(minimumCredit));
+        inputs.add(Utils.convertObjectToJsonString(auction));
+        communication("promoteAuctionPrice",inputs);
     }
 }

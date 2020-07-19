@@ -36,7 +36,7 @@ public class CompareGMenu extends GMenu {
     }
 
     @Override
-    protected Scene createScene() {
+    public Scene createScene() {
         GridPane compareTable = new GridPane();
         VBox mainLayout = new VBox();
         ScrollPane backgroundLayout = new ScrollPane();

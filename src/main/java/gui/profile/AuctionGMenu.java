@@ -146,31 +146,40 @@ public class AuctionGMenu extends GMenu {
         vBox12.setStyle("-fx-background-color: #9cbfe3;");
         vBox12.setAlignment(TOP_CENTER);
         Label label13 = new Label();
-        label13.setText("Order now!");
+        label13.setText("Auction!");
 
         // Adding child to parent
         vBox12.getChildren().add(label13);
-        HBox hBox16 = new HBox();
-        hBox16.setPrefHeight(37.0);
-        hBox16.setPrefWidth(433.0);
-        hBox16.setTranslateY(150.0);
-        hBox16.setTranslateX(60);
-        ComboBox<String> suppliers = new ComboBox<>();
-        suppliers.setPrefWidth(200.0);
-        suppliers.setTranslateX(25.0);
+
+
+        HBox newPriceHBox = new HBox();
+        newPriceHBox.setPrefHeight(37.0);
+        newPriceHBox.setPrefWidth(433);
+        newPriceHBox.setTranslateX(60);
+        newPriceHBox.setTranslateY(150);
+        newPriceHBox.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
+        newPriceHBox.setLayoutY(179.0);
+        TextField newPriceField = new TextField();
+        newPriceField.setPrefHeight(51.0);
+        newPriceField.setPrefWidth(295.0);
+        newPriceField.setStyle("-fx-background-color: transparent;");
+        newPriceField.setOpacity(0.83);
+        newPriceField.setPromptText("Bid Higher Price!");
 
         // Adding child to parent
-        hBox16.getChildren().add(suppliers);
+        newPriceHBox.getChildren().add(newPriceField);
 
         // Adding child to parent
-        vBox12.getChildren().add(hBox16);
-        Button addToCartButton = new Button();
-        addToCartButton.setPrefHeight(33.0);
-        addToCartButton.setPrefWidth(233.0);
-        addToCartButton.setTranslateY(280.0);
-        addToCartButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        addToCartButton.setText("Add to cart");
-        addToCartButton.setMnemonicParsing(false);
+
+        // Adding child to parent
+        vBox12.getChildren().add(newPriceHBox);
+        Button promotePriceButton = new Button();
+        promotePriceButton.setPrefHeight(33.0);
+        promotePriceButton.setPrefWidth(233.0);
+        promotePriceButton.setTranslateY(280.0);
+        promotePriceButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
+        promotePriceButton.setText("Promote Price!");
+        promotePriceButton.setMnemonicParsing(false);
 
         // Adding tabPane
         TabPane commentAndDetail = new TabPane();
@@ -184,7 +193,7 @@ public class AuctionGMenu extends GMenu {
 
         anchorPane0.getChildren().add(commentAndDetail);
         // Adding child to parent
-        vBox12.getChildren().add(addToCartButton);
+        vBox12.getChildren().add(promotePriceButton);
 
         // Adding
         vBox12.getChildren().add(priceLabel);
@@ -192,8 +201,6 @@ public class AuctionGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(vBox12);
-        suppliers.setPromptText("Choose your supplier");
-
 
         // Adding Controller
         // adding image!
@@ -231,90 +238,36 @@ public class AuctionGMenu extends GMenu {
         details.setContent(detailsScrollPane);
 
 
-        try {
-            if(controller.getOffController().isProductHasAnySale(product)) {
-                ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/Sale.png", 250, 205);
+        descriptionText.setText(auction.getProduct().getDescription());
+        nameText.setText(auction.getProduct().getName());
 
-                soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
-                Group blend = new Group(
-                        imageViewBox,
-                        soldOutImageView
-                );
-
-                imageViewGridPane.getChildren().addAll(imageViewBox, blend, soldOutImageView);
-                //                gridPane.getChildren().add(soldOutImageView);
-            }
-            else if(controller.getProductController().getAllSuppliersThatHaveAvailableProduct(product).size() == 0) {
-                ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 250, 250);
-
-                soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
-                Group blend = new Group(
-                        imageViewBox,
-                        soldOutImageView
-                );
-
-                imageViewGridPane.getChildren().addAll( imageViewBox, blend,soldOutImageView);
-                //                gridPane.getChildren().add(soldOutImageView);
-            }
-            else {
-                imageViewGridPane.getChildren().add(imageViewBox);
-            }
-        } catch (ExceptionalMassage exceptionalMassage) {
-            new AlertBox(this, exceptionalMassage, controller).showAndWait();
-        }
-
-        ArrayList<String> suppliersIds = new ArrayList<>();
-        try {
-            for (Supplier supplier : controller.getProductController().getAllSuppliersThatHaveAvailableProduct(product)) {
-                suppliersIds.add(supplier.getNameOfCompany());
-            }
-        } catch (ExceptionalMassage exceptionalMassage) {
-            new AlertBox(this, exceptionalMassage, controller);
-        }
-        suppliers.getItems().addAll(suppliersIds);
-
-
-        descriptionText.setText(product.getDescription());
-        nameText.setText(product.getName());
-
-        addToCartButton.setOnAction( e -> {
-            String productId = product.getProductId();
-            String supplierNameOfCompany = suppliers.getValue();
+        promotePriceButton.setOnAction( e -> {
             try {
-                controller.getAccountController().controlAddToCart(productId, supplierNameOfCompany);
-                stage.setScene(new CartGMenu(this, stage, controller).getScene());
-            } catch (ExceptionalMassage ex) {
-                new AlertBox(this, ex, controller).showAndWait();
-            }
-
-        });
-
-        suppliers.setOnAction( e -> {
-            try {
-                int originalPrice = product.getPrice(controller.getAccountController().getSupplierByCompanyName(suppliers.getValue()));
-                if (controller.getOffController().isProductInThisSuppliersSale(product, controller.getAccountController().getSupplierByCompanyName(suppliers.getValue()))) {
-                    priceLabel.setText((originalPrice) + "=>" + (originalPrice - controller.getOffController().getProductSale(product, controller.getAccountController().getSupplierByCompanyName(suppliers.getValue())).discountAmountFor(originalPrice)));
-
-                } else {
-                    priceLabel.setText(originalPrice + "");
+                int price = Integer.parseInt(newPriceField.getText());
+                try {
+                    int minimumPrice = controller.getAccountController().controlGetMinimum();
+                    controller.getProductController().promoteAuctionPrice(price,minimumPrice,auction);
+                    stage.setScene(new CartGMenu(this, stage, controller).getScene());
+                } catch (ExceptionalMassage ex){
+                    new AlertBox(this, ex, controller).showAndWait();
                 }
-            } catch (ExceptionalMassage ex){
-                new AlertBox(this, ex, controller).showAndWait();
+            } catch (NumberFormatException ex) {
+                new AlertBox(this, "Enter number for price, please","OK",controller).showAndWait();
             }
-            suppliers.setPromptText("Choose your supplier");
+
         });
 
         starRating.setOnMouseClicked( e -> {
             float rating =(float) starRating.getRating();
             try {
-                controller.getProductController().controlRateProductById(product.getProductId(), rating);
-                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+                controller.getProductController().controlRateProductById(auction.getProduct().getProductId(), rating);
+                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(auction.getProduct()));
                 starRating.setDisable(true);
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }
             try {
-                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(auction.getProduct()));
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this,exceptionalMassage,controller).showAndWait();
             }
@@ -322,7 +275,7 @@ public class AuctionGMenu extends GMenu {
 
         starRating.setOnMouseExited( e -> {
             try {
-                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(product));
+                starRating.setRating(controller.getProductController().controlGetAverageScoreByProduct(auction.getProduct()));
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this,exceptionalMassage,controller).showAndWait();
             }
@@ -346,11 +299,11 @@ public class AuctionGMenu extends GMenu {
         TextField productName = new TextField();
         productName.setPromptText("Other product's name");
         int i = 0;
-        for (String key : product.getSpecification().keySet()) {
+        for (String key : auction.getProduct().getSpecification().keySet()) {
             Label keyLabel = new Label(key);
             keyLabel.setAlignment(Pos.CENTER);
             GridPane.setHalignment(keyLabel, HPos.CENTER);
-            Label value = new Label(product.getSpecification().get(key));
+            Label value = new Label(auction.getProduct().getSpecification().get(key));
             GridPane.setHalignment(value, HPos.CENTER);
             value.setAlignment(Pos.CENTER);
             gridPane.add(keyLabel, 0, i);
@@ -369,7 +322,7 @@ public class AuctionGMenu extends GMenu {
             if(comparing == null){
                 new AlertBox(this,"No such product","OK",controller).showAndWait();
             } else {
-                stage.setScene(new CompareGMenu("Compare menu", this, stage, controller, product,comparing ).createScene());
+                stage.setScene(new CompareGMenu("Compare menu", this, stage, controller, auction.getProduct(),comparing ).createScene());
             }
         });
 

@@ -1,9 +1,6 @@
 package database;
 
-import account.Account;
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
+import account.*;
 import exceptionalMassage.ExceptionalMassage;
 
 import java.sql.*;
@@ -29,6 +26,7 @@ public class AccountDataBase {
         content.put("cartId", "String");
         content.put("nameOfCompany", "String");
         content.put("isAvailable", "boolean");
+        content.put("type", "String");
 
         DataBase.createNewTable("Accounts", content);
     }
@@ -39,8 +37,8 @@ public class AccountDataBase {
             return;
         }
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
-                " cartId, nameOfCompany,isAvailable)"+
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ?,? )";
+                " cartId, nameOfCompany,isAvailable, type)"+
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ?,?, ? )";
         try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
             statement.setString(1, account.getUserName());
             statement.setString(2,account.getName());
@@ -50,6 +48,7 @@ public class AccountDataBase {
             statement.setString(6, account.getPassword());
             statement.setInt(7, account.getCredit());
             statement.setBoolean(10,account.getIsAvailable());
+            statement.setString(11, account.getAccountType());
 
             if(account instanceof Customer){
                 statement.setString(8,((Customer)account).getCart().getIdentifier());
@@ -98,17 +97,20 @@ public class AccountDataBase {
                 String cartId = resultSet.getString("cartId");
                 String nameOfCompany = resultSet.getString("nameOfCompany");
                 boolean isAvailable = resultSet.getBoolean("isAvailable");
+                String type = resultSet.getString("type");
 
 
-                if(cartId!= null){
+                if(type.equals("Customer")){
                     Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit,
                              cartId, isAvailable);
                 }
-                else if(nameOfCompany != null){
+                else if(type.equals("Supplier")){
                     Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,isAvailable,nameOfCompany);
                 }
-                else{
+                else if(type.equals("Supervisor")){
                     Supervisor supervisor = new Supervisor(username,name, familyName, email,phoneNumber,password,credit,isAvailable);
+                }else {
+                    Supporter supporter = new Supporter(username,name, familyName, email, phoneNumber, password, credit, isAvailable);
                 }
 
             }

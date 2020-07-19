@@ -579,6 +579,11 @@ public class AccountController {
                 Utils.convertSupervisorArrayListToJsonElement(Account.getSupervisorsList()).toString());
     }
 
+    public Response getSupporterObservableList() throws ExceptionalMassage {
+        return new Response(RequestStatus.SUCCESSFUL,
+                Utils.convertSupporterArrayListToJsonElement(Account.getSupportersList()).toString());
+    }
+
     public Response getSupplierByCompanyName(String name){
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Supplier.getSupplierByCompanyName(name)));
     }

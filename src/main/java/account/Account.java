@@ -194,7 +194,9 @@ public abstract class Account {
             return "Customer";
         if(this instanceof Supervisor)
             return "Supervisor";
-        return "Supplier";
+        if(this instanceof Supplier)
+            return "Supplier";
+        return "Supporter";
     }
 
     public static ArrayList<Supervisor> getSupervisorsList() {
@@ -205,6 +207,16 @@ public abstract class Account {
             }
         }
         return allSupervisors;
+    }
+
+    public static ArrayList<Supporter> getSupportersList() {
+        ArrayList<Supporter> allSupporters = new ArrayList<>();
+        for (Account account: allAccounts) {
+            if (account instanceof Supporter && account.isAvailable) {
+                allSupporters.add((Supporter) account);
+            }
+        }
+        return allSupporters;
     }
 
     public static ArrayList<Supplier> getSuppliersList() {

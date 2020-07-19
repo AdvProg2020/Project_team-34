@@ -72,7 +72,7 @@ public class Auction {
         allAuctionsCount++;
     }
 
-    public Auction(String json) {
+    private Auction(String json) {
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
         this.identifier = jsonObject.get("identifier").getAsString();
         this.chatRoomIdentifier = jsonObject.get("chatRoomIdentifier").getAsString();
@@ -194,7 +194,7 @@ public class Auction {
         return jsonObject.toString();
     }
 
-    public Auction convertJsonStringToAuction(String json) {
+    public static Auction convertJsonStringToAuction(String json) {
         return new Auction(json);
     }
 

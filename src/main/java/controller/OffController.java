@@ -197,9 +197,9 @@ public class OffController {
                 getAllSaleRequestsBySupplier((Supplier) mainController.getAccount())).toString());
     }
 
-    public Response controlGetPriceForEachProductAfterSale(String productId, String supplierCompanyName) {
+    public Response controlGetPriceForEachProductAfterSale(String productId, String supplierUsername) {
         Product product = Product.getProductById(productId);
-        Supplier supplier = Supplier.getSupplierByCompanyName(supplierCompanyName);
+        Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         Sale sale = Sale.getProductSale(product, supplier);
         int price = product.getPrice(supplier);
         if (sale != null) {

@@ -349,6 +349,14 @@ public class Utils {
         return jsonObject;
     }
 
+    public static ArrayList<Product> convertProductIdArrayListToProductArrayList(ArrayList<String> productIds){
+        ArrayList<Product> products = new ArrayList<>();
+        for (String productId : productIds) {
+            products.add(Product.getProductById(productId));
+        }
+        return products;
+    }
+
     public static HashMap<Customer, Integer> convertJsonElementCustomerToIntegerHashMap(JsonElement jsonElement) {
         HashMap<Customer, Integer> hashMap = new HashMap<>();
         JsonObject jsonObject = jsonElement.getAsJsonObject();

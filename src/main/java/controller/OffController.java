@@ -1,11 +1,13 @@
 package controller;
 
+import account.Account;
 import account.Customer;
 import account.Supplier;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import discount.CodedDiscount;
 import discount.Sale;
+import jdk.jshell.execution.Util;
 import product.Product;
 import server.communications.RequestStatus;
 import server.communications.Response;
@@ -96,11 +98,11 @@ public class OffController {
     }
 
     public Response controlCreateSale(String startDateString, String endDateString, String percentString,
-                                      String productsString) {
+                                      String productIds) {
         Date startDate = new Date(Long.parseLong(startDateString));
         Date endDate = new Date(Long.parseLong(endDateString));
         int percent = Integer.parseInt(percentString);
-        ArrayList<Product> products = Utils.convertJsonElementToProductArrayList(new JsonParser().parse(productsString));
+        ArrayList<Product> products = Utils.convertProductIdArrayListToProductArrayList(Utils.convertJsonElementToStringArrayList((new JsonParser()).parse(productIds)));
         if (products.size() == 0) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Select at least one product!");
         }
@@ -140,10 +142,10 @@ public class OffController {
         Date newEndDate = new Date(Long.parseLong(newEndDateStr));
         Date newStartDate = new Date(Long.parseLong(newStartDateStr));
         int newPercent = Integer.parseInt(newPercentStr);
-        ArrayList<Product> addingProduct = Utils.convertJsonElementToProductArrayList(new JsonParser().
-                parse(addingProductStr));
-        ArrayList<Product> removingProduct = Utils.convertJsonElementToProductArrayList(new JsonParser().
-                parse(removingProductStr));
+        ArrayList<Product> addingProduct = Utils.convertProductIdArrayListToProductArrayList(Utils.convertJsonElementToStringArrayList(new JsonParser().
+                parse(addingProductStr)));
+        ArrayList<Product> removingProduct = Utils.convertProductIdArrayListToProductArrayList(Utils.convertJsonElementToStringArrayList(new JsonParser().
+                parse(removingProductStr)));
         Sale sale = controlInternalGetSaleById(id);
         if (sale == null) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "No such sale with this code!");
@@ -181,8 +183,8 @@ public class OffController {
                 toString());
     }
 
-    public Response controlGetRemainedNumberInCodedDiscountForCustomer(String codedDiscountStr) {
-        CodedDiscount codedDiscount = CodedDiscount.convertJsonStringToCodedDiscount(codedDiscountStr);
+    public Response controlGetRemainedNumberInCodedDiscountForCustomer(String codedDiscountCode) {
+        CodedDiscount codedDiscount = CodedDiscount.getCodedDiscountByCode(codedDiscountCode);
         if (!(mainController.getAccount() instanceof Customer)) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Sign in as a Customer");
         }
@@ -195,9 +197,9 @@ public class OffController {
                 getAllSaleRequestsBySupplier((Supplier) mainController.getAccount())).toString());
     }
 
-    public Response controlGetPriceForEachProductAfterSale(String productStr, String supplierStr) {
-        Product product = Product.convertJsonStringToProduct(productStr);
-        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierStr);
+    public Response controlGetPriceForEachProductAfterSale(String productId, String supplierCompanyName) {
+        Product product = Product.getProductById(productId);
+        Supplier supplier = Supplier.getSupplierByCompanyName(supplierCompanyName);
         Sale sale = Sale.getProductSale(product, supplier);
         int price = product.getPrice(supplier);
         if (sale != null) {
@@ -207,33 +209,33 @@ public class OffController {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(price));
     }
 
-    public Response removeCodedDiscount(String codedDiscountStr) {
-        CodedDiscount codedDiscount = CodedDiscount.convertJsonStringToCodedDiscount(codedDiscountStr);
+    public Response removeCodedDiscount(String codedDiscountId) {
+        CodedDiscount codedDiscount = CodedDiscount.getCodedDiscountByCode(codedDiscountId);
         CodedDiscount.removeCodeFromList(codedDiscount);
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public Response isProductHasAnySale(String productString){
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response isProductHasAnySale(String productId){
+        Product product = Product.getProductById(productId);
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(String.valueOf(Sale.
                 isProductHasAnySale(product))));
     }
 
-    public Response getProductSale(String productString,String supplierString){
-        Product product = Product.convertJsonStringToProduct(productString);
-        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
+    public Response getProductSale(String productId,String supplierUsername){
+        Product product = Product.getProductById(productId);
+        Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Sale.getProductSale(product,supplier)));
     }
 
-    public Response controlGetMaxSaleForThisProduct(String productString){
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response controlGetMaxSaleForThisProduct(String productId){
+        Product product = Product.getProductById(productId);
         Sale sale = Sale.getMaxSaleForThisProduct(product);
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(sale));
     }
 
-    public Response isProductInThisSuppliersSale(String productString,String supplierString){
-        Product product = Product.convertJsonStringToProduct(productString);
-        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
+    public Response isProductInThisSuppliersSale(String productId,String supplierUsername){
+        Product product = Product.getProductById(productId);
+        Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Sale.isProductInThisSuppliersSale(product,supplier)));
     }
 }

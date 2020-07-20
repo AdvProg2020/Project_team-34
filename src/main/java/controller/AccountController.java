@@ -789,9 +789,9 @@ public class AccountController {
         }
     }
 
-    public Response controlPay(String amount) {
-        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
-    }
+//    public Response controlPay(String amount) {
+//        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
+//    }
 
     public Response controlGetMembersOfChatRoom(String chatRoomId){
         ArrayList<String> userNames = new ArrayList<>();

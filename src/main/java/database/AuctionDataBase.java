@@ -43,8 +43,17 @@ public class AuctionDataBase {
             statement.setString(2, auction.getChatRoomIdentifier());
             statement.setString(3, auction.getProduct().getProductId());
             statement.setString(4, auction.getSupplier().getUserName());
-            statement.setString(5, auction.getHighestPromoter().getUserName());
-            statement.setInt(6, auction.getHighestPromotion());
+            if(auction.getHighestPromoter() == null) {
+                statement.setString(5, null);
+            }
+            else {
+                statement.setString(5, auction.getHighestPromoter().getUserName());
+            }
+            if(auction.getHighestPromotion() == null){
+                statement.setInt(6, -1);
+            }else {
+                statement.setInt(6, auction.getHighestPromotion());
+            }
             statement.setLong(7, auction.getEnd().getTime());
             statement.setInt(8, auction.getWage());
 
@@ -78,10 +87,13 @@ public class AuctionDataBase {
                 Supplier supplier = (Supplier)(Account.getAccountByUsernameWithinAll(resultSet.getString("supplierUsername")));
                 Customer highestPromoter = (Customer) Account.getAccountByUsernameWithinAll(resultSet.getString("highestPromoterUsername"));
                 int highestPromotion = resultSet.getInt("highestPromotion");
-                Date endDate = new Date(resultSet.getLong("credit"));
+                Integer highestPromotionInteger = null;
+                if(highestPromotion != -1)
+                    highestPromotionInteger = highestPromotion;
+                Date endDate = new Date(resultSet.getLong("endDate"));
                 int wage = resultSet.getInt("wage");
 
-                new Auction(identifier, chatRoomIdentifier,product, supplier,highestPromoter,highestPromotion, endDate, wage);
+                new Auction(identifier, chatRoomIdentifier,product, supplier,highestPromoter,highestPromotionInteger, endDate, wage);
 
             }
         } catch (SQLException e) {

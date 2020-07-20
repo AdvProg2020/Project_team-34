@@ -6,6 +6,7 @@ import account.Supplier;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import database.AuctionDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import product.Product;
@@ -51,6 +52,7 @@ public class Auction {
         FINISHER.schedule(endTask, end);
         ALL_AUCTIONS.add(this);
         allAuctionsCount++;
+        AuctionDataBase.add(this);
     }
 
     public Auction(String identifier, String chatRoomIdentifier, Product product, Supplier supplier,

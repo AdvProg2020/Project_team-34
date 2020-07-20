@@ -340,6 +340,12 @@ public class ProductController {
         communication("controlFilterSetAvailabilityFilter", inputs);
     }
 
+    public void controlFilterSetOnlyInAuctionFilter(boolean onlyInAuction) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(onlyInAuction));
+        communication("controlFilterSetOnlyInAuctionFilter", inputs);
+    }
+
     public void controlFilterSetPriceLowerBound(int priceLowerBound) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(String.valueOf(priceLowerBound));

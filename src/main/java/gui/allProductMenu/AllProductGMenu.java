@@ -163,10 +163,6 @@ public class AllProductGMenu extends GMenu {
         });
 
         CheckBox availabilityCheck = new CheckBox("Only Available Products");
-        availabilityVBox.getChildren().addAll(availabilityCheck, saleCheck);
-        availabilityVBox.setSpacing(10);
-        availabilityVBox.setPadding(new Insets(10, 10, 10, 10));
-
         availabilityCheck.setOnMouseReleased(e -> {
             rangeSlider.setDisable(!availabilityCheck.isSelected());
             try {
@@ -178,6 +174,19 @@ public class AllProductGMenu extends GMenu {
 
         });
 
+        CheckBox auctionCheckBox = new CheckBox("Only Products In Auction");
+        auctionCheckBox.setOnMouseReleased(e -> {
+            try {
+                controller.getProductController().controlFilterSetOnlyInAuctionFilter(auctionCheckBox.isSelected());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
+            putNewProductsInProductGridPane(productGridPane);
+        });
+
+        availabilityVBox.getChildren().addAll(availabilityCheck, saleCheck, auctionCheckBox);
+        availabilityVBox.setSpacing(10);
+        availabilityVBox.setPadding(new Insets(10, 10, 10, 10));
 
         boolean isAvailability = false;
         try {
@@ -206,7 +215,7 @@ public class AllProductGMenu extends GMenu {
             treeView = new TreeView<>(getTreeItem(allProductCategory, controller, productGridPane, numberOfViews, saleCheck, availabilityCheck, rangeSlider, specialFilterVBox));
 
             treeView.setPrefHeight(250);
-            filterAndSort.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+            filterAndSort.getStylesheets().add(new File("src/main/resources/cssInsider/Style.css").toURI().toString());
         } catch (ExceptionalMassage exceptionalMassage) {
             new AlertBox(this, exceptionalMassage, controller).showAndWait();
         }
@@ -478,10 +487,12 @@ public class AllProductGMenu extends GMenu {
             } else {
                 if (auction == null) {
                     priceLabel = new Label(String.valueOf(product.getMinimumPrice()) + "$");
+                    priceLabel.setStyle("-fx-font-size: 18");
                 } else {
                     priceLabel = new Label("Highest Promotion:" + String.valueOf(auction.getHighestPromotion()) + "$");
+                    priceLabel.setStyle("-fx-font-size: 14");
                 }
-                priceLabel.setStyle("-fx-font-size: 18");
+
 
             }
             Sale sale = null;

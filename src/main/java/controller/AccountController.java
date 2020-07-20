@@ -10,6 +10,7 @@ import com.google.gson.JsonParser;
 import database.WageDataBase;
 import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
+import jdk.jshell.execution.Util;
 import log.CustomerLog;
 import log.LogStatus;
 import log.SupplierLog;
@@ -643,10 +644,9 @@ public class AccountController {
     public Response getAllMessagesOfChatRoomById(String chatRoomId){
         ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
         if(chatRoom == null){
-            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room id invalid!"));
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat Room is closed!"));
         }
-        //Need modification!
-        return null;
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertMessageToJsonElement(chatRoom.getMessages()).toString());
     }
 
     public Response controlSetWageAndMinimum(String wageString , String minimumString ){
@@ -688,5 +688,35 @@ public class AccountController {
     public Response getOnlineSupporters() {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertSupporterArrayListToJsonElement(mainController.
                 getClientThread().getServer().getOnlineSupporters()).toString());
+    }
+
+    public Response getRequestingCustomersBySupporter(){
+        if(!(mainController.getAccount() instanceof Supporter)){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Supporter!"));
+        }
+        Supporter supporter = (Supporter)mainController.getAccount();
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertStringArrayListToJsonElement(ChatRoom.getSupportiveChatRoomIdsForSupporter(supporter)).toString());
+    }
+
+    public Response getCustomerOfAChatRoom(String chatRoomId){
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
+        if(chatRoom == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room doesn't exist!"));
+        }
+        Customer customer = chatRoom.getCustomerOfChatRoom();
+        if(customer == null) {
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No customer in this Chat room!"));
+        }
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(customer));
+
+    }
+
+    public Response controlCloseChatRoomById(String id){
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(id);
+        if(chatRoom == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room doesn't exist!"));
+        }
+        ChatRoom.removeChatRoom(chatRoom);
+        return Response.createSuccessResponse();
     }
 }

@@ -2,5 +2,5 @@ Data
 10
 100
 604800000
-1595104157322
+0
 percent, max amount, period, lastTime

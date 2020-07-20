@@ -13,9 +13,9 @@ public class ChatRoom {
     public ChatRoom() {
         this.joinedAccounts = new ArrayList<>();
         this.messages = new ArrayList<>();
-        allChatRooms.add(this);
-        numberOfChatRoomsCreated++;
         this.chatRoomId = ChatRoom.generateIdentifier();
+        numberOfChatRoomsCreated++;
+        allChatRooms.add(this);
     }
 
     public void joinChatRoom(Account account){
@@ -57,6 +57,38 @@ public class ChatRoom {
 
     public ArrayList<Message> getMessages() {
         return messages;
+    }
+
+    public static ArrayList<String> getSupportiveChatRoomIdsForSupporter(Supporter supporter){
+        ArrayList<String> chatRoomIds = new ArrayList<>();
+        for (ChatRoom allChatRoom : allChatRooms) {
+            if(allChatRoom.isSupporterInThisChatRoom(supporter)){
+                chatRoomIds.add(allChatRoom.getChatRoomId());
+            }
+        }
+        return chatRoomIds;
+    }
+
+    public boolean isSupporterInThisChatRoom(Supporter supporter){
+        for (Account joinedAccount : joinedAccounts) {
+            if(joinedAccount.equals(supporter)){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public Customer getCustomerOfChatRoom(){
+        for (Account joinedAccount : joinedAccounts) {
+            if(joinedAccount instanceof Customer){
+                return (Customer)joinedAccount;
+            }
+        }
+        return null;
+    }
+
+    public static void removeChatRoom(ChatRoom chatRoom){
+        allChatRooms.remove(chatRoom);
     }
 
     @Override

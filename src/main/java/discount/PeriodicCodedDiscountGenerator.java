@@ -67,8 +67,5 @@ public class PeriodicCodedDiscountGenerator extends Thread {
         } catch (InterruptedException e) {
             System.err.println("Error, periodic coded discount thread interrupted");
         }
-        if (continuous) {
-            run();
-        }
     }
 }

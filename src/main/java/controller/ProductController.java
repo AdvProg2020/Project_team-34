@@ -5,6 +5,7 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import auction.Auction;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -572,6 +573,13 @@ public class ProductController {
         filterAndSort.setAvailabilityFilter(availabilityFilter);
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
+
+    public Response controlFilterSetOnlyInAuctionFilter(String onlyInAuctionString){
+        boolean onlyInAuction = new JsonParser().parse(onlyInAuctionString).getAsBoolean();
+        filterAndSort.setInAuctionOnly(onlyInAuction);
+        return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
 
     public Response controlFilterSetPriceLowerBound(String priceLowerBoundStr) {
         int priceLowerBound = new JsonParser().parse(priceLowerBoundStr).getAsInt();

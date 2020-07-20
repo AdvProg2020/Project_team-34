@@ -407,4 +407,12 @@ public class AccountController {
         //Need modification!
         return null;
     }
+
+    public void controlPay(String username, String password) throws ExceptionalMassage {
+
+    }
+
+    public void controlPay() throws ExceptionalMassage {
+
+    }
 }

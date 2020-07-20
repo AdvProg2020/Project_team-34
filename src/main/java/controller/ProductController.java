@@ -768,7 +768,7 @@ public class ProductController {
         ArrayList<Auction> allAuctions = Auction.getAllAuctions();
         ArrayList<String> auctionsIds = new ArrayList<>();
         for (Auction allAuction : allAuctions) {
-            if(allAuction.getSupplier().equals(supplier)){
+            if(allAuction.getSupplier().equals(supplier) && Auction.isThisProductInAuction(allAuction.getProduct(),supplier)){
                 auctionsIds.add(allAuction.getIdentifier());
             }
         }

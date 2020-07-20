@@ -11,9 +11,7 @@ import log.CustomerLog;
 import product.Product;
 import server.communications.Utils;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * @author Aryan Ahadinia
@@ -24,16 +22,7 @@ public class Auction {
     private static final ArrayList<Auction> ALL_AUCTIONS = new ArrayList<>();
     private static int allAuctionsCount = 0;
 
-    private static final Runnable END_CHECKER = () -> {
-        for (Auction auction : ALL_AUCTIONS) {
-            auction.checkForEnd();
-        }
-        try {
-            Thread.sleep(300000);
-        } catch (InterruptedException e) {
-            System.err.println("Auction checker thread interrupted");
-        }
-    };
+    private static final Timer FINISHER = new Timer();
 
     private final String identifier;
     private final String chatRoomIdentifier;
@@ -53,6 +42,13 @@ public class Auction {
         this.highestPromotion = null;
         this.end = new Date(endLong);
         this.wage = wage;
+        TimerTask endTask = new TimerTask() {
+            @Override
+            public void run() {
+                end();
+            }
+        };
+        FINISHER.schedule(endTask, end);
         ALL_AUCTIONS.add(this);
         allAuctionsCount++;
     }
@@ -67,6 +63,13 @@ public class Auction {
         this.highestPromotion = highestPromotion;
         this.end = end;
         this.wage = wage;
+        TimerTask endTask = new TimerTask() {
+            @Override
+            public void run() {
+                end();
+            }
+        };
+        FINISHER.schedule(endTask, end);
         ALL_AUCTIONS.add(this);
         allAuctionsCount++;
     }
@@ -88,10 +91,13 @@ public class Auction {
             this.highestPromotion = Integer.parseInt(jsonObject.get("highestPromotion").toString());
         }
         this.end = new Date(Long.parseLong(jsonObject.get("end").getAsString()));
-    }
-
-    public static Runnable getEndChecker() {
-        return END_CHECKER;
+        TimerTask endTask = new TimerTask() {
+            @Override
+            public void run() {
+                end();
+            }
+        };
+        FINISHER.schedule(endTask, end);
     }
 
     public String getIdentifier() {
@@ -182,12 +188,6 @@ public class Auction {
             }
         }
         //product out
-    }
-
-    public void checkForEnd() {
-        if (System.currentTimeMillis() >= end.getTime()) {
-            end();
-        }
     }
 
     public String toJson() {

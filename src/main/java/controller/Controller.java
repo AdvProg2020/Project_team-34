@@ -4,6 +4,7 @@ import account.Account;
 import com.google.gson.JsonArray;
 import communications.*;
 import exceptionalMassage.ExceptionalMassage;
+import peer.PeerNode;
 
 import java.io.*;
 import java.net.Socket;
@@ -17,12 +18,14 @@ public class Controller {
 
     private String token;
     private boolean isFirstSupervisorCreated;
+    private PeerNode peerNode;
 
     private final AccountController accountController;
     private final ProductController productController;
     private final OffController offController;
 
     public Controller() {
+        peerNode = new PeerNode(0);
         try {
             this.socket = new Socket("localHost",8088);
             try {
@@ -77,6 +80,10 @@ public class Controller {
 
     public ObjectOutputStream getOutputStream() {
         return outputStream;
+    }
+
+    public PeerNode getPeerNode() {
+        return peerNode;
     }
 
     public String getToken() {

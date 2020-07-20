@@ -4,6 +4,7 @@ import controller.Controller;
 import gui.GMenu;
 import gui.loginMenu.FirstSupervisorMenu;
 import gui.mainMenu.MainMenuG;
+import gui.profile.sendMenu;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -39,9 +40,10 @@ public class Main extends Application {
 
         Controller controller = new Controller();
 
-        GMenu mainMenu = new MainMenuG( null, stage, controller);
-        GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
-        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
+//        GMenu mainMenu = new MainMenuG( null, stage, controller);
+//        GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
+//        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
+        stage.setScene(new sendMenu(null, stage, controller).getScene());
         stage.show();
     }
 

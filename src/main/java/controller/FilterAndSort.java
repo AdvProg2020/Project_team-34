@@ -1,6 +1,7 @@
 package controller;
 
 import account.Supplier;
+import auction.Auction;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Category;
@@ -16,6 +17,7 @@ import java.util.*;
 public class FilterAndSort {
     private boolean availabilityFilter;
     private boolean inSaleOnly;
+    private boolean inAuctionOnly;
     private Integer priceLowerBound;
     private Integer priceUpperBound;
     private SortType sortType;
@@ -28,6 +30,7 @@ public class FilterAndSort {
     public FilterAndSort() {
         this.availabilityFilter = false;
         this.inSaleOnly = false;
+        this.inAuctionOnly = false;
         this.priceLowerBound = null;
         this.priceUpperBound = null;
         this.sortType = SortType.BY_NUMBER_OF_VIEWS;
@@ -41,6 +44,7 @@ public class FilterAndSort {
     public void clear() {
         this.availabilityFilter = false;
         this.inSaleOnly = false;
+        this.inAuctionOnly = false;
         this.priceLowerBound = null;
         this.priceUpperBound = null;
         this.sortType = SortType.BY_NUMBER_OF_VIEWS;
@@ -54,6 +58,7 @@ public class FilterAndSort {
     public void clearFiltersExceptCategory() {
         this.availabilityFilter = false;
         this.inSaleOnly = false;
+        this.inAuctionOnly = false;
         this.priceLowerBound = null;
         this.priceUpperBound = null;
         this.sortType = SortType.BY_NUMBER_OF_VIEWS;
@@ -69,6 +74,10 @@ public class FilterAndSort {
 
     public boolean isInSaleOnly() {
         return inSaleOnly;
+    }
+
+    public boolean isInAuctionOnly() {
+        return inAuctionOnly;
     }
 
     public Integer getPriceLowerBound() {
@@ -109,6 +118,10 @@ public class FilterAndSort {
 
     public void setInSaleOnly(boolean inSaleOnly) {
         this.inSaleOnly = inSaleOnly;
+    }
+
+    public void setInAuctionOnly(boolean inAuctionOnly) {
+        this.inAuctionOnly = inAuctionOnly;
     }
 
     public void setPriceLowerBound(Integer priceLowerBound) throws ExceptionalMassage {
@@ -343,6 +356,19 @@ public class FilterAndSort {
         }
     }
 
+    private ArrayList<Product> applyAuctionOnlyFilter(ArrayList<Product> products) {
+        if (inAuctionOnly) {
+            ArrayList<Product> filteredProducts = new ArrayList<>();
+            for (Product product : products) {
+                if (Auction.isThisProductInAuction(product, product.getListOfSuppliers().get(0))) {
+                    filteredProducts.add(product);
+                }
+            }
+            return filteredProducts;
+        }
+        return new ArrayList<>(products);
+    }
+
     public ArrayList<Product> getProducts() {
         ArrayList<Product> products = category.getAllProductInAllSubCategories();
         products = applyAvailabilityFilter(products);
@@ -352,6 +378,7 @@ public class FilterAndSort {
         products = applyNameFilter(products);
         products = applyBrandFilter(products);
         products = applySaleOnlyFilter(products);
+        products = applyAuctionOnlyFilter(products);
         products = applySupplierFilter(products);
         products = sort(products);
         return products;

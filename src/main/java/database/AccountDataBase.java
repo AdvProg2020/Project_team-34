@@ -39,7 +39,7 @@ public class AccountDataBase {
         }
         String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
                 " cartId, nameOfCompany,isAvailable,bankAccountNumber , type)"+
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ?,?, ? )";
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ?,?, ? ,?)";
         try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
             statement.setString(1, account.getUserName());
             statement.setString(2,account.getName());

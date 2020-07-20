@@ -519,8 +519,8 @@ public class AccountController {
                 getDeliveryStatus() != LogStatus.DELIVERED));
     }
 
-    public Response numberOfProductInCart(String productInCartStr) {
-        ProductInCart productInCart = ProductInCart.convertJsonStringToProductInCart(productInCartStr);
+    public Response numberOfProductInCart(String productInCartId) {
+        ProductInCart productInCart = ProductInCart.getProductInCartByIdentifier(productInCartId);
         int c;
         try {
             c = mainController.getCart().getCountOfProductInCart(productInCart);
@@ -621,8 +621,8 @@ public class AccountController {
     }
 
     //Supporter methods!
-    public Response createChatRoomBetweenSupporterAndCustomer(String supporterString){
-        Supporter supporter = Supporter.convertJsonStringToSupporter(supporterString);
+    public Response createChatRoomBetweenSupporterAndCustomer(String supporterUsername){
+        Supporter supporter = (Supporter) Account.getAccountByUsernameWithinAvailable(supporterUsername);
         if(!(mainController.getAccount() instanceof Customer)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as customer!"));
         }

@@ -5,6 +5,7 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import auction.Auction;
+import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -184,8 +185,8 @@ public class ProductController {
         }
     }
 
-    public Response controlGetAllSuppliersForAProduct(String productString) {
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response controlGetAllSuppliersForAProduct(String productId) {
+        Product product = Product.getProductById(productId);
         JsonElement suppliers = Utils.convertSupplierArrayListToJsonElement(product.getListOfSuppliers());
         return new Response(RequestStatus.SUCCESSFUL, suppliers.toString());
     }
@@ -195,9 +196,9 @@ public class ProductController {
         return new Response(RequestStatus.SUCCESSFUL, customers.toString());
     }
 
-    public Response doesThisSupplierSellThisProduct(String sellerString, String productString) {
-        Supplier seller = Supplier.convertJsonStringToSupplier(sellerString);
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response doesThisSupplierSellThisProduct(String sellerUsername, String productId) {
+        Supplier seller = (Supplier) Account.getAccountByUsernameWithinAvailable(sellerUsername);
+        Product product = Product.getProductById(productId);
         if (mainController.getAccount() == null)
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sing in first."));
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(product.
@@ -205,8 +206,8 @@ public class ProductController {
     }
 
     //added by rpirayadi
-    public Response controlGetAllCategoriesInACategory(String rootCategoryString){
-        Category rootCategory = Category.convertJsonStringToCategory(rootCategoryString);
+    public Response controlGetAllCategoriesInACategory(String rootCategoryName){
+        Category rootCategory = Category.getCategoryByName(rootCategoryName);
         JsonElement categories = Utils.convertCategoryArrayListToJsonElement(rootCategory.getAllCategoriesIn());
         return new Response(RequestStatus.SUCCESSFUL,categories.toString());
     }
@@ -217,8 +218,8 @@ public class ProductController {
     }
 
     //related to feedback:
-    public Response controlAddCommentToProduct(String title, String content, String productString){
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response controlAddCommentToProduct(String title, String content, String productId){
+        Product product = Product.getProductById(productId);
         if (!(mainController.getAccount() instanceof Customer)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sign in as a customer first!"));
         }
@@ -226,8 +227,8 @@ public class ProductController {
         return Response.createSuccessResponse();
     }
 
-    public Response controlGetCommentsOfAProduct(String productString) {
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response controlGetCommentsOfAProduct(String productId) {
+        Product product = Product.getProductById(productId);
         ArrayList<Comment> productComment = new ArrayList<>();
         for (Comment comment : Comment.getComments()) {
             if (comment.getProduct() == product) {
@@ -252,8 +253,8 @@ public class ProductController {
         return Response.createSuccessResponse();
     }
 
-    public Response controlGetAverageScoreByProduct(String productString) {
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response controlGetAverageScoreByProduct(String productId) {
+        Product product = Product.getProductById(productId);
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(Score.
                 getAverageScoreForProduct(product))));
     }
@@ -332,9 +333,9 @@ public class ProductController {
         return new Response(RequestStatus.SUCCESSFUL, jsonElement.toString());
     }
 
-    public Response controlHasCustomerBoughtThisProduct(String customerString, String productString){
-        Customer customer = Customer.convertJsonStringToCustomer(customerString);
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response controlHasCustomerBoughtThisProduct(String customerUsername, String productId){
+        Customer customer = (Customer) Account.getAccountByUsernameWithinAvailable(customerUsername);
+        Product product = Product.getProductById(productId);
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(CustomerLog.
                 getAllCustomersBoughtProduct(product).contains(customer))));
     }
@@ -343,15 +344,15 @@ public class ProductController {
         return CustomerLog.getAllCustomersBoughtProduct(product).contains(customer);
     }
 
-    public Response controlViewThisProduct(String productString){
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response controlViewThisProduct(String productId){
+        Product product = Product.getProductById(productId);
         product.setNumberOfViews(product.getNumberOfViews()+ 1);
         return Response.createSuccessResponse();
     }
 
-    public Response getCustomersBoughtProductObservable(String productString ,String supplierString) {
-        Product product = Product.convertJsonStringToProduct(productString);
-        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
+    public Response getCustomersBoughtProductObservable(String productId ,String supplierUsername) {
+        Product product = Product.getProductById(productId);
+        Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         JsonElement returning = Utils.convertCustomerArrayListToJsonElement(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
         return new Response(RequestStatus.SUCCESSFUL,returning.toString());
     }
@@ -573,6 +574,13 @@ public class ProductController {
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
+    public Response controlFilterSetOnlyInAuctionFilter(String onlyInAuctionString){
+        boolean onlyInAuction = new JsonParser().parse(onlyInAuctionString).getAsBoolean();
+        filterAndSort.setInAuctionOnly(onlyInAuction);
+        return new Response(RequestStatus.SUCCESSFUL, "");
+    }
+
+
     public Response controlFilterSetPriceLowerBound(String priceLowerBoundStr) {
         int priceLowerBound = new JsonParser().parse(priceLowerBoundStr).getAsInt();
         try {
@@ -723,8 +731,8 @@ public class ProductController {
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public Response getAllSuppliersThatHaveAvailableProduct(String productString){
-        Product product = Product.convertJsonStringToProduct(productString);
+    public Response getAllSuppliersThatHaveAvailableProduct(String productId){
+        Product product = Product.getProductById(productId);
         ArrayList<Supplier> suppliers = product.getAllSuppliersThatHaveAvailableProduct();
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertSupplierArrayListToJsonElement(suppliers).toString());
     }
@@ -734,8 +742,8 @@ public class ProductController {
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(product));
     }
 
-    public Response getProductForSupplier(String supplierString){
-        Supplier supplier = Supplier.convertJsonStringToSupplier(supplierString);
+    public Response getProductForSupplier(String supplierUsername){
+        Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         ArrayList<Product> products = Product.getProductForSupplier(supplier);
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(products).toString());
     }
@@ -744,14 +752,14 @@ public class ProductController {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Product.getProductById(id)));
     }
 
-    public Response promoteAuctionPrice(String newPrice,String minimum,String auctionString){
+    public Response promoteAuctionPrice(String newPrice,String minimum,String auctionId){
         if(!(mainController.getAccount() instanceof Customer)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Customer!"));
         }
         Customer customer = (Customer) mainController.getAccount();
         int minimumAmountOfCredit = Integer.parseInt(minimum);
         int price = Integer.parseInt(newPrice);
-        Auction auction = Auction.convertJsonStringToAuction(auctionString);
+        Auction auction = Auction.getAuctionByIdentifier(auctionId);
         try {
             auction.promote(customer, price, minimumAmountOfCredit);
             return Response.createSuccessResponse();
@@ -790,12 +798,12 @@ public class ProductController {
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertProductArrayListToJsonElement(notAuctionedProducts).toString());
     }
 
-    public Response controlAddAuction(String productString,String dateString){
+    public Response controlAddAuction(String productId,String dateString){
         if(!(mainController.getAccount() instanceof Supplier)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Supplier!"));
         }
         Supplier supplier = (Supplier) mainController.getAccount();
-        Product product = Product.convertJsonStringToProduct(productString);
+        Product product = Product.getProductById(productId);
         Long date = Long.parseLong(dateString);
         int wage = mainController.getAccountController().controlGetWageInternal();
         new Auction(product,supplier,date,wage);
@@ -808,5 +816,17 @@ public class ProductController {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Auction not found!"));
         }
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(auction));
+    }
+
+    public Response controlGetAuctionForProduct(String productId){
+        Product product = Product.getProductById(productId);
+        Auction auction = Auction.getAuctionForProduct(product, product.getListOfSuppliers().get(0));
+        String result;
+        if(auction == null){
+            result = "";
+        }else {
+            result = auction.toJson();
+        }
+        return new Response(RequestStatus.SUCCESSFUL,result);
     }
 }

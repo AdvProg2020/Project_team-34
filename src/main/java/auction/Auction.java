@@ -6,6 +6,7 @@ import account.Supplier;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import database.AuctionDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import log.CustomerLog;
 import product.Product;
@@ -51,6 +52,7 @@ public class Auction {
         FINISHER.schedule(endTask, end);
         ALL_AUCTIONS.add(this);
         allAuctionsCount++;
+        AuctionDataBase.add(this);
     }
 
     public Auction(String identifier, String chatRoomIdentifier, Product product, Supplier supplier,
@@ -157,6 +159,15 @@ public class Auction {
             }
         }
         return false;
+    }
+
+    public static Auction getAuctionForProduct(Product product, Supplier supplier){
+        for (Auction auction : ALL_AUCTIONS) {
+            if(auction.getProduct().equals(product) && auction.getSupplier().equals(supplier)
+            && System.currentTimeMillis() < auction.getEnd().getTime())
+                return auction;
+        }
+        return null;
     }
 
     public void promote(Customer customer, int promotionAmount, int minimumCreditRequired) throws ExceptionalMassage {

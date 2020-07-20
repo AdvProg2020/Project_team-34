@@ -75,7 +75,11 @@ public class OffController {
         inputs.add(String.valueOf(startDate.getTime()));
         inputs.add(String.valueOf(endDate.getTime()));
         inputs.add(String.valueOf(percent));
-        inputs.add(Utils.convertProductArrayListToJsonElement(products));
+        ArrayList<String> productIds = new ArrayList<>();
+        for (Product product : products) {
+            productIds.add(product.getProductId());
+        }
+        inputs.add(Utils.convertStringArrayListToJsonElement(productIds));
         communication("controlCreateSale", inputs);
     }
 
@@ -98,8 +102,16 @@ public class OffController {
         inputs.add(String.valueOf(newEndDate.getTime()));
         inputs.add(String.valueOf(newStartDate.getTime()));
         inputs.add(String.valueOf(newPercent));
-        inputs.add(Utils.convertProductArrayListToJsonElement(addingProduct));
-        inputs.add(Utils.convertProductArrayListToJsonElement(removingProduct));
+        ArrayList<String> addingProductIds = new ArrayList<>();
+        ArrayList<String> removingProductIds = new ArrayList<>();
+        for (Product product : addingProduct) {
+            addingProductIds.add(product.getProductId());
+        }
+        for (Product product : removingProduct) {
+            removingProductIds.add(product.getProductId());
+        }
+        inputs.add(Utils.convertStringArrayListToJsonElement(addingProductIds));
+        inputs.add(Utils.convertStringArrayListToJsonElement(removingProductIds));
         communication("controlEditSaleById", inputs);
     }
 
@@ -116,7 +128,7 @@ public class OffController {
 
     public int controlGetRemainedNumberInCodedDiscountForCustomer(CodedDiscount codedDiscount) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(codedDiscount));
+        inputs.add(codedDiscount.getDiscountCode());
         return communication("controlGetRemainedNumberInCodedDiscountForCustomer", inputs).getAsInt();
     }
 
@@ -127,14 +139,14 @@ public class OffController {
 
     public int controlGetPriceForEachProductAfterSale(Product product, Supplier supplier) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
-        inputs.add(Utils.convertObjectToJsonString(supplier));
+        inputs.add(product.getProductId());
+        inputs.add(supplier.getUserName());
         return communication("controlGetPriceForEachProductAfterSale", inputs).getAsInt();
     }
 
     public void removeCodedDiscount(CodedDiscount codedDiscount) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(codedDiscount));
+        inputs.add(codedDiscount.getDiscountCode());
         communication("removeCodedDiscount", inputs);
     }
 
@@ -150,27 +162,27 @@ public class OffController {
 
     public boolean isProductHasAnySale(Product product) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(product.getProductId());
         return communication("isProductHasAnySale", inputs).getAsBoolean();
     }
 
     public boolean isProductInThisSuppliersSale(Product product, Supplier supplier) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
-        inputs.add(Utils.convertObjectToJsonString(supplier));
+        inputs.add(product.getProductId());
+        inputs.add(supplier.getUserName());
         return communication("isProductInThisSuppliersSale", inputs).getAsBoolean();
     }
 
     public Sale getProductSale(Product product, Supplier supplier) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
-        inputs.add(Utils.convertObjectToJsonString(supplier));
+        inputs.add(product.getProductId());
+        inputs.add(supplier.getUserName());
         return Sale.convertJsonStringToSale(communication("getProductSale",inputs).getAsString());
     }
 
     public Sale controlGetMaxSaleForThisProduct(Product product) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(product.getProductId());
         return  Sale.convertJsonStringToSale(communication("controlGetMaxSaleForThisProduct", inputs).toString());
     }
 }

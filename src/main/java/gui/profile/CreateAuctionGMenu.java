@@ -63,6 +63,7 @@ public class CreateAuctionGMenu extends GMenu {
                 if (productsListView.getSelectionModel().getSelectedItems().size() != 0) {
                     product = controller.getProductController().getProductById(productsListView.getSelectionModel().getSelectedItems().get(0));
                     controller.getProductController().controlAddAuction(product, new Date(GMenu.getTime(jfxDatePicker, jfxTimePicker)));
+                    stage.setScene(new SupplierProfileGMenu(this, stage, controller).createScene());
 
                 }else {
                     new AlertBox(this, "Please Select Product", "OK", controller).showAndWait();
@@ -70,8 +71,6 @@ public class CreateAuctionGMenu extends GMenu {
             } catch (ExceptionalMassage exceptionalMassage) {
                 exceptionalMassage.printStackTrace();
             }
-
-            stage.setScene(new CreateAuctionGMenu(this, stage, controller).createScene());
         });
         sidePane.getChildren().addAll(jfxDatePicker, jfxTimePicker, createAuctionButton);
         sidePane.setAlignment(Pos.CENTER);

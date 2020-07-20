@@ -126,6 +126,21 @@ public class Auction {
     }
 
     @Override
+    public String toString() {
+        String highestPromoterUsername = "NO promoter yet";
+        if(highestPromoter != null)
+            highestPromoterUsername = highestPromoter.getUserName();
+        return "Auction{" +
+                "identifier='" + identifier + '\'' +
+                ", productName=" + product.getName() +
+                ", supplier=" + supplier.getUserName() +
+                ", highestPromoter=" + highestPromoterUsername +
+                ", highestPromotion=" + highestPromotion +
+                ", end=" + end +
+                '}';
+    }
+
+    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;

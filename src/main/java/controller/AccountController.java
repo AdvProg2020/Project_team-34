@@ -282,7 +282,7 @@ public class AccountController {
 
     public int numberOfProductInCart(ProductInCart productInCart) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(productInCart));
+        inputs.add(productInCart.getIdentifier());
         return Integer.parseInt(communication("numberOfProductInCart", inputs).getAsString());
     }
 
@@ -359,7 +359,7 @@ public class AccountController {
 
     public String createChatRoomBetweenSupporterAndCustomer(Supporter supporter) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(supporter));
+        inputs.add(supporter.getUserName());
         return communication("createChatRoomBetweenSupporterAndCustomer", inputs).getAsString();
 
     }

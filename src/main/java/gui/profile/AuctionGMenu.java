@@ -246,7 +246,7 @@ public class AuctionGMenu extends GMenu {
                 int price = Integer.parseInt(newPriceField.getText());
                 try {
                     int minimumPrice = controller.getAccountController().controlGetMinimum();
-                    controller.getProductController().promoteAuctionPrice(price,minimumPrice,auction);
+                    controller.getProductController().promoteAuctionPrice(price,minimumPrice,auction.getIdentifier());
                     stage.setScene(new CartGMenu(this, stage, controller).getScene());
                 } catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();

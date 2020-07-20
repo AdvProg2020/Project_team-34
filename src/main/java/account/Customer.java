@@ -14,15 +14,16 @@ import java.util.Objects;
 public class Customer extends Account {
     private String cartIdentifier;
 
-    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit) {
-        super(userName, name, familyName, email, phoneNumber, password, credit,true);
+    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password,
+                    int credit, int bankAccountNumber) {
+        super(userName, name, familyName, email, phoneNumber, password, credit,true, bankAccountNumber);
         this.cartIdentifier = new Cart(this).getIdentifier();
         AccountDataBase.add(this);
     }
 
     public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password,
-                    int credit,  String cartIdentifier, boolean isAvailable) {
-        super(userName, name, familyName, email, phoneNumber, password, credit,isAvailable);
+                    int credit,  String cartIdentifier, boolean isAvailable, int bankAccountNumber) {
+        super(userName, name, familyName, email, phoneNumber, password, credit,isAvailable, bankAccountNumber);
         this.cartIdentifier = cartIdentifier;
     }
 

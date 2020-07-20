@@ -16,14 +16,15 @@ public class Supplier extends Account{
     private String nameOfCompany;
 
     public Supplier(String userName, String name, String familyName, String email, String phoneNumber, String password,
-                    int credit , String nameOfCompany) {
-        super(userName, name, familyName, email, phoneNumber, password, credit,true);
+                    int credit , String nameOfCompany,int bankAccountNumber) {
+        super(userName, name, familyName, email, phoneNumber, password, credit,true, bankAccountNumber);
         this.nameOfCompany = nameOfCompany;
         AccountDataBase.add(this);
     }
 
-    public Supplier(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit, boolean isAvailable, String nameOfCompany) {
-        super(userName, name, familyName, email, phoneNumber, password, credit, isAvailable);
+    public Supplier(String userName, String name, String familyName, String email, String phoneNumber, String password,
+                    int credit, boolean isAvailable, String nameOfCompany, int bankAccountNumber) {
+        super(userName, name, familyName, email, phoneNumber, password, credit, isAvailable, bankAccountNumber);
         this.nameOfCompany = nameOfCompany;
     }
 

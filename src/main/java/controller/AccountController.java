@@ -819,7 +819,8 @@ public class AccountController {
     }
 
     public Response controlPay(String amount) {
-        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
+        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), String.valueOf(
+                getInternalAccount().getBankAccountNumber()), amount);
     }
 
     public Response controlGetMembersOfChatRoom(String chatRoomId){
@@ -870,10 +871,4 @@ public class AccountController {
         }
         return Response.createSuccessResponse();
     }
-}
-
-
-//    public Response controlPay(String amount) {
-//        //return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
-//    }
 }

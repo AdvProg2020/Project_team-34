@@ -424,4 +424,22 @@ public class AccountController {
         inputs.add(id);
         communication("controlCloseChatRoomById", inputs);
     }
+
+    public ArrayList<String> controlGetMembersOfChatRoom(String chatRoomId) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(chatRoomId);
+        return Utils.convertJsonElementToStringArrayList(communication("controlGetMembersOfChatRoom", inputs));
+    }
+
+    public void controlJoinChatRoom(String chatRoomId) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(chatRoomId);
+        communication("controlJoinChatRoom", inputs);
+    }
+
+    public void controlLeaveChatRoom(String chatRoomId) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(chatRoomId);
+        communication("controlLeaveChatRoom",inputs);
+    }
 }

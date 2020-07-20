@@ -58,7 +58,7 @@ public class Auction {
     public Auction(String identifier, String chatRoomIdentifier, Product product, Supplier supplier,
                    Customer highestPromoter, Integer highestPromotion, Date end, int wage) {
         this.identifier = identifier;
-        this.chatRoomIdentifier = chatRoomIdentifier;
+        this.chatRoomIdentifier = new ChatRoom().getChatRoomId();
         this.product = product;
         this.supplier = supplier;
         this.highestPromoter = highestPromoter;

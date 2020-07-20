@@ -792,4 +792,55 @@ public class AccountController {
     public Response controlPay(String amount) {
         return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
     }
+
+    public Response controlGetMembersOfChatRoom(String chatRoomId){
+        ArrayList<String> userNames = new ArrayList<>();
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
+        if(mainController.getAccount() == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login First!"));
+        }
+        if(chatRoom == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room is closed!"));
+        }
+        for (Account joinedAccount : chatRoom.getJoinedAccounts()) {
+            userNames.add(joinedAccount.getUserName());
+        }
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertStringArrayListToJsonElement(userNames).toString());
+    }
+
+    public Response controlJoinChatRoom(String chatRoomId){
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
+        if(mainController.getAccount() == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login first!"));
+        }
+        if(chatRoom == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room is closed!"));
+        }
+        if(chatRoom.getJoinedAccounts().contains(mainController.getAccount())){
+            return Response.createSuccessResponse();
+        }
+        chatRoom.joinChatRoom(mainController.getAccount());
+        try {
+            Message.getInstance("Server",mainController.getAccount().getUserName() + " joined chat room.", chatRoomId);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+        }
+        return Response.createSuccessResponse();
+    }
+
+    public Response controlLeaveChatRoom(String chatRoomId){
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
+        if(chatRoom == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room is closed!"));
+        }
+        chatRoom.leaveChatRoom(mainController.getAccount());
+        try {
+            Message.getInstance("Server",mainController.getAccount().getUserName() + " left chat room.", chatRoomId);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+        }
+        return Response.createSuccessResponse();
+    }
 }
+
+

@@ -1,7 +1,10 @@
 # Project Team 34
 Advanced Programing Project, 2020 Spring
 
-## People
+# Bank Project
+The bank is a sub-project of this project. [In this repository](https://github.com/AryanAhadinia/Bank) you can see the bank
+
+## Students
 | Name | Student number |
 | :-: | :-: | 
 | _***[Mr. Aryan Ahadinia](https://github.com/AryanAhadinia)***_ |  98103878 |

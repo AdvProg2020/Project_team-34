@@ -479,7 +479,7 @@ public class AllProductGMenu extends GMenu {
                 if (auction == null) {
                     priceLabel = new Label(String.valueOf(product.getMinimumPrice()) + "$");
                 } else {
-                    priceLabel = new Label("Highest Promotion:" + String.valueOf(auction.getHighestPromoter()) + "$");
+                    priceLabel = new Label("Highest Promotion:" + String.valueOf(auction.getHighestPromotion()) + "$");
                 }
                 priceLabel.setStyle("-fx-font-size: 18");
 

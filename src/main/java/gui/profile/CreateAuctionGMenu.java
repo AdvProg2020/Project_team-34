@@ -10,6 +10,7 @@ import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -61,7 +62,7 @@ public class CreateAuctionGMenu extends GMenu {
             try {
                 if (productsListView.getSelectionModel().getSelectedItems().size() != 0) {
                     product = controller.getProductController().getProductById(productsListView.getSelectionModel().getSelectedItems().get(0));
-                    controller.getProductController().controlAddAuction(product, new Date());
+                    controller.getProductController().controlAddAuction(product, new Date(GMenu.getTime(jfxDatePicker, jfxTimePicker)));
 
                 }else {
                     new AlertBox(this, "Please Select Product", "OK", controller).showAndWait();

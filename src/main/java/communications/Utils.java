@@ -289,7 +289,7 @@ public class Utils {
         JsonObject jsonObject = new JsonObject();
         JsonParser jsonParser = new JsonParser();
         for (String key : hashMap.keySet()) {
-            jsonObject.add(key, jsonParser.parse(hashMap.get(key)));
+            jsonObject.add(key, jsonParser.parse(Utils.convertObjectToJsonString(hashMap.get(key))));
         }
         return jsonObject;
     }

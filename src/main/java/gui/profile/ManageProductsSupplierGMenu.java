@@ -580,9 +580,13 @@ public class ManageProductsSupplierGMenu extends GMenu {
             newStage.initModality(Modality.APPLICATION_MODAL);
             newStage.setTitle("Create product");
             selectedImage[0] = fileChooser.showOpenDialog(newStage);
-            imageURL.setText(selectedImage[0].getAbsolutePath());
+            try {
+                imageURL.setText(selectedImage[0].getAbsolutePath());
+            } catch (NullPointerException ex){
+                imageURL.clear();
+            }
             boolean isDisable2 = (nameField.getText().trim().equals("") || priceField.getText().trim().equals("") || remainedNumberField.getText().trim().equals("") ||
-                    nameOfCompanyField.getText().trim().equals("") || imageURL.getText().trim().equals("") || categoryField.getValue().trim().equals("") );
+                    nameOfCompanyField.getText().trim().equals("") || imageURL.getText().trim().equals("") || categoryField.getValue() == null );
 
             createButton.setDisable(isDisable2);
         });
@@ -591,9 +595,16 @@ public class ManageProductsSupplierGMenu extends GMenu {
             boolean isDisable = (keyField.getText().trim().equals("") || valueField.getText().trim().equals("") );
             addToList.setDisable(isDisable);
             boolean isDisable2 = (nameField.getText().trim().equals("") || priceField.getText().trim().equals("") || remainedNumberField.getText().trim().equals("") ||
-                    nameOfCompanyField.getText().trim().equals("") || imageURL.getText().trim().equals("") || categoryField.getValue().trim().equals("") );
+                    nameOfCompanyField.getText().trim().equals("") || imageURL.getText().trim().equals("") || categoryField.getValue() == null );
 
             createButton.setDisable(isDisable2);
+        });
+
+        categoryField.setOnAction(e -> {
+            boolean isDisable2 = (nameField.getText().trim().equals("") || priceField.getText().trim().equals("") || remainedNumberField.getText().trim().equals("") ||
+                    nameOfCompanyField.getText().trim().equals("") || imageURL.getText().trim().equals("") || categoryField.getValue() == null );
+            createButton.setDisable(isDisable2);
+
         });
 
         HashMap<String, String> specification = new HashMap<>();

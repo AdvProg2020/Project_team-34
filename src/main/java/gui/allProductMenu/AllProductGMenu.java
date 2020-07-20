@@ -1,11 +1,13 @@
 package gui.allProductMenu;
 
+import auction.Auction;
 import controller.Controller;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.productMenu.ProductMenuG;
+import gui.profile.AuctionGMenu;
 import gui.profile.EditPersonalInfoGMenu;
 import javafx.collections.FXCollections;
 import javafx.collections.ListChangeListener;
@@ -51,7 +53,7 @@ public class AllProductGMenu extends GMenu {
         try {
             controller.getProductController().clearFilterAndSort();
         } catch (ExceptionalMassage exceptionalMassage) {
-            new AlertBox(this, exceptionalMassage,controller).showAndWait();
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
         }
     }
 
@@ -101,7 +103,7 @@ public class AllProductGMenu extends GMenu {
             try {
                 controller.getProductController().controlFilterSetSortType("by number of views");
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
             putNewProductsInProductGridPane(productGridPane);
         });
@@ -110,7 +112,7 @@ public class AllProductGMenu extends GMenu {
             try {
                 controller.getProductController().controlFilterSetSortType("by score");
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
             putNewProductsInProductGridPane(productGridPane);
         });
@@ -119,7 +121,7 @@ public class AllProductGMenu extends GMenu {
             try {
                 controller.getProductController().controlFilterSetSortType("by time added");
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
             putNewProductsInProductGridPane(productGridPane);
         });
@@ -130,13 +132,13 @@ public class AllProductGMenu extends GMenu {
         try {
             controller.getProductController().controlFilterSetInSaleOnly(onlyProductInSale);
         } catch (ExceptionalMassage exceptionalMassage) {
-            new AlertBox(this, exceptionalMassage,controller).showAndWait();
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
         }
         saleCheck.setOnMouseClicked(e -> {
             try {
                 controller.getProductController().controlFilterSetInSaleOnly(saleCheck.isSelected());
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
             putNewProductsInProductGridPane(productGridPane);
         });
@@ -150,12 +152,12 @@ public class AllProductGMenu extends GMenu {
             try {
                 controller.getProductController().controlFilterSetPriceUpperBound((int) rangeSlider.getHighValue());
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
             try {
                 controller.getProductController().controlFilterSetPriceLowerBound((int) rangeSlider.getLowValue());
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
             putNewProductsInProductGridPane(productGridPane);
         });
@@ -170,7 +172,7 @@ public class AllProductGMenu extends GMenu {
             try {
                 controller.getProductController().controlFilterSetAvailabilityFilter(availabilityCheck.isSelected());
             } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage,controller).showAndWait();
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
             putNewProductsInProductGridPane(productGridPane);
 
@@ -181,7 +183,7 @@ public class AllProductGMenu extends GMenu {
         try {
             isAvailability = controller.getProductController().controlFilterGetAvailabilityFilter();
         } catch (ExceptionalMassage exceptionalMassage) {
-            new AlertBox(this, exceptionalMassage,controller).showAndWait();
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
         }
         rangeSlider.setDisable(!isAvailability);
 
@@ -206,7 +208,7 @@ public class AllProductGMenu extends GMenu {
             treeView.setPrefHeight(250);
             filterAndSort.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
         } catch (ExceptionalMassage exceptionalMassage) {
-            new AlertBox(this, exceptionalMassage,controller).showAndWait();
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
         }
 
         VBox nameFilter = new VBox();
@@ -260,7 +262,7 @@ public class AllProductGMenu extends GMenu {
         ListView<String> filterByNameOfCompanyListView = new ListView<>();
         filterByNameOfCompanyListView.setMaxHeight(100);
         filterByNameOfCompanyListView.setMaxWidth(100);
-        listViewsGridPane.add(filterByNameOfCompanyListView, 0,3);
+        listViewsGridPane.add(filterByNameOfCompanyListView, 0, 3);
 
         nameFilter.getChildren().add(listViewsGridPane);
 
@@ -269,15 +271,15 @@ public class AllProductGMenu extends GMenu {
         Button filterByNameAddButton = new Button("Add");
         GMenu.addStyleToSmallButton(filterByNameAddButton);
         filterByNameAddButton.setOnMouseClicked(e -> {
-            if (!filterByNameOrBrandTextField.getText().equals("")  && choseBetweenNameAndBrand.getSelectionModel().getSelectedItem() != null) {
+            if (!filterByNameOrBrandTextField.getText().equals("") && choseBetweenNameAndBrand.getSelectionModel().getSelectedItem() != null) {
                 try {
                     if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Name")) {
                         controller.getProductController().controlFilterAddNameFilter(filterByNameOrBrandTextField.getText());
                         filterByNameListView.getItems().add(filterByNameOrBrandTextField.getText());
-                    } else if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Brand")){
+                    } else if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Brand")) {
                         controller.getProductController().controlFilterAddBrandFilter(filterByNameOrBrandTextField.getText());
                         filterByBrandListView.getItems().add(filterByNameOrBrandTextField.getText());
-                    }else{
+                    } else {
                         controller.getProductController().controlFilterAddSupplierFilter(filterByNameOrBrandTextField.getText());
                         filterByNameOfCompanyListView.getItems().add(filterByNameOrBrandTextField.getText());
                     }
@@ -293,7 +295,7 @@ public class AllProductGMenu extends GMenu {
         Button filterByNameRemoveButton = new Button("Remove");
         GMenu.addStyleToSmallButton(filterByNameRemoveButton);
         filterByNameRemoveButton.setOnMouseClicked(e -> {
-            if(choseBetweenNameAndBrand.getSelectionModel().getSelectedItem() != null) {
+            if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem() != null) {
                 if (choseBetweenNameAndBrand.getSelectionModel().getSelectedItem().equals("Name") &&
                         filterByNameListView.getSelectionModel().getSelectedItems().size() != 0) {
                     String itemWantedToBeRemoved = filterByNameListView.getSelectionModel().getSelectedItems().get(0);
@@ -341,7 +343,7 @@ public class AllProductGMenu extends GMenu {
         specialFilterVBox.setSpacing(20);
         specialFilterVBox.setAlignment(Pos.CENTER);
         putNewSpecialFilters(specialFilterVBox, productGridPane);
-        filterAndSort.getChildren().addAll(sortLabel, sort, filterLabel, availabilityVBox, priceVBox, specialFilterVBox, nameFilter,treeViewLabel,  treeView);
+        filterAndSort.getChildren().addAll(sortLabel, sort, filterLabel, availabilityVBox, priceVBox, specialFilterVBox, nameFilter, treeViewLabel, treeView);
         filterAndSort.setStyle("-fx-background-color : #f8e8e2");
 
 
@@ -385,6 +387,14 @@ public class AllProductGMenu extends GMenu {
             gridPane = new GridPane();
             mainVBox.setStyle("-fx-background-color: #9cbfe3");
 
+            Auction auction = null;
+            try {
+                auction = controller.getProductController().controlGetAuctionForProduct(product);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
+            Auction tempAuction = auction;
+
             Label nameLabel = new Label(product.getName());
             nameLabel.setStyle("-fx-font-size: 20");
 
@@ -397,13 +407,20 @@ public class AllProductGMenu extends GMenu {
                 } catch (ExceptionalMassage exceptionalMassage) {
                     new AlertBox(this, exceptionalMassage, controller).showAndWait();
                 }
-                stage.setScene(new ProductMenuG(this, stage, product, controller).getScene());
+                if(tempAuction == null) {
+                    stage.setScene(new ProductMenuG(this, stage, product, controller).getScene());
+                }else{
+                    stage.setScene(new AuctionGMenu(this,stage, controller, tempAuction).getScene());
+                }
             });
             boolean doesProductHaveAnySale = false;
             boolean isSizeOfSuppliersZero = false;
+            boolean isInAuction = false;
+            if(auction != null)
+                isInAuction = true;
             try {
                 doesProductHaveAnySale = controller.getOffController().isProductHasAnySale(product);
-                isSizeOfSuppliersZero  = controller.getProductController().getAllSuppliersThatHaveAvailableProduct(product).size() == 0;
+                isSizeOfSuppliersZero = controller.getProductController().getAllSuppliersThatHaveAvailableProduct(product).size() == 0;
             } catch (ExceptionalMassage exceptionalMassage) {
                 exceptionalMassage.printStackTrace();
             }
@@ -429,6 +446,16 @@ public class AllProductGMenu extends GMenu {
 
                 gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
 //                gridPane.getChildren().add(soldOutImageView);
+            } else if(isInAuction){
+                ImageView AuctionImageView = GMenu.getImageView("./src/main/resources/image/auction.png", 200, 200);
+
+                AuctionImageView.setBlendMode(BlendMode.SRC_OVER);
+                Group blend = new Group(
+                        productImageView,
+                        AuctionImageView
+                );
+
+                gridPane.getChildren().addAll(productImageView, blend, AuctionImageView);
             } else {
                 gridPane.getChildren().add(productImageView);
             }
@@ -445,14 +472,18 @@ public class AllProductGMenu extends GMenu {
             starRating.setFocusTraversable(false);
             starRating.setMouseTransparent(true);
 
-            Label priceLabel;
-            if(!product.isProductAvailableNow()){
+            Label priceLabel = null;
+            if (!product.isProductAvailableNow()) {
                 priceLabel = new Label("Not Available");
-            }else {
-                priceLabel = new Label(String.valueOf(product.getMinimumPrice()) + "$");
-            }
-            priceLabel.setStyle("-fx-font-size: 18");
+            } else {
+                if (auction == null) {
+                    priceLabel = new Label(String.valueOf(product.getMinimumPrice()) + "$");
+                } else {
+                    priceLabel = new Label("Highest Promotion:" + String.valueOf(auction.getHighestPromoter()) + "$");
+                }
+                priceLabel.setStyle("-fx-font-size: 18");
 
+            }
             Sale sale = null;
             try {
                 sale = controller.getOffController().controlGetMaxSaleForThisProduct(product);
@@ -462,7 +493,7 @@ public class AllProductGMenu extends GMenu {
 
             VBox saleVBox = new VBox();
             saleVBox.setAlignment(Pos.CENTER);
-            if(sale != null) {
+            if (sale != null) {
                 Label percentLabel = new Label(sale.getPercent() + "%");
                 percentLabel.setStyle("-fx-font-size: 13");
                 Label fromLabel = new Label("from" + String.valueOf(sale.getStart()));
@@ -470,8 +501,8 @@ public class AllProductGMenu extends GMenu {
                 Label toLabel = new Label("to   " + String.valueOf(sale.getEnd()));
                 toLabel.setStyle("-fx-font-size: 13");
                 saleVBox.getChildren().addAll(percentLabel, fromLabel, toLabel);
-            }else {
-                Label noSale =  new Label("No Sale \n\n");
+            } else {
+                Label noSale = new Label("No Sale \n\n");
                 noSale.setStyle("-fx-font-size: 13");
                 saleVBox.getChildren().add(noSale);
             }
@@ -494,7 +525,7 @@ public class AllProductGMenu extends GMenu {
             }
 
         }
-        if(products.size() == 0){
+        if (products.size() == 0) {
             Label tryAgainLabel = new Label("No Product Found! Try Another Filter\t\t\t\t\t");
             tryAgainLabel.setStyle("-fx-font-size: 20");
             productGridPane.add(tryAgainLabel, 7, 10);
@@ -521,7 +552,7 @@ public class AllProductGMenu extends GMenu {
         TreeItem<Label> rootTreeItem = new TreeItem<>(rootLabel);
         if (!rootCategory.isCategoryClassifier())
             return rootTreeItem;
-        ArrayList<Category> allCategoriesIn =  null;
+        ArrayList<Category> allCategoriesIn = null;
         try {
             allCategoriesIn = controller.getProductController().controlGetAllCategoriesInACategory(rootCategory);
         } catch (ExceptionalMassage exceptionalMassage) {

@@ -18,6 +18,9 @@ import server.communications.RequestStatus;
 import server.communications.Response;
 import server.communications.Utils;
 
+import java.io.*;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -716,5 +719,56 @@ public class AccountController {
         }
         ChatRoom.removeChatRoom(chatRoom);
         return Response.createSuccessResponse();
+    }
+
+    public int controlInternalCreateBankAccount(String firstName, String lastName, String username, String password) throws ExceptionalMassage {
+        try {
+            Socket socket = new Socket(Controller.BANK_IP, Controller.BANK_SOCKET);
+            DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+            DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            dataOutputStream.writeUTF("create_account " + firstName + " " + lastName + " " + username + " " + password + " " + password);
+            dataOutputStream.flush();
+            String response = dataInputStream.readUTF();
+            if (!response.matches("\\d{6}")) {
+                throw new ExceptionalMassage(response);
+            }
+            return Integer.parseInt(response);
+        } catch (IOException e) {
+            throw new ExceptionalMassage("Error communicating with bank");
+        }
+    }
+
+    public Response controlPay(String username, String password, String accountNumber, String amountStr) {
+        try {
+            Socket socket = new Socket(Controller.BANK_IP, Controller.BANK_SOCKET);
+            DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+            DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            dataOutputStream.writeUTF("get_token " + username + " " + password);
+            dataOutputStream.flush();
+            String response1 = dataInputStream.readUTF();
+            if (!response1.matches("TOKEN_\\w{10}")) {
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response1);
+            }
+            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + accountNumber + " " + Controller.SHOP_BANK_NUMBER +
+                    " TEAM34_ONLINE_STORE");
+            dataOutputStream.flush();
+            String response2 = dataInputStream.readUTF();
+            if (!response2.matches("TRMOV\\d{15}")) {
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response2);
+            }
+            dataOutputStream.writeUTF("pay " + response2);
+            dataOutputStream.flush();
+            String response3 = dataInputStream.readUTF();
+            if (!response3.equals("done successfully")) {
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
+            }
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (IOException e) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");
+        }
+    }
+
+    public Response controlPay(String amount) {
+        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
     }
 }

@@ -732,9 +732,34 @@ public class AccountController {
             if (!response.matches("\\d{6}")) {
                 throw new ExceptionalMassage(response);
             }
+            disconnectFromBank(socket, dataOutputStream, dataInputStream);
             return Integer.parseInt(response);
         } catch (IOException e) {
             throw new ExceptionalMassage("Error communicating with bank");
+        }
+    }
+
+    public void disconnectFromBank(Socket socket, DataOutputStream dataOutputStream, DataInputStream dataInputStream) {
+        try {
+            dataOutputStream.writeUTF("exit");
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            dataOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            dataInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -762,13 +787,14 @@ public class AccountController {
             if (!response3.equals("done successfully")) {
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
+            disconnectFromBank(socket, dataOutputStream, dataInputStream);
             return new Response(RequestStatus.SUCCESSFUL, "");
         } catch (IOException e) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");
         }
     }
 
-    public Response controlPay(String amount) {
-        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
-    }
+//    public Response controlPay(String amount) {
+//        //return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
+//    }
 }

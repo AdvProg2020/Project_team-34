@@ -127,6 +127,10 @@ public class AccountController {
                 return controlLogin(username, password);
             }
         }
+        if (type.equals("supervisor"))
+            return controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
+        if (type.equals("supporter"))
+            return controlCreateSupporter(username, name, familyName, email, phoneNumber, password, credit);
         return null;
     }
 
@@ -753,9 +757,34 @@ public class AccountController {
             if (!response.matches("\\d{6}")) {
                 throw new ExceptionalMassage(response);
             }
+            disconnectFromBank(socket, dataOutputStream, dataInputStream);
             return Integer.parseInt(response);
         } catch (IOException e) {
             throw new ExceptionalMassage("Error communicating with bank");
+        }
+    }
+
+    public void disconnectFromBank(Socket socket, DataOutputStream dataOutputStream, DataInputStream dataInputStream) {
+        try {
+            dataOutputStream.writeUTF("exit");
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            dataOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            dataInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -789,9 +818,10 @@ public class AccountController {
         }
     }
 
-//    public Response controlPay(String amount) {
-//        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
-//    }
+    public Response controlPay(String amount) {
+        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), String.valueOf(
+                getInternalAccount().getBankAccountNumber()), amount);
+    }
 
     public Response controlGetMembersOfChatRoom(String chatRoomId){
         ArrayList<String> userNames = new ArrayList<>();

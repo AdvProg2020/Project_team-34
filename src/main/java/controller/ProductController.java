@@ -809,4 +809,16 @@ public class ProductController {
         }
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(auction));
     }
+
+    public Response controlGetAuctionForProduct(String productId){
+        Product product = Product.getProductById(productId);
+        Auction auction = Auction.getAuctionForProduct(product, product.getListOfSuppliers().get(0));
+        String result;
+        if(auction == null){
+            result = "";
+        }else {
+            result = auction.toJson();
+        }
+        return new Response(RequestStatus.SUCCESSFUL,result);
+    }
 }

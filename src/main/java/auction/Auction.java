@@ -153,6 +153,15 @@ public class Auction {
         return false;
     }
 
+    public static Auction getAuctionForProduct(Product product, Supplier supplier){
+        for (Auction auction : ALL_AUCTIONS) {
+            if(auction.getProduct().equals(product) && auction.getSupplier().equals(supplier)
+            && System.currentTimeMillis() < auction.getEnd().getTime())
+                return auction;
+        }
+        return null;
+    }
+
     public void promote(Customer customer, int promotionAmount, int minimumCreditRequired) throws ExceptionalMassage {
         if (System.currentTimeMillis() >= end.getTime()) {
             throw new ExceptionalMassage("Auction ended.");

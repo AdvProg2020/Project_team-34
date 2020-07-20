@@ -17,10 +17,11 @@ public abstract class Account {
     protected String userName , name , familyName , email , phoneNumber , password;
     protected int credit;
     protected boolean isAvailable ;
+    protected int bankAccountNumber;
     private static final ArrayList<Account> allAccounts = new ArrayList<>();
 
     public Account(String userName, String name, String familyName, String email, String phoneNumber, String password,
-                   int credit, boolean isAvailable) {
+                   int credit, boolean isAvailable , int bankAccountNumber) {
         this.userName = userName;
         this.name = name;
         this.familyName = familyName;
@@ -29,6 +30,7 @@ public abstract class Account {
         this.password = password;
         this.credit = credit;
         this.isAvailable = isAvailable;
+        this.bankAccountNumber = bankAccountNumber;
         allAccounts.add(this);
     }
 
@@ -62,6 +64,10 @@ public abstract class Account {
 
     public boolean getIsAvailable() {
         return isAvailable;
+    }
+
+    public int getBankAccountNumber() {
+        return bankAccountNumber;
     }
 
     public static ArrayList<Account> getAllAccounts() {
@@ -175,6 +181,17 @@ public abstract class Account {
             }
         }
         return false;
+    }
+
+    public static Account getASupervisor() {
+        if (allAccounts.size() != 0) {
+            for (Account account : allAccounts) {
+                if (account instanceof Supervisor) {
+                    return account;
+                }
+            }
+        }
+        return null;
     }
 
     public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,

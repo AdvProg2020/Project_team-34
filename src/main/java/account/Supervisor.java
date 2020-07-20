@@ -11,13 +11,15 @@ import server.communications.Utils;
 
 public class Supervisor extends Account {
 
-    public Supervisor(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit) {
-        super(userName, name, familyName, email, phoneNumber, password, credit,true);
+    public Supervisor(String userName, String name, String familyName, String email, String phoneNumber, String password,
+                      int credit, int bankAccountNumber) {
+        super(userName, name, familyName, email, phoneNumber, password, credit,true, bankAccountNumber);
         AccountDataBase.add(this);
     }
 
-    public Supervisor(String userName, String name, String familyName, String email, String phoneNumber, String password, int credit, boolean isAvailable) {
-        super(userName, name, familyName, email, phoneNumber, password, credit, isAvailable);
+    public Supervisor(String userName, String name, String familyName, String email, String phoneNumber, String password,
+                      int credit, boolean isAvailable, int bankAccountNumber) {
+        super(userName, name, familyName, email, phoneNumber, password, credit, isAvailable, bankAccountNumber);
     }
 
     public static Supervisor convertJsonStringToSupervisor(String jsonString){

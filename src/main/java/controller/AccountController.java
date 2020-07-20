@@ -99,17 +99,33 @@ public class AccountController {
 
         if (!Account.isUsernameAvailable(username))
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate username"));
-        if (type.equals("customer")) {
-            if (credit == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
-            Response response = controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit);
-            return controlLogin(username, password);
-        }
-        if (type.equals("supplier")) {
-            if (nameOfCompany.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
-            Response response = controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
-            if(response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
-                return response;
-            return controlLogin(username, password);
+        if (type.equals("supporter"))
+            return controlCreateSupporter(username, name, familyName, email, phoneNumber, password, credit);
+        else if (type.equals("supervisor"))
+            return controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
+        else {
+            int bankAccountNumber;
+            try {
+                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, username, password);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+            }
+            if (type.equals("customer")) {
+                if (credit == 0)
+                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
+                Response response = controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit, bankAccountNumber);
+                if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
+                    return response;
+                return controlLogin(username, password);
+            }
+            if (type.equals("supplier")) {
+                if (nameOfCompany.trim().length() == 0)
+                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
+                Response response = controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany, bankAccountNumber);
+                if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
+                    return response;
+                return controlLogin(username, password);
+            }
         }
         if (type.equals("supervisor"))
             return controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
@@ -127,30 +143,39 @@ public class AccountController {
     }
 
     private Response controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
-                                       String password, int credit) {
-        new Customer(username, name, familyName, email, phoneNumber, password, credit);
+                                       String password, int credit, int bankAccountNumber) {
+        new Customer(username, name, familyName, email, phoneNumber, password, credit,bankAccountNumber);
         return Response.createSuccessResponse();
     }
 
     private Response controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber,
-                                       String password, int credit, String nameOfCompany){
+                                       String password, int credit, String nameOfCompany, int bankAccountNumber){
         if (Supplier.getSupplierByCompanyName(nameOfCompany) != null) {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate company name."));
         }
-        new Supplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany);
+        new Supplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany,bankAccountNumber);
         return Response.createSuccessResponse();
     }
 
     private Response controlCreateSupervisor(String username, String name, String familyName, String email,
                                          String phoneNumber, String password, int credit){
         mainController.setIsFirstSupervisorCreated(Account.isSupervisorCreated());
+        int bankAccountNumber;
         if (mainController.getIsFirstSupervisorCreated()) {
             if (mainController.getAccount() == null)
                 return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must login as supervisor before create a supervisor account."));
             if (!(mainController.getAccount() instanceof Supervisor))
                 return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must be a supervisor to create supervisor account."));
+            bankAccountNumber = Account.getASupervisor().getBankAccountNumber();
+        }else {
+
+            try {
+                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, username, password);
+            } catch (ExceptionalMassage exceptionalMassage) {
+                return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+            }
         }
-        new Supervisor(username, name, familyName, email, phoneNumber, password, credit);
+        new Supervisor(username, name, familyName, email, phoneNumber, password, credit, bankAccountNumber);
         mainController.setIsFirstSupervisorCreated(true);
         return Response.createSuccessResponse();
     }
@@ -787,12 +812,66 @@ public class AccountController {
             if (!response3.equals("done successfully")) {
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
-            disconnectFromBank(socket, dataOutputStream, dataInputStream);
             return new Response(RequestStatus.SUCCESSFUL, "");
         } catch (IOException e) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");
         }
     }
+
+    public Response controlPay(String amount) {
+        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
+    }
+
+    public Response controlGetMembersOfChatRoom(String chatRoomId){
+        ArrayList<String> userNames = new ArrayList<>();
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
+        if(mainController.getAccount() == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login First!"));
+        }
+        if(chatRoom == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room is closed!"));
+        }
+        for (Account joinedAccount : chatRoom.getJoinedAccounts()) {
+            userNames.add(joinedAccount.getUserName());
+        }
+        return new Response(RequestStatus.SUCCESSFUL,Utils.convertStringArrayListToJsonElement(userNames).toString());
+    }
+
+    public Response controlJoinChatRoom(String chatRoomId){
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
+        if(mainController.getAccount() == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login first!"));
+        }
+        if(chatRoom == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room is closed!"));
+        }
+        if(chatRoom.getJoinedAccounts().contains(mainController.getAccount())){
+            return Response.createSuccessResponse();
+        }
+        chatRoom.joinChatRoom(mainController.getAccount());
+        try {
+            Message.getInstance("Server",mainController.getAccount().getUserName() + " joined chat room.", chatRoomId);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+        }
+        return Response.createSuccessResponse();
+    }
+
+    public Response controlLeaveChatRoom(String chatRoomId){
+        ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
+        if(chatRoom == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room is closed!"));
+        }
+        chatRoom.leaveChatRoom(mainController.getAccount());
+        try {
+            Message.getInstance("Server",mainController.getAccount().getUserName() + " left chat room.", chatRoomId);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+        }
+        return Response.createSuccessResponse();
+    }
+}
+
 
 //    public Response controlPay(String amount) {
 //        //return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);

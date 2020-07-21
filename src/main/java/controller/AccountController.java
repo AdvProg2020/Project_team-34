@@ -809,9 +809,9 @@ public class AccountController {
             String response3 = dataInputStream.readUTF();
             disconnectFromBank(socket, dataOutputStream, dataInputStream);
             if (!response3.equals("done successfully")) {
-                getInternalAccount().setCredit(getInternalAccount().getCredit() - Integer.parseInt(amountStr));
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
+            getInternalAccount().setCredit(getInternalAccount().getCredit() - Integer.parseInt(amountStr));
             return new Response(RequestStatus.SUCCESSFUL, "");
         } catch (IOException e) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");
@@ -847,9 +847,9 @@ public class AccountController {
             String response3 = dataInputStream.readUTF();
             disconnectFromBank(socket, dataOutputStream, dataInputStream);
             if (!response3.equals("done successfully")) {
-                getInternalAccount().setCredit(getInternalAccount().getCredit() + Integer.parseInt(amountStr));
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
+            getInternalAccount().setCredit(getInternalAccount().getCredit() + Integer.parseInt(amountStr));
             return new Response(RequestStatus.SUCCESSFUL, "");
         } catch (IOException e) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");

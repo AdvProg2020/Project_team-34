@@ -6,6 +6,7 @@ import cart.ProductInCart;
 import cart.ShippingInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.WageDataBase;
 import discount.CodedDiscount;
@@ -154,7 +155,7 @@ public class AccountController {
             bankAccountNumber = Account.getStoreBankAccount();
         } else {
             try {
-                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, username, password);
+                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, "Team34", "343434");
             } catch (ExceptionalMassage exceptionalMassage) {
                 return Response.createResponseFromExceptionalMassage(exceptionalMassage);
             }
@@ -797,9 +798,9 @@ public class AccountController {
             String response3 = dataInputStream.readUTF();
             disconnectFromBank(socket, dataOutputStream, dataInputStream);
             if (!response3.equals("done successfully")) {
+                getInternalAccount().setCredit(getInternalAccount().getCredit() - Integer.parseInt(amountStr));
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
-            getInternalAccount().setCredit(getInternalAccount().getCredit() - Integer.parseInt(amountStr));
             return new Response(RequestStatus.SUCCESSFUL, "");
         } catch (IOException e) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");
@@ -835,9 +836,9 @@ public class AccountController {
             String response3 = dataInputStream.readUTF();
             disconnectFromBank(socket, dataOutputStream, dataInputStream);
             if (!response3.equals("done successfully")) {
+                getInternalAccount().setCredit(getInternalAccount().getCredit() + Integer.parseInt(amountStr));
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
-            getInternalAccount().setCredit(getInternalAccount().getCredit() + Integer.parseInt(amountStr));
             return new Response(RequestStatus.SUCCESSFUL, "");
         } catch (IOException e) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");

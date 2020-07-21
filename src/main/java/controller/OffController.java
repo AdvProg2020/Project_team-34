@@ -28,7 +28,7 @@ public class OffController {
     }
 
     public Response controlGetAllCodedDiscounts() {
-        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(CodedDiscount.getCodedDiscounts()));
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertCodedDiscountArrayListToJsonElement(CodedDiscount.getCodedDiscounts()).toString());
     }
 
     private CodedDiscount controlInternalGetDiscountByCode(String code) {
@@ -72,15 +72,9 @@ public class OffController {
         int percent = Integer.parseInt(percentStr);
         int maxDiscountAmount = Integer.parseInt(maxDiscountAmountStr);
         HashMap<Customer, Integer> maxNumberOfUsage = new HashMap<>();
-        JsonObject jsonObject = new JsonParser().parse(maxNumberOfUsageStr).getAsJsonObject();
-        for (String customerJson : jsonObject.keySet()) {
-            maxNumberOfUsage.put(Customer.convertJsonStringToCustomer(customerJson),
-                    jsonObject.get(customerJson).getAsInt());
-        }
-        for (CodedDiscount codedDiscount : CodedDiscount.getCodedDiscounts()) {
-            if (codedDiscount.getDiscountCode().equals(code)) {
-                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Code already exists!");
-            }
+        HashMap<String, String> idToMax = Utils.convertJsonElementStringToStringToHashMap(new JsonParser().parse(maxNumberOfUsageStr));
+        for (String s : idToMax.keySet()) {
+            maxNumberOfUsage.put((Customer) Account.getAccountByUsernameWithinAvailable(s),Integer.parseInt(idToMax.get(s)));
         }
         if (maxNumberOfUsage.size() == 0) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Select at Least one customer, please!");

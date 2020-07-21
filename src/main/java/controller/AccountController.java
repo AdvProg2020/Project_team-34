@@ -6,6 +6,7 @@ import cart.ProductInCart;
 import cart.ShippingInfo;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.WageDataBase;
 import discount.CodedDiscount;
@@ -447,6 +448,20 @@ public class AccountController {
             controlInternalCreateCodedDiscountForLoggedInCustomer();
         }
         return new Response(RequestStatus.SUCCESSFUL, String.valueOf(customerLog.getPaidAmount() >= BOUND));
+    }
+
+    public Response controlGetLinksToDownloadFileProducts(){
+        Cart cart = mainController.getCart();
+        ArrayList<Product> products = cart.getFileProductsInCart();
+        JsonArray jsonArray = new JsonArray();
+        JsonObject jsonObject;
+        for (Product product : products) {
+            jsonObject = new JsonObject();
+            jsonObject.addProperty("filePath", product.getFilePath());
+            jsonObject.addProperty("port", product.getSupplierPort());
+            jsonArray.add(jsonObject);
+        }
+        return new Response(RequestStatus.SUCCESSFUL, jsonArray.toString());
     }
 
     public Response getAccountUsername() {

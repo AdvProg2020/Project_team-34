@@ -369,6 +369,17 @@ public class Cart {
         return productInCount.get(productInCart);
     }
 
+    public ArrayList<Product> getFileProductsInCart(){
+        ArrayList<Product> fileProducts = new ArrayList<>();
+        Product product;
+        for (ProductInCart productInCart : productsIn) {
+            product = productInCart.getProduct();
+            if(product.getFilePath() != null){
+                fileProducts.add(product);
+            }
+        }
+        return fileProducts;
+    }
     public static Cart convertJsonStringToCart(String jsonString) {
         return new Cart(jsonString);
         //return (Cart) Utils.convertStringToObject(jsonString, "cart.Cart");

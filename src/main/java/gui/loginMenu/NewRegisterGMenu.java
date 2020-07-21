@@ -16,7 +16,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class NewRegisterGMenu extends GMenu {
-    private Stage popupCaller;
+    private final Stage popupCaller;
 
     public NewRegisterGMenu(GMenu parentMenu, Stage stage, Stage popupCaller, Controller controller) {
         super("Sign Up", parentMenu, stage, controller);

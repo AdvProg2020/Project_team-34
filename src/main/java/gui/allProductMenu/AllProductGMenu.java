@@ -309,7 +309,7 @@ public class AllProductGMenu extends GMenu {
                         filterByNameListView.getSelectionModel().getSelectedItems().size() != 0) {
                     String itemWantedToBeRemoved = filterByNameListView.getSelectionModel().getSelectedItems().get(0);
                     try {
-                        controller.getProductController().controlFilterRemoveBrandFilter(itemWantedToBeRemoved);
+                        controller.getProductController().controlFilterRemoveNameFilter(itemWantedToBeRemoved);
                         filterByNameListView.getItems().remove(itemWantedToBeRemoved);
                         filterByNameOrBrandTextField.setText("");
                         putNewProductsInProductGridPane(productGridPane);

@@ -42,12 +42,12 @@ public class Main extends Application {
             System.exit(0);
         });
 
-        stage.setScene(new PaymentMenuForCustomer(null, stage, controller, 1000).getScene());
-        stage.show();
-//        GMenu mainMenu = new MainMenuG( null, stage, controller);
-//        GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
-//        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
+//        stage.setScene(new PaymentMenuForCustomer(null, stage, controller, 1000).getScene());
 //        stage.show();
+        GMenu mainMenu = new MainMenuG( null, stage, controller);
+        GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
+        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
+        stage.show();
     }
 
 }

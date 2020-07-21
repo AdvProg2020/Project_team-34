@@ -5,6 +5,8 @@ import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import gui.mainMenu.MainMenuG;
+import gui.profile.ViewLogsForCustomerGMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -104,7 +106,13 @@ public class PaymentMenuForCustomer extends GMenu {
                 controller.getAccountController().controlPay(username.getText(), Integer.parseInt(bankAccountNumber.getText()),
                         password.getText(), amount);
                 stage.setScene(getScene());
-                //TODO FINILIZE ORDER
+                boolean hasCustomerWonCode =  controller.getAccountController().finalizeOrder();
+                controller.getAccountController().controlGetLinksToDownloadFileProducts();
+                new AlertBox(this, "You have successfully purchased your cart!","OK",controller).showAndWait();
+                if(hasCustomerWonCode){
+                    new AlertBox(this, "Congratulations, You have won a coded discount!", "OK",controller).showAndWait();
+                }
+                stage.setScene(new ViewLogsForCustomerGMenu(new MainMenuG(null, stage, controller), stage, controller).getScene());
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }

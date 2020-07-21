@@ -337,11 +337,10 @@ public class PurchaseMenuG extends GMenu {
 
         purchaseWithBank.setOnAction( e -> {
             try {
-                new PaymentMenuForCustomer(this, stage, controller, controller.getAccountController().controlViewCart().getBill());
+                stage.setScene(new PaymentMenuForCustomer(this, stage, controller, controller.getAccountController().controlViewCart().getBill()).getScene());
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }
-
         });
 
         anchorPane0.onKeyReleasedProperty().set( e -> {

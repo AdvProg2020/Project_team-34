@@ -136,7 +136,7 @@ public class ChooseRequestingCustomersGMenu extends GMenu {
                 Stage stage1 = new Stage();
                 stage1.setTitle(s);
                 stage1.show();
-                stage1.setScene(new ChatRoomGMenu(this, stage, controller, s).createScene());
+                stage1.setScene(new ChatRoomGMenu(this, stage, controller, s).getScene());
             }
         });
 

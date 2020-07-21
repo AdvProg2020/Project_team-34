@@ -121,7 +121,7 @@ public class OffController {
                 allSalesForThisSupplier.add(sale);
             }
         }
-        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(allSalesForThisSupplier));
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertSaleArrayListToJsonElement(allSalesForThisSupplier).toString());
     }
 
     private Sale controlInternalGetSaleById(String id) {

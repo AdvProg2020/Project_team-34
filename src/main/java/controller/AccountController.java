@@ -120,7 +120,7 @@ public class AccountController {
             }
             if (type.equals("supplier")) {
                 if (nameOfCompany.trim().length() == 0)
-                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
+                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Name of company can't be empty"));
                 Response response = controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany, bankAccountNumber);
                 if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
                     return response;
@@ -910,3 +910,5 @@ public class AccountController {
         return Response.createSuccessResponse();
     }
 }
+
+

@@ -1,9 +1,12 @@
 package gui.paymentMenu;
 
+import account.Account;
+import account.Supplier;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import gui.profile.SupplierProfileGMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -111,6 +114,7 @@ public class WalletGMenu extends GMenu {
             if (useMyDefault.isSelected()) {
                 try {
                     controller.getAccountController().controlPay(Integer.parseInt(amount.getText()));
+                    stage.setScene(getScene());
                 } catch (ExceptionalMassage exceptionalMassage) {
                     new AlertBox(this, exceptionalMassage, controller).showAndWait();
                 }
@@ -118,6 +122,7 @@ public class WalletGMenu extends GMenu {
                 try {
                     controller.getAccountController().controlPay(username.getText(), Integer.parseInt(accountNumber.getText()),
                             passwordField.getText() ,Integer.parseInt(amount.getText()));
+                    stage.setScene(getScene());
                 } catch (ExceptionalMassage exceptionalMassage) {
                     new AlertBox(this, exceptionalMassage, controller).showAndWait();
                 }
@@ -185,6 +190,7 @@ public class WalletGMenu extends GMenu {
             if (useMyDefault.isSelected()) {
                 try {
                     controller.getAccountController().controlPayBack(Integer.parseInt(amount.getText()));
+                    stage.setScene(getScene());
                 } catch (ExceptionalMassage exceptionalMassage) {
                     new AlertBox(this, exceptionalMassage, controller).showAndWait();
                 }
@@ -192,6 +198,7 @@ public class WalletGMenu extends GMenu {
                 try {
                     controller.getAccountController().controlPayBack(Integer.parseInt(accountNumber.getText()),
                             Integer.parseInt(amount.getText()));
+                    stage.setScene(getScene());
                 } catch (ExceptionalMassage exceptionalMassage) {
                     new AlertBox(this, exceptionalMassage, controller).showAndWait();
                 }

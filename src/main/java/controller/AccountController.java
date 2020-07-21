@@ -164,9 +164,8 @@ public class AccountController {
                 return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must be a supervisor to create supervisor account."));
             bankAccountNumber = Account.getASupervisor().getBankAccountNumber();
         }else {
-
             try {
-                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, username, password);
+                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, "Team34", "343434");
             } catch (ExceptionalMassage exceptionalMassage) {
                 return Response.createResponseFromExceptionalMassage(exceptionalMassage);
             }
@@ -262,14 +261,14 @@ public class AccountController {
     }
 
     public Response editAllFields(String name, String familyName, String email, String phoneNumber, String password,
-                              String credit, String nameOfCompany) {
+                                  String nameOfCompany) {
         if (password == null || password.trim().length() == 0) {
             password = getInternalAccount().getPassword();
         }
         if (getInternalAccount() instanceof Supplier) {
             ((Supplier) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
         } else {
-            (getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
+            (getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password);
         }
         return Response.createSuccessResponse();
     }
@@ -785,6 +784,8 @@ public class AccountController {
     }
 
     public Response controlPayBack(String accountNumberStr, String amountStr) {
+        if (!(getInternalAccount() instanceof Supplier))
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Only suppliers can do this action");
         try {
             Socket socket = new Socket(Controller.BANK_IP, Controller.BANK_SOCKET);
             DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
@@ -807,6 +808,7 @@ public class AccountController {
             String response3 = dataInputStream.readUTF();
             disconnectFromBank(socket, dataOutputStream, dataInputStream);
             if (!response3.equals("done successfully")) {
+                getInternalAccount().setCredit(getInternalAccount().getCredit() - Integer.parseInt(amountStr));
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
             return new Response(RequestStatus.SUCCESSFUL, "");
@@ -820,6 +822,8 @@ public class AccountController {
     }
 
     public Response controlPay(String username, String password, String accountNumber, String amountStr) {
+        if (!(getInternalAccount() instanceof Supplier) && !(getInternalAccount() instanceof  Customer))
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Only suppliers and customers can do this action");
         try {
             Socket socket = new Socket(Controller.BANK_IP, Controller.BANK_SOCKET);
             DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
@@ -842,6 +846,7 @@ public class AccountController {
             String response3 = dataInputStream.readUTF();
             disconnectFromBank(socket, dataOutputStream, dataInputStream);
             if (!response3.equals("done successfully")) {
+                getInternalAccount().setCredit(getInternalAccount().getCredit() + Integer.parseInt(amountStr));
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
             return new Response(RequestStatus.SUCCESSFUL, "");

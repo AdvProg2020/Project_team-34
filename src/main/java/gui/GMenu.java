@@ -216,8 +216,19 @@ public abstract class GMenu {
         showingInfoPane.add(phoneNumberValue,2, row);
         row++;
 
-        Label accountNumberLabel = new Label("Account Number");
-        Label accountNumberValue = new Label(String.valueOf(account.getBankAccountNumber()));
+        int bankAccountNumber = account.getBankAccountNumber();
+        String bankAccountNumberString ;
+        if(bankAccountNumber == -1){
+            bankAccountNumberString = "No Account Yet";
+        }else {
+            bankAccountNumberString = String.valueOf(bankAccountNumber);
+        }
+        String accountNumberSting = "Account Number";
+        if(account instanceof Supervisor){
+            accountNumberSting = "Store Account Number";
+        }
+        Label accountNumberLabel = new Label(accountNumberSting);
+        Label accountNumberValue = new Label(bankAccountNumberString);
         showingInfoPane.add(accountNumberLabel, 0, row);
         showingInfoPane.add(accountNumberValue,2, row);
         row++;

@@ -30,19 +30,15 @@ public class OffController {
     }
 
     public ArrayList<CodedDiscount> controlGetAllCodedDiscounts() throws ExceptionalMassage {
-        JsonArray jsonArray = communication("controlGetAllCodedDiscounts", new JsonArray()).getAsJsonArray();
-        ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
-        for (JsonElement jsonElement : jsonArray) {
-            codedDiscounts.add(CodedDiscount.convertJsonStringToCodedDiscount(jsonElement.getAsString()));
-        }
-        return codedDiscounts;
+        JsonElement arrayList = communication("controlGetAllCodedDiscounts", new JsonArray());
+        return Utils.convertJsonElementToCodedDiscountArrayList(arrayList);
     }
 
     public CodedDiscount controlGetDiscountByCode(String code) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(code);
         return CodedDiscount.convertJsonStringToCodedDiscount(communication("controlGetDiscountByCode",
-                inputs).getAsString());
+                inputs).toString());
     }
 
     public void controlEditDiscountByCode(String code, Date newStartDate, Date newEndDate, int newPercent,
@@ -53,13 +49,17 @@ public class OffController {
 
     public void controlCreateCodedDiscount(String code, Date startDate, Date endDate, int percent, int maxDiscountAmount,
                                            HashMap<Customer, Integer> maxNumberOfUsage) throws ExceptionalMassage {
-        JsonArray inputs = jsonArrayFor(code, startDate, endDate, percent, maxDiscountAmount);
-        JsonObject jsonHashmap = new JsonObject();
+        JsonArray inputs = new JsonArray();
+        inputs.add(code);
+        inputs.add(String.valueOf(startDate.getTime()));
+        inputs.add(String.valueOf(endDate.getTime()));
+        inputs.add(String.valueOf(percent));
+        inputs.add(String.valueOf(maxDiscountAmount));
+        HashMap<String, String> idToMaxNumberOfUsage = new HashMap<>();
         for (Customer customer : maxNumberOfUsage.keySet()) {
-            jsonHashmap.add(Utils.convertObjectToJsonString(customer),
-                    new JsonParser().parse(Utils.convertObjectToJsonString(maxNumberOfUsage.get(customer))));
+            idToMaxNumberOfUsage.put(customer.getUserName(), String.valueOf(maxNumberOfUsage.get(customer)));
         }
-        inputs.add(jsonHashmap);
+        inputs.add(Utils.convertStringToStringHashMapToJsonElement(idToMaxNumberOfUsage).toString());
         communication("controlCreateCodedDiscount", inputs);
     }
 

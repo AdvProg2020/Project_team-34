@@ -489,7 +489,7 @@ public class ManageProductsSupplierGMenu extends GMenu {
         createButton.setPrefWidth(233.0);
         createButton.setLayoutX(600.0);
         createButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
-        createButton.setLayoutY(507.0);
+        createButton.setLayoutY(545.0);
         createButton.setText("Create");
         createButton.setMnemonicParsing(false);
 
@@ -560,6 +560,60 @@ public class ManageProductsSupplierGMenu extends GMenu {
         anchorPane0.getChildren().add(addToList);
         gridPane4.setVgap(15);
 
+        HBox hBox17 = new HBox();
+        hBox17.setPrefHeight(51.0);
+        hBox17.setPrefWidth(345.0);
+        hBox17.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
+        TextField fileURL = new TextField();
+        fileURL.setPrefHeight(51.0);
+        fileURL.setPrefWidth(295.0);
+        fileURL.setStyle("-fx-background-color: transparent;");
+        fileURL.setOpacity(0.83);
+        fileURL.setPromptText("Choose file");
+        Button fileChooserButtonForFile = new Button("...");
+        fileChooserButtonForFile.setPrefWidth(62);
+        fileChooserButtonForFile.setPrefHeight(59);
+
+        // Adding child to parent
+        hBox17.getChildren().add(fileURL);
+        hBox17.getChildren().add(fileChooserButtonForFile);
+        hBox17.setLayoutX(550);
+        hBox17.setLayoutY(485);
+
+        anchorPane0.getChildren().add(hBox17);
+
+        CheckBox isFileCheckBox = new CheckBox();
+        isFileCheckBox.setText("Is this product a file?");
+        isFileCheckBox.setLayoutX(550);
+        isFileCheckBox.setLayoutY(470);
+
+        fileURL.setDisable(true);
+        fileChooserButtonForFile.setDisable(true);
+
+        isFileCheckBox.setOnAction(  e -> {
+            if(isFileCheckBox.isSelected()){
+                fileChooserButtonForFile.setDisable(false);
+            } else {
+                fileChooserButtonForFile.setDisable(true);
+            }
+        });
+
+        anchorPane0.getChildren().add(isFileCheckBox);
+
+        FileChooser fileChooserForFile = new FileChooser();
+        File[] selectedFile = new File[1];
+
+        fileChooserButtonForFile.setOnAction(e -> {
+            Stage newStage = new Stage();
+            newStage.initModality(Modality.APPLICATION_MODAL);
+            newStage.setTitle("Create product");
+            selectedFile[0] = fileChooserForFile.showOpenDialog(newStage);
+            try {
+                fileURL.setText(selectedFile[0].getAbsolutePath());
+            } catch (NullPointerException ex){
+                fileURL.clear();
+            }
+        });
 
 
         // Adding controller
@@ -630,11 +684,17 @@ public class ManageProductsSupplierGMenu extends GMenu {
             String categoryName = categoryField.getValue();
             String description = descriptionField.getText();
             String imgURL = selectedImage[0].getAbsolutePath();
+            String filURL;
+            try {
+                filURL = selectedFile[0].getAbsolutePath();
+            } catch (NullPointerException ex){
+                filURL = "";
+            }
             try{
                 int price = Integer.parseInt(priceField.getText());
                 int remainedNumber = Integer.parseInt(remainedNumberField.getText());
                 try{
-                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL, null, 0);//TODO Checking
+                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL, filURL, controller.getPeerNode().getPort());
                     ((Stage)anchorPane0.getScene().getWindow()).close();
                 }  catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();

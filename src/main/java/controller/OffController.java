@@ -110,8 +110,8 @@ public class OffController {
         for (Product product : removingProduct) {
             removingProductIds.add(product.getProductId());
         }
-        inputs.add(Utils.convertStringArrayListToJsonElement(addingProductIds));
-        inputs.add(Utils.convertStringArrayListToJsonElement(removingProductIds));
+        inputs.add(Utils.convertStringArrayListToJsonElement(addingProductIds).toString());
+        inputs.add(Utils.convertStringArrayListToJsonElement(removingProductIds).toString());
         communication("controlEditSaleById", inputs);
     }
 
@@ -184,5 +184,11 @@ public class OffController {
         JsonArray inputs = new JsonArray();
         inputs.add(product.getProductId());
         return  Sale.convertJsonStringToSale(communication("controlGetMaxSaleForThisProduct", inputs).toString());
+    }
+
+    public ArrayList<Product> controlGetNotSaleProductsForSupplier(String saleId) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(saleId);
+        return Utils.convertJsonElementToProductArrayList(communication("controlGetNotSaleProductsForSupplier",inputs));
     }
 }

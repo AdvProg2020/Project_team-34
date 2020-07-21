@@ -29,12 +29,12 @@ public class Sale extends Discount {
                 new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("end").getAsString())),
                 Integer.parseInt((new JsonParser().parse(json).getAsJsonObject()).get("percent").getAsString()));
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
-        this.offId = jsonObject.get("offId").toString();
+        this.offId = jsonObject.get("offId").getAsString();
         this.rootSaleId = jsonObject.get("rootSaleId").toString();
-        if(jsonObject.get("rootSaleId") instanceof JsonNull){
+        if(jsonObject.get("products") instanceof JsonNull){
             products = new ArrayList<>();
         } else {
-            this.products = Utils.convertJsonElementToProductArrayList(jsonObject.get("rootSaleId"));
+            this.products = Utils.convertJsonElementToProductArrayList(jsonObject.get("products"));
         }
         this.state = State.valueOf(jsonObject.get("state").getAsString());
         this.supplier = Supplier.convertJsonStringToSupplier(jsonObject.get("supplier").toString());
@@ -116,5 +116,19 @@ public class Sale extends Discount {
     @Override
     public int hashCode() {
         return Objects.hash(offId);
+    }
+
+    @Override
+    public String toString() {
+        String returning = "ID :" + offId + "\n" +
+                ", State:" + state +
+                ", Off percent:" + percent + "\n" +
+                ", Products In sale: \n"
+                ;
+
+        for (Product product : products) {
+            returning += product.getName() + '\n';
+        }
+        return returning;
     }
 }

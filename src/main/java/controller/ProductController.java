@@ -45,8 +45,9 @@ public class ProductController {
         inputs.add(category);
         inputs.add(description);
         inputs.add(Utils.convertStringToStringHashMapToJsonElement(specifications).toString());
-        System.out.println(Utils.convertImageToJsonElement(imageURL));
         inputs.add(Utils.convertImageToJsonElement(imageURL));
+        inputs.add(filePath);
+        inputs.add(String.valueOf(port));
         communication("controlAddProduct",inputs);
     }
 

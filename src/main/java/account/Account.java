@@ -34,6 +34,10 @@ public abstract class Account {
         allAccounts.add(this);
     }
 
+    public static int getStoreBankAccount() {
+        return getASupervisor() != null ? getASupervisor().getBankAccountNumber() : 0;
+    }
+
     public String getUserName() {
         return userName;
     }

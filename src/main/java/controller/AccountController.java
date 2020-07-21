@@ -785,8 +785,6 @@ public class AccountController {
     }
 
     public Response controlPayBack(String accountNumberStr, String amountStr) {
-        int accountNumber = Integer.parseInt(amountStr);
-        int amount = Integer.parseInt(amountStr);
         try {
             Socket socket = new Socket(Controller.BANK_IP, Controller.BANK_SOCKET);
             DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
@@ -797,7 +795,7 @@ public class AccountController {
             if (!response1.matches("TOKEN_\\w{10}")) {
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response1);
             }
-            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + Controller.SHOP_BANK_NUMBER + " " + accountNumberStr +
+            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + Account.getStoreBankAccount() + " " + accountNumberStr +
                     " TEAM34_ONLINE_STORE");
             dataOutputStream.flush();
             String response2 = dataInputStream.readUTF();
@@ -832,7 +830,7 @@ public class AccountController {
             if (!response1.matches("TOKEN_\\w{10}")) {
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response1);
             }
-            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + accountNumber + " " + Controller.SHOP_BANK_NUMBER +
+            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + accountNumber + " " + Account.getStoreBankAccount() +
                     " TEAM34_ONLINE_STORE");
             dataOutputStream.flush();
             String response2 = dataInputStream.readUTF();

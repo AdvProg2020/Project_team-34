@@ -17,9 +17,6 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         DataBase.createNewTablesToStart();
         DataBase.importAllData();
-        if(Account.isFirstSupervisorCreated()) {
-            Controller.setShopBankNumber(Account.getASupervisor().getBankAccountNumber());
-        }
         try {
             Server server = new Server();
             server.start();

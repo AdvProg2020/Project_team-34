@@ -2,7 +2,9 @@ package gui.paymentMenu;
 
 import account.Account;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
+import gui.alerts.AlertBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -95,6 +97,16 @@ public class PaymentMenuForCustomer extends GMenu {
         bankAccountNumber.setOnKeyTyped(e -> {
             pay.setDisable(username.getText().trim().equals("") || password.getText().trim().equals("") ||
                     bankAccountNumber.getText().trim().equals(""));
+        });
+
+        pay.setOnAction(e -> {
+            try {
+                controller.getAccountController().controlPay(username.getText(), Integer.parseInt(bankAccountNumber.getText()),
+                        password.getText(), amount);
+                stage.setScene(getScene());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
+            }
         });
 
         return scene;

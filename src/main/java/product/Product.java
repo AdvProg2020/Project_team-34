@@ -222,4 +222,23 @@ public class Product {
         this.imageInStringForm = jsonObject.get("imageInStringForm").getAsString();
         this.numberOfViews = jsonObject.get("numberOfViews").getAsInt();
     }
+
+    @Override
+    public String toString() {
+        ArrayList<String> stringArrayList = new ArrayList<>();
+        for (Supplier listOfSupplier : listOfSuppliers) {
+            stringArrayList.add(listOfSupplier.getUserName());
+        }
+        StringBuilder returning = new StringBuilder("Product{" +
+                "numberOfViews=" + numberOfViews +
+                ", productId='" + productId + '\'' +
+                ", name='" + name + '\'' +
+                ", nameOfCompany='" + nameOfCompany + '\'' +
+                ", ListOfSuppliersUserName=" + stringArrayList + '\'' +
+                ", description='" + description + '\'' +
+                ", specification=" + specification +
+                '}' + '\'');
+
+        return returning.toString();
+    }
 }

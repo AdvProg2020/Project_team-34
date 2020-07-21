@@ -72,7 +72,7 @@ public class ProductController {
     public void controlEditProductById(String productId, HashMap<String, String> fieldsToChange) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(productId);
-        inputs.add(Utils.convertStringToStringHashMapToJsonElement(fieldsToChange));
+        inputs.add(Utils.convertStringToStringHashMapToJsonElement(fieldsToChange).toString());
         communication("controlEditProductById",inputs);
     }
 
@@ -160,7 +160,7 @@ public class ProductController {
     public String controlShowDetailForRequest(String requestId) throws ExceptionalMassage {
         JsonArray input = new JsonArray();
         input.add(requestId);
-        return communication("controlShowDetailForRequest",input).toString();
+        return communication("controlShowDetailForRequest",input).getAsString();
     }
 
     public State controlGetEnumForRequest(String requestId) throws ExceptionalMassage {

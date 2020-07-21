@@ -305,7 +305,7 @@ public class RegisterGMenu extends GMenu {
                 }
             } else {
                 try{
-                    controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,1,companyName);
+                    controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,0,companyName);
                     stage.close();
                     popUpCallerStage.setScene(parentMenu.getScene());
                     //popUpCallerStage.setScene(new MainMenuG(null, stage, controller).getScene());

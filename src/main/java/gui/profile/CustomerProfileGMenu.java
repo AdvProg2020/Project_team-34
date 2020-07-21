@@ -4,6 +4,7 @@ import controller.Controller;
 import discount.CodedDiscount;
 import gui.GMenu;
 import gui.cartMenu.CartGMenu;
+import gui.paymentMenu.WalletGMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -63,7 +64,7 @@ public class CustomerProfileGMenu extends GMenu {
         Button myWalletButton = new Button("My Wallet");
         GMenu.addStyleToButton(myWalletButton);
         myWalletButton.setOnAction(e->{
-            stage.setScene(new ChooseRequestingCustomersGMenu(this, stage,controller).getScene());
+            stage.setScene(new WalletGMenu(this, stage,controller).getScene());
         });
 
 

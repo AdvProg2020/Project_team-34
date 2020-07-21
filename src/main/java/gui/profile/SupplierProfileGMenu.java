@@ -4,6 +4,7 @@ import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import gui.paymentMenu.WalletGMenu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -64,7 +65,7 @@ public class SupplierProfileGMenu extends GMenu {
         Button myWalletButton = new Button("My Wallet");
         GMenu.addStyleToButton(myWalletButton);
         myWalletButton.setOnMouseClicked(e->{
-            stage.setScene(new ManageAuctionsForSupplierGMenu(this, stage, controller).getScene());
+            stage.setScene(new WalletGMenu(this, stage, controller).getScene());
         });
 
         buttonPane.setAlignment(Pos.CENTER);

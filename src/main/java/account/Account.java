@@ -11,6 +11,7 @@ public abstract class Account {
     protected String userName , name , familyName , email , phoneNumber , password;
     protected int credit;
     protected boolean isAvailable ;
+    protected int bankAccountNumber;
 
     public String getUserName() {
         return userName;
@@ -66,6 +67,14 @@ public abstract class Account {
 
     public void setCredit(int credit) {
         this.credit = credit;
+    }
+
+    public int getBankAccountNumber() {
+        return bankAccountNumber;
+    }
+
+    public void setBankAccountNumber(int bankAccountNumber) {
+        this.bankAccountNumber = bankAccountNumber;
     }
 
     public boolean isAvailable() {

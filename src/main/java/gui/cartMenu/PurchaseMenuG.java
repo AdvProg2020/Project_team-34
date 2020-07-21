@@ -288,6 +288,7 @@ public class PurchaseMenuG extends GMenu {
         purchaseButton.setOnAction( e -> {
             try{
                 boolean hasCustomerWonCode =  controller.getAccountController().finalizeOrder();
+                controller.getAccountController().controlGetLinksToDownloadFileProducts();
                 new AlertBox(this, "You have successfully purchased your cart!","OK",controller).showAndWait();
                 if(hasCustomerWonCode){
                     new AlertBox(this, "Congratulations, You have won a coded discount!", "OK",controller).showAndWait();

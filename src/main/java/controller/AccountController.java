@@ -5,6 +5,7 @@ import cart.Cart;
 import cart.ProductInCart;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import communications.ControllerSource;
 import communications.Utils;
@@ -216,12 +217,27 @@ public class AccountController {
         return Boolean.parseBoolean(communication("finalizeOrder", new JsonArray()).getAsString());
     }
 
-    private void controlInsiderBuyProductWithP2P (String filePath, int port) throws ExceptionalMassage{
-        try {
-            mainController.getPeerNode().sendRequest(filePath, "localhost", port);
-        } catch (IOException e) {
-            throw new ExceptionalMassage(e.getMessage());
+    public void controlGetLinksToDownloadFileProducts() throws ExceptionalMassage {
+        JsonArray jsonArray =communication("controlGetLinksToDownloadFileProducts", new JsonArray()).getAsJsonArray();
+        JsonObject jsonObject;
+        for (JsonElement jsonElement : jsonArray) {
+            jsonObject =  jsonElement.getAsJsonObject();
+            controlInsiderDownloadProductWithP2P(jsonObject.get("filePath").getAsString(), jsonObject.get("port").getAsInt());
         }
+    }
+
+    private void controlInsiderDownloadProductWithP2P (String filePath, int port) throws ExceptionalMassage{
+            System.out.println("daram mifrestam be khoda");
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        mainController.getPeerNode().sendRequest(filePath, "localhost", port);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }).start();
     }
 
     public String getAccountUsername() throws ExceptionalMassage {

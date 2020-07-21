@@ -104,6 +104,7 @@ public class PaymentMenuForCustomer extends GMenu {
                 controller.getAccountController().controlPay(username.getText(), Integer.parseInt(bankAccountNumber.getText()),
                         password.getText(), amount);
                 stage.setScene(getScene());
+                //TODO FINILIZE ORDER
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }

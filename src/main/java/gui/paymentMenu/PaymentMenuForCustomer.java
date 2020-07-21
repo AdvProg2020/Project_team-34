@@ -82,6 +82,7 @@ public class PaymentMenuForCustomer extends GMenu {
             } else {
                 bankAccountNumber.clear();
             }
+            bankAccountNumber.setDisable(isSelected);
             pay.setDisable(username.getText().trim().equals("") || password.getText().trim().equals("") ||
                     bankAccountNumber.getText().trim().equals(""));
         });

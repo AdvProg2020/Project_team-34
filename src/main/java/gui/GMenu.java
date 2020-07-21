@@ -347,7 +347,7 @@ public abstract class GMenu {
         return label;
     }
 
-    public static long getTime(JFXDatePicker datePicker, JFXTimePicker timePicker) {
+    public static long getTime(JFXDatePicker datePicker, JFXTimePicker timePicker) throws NullPointerException {
         Date fromDatePicker = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         long fromTimePicker = (timePicker.getValue().getHour() * 60 + timePicker.getValue().getMinute()) * 60000;
         return fromDatePicker.getTime() + fromTimePicker;

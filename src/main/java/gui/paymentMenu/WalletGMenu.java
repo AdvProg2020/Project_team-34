@@ -11,7 +11,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import org.w3c.dom.Text;
 
 public class WalletGMenu extends GMenu {
     public WalletGMenu(GMenu parentMenu, Stage stage, Controller controller) {

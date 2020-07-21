@@ -127,6 +127,7 @@ public class ClientThread extends Thread {
         ArrayList<String> values = new ArrayList<>();
 
         JsonArray argumentsArray = (JsonArray)jsonParser.parse(request.getInputs());
+        System.out.println(functionName);
 
         if(argumentsArray != null){
             for (JsonElement jsonElement : argumentsArray) {
@@ -140,7 +141,7 @@ public class ClientThread extends Thread {
             }
         }
 
-        System.out.println(functionName);
+
         Method method;
         try {
             if (request.getSource() == ControllerSource.ACCOUNT_CONTROLLER) {

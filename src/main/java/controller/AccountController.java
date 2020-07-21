@@ -164,9 +164,8 @@ public class AccountController {
                 return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must be a supervisor to create supervisor account."));
             bankAccountNumber = Account.getASupervisor().getBankAccountNumber();
         }else {
-
             try {
-                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, username, password);
+                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, "Team34", "343434");
             } catch (ExceptionalMassage exceptionalMassage) {
                 return Response.createResponseFromExceptionalMassage(exceptionalMassage);
             }
@@ -770,7 +769,7 @@ public class AccountController {
             if (!response1.matches("TOKEN_\\w{10}")) {
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response1);
             }
-            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + accountNumber + " " + Controller.SHOP_BANK_NUMBER +
+            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + accountNumber + " " + Account.getASupervisor().getBankAccountNumber() +
                     " TEAM34_ONLINE_STORE");
             dataOutputStream.flush();
             String response2 = dataInputStream.readUTF();
@@ -789,9 +788,9 @@ public class AccountController {
         }
     }
 
-    public Response controlPay(String amount) {
-        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
-    }
+//    public Response controlPay(String amount) {
+//        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
+//    }
 
     public Response controlGetMembersOfChatRoom(String chatRoomId){
         ArrayList<String> userNames = new ArrayList<>();

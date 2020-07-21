@@ -1,5 +1,7 @@
 package main;
 
+import account.Account;
+import controller.Controller;
 import database.DataBase;
 import database.WageDataBase;
 import server.Server;
@@ -15,6 +17,9 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         DataBase.createNewTablesToStart();
         DataBase.importAllData();
+        if(Account.isFirstSupervisorCreated()) {
+            Controller.setShopBankNumber(Account.getASupervisor().getBankAccountNumber());
+        }
         try {
             Server server = new Server();
             server.start();

@@ -33,6 +33,8 @@ public class ProductDataBase {
         content.put("rootProductId" , "String");
         content.put("futureCategoryName", "String");
         content.put("imageInStringForm", "String");
+        content.put("filePath", "String");
+        content.put("supplierPort", "int");
 
         DataBase.createNewTable("Products", content);
     }
@@ -43,8 +45,9 @@ public class ProductDataBase {
            return;
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name,nameOfCompany,  priceForEachSupplier," +
-                "listOfSuppliers, remainedNumberForEachSupplier, description , specification, rootProductId,futureCategoryName, imageInStringForm)" +
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?, ?)";
+                "listOfSuppliers, remainedNumberForEachSupplier, description , specification, rootProductId,futureCategoryName, " +
+                "imageInStringForm, filePath, supplierPort)" +
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?, ?, ?, ?)";
         try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setInt(1, product.getNumberOfViews());
@@ -60,6 +63,8 @@ public class ProductDataBase {
             statement.setString(11, product.getRootProductId());
             statement.setString(12, product.getFutureCategoryName());
             statement.setString(13, product.getImageInStringForm());
+            statement.setString(14, product.getFilePath());
+            statement.setInt(15, product.getSupplierPort());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -145,7 +150,10 @@ public class ProductDataBase {
                 String futureCategoryName = resultSet.getString("futureCategoryName");
                 HashMap<String,String> specification = convertJsonToStringStringHashMap((resultSet.getString("specification")));
                 String imageInStringForm = resultSet.getString("imageInStringForm");
-                new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,remainedNumberForEachSupplier,description,numberOfViews,productId,state,rootProductId,futureCategoryName,specification, imageInStringForm);
+                String filePath = resultSet.getString("filePath");
+                int supplierPort = resultSet.getInt("supplierPort");
+                new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,remainedNumberForEachSupplier,description,
+                        numberOfViews,productId,state,rootProductId,futureCategoryName,specification, imageInStringForm, filePath, supplierPort);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

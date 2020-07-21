@@ -9,8 +9,6 @@ public class Controller {
     public static final String BANK_IP = "localhost";
     public static final int BANK_SOCKET = 9999;
 
-    public static int SHOP_BANK_NUMBER = 0;
-
     private final ClientThread clientThread;
 
     private String token;

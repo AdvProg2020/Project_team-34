@@ -70,7 +70,8 @@ public class ProductController {
 //        else {
 //            product.addNewSupplierForProduct(supplier, price, remainedNumbers);
 //        }
-        Product product1 = new Product(supplier, name, nameOfCompany, Integer.parseInt(price), Integer.parseInt(remainedNumbers), description, null, category, specifications, imageInStringForm);
+        Product product1 = new Product(supplier, name, nameOfCompany, Integer.parseInt(price), Integer.parseInt(remainedNumbers),
+                description, null, category, specifications, imageInStringForm, filePath, port);
         System.out.println(product1);
         return Response.createSuccessResponse();
     }

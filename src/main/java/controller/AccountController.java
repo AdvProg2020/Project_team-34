@@ -104,14 +104,13 @@ public class AccountController {
     }
 
     public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,
-                              int credit, String nameOfCompany) throws ExceptionalMassage {
+                              String nameOfCompany) throws ExceptionalMassage {
         JsonArray input = new JsonArray();
         input.add(name);
         input.add(familyName);
         input.add(email);
         input.add(phoneNumber);
         input.add(password);
-        input.add(String.valueOf(credit));
         input.add(nameOfCompany);
         communication("editAllFields", input);
     }

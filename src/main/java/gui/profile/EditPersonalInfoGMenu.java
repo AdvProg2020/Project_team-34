@@ -105,9 +105,8 @@ public class EditPersonalInfoGMenu extends GMenu {
             String phoneNumber = phoneNumberField.getText();
             String password = passwordField.getText();
             String nameOfCompany = nameOfCompanyField.getText();
-            int credit = Integer.parseInt(creditField.getText());
             try {
-                controller.getAccountController().editAllFields(name, familyName, email, phoneNumber, password, credit, nameOfCompany);
+                controller.getAccountController().editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }

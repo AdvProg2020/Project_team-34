@@ -408,11 +408,17 @@ public class AccountController {
         return null;
     }
 
-    public void controlPay(String username, String password) throws ExceptionalMassage {
-
+    public void controlPay(String username, String accountNumber, String password, int amount) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(username);
+        inputs.add(accountNumber);
+        inputs.add(password);
+        inputs.add(String.valueOf(amount));
+        communication("controlPay", inputs);
     }
 
     public void controlPay() throws ExceptionalMassage {
-
+        JsonArray inputs = new JsonArray();
+        communication("controlPay", inputs);
     }
 }

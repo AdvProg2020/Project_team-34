@@ -2,58 +2,33 @@ package gui.paymentMenu;
 
 import controller.Controller;
 import gui.GMenu;
-import gui.profile.ViewLogsForCustomerGMenu;
-import gui.profile.ViewProductCustomers;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class PaymentMenuForCustomer extends GMenu {
-    private final TextField username;
-    private final PasswordField password;
-    private final CheckBox useDefaultAccount;
 
-    public final EventHandler<ActionEvent> inPurchase = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent actionEvent) {
-            stage.setScene(new ViewLogsForCustomerGMenu(null, stage, controller).getScene());
-        }
-    };
+    private int afterPay;
 
-    public final EventHandler<ActionEvent> inCreditCharge = new EventHandler<ActionEvent>() {
-        @Override
-        public void handle(ActionEvent actionEvent) {
+    private int amount;
 
-        }
-    };
-
-    private final EventHandler<ActionEvent> onPay;
-
-    public PaymentMenuForCustomer(GMenu parentMenu, Stage stage, Controller controller, int afterPay) {
+    public PaymentMenuForCustomer(GMenu parentMenu, Stage stage, Controller controller, int amount, int afterPay) {
         super("Payment Menu", parentMenu, stage, controller);
-        username = new TextField();
-        password = new PasswordField();
-        useDefaultAccount = new CheckBox("Use my default account");
-        if (afterPay == 1) {
-            onPay = inPurchase;
-        } else {
-            onPay = inCreditCharge;
-        }
+        this.amount = amount;
+        this.afterPay = afterPay;
     }
 
     @Override
     protected Scene createScene() {
+        Label label = new Label("Pay $" + amount);
+        label.setStyle("-fx-font-weight: bolder");
         TextField username = new TextField();
+        TextField bankAccountNumber = new TextField();
         PasswordField password = new PasswordField();
         CheckBox useDefaultAccount = new CheckBox("Use my default account");
         Button pay = new Button("Pay");
@@ -68,6 +43,12 @@ public class PaymentMenuForCustomer extends GMenu {
         username.setMaxWidth(300);
         username.setStyle("-fx-border-color: #4678c8; -fx-border-width: 2px; -fx-border-radius: 15px; " +
                 "-fx-background-radius: 15px");
+        bankAccountNumber.setPromptText("Account number");
+        bankAccountNumber.setAlignment(Pos.CENTER);
+        bankAccountNumber.setMinWidth(300);
+        bankAccountNumber.setMaxWidth(300);
+        bankAccountNumber.setStyle("-fx-border-color: #4678c8; -fx-border-width: 2px; -fx-border-radius: 15px; " +
+                "-fx-background-radius: 15px");
         password.setPromptText("Password");
         password.setAlignment(Pos.CENTER);
         password.setMinWidth(300);
@@ -77,7 +58,8 @@ public class PaymentMenuForCustomer extends GMenu {
         pay.setDefaultButton(true);
         pay.setPrefWidth(100);
         buttonBox.getChildren().add(pay);
-        paymentInfoBox.getChildren().addAll(createHeader(), username, password, useDefaultAccount, buttonBox);
+        paymentInfoBox.getChildren().addAll(createHeader(), label, username, bankAccountNumber, password,
+                useDefaultAccount, buttonBox);
         backgroundLayout.getChildren().addAll(paymentInfoBox);
         buttonBox.setAlignment(Pos.CENTER_RIGHT);
 
@@ -90,22 +72,24 @@ public class PaymentMenuForCustomer extends GMenu {
 
         useDefaultAccount.setOnAction(e -> {
             username.clear();
+            bankAccountNumber.clear();
             password.clear();
             boolean isSelected = useDefaultAccount.isSelected();
             pay.setDisable(!isSelected);
             username.setDisable(isSelected);
+            bankAccountNumber.setDisable(isSelected);
             password.setDisable(isSelected);
         });
 
         username.setOnKeyTyped(e -> {
-            pay.setDisable(username.getText().trim().equals("") || password.getText().trim().equals(""));
+            pay.setDisable(username.getText().trim().equals("") || password.getText().trim().equals("") ||
+                    bankAccountNumber.getText().trim().equals(""));
         });
 
         password.setOnKeyTyped(e -> {
-            pay.setDisable(username.getText().trim().equals("") || password.getText().trim().equals(""));
+            pay.setDisable(username.getText().trim().equals("") || password.getText().trim().equals("") ||
+                    bankAccountNumber.getText().trim().equals(""));
         });
-
-        pay.setOnAction(onPay);
 
         return scene;
     }

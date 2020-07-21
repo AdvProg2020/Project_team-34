@@ -28,7 +28,7 @@ public class Main extends Application {
 
         Controller controller = new Controller();
 
-        stage.setScene(new PaymentMenuForCustomer(null, stage, controller, null).getScene());
+        stage.setScene(new PaymentMenuForCustomer(null, stage, controller, 100, 1).getScene());
 
 //
 //        GMenu mainMenu = new MainMenuG( null, stage, controller);

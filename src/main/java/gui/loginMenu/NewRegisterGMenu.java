@@ -162,7 +162,7 @@ public class NewRegisterGMenu extends GMenu {
                         firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
                         nameOfCompany.getText(), bankUsername.getText(), bankPassword.getText(), bankAccount.isSelected());
                 stage.close();
-                popupCaller.setScene(new MainMenuG(null, stage, controller).getScene());
+                popupCaller.setScene(new MainMenuG(null, popupCaller, controller).getScene());
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }

@@ -198,15 +198,13 @@ public abstract class Account {
         return null;
     }
 
-    public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,
-                              int credit) {
+    public void editAllFields(String name, String familyName, String email, String phoneNumber, String password) {
         this.userName = userName;
         this.name = name;
         this.familyName = familyName;
         this.email = email;
         this.phoneNumber = phoneNumber;
         this.password = password;
-        this.credit = credit;
         AccountDataBase.update(this);
     }
 

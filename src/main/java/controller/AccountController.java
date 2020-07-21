@@ -262,14 +262,14 @@ public class AccountController {
     }
 
     public Response editAllFields(String name, String familyName, String email, String phoneNumber, String password,
-                              String credit, String nameOfCompany) {
+                                  String nameOfCompany) {
         if (password == null || password.trim().length() == 0) {
             password = getInternalAccount().getPassword();
         }
         if (getInternalAccount() instanceof Supplier) {
             ((Supplier) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
         } else {
-            (getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, Integer.parseInt(credit));
+            (getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password);
         }
         return Response.createSuccessResponse();
     }

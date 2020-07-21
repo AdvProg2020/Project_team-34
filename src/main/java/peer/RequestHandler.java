@@ -4,8 +4,8 @@ import java.io.*;
 import java.net.Socket;
 
 public class RequestHandler implements Runnable {
-    final static String CRLF = "\r\n";
-    Socket socket;
+    private final static String CRLF = "\r\n";
+    private Socket socket;
 
     public RequestHandler(Socket socket) throws Exception {
         this.socket = socket;
@@ -21,103 +21,58 @@ public class RequestHandler implements Runnable {
     }
 
     private void processRequest() throws Exception {
-        DataOutputStream os = new DataOutputStream(socket.getOutputStream());
+        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
 
-        InputStream is = socket.getInputStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+        InputStream inputStream = socket.getInputStream();
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
 
-        // Get the request line of the HTTP request message.
-        String requestLine = br.readLine();
-        System.out.println(requestLine);
-
-        String[] tokens = requestLine.split(" ");
-        String fileName = tokens[0];
-
-        // Prepend a "." so that file request is within the current directory.
-        fileName = ".\\src\\main\\resources\\image\\auction.png" + fileName;
+        String filePath = bufferedReader.readLine();
+        System.out.println(filePath);
 
         // Open the requested file.
         FileInputStream fis = null;
         boolean fileExists = true;
-
         try
         {
-            fis = new FileInputStream(fileName);
+            fis = new FileInputStream(filePath);
         }
         catch (FileNotFoundException e)
         {
             fileExists = false;
         }
 
-        // construct the response Message
-        // Construct the response message.
         String statusLine = null;
-        String contentTypeLine = null;
-        String entityBody = null;
         if (fileExists)
         {
-            statusLine = "HTTP/1.1 200 OK" + CRLF;
-            contentTypeLine = "Content-Type: " + contentType(fileName) + CRLF;
+            statusLine = "Successful" + CRLF;
         }
         else
         {
-            System.out.println("hi");
-            statusLine = "HTTP/1.1 404 Not Found" + CRLF;
-            contentTypeLine = "Content-Type: text/html" + CRLF;
-            entityBody = "<HTML><HEAD><TITLE>404 Not Found</TITLE></HEAD><BODY>Error 404: Page Not Found</BODY></HTML>";
+            statusLine = "Error" + CRLF;
         }
 
-        // Send the status line.
-        os.writeBytes(statusLine);
-        os.flush();
-        System.out.println("neveashtam");
+        dataOutputStream.writeBytes(statusLine);
+        dataOutputStream.flush();
 
-        // Send the content type line.
-        os.writeBytes(contentTypeLine);
-
-        // Send a blank line to indicate the end of the header lines.
-        os.writeBytes(CRLF);
-
-        // Send the entity body.
         if (fileExists) {
-            sendBytes(fis, os);
+            sendBytes(fis, dataOutputStream);
             fis.close();
-        } else {
-            os.writeBytes(entityBody);
         }
-        // Close streams and socket.
-        os.close();
-        br.close();
+
+        dataOutputStream.close();
+        bufferedReader.close();
         socket.close();
 
     }
 
-    private static void sendBytes(FileInputStream fis, OutputStream os)
+
+    private static void sendBytes(FileInputStream fileInputStream, OutputStream outputStream)
             throws Exception
             {
-        // Construct a 1K buffer to hold bytes on their way to the socket.
         byte[] buffer = new byte[1024];
         int bytes = 0;
-
-        // Copy requested file into the socket's output stream.
-        while ((bytes = fis.read(buffer)) != -1) {
-            os.write(buffer, 0, bytes);
+        while ((bytes = fileInputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, bytes);
         }
-    }
-
-    private static String contentType(String fileName) {
-        if (fileName.endsWith(".htm") || fileName.endsWith(".html")) {
-            return "text/html";
-        }
-        if (fileName.endsWith(".jpg") || fileName.endsWith(".jpeg")) {
-            return "image/jpeg";
-        }
-        if (fileName.endsWith(".gif")) {
-            return "image/gif";
-        }
-        if (fileName.endsWith(".ram") || fileName.endsWith(".ra")) {
-            return "audio/x-pn-realaudio";
-        }
-        return "application/octet-stream";
     }
 }

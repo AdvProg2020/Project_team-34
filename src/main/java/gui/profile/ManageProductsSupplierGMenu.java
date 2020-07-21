@@ -623,7 +623,7 @@ public class ManageProductsSupplierGMenu extends GMenu {
                 int price = Integer.parseInt(priceField.getText());
                 int remainedNumber = Integer.parseInt(remainedNumberField.getText());
                 try{
-                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL);
+                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL, null, 0);//TODO Checking
                     ((Stage)anchorPane0.getScene().getWindow()).close();
                 }  catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();

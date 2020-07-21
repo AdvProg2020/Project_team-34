@@ -416,16 +416,17 @@ public class AllProductGMenu extends GMenu {
                 } catch (ExceptionalMassage exceptionalMassage) {
                     new AlertBox(this, exceptionalMassage, controller).showAndWait();
                 }
-                if(tempAuction == null) {
+                if (tempAuction == null) {
                     stage.setScene(new ProductMenuG(this, stage, product, controller).getScene());
-                }else{
-                    stage.setScene(new AuctionGMenu(this,stage, controller, tempAuction).getScene());
+                } else {
+                    stage.setScene(new AuctionGMenu(this, stage, controller, tempAuction).getScene());
                 }
             });
             boolean doesProductHaveAnySale = false;
             boolean isSizeOfSuppliersZero = false;
             boolean isInAuction = false;
-            if(auction != null)
+            boolean isFile = product.getFilePath() != null;
+            if (auction != null)
                 isInAuction = true;
             try {
                 doesProductHaveAnySale = controller.getOffController().isProductHasAnySale(product);
@@ -455,8 +456,18 @@ public class AllProductGMenu extends GMenu {
 
                 gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
 //                gridPane.getChildren().add(soldOutImageView);
-            } else if(isInAuction){
+            } else if (isInAuction) {
                 ImageView AuctionImageView = GMenu.getImageView("./src/main/resources/image/auction.png", 200, 200);
+
+                AuctionImageView.setBlendMode(BlendMode.SRC_OVER);
+                Group blend = new Group(
+                        productImageView,
+                        AuctionImageView
+                );
+
+                gridPane.getChildren().addAll(productImageView, blend, AuctionImageView);
+            } else if (isFile) {
+                ImageView AuctionImageView = GMenu.getImageView("./src/main/resources/image/file.png", 200, 200);
 
                 AuctionImageView.setBlendMode(BlendMode.SRC_OVER);
                 Group blend = new Group(

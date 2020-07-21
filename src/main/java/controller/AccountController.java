@@ -358,7 +358,7 @@ public class AccountController {
         try {
             mainController.getCart().increaseProductCount(product, supplier);
         } catch (ExceptionalMassage exceptionalMassage) {
-            return new Response(RequestStatus.SUCCESSFUL, exceptionalMassage.getMessage());
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
         }
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
@@ -377,6 +377,11 @@ public class AccountController {
     public Response controlViewCart() {
         String cartJson = Utils.convertObjectToJsonString(mainController.getCart());
         return new Response(RequestStatus.SUCCESSFUL,cartJson);
+    }
+
+    public Response controlViewCartInfo() {
+        String cartStringForm = mainController.getCart().toString();
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(cartStringForm));
     }
 
     public Response controlSubmitShippingInfo(String firstName, String lastName, String city, String address,
@@ -400,17 +405,21 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public Response controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
+    public Response controlSubmitDiscountCode(String discountCode) {
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.");
         if (!(account instanceof Customer))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login as a customer.");
-        mainController.getCart().applyCodedDiscount(discountCode);
+        try {
+            mainController.getCart().applyCodedDiscount(discountCode);
+        } catch (ExceptionalMassage ex){
+            return Response.createResponseFromExceptionalMassage(ex);
+        }
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public Response controlRemoveDiscountCode() throws ExceptionalMassage {
+    public Response controlRemoveDiscountCode() {
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.");

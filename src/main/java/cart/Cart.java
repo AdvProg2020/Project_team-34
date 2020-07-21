@@ -253,10 +253,7 @@ public class Cart {
         setCodedDiscount(discount);
     }
 
-    public void removeCodedDiscount() throws ExceptionalMassage {
-        if (codedDiscount == null) {
-            throw new ExceptionalMassage("Code hasn't applied yet.");
-        }
+    public void removeCodedDiscount(){
         setCodedDiscount(null);
     }
 

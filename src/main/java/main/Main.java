@@ -3,6 +3,7 @@ package main;
 import controller.Controller;
 import gui.GMenu;
 import gui.loginMenu.FirstSupervisorMenu;
+import gui.loginMenu.NewRegisterGMenu;
 import gui.mainMenu.MainMenuG;
 import gui.profile.sendMenu;
 import javafx.application.Application;
@@ -51,6 +52,8 @@ public class Main extends Application {
             System.exit(0);
         });
 
+//        stage.setScene(new NewRegisterGMenu(null, stage, controller).getScene());
+//        stage.show();
         GMenu mainMenu = new MainMenuG( null, stage, controller);
         GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
         stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());

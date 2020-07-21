@@ -314,9 +314,9 @@ public abstract class GMenu {
 
         done.setOnAction(e -> {
             try {
-                controller.getAccountController().controlCreateAccount(usernameField.getText(), type.getValue().toLowerCase(),
-                        firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
-                        passwordField.getText(), 0, "");
+                controller.getAccountController().controlCreateAccount(type.getValue().toLowerCase(), usernameField.getText(),
+                        passwordField.getText(), firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
+                        "", "", "", false);
                 stage.setScene(gMenu.createScene());
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();

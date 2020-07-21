@@ -289,7 +289,9 @@ public class RegisterGMenu extends GMenu {
             String userName = usernameField.getText();
             String password = passwordField.getText();
             String companyName = companyNameField.getText();
+            /*
             if(((RadioButton)accountType.getSelectedToggle()).getText().equals("Customer")){
+
                 try{
                     int credit = Integer.parseInt(creditField.getText());
                     try{
@@ -303,6 +305,7 @@ public class RegisterGMenu extends GMenu {
                 } catch (NumberFormatException ex){
                     new AlertBox(this, "Enter number for credit, please","OK",controller).showAndWait();
                 }
+
             } else {
                 try{
                     controller.getAccountController().controlCreateAccount(userName,"supplier",firstName,lastName,email,phoneNum,password,0,companyName);
@@ -313,6 +316,8 @@ public class RegisterGMenu extends GMenu {
                     new AlertBox(this, ex, controller).showAndWait();
                 }
             }
+
+                 */
             passwordField.clear();
         });
 

@@ -56,20 +56,48 @@ public class AccountController {
         return jsonElement.getAsString();
     }
 
-    public void controlCreateAccount(String username, String type, String name, String familyName, String email,
-                                     String phoneNumber, String password, int credit, String nameOfCompany)
-            throws ExceptionalMassage {
-        JsonArray input = new JsonArray();
-        input.add(username);
-        input.add(type);
-        input.add(name);
-        input.add(familyName);
-        input.add(email);
-        input.add(phoneNumber);
-        input.add(password);
-        input.add(String.valueOf(credit));
-        input.add(nameOfCompany);
-        JsonElement response = communication("controlCreateAccount", input);
+    public void controlCreateAccount(String type, String username, String password, String firstName, String lastName,
+                                     String email, String phoneNumber, String nameOfCompany, String bankUsername,
+                                     String bankPassword, boolean alsoBank) throws ExceptionalMassage {
+        if (!type.equals("customer") && !type.equals("supervisor") && !type.equals("supplier") && !type.equals("supporter"))
+            throw new ExceptionalMassage("Invalid account type");
+        if (username.trim().length() == 0)
+            throw new ExceptionalMassage("Username can't be empty");
+        if (!username.matches("\\w+"))
+            throw new ExceptionalMassage("Invalid username");
+        if (password.trim().length() == 0)
+            throw new ExceptionalMassage("Password can't be empty");
+        if (!password.matches("\\w+"))
+            throw new ExceptionalMassage("Invalid password");
+        if (firstName.trim().length() == 0)
+            throw new ExceptionalMassage("First name can't be empty");
+        if (lastName.trim().length() == 0)
+            throw new ExceptionalMassage("Last name can't be empty");
+        if (email.trim().length() == 0)
+            throw new ExceptionalMassage("Email can't be empty");
+        if (phoneNumber.trim().length() == 0)
+            throw new ExceptionalMassage("Phone number can't be empty");
+        if (type.equals("supplier") && nameOfCompany.trim().length() == 0)
+            throw new ExceptionalMassage("Name of company cannot be empty");
+        if (alsoBank) {
+            if (bankUsername.trim().length() == 0)
+                throw new ExceptionalMassage("Bank username can't be empty");
+            if (bankPassword.trim().length() == 0)
+                throw new ExceptionalMassage("Bank password can't be empty");
+        }
+        JsonArray inputs = new JsonArray();
+        inputs.add(type);
+        inputs.add(username);
+        inputs.add(password);
+        inputs.add(firstName);
+        inputs.add(lastName);
+        inputs.add(email);
+        inputs.add(phoneNumber);
+        inputs.add(nameOfCompany);
+        inputs.add(bankUsername);
+        inputs.add(bankPassword);
+        inputs.add(String.valueOf(alsoBank));
+        JsonElement response = communication("controlCreateAccount", inputs);
         if (type.equals("customer") || type.equals("supplier")) {
             mainController.setToken(response.getAsString());
         }
@@ -216,7 +244,7 @@ public class AccountController {
         return Boolean.parseBoolean(communication("finalizeOrder", new JsonArray()).getAsString());
     }
 
-    private void controlInsiderBuyProductWithP2P (String filePath, int port) throws ExceptionalMassage{
+    private void controlInsiderBuyProductWithP2P(String filePath, int port) throws ExceptionalMassage {
         try {
             mainController.getPeerNode().sendRequest(filePath, "localhost", port);
         } catch (IOException e) {
@@ -331,7 +359,7 @@ public class AccountController {
         return observableList;
     }
 
-    public ObservableList<Supporter> getSupporterObservableList() throws ExceptionalMassage{
+    public ObservableList<Supporter> getSupporterObservableList() throws ExceptionalMassage {
         ArrayList<Supporter> arrayList = Utils.convertJsonElementToSupporterArrayList(communication(
                 "getSupporterObservableList", new JsonArray()));
         ObservableList<Supporter> observableList = FXCollections.observableArrayList();
@@ -342,10 +370,10 @@ public class AccountController {
     public Supplier getSupplierByCompanyName(String companyName) throws ExceptionalMassage {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(companyName);
-        return Supplier.convertJsonStringToSupplier(communication("getSupplierByCompanyName",jsonArray).toString());
+        return Supplier.convertJsonStringToSupplier(communication("getSupplierByCompanyName", jsonArray).toString());
     }
 
-    public Account getAccountByUsernameWithinAvailable(String username) throws ExceptionalMassage{
+    public Account getAccountByUsernameWithinAvailable(String username) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(username);
         JsonElement jsonElement = communication("getAccountByUsernameWithinAvailable", inputs);
@@ -372,19 +400,19 @@ public class AccountController {
 
     }
 
-    public void addMessageToChatRoom(String senderUsername,String content,String chatRoomId) throws ExceptionalMassage{
+    public void addMessageToChatRoom(String senderUsername, String content, String chatRoomId) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(senderUsername);
         inputs.add(content);
         inputs.add(chatRoomId);
-        communication("addMessageToChatRoom",inputs);
+        communication("addMessageToChatRoom", inputs);
     }
 
-    public void controlSetWageAndMinimum(int wage , int minimum ) throws ExceptionalMassage {
+    public void controlSetWageAndMinimum(int wage, int minimum) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(wage);
         inputs.add(minimum);
-        communication("controlSetWageAndMinimum",inputs);
+        communication("controlSetWageAndMinimum", inputs);
     }
 
     public int controlGetWage() throws ExceptionalMassage {
@@ -411,14 +439,14 @@ public class AccountController {
         return Utils.convertJsonElementToSupporterArrayList(communication("getOnlineSupporters", new JsonArray()));
     }
 
-    public ArrayList<Message> getAllMessagesOfChatRoomById(String chatRoomId) throws ExceptionalMassage{
+    public ArrayList<Message> getAllMessagesOfChatRoomById(String chatRoomId) throws ExceptionalMassage {
         JsonArray input = new JsonArray();
         input.add(chatRoomId);
-        return Utils.convertJsonElementToMessageArrayList(communication("getAllMessagesOfChatRoomById",input));
+        return Utils.convertJsonElementToMessageArrayList(communication("getAllMessagesOfChatRoomById", input));
     }
 
-    public ArrayList<String> getRequestingCustomersBySupporter() throws ExceptionalMassage{
-        return Utils.convertJsonElementToStringArrayList(communication("getRequestingCustomersBySupporter",new JsonArray()));
+    public ArrayList<String> getRequestingCustomersBySupporter() throws ExceptionalMassage {
+        return Utils.convertJsonElementToStringArrayList(communication("getRequestingCustomersBySupporter", new JsonArray()));
     }
 
     public Customer getCustomerOfAChatRoom(String id) throws ExceptionalMassage {
@@ -427,28 +455,28 @@ public class AccountController {
         return Customer.convertJsonStringToCustomer(communication("getCustomerOfAChatRoom", inputs).toString());
     }
 
-    public void controlCloseChatRoomById(String id) throws ExceptionalMassage{
+    public void controlCloseChatRoomById(String id) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(id);
         communication("controlCloseChatRoomById", inputs);
     }
 
-    public ArrayList<String> controlGetMembersOfChatRoom(String chatRoomId) throws ExceptionalMassage{
+    public ArrayList<String> controlGetMembersOfChatRoom(String chatRoomId) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(chatRoomId);
         return Utils.convertJsonElementToStringArrayList(communication("controlGetMembersOfChatRoom", inputs));
     }
 
-    public void controlJoinChatRoom(String chatRoomId) throws ExceptionalMassage{
+    public void controlJoinChatRoom(String chatRoomId) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(chatRoomId);
         communication("controlJoinChatRoom", inputs);
     }
 
-    public void controlLeaveChatRoom(String chatRoomId) throws ExceptionalMassage{
+    public void controlLeaveChatRoom(String chatRoomId) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(chatRoomId);
-        communication("controlLeaveChatRoom",inputs);
+        communication("controlLeaveChatRoom", inputs);
     }
 
     public void controlPayBack(int accountNumber, int amount) throws ExceptionalMassage {

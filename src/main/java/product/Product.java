@@ -29,6 +29,8 @@ public class Product {
     private String futureCategoryName;
     private String imageInStringForm;
     private int numberOfViews;
+    private String filePath;
+    private int supplierPort;
 
     public int getNumberOfViews() {
         return numberOfViews;
@@ -56,6 +58,22 @@ public class Product {
 
     public String getName() {
         return name;
+    }
+
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public int getSupplierPort() {
+        return supplierPort;
+    }
+
+    public void setSupplierPort(int supplierPort) {
+        this.supplierPort = supplierPort;
     }
 
     public void setName(String name) {

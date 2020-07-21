@@ -13,6 +13,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import product.Product;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class AccountController {
@@ -214,6 +215,14 @@ public class AccountController {
 
     public boolean finalizeOrder() throws ExceptionalMassage {
         return Boolean.parseBoolean(communication("finalizeOrder", new JsonArray()).getAsString());
+    }
+
+    private void controlInsiderBuyProductWithP2P (String filePath, int port) throws ExceptionalMassage{
+        try {
+            mainController.getPeerNode().sendRequest(filePath, "localhost", port);
+        } catch (IOException e) {
+            throw new ExceptionalMassage(e.getMessage());
+        }
     }
 
     public String getAccountUsername() throws ExceptionalMassage {

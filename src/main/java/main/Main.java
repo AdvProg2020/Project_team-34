@@ -1,13 +1,25 @@
 package main;
 
 import controller.Controller;
-import gui.paymentMenu.PaymentMenuForCustomer;
+import gui.GMenu;
+import gui.loginMenu.FirstSupervisorMenu;
+import gui.mainMenu.MainMenuG;
+import gui.profile.sendMenu;
 import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
+import tornadofx.control.DateTimePicker;
+import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTimePicker;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class Main extends Application {
 
@@ -28,12 +40,10 @@ public class Main extends Application {
 
         Controller controller = new Controller();
 
-        stage.setScene(new PaymentMenuForCustomer(null, stage, controller, 100, 1).getScene());
-
-//
 //        GMenu mainMenu = new MainMenuG( null, stage, controller);
 //        GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
 //        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
+        stage.setScene(new sendMenu(null, stage, controller).getScene());
         stage.show();
     }
 

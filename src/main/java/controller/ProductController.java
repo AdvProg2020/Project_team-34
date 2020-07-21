@@ -35,7 +35,8 @@ public class ProductController {
     }
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers, String category,
-                                  String description, HashMap<String, String> specifications, String imageURL) throws ExceptionalMassage {
+                                  String description, HashMap<String, String> specifications, String imageURL,
+                                  String filePath , int port) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(name);
         inputs.add(nameOfCompany);

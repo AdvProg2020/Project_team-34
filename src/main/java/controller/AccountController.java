@@ -87,74 +87,63 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString("Supplier"));
     }
 
-    public Response controlCreateAccount(String username, String type, String name, String familyName, String email,
-                                     String phoneNumber, String password, String creditString, String nameOfCompany) {
-        int credit = Integer.parseInt(creditString);
-        if (username.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("username can't be empty"));
-        if (name.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("name can't be empty"));
-        if (familyName.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("family name can't be empty"));
-        if (email.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("email can't be empty"));
-        if (phoneNumber.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("phone number can't be empty"));
-        if (password.trim().length() == 0) return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("password can't be empty"));
-
+    public Response controlCreateAccount(String type, String username, String password, String firstName, String lastName,
+                                         String email, String phoneNumber, String nameOfCompany, String bankUsername,
+                                         String bankPassword, String alsoBankStr) {
+        boolean alsoBank = Boolean.parseBoolean(alsoBankStr);
         if (!Account.isUsernameAvailable(username))
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate username"));
         if (type.equals("supporter"))
-            return controlCreateSupporter(username, name, familyName, email, phoneNumber, password, credit);
+            return controlCreateSupporter(username, firstName, lastName, email, phoneNumber, password);
         else if (type.equals("supervisor"))
-            return controlCreateSupervisor(username, name, familyName, email, phoneNumber, password, credit);
+            return controlCreateSupervisor(username, firstName, lastName, email, phoneNumber, password);
         else {
-            int bankAccountNumber;
-            try {
-                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, username, password);
-            } catch (ExceptionalMassage exceptionalMassage) {
-                return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+            int bankAccountNumber = -1;
+            if (alsoBank) {
+                try {
+                    bankAccountNumber = controlInternalCreateBankAccount(firstName, lastName, bankUsername, bankPassword);
+                } catch (ExceptionalMassage exceptionalMassage) {
+                    return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+                }
             }
+            Response response;
             if (type.equals("customer")) {
-                if (credit == 0)
-                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
-                Response response = controlCreateCustomer(username, name, familyName, email, phoneNumber, password, credit, bankAccountNumber);
-                if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
-                    return response;
-                return controlLogin(username, password);
+                response = controlCreateCustomer(username, firstName, lastName, email, phoneNumber, password, bankAccountNumber);
             }
-            if (type.equals("supplier")) {
-                if (nameOfCompany.trim().length() == 0)
-                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Name of company can't be empty"));
-                Response response = controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany, bankAccountNumber);
-                if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
-                    return response;
-                return controlLogin(username, password);
+            else {
+                response = controlCreateSupplier(username, firstName, lastName, email, phoneNumber, password, nameOfCompany, bankAccountNumber);
             }
+            if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
+                return response;
+            return controlLogin(username, password);
         }
-        return null;
     }
 
     private Response controlCreateSupporter(String username, String name, String familyName, String email,
-                                             String phoneNumber, String password, int credit) {
+                                            String phoneNumber, String password) {
         if (!(mainController.getAccount() instanceof Supervisor))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "You must be a supervisor to create supporter account.");
-        new Supporter(username, name, familyName, email, phoneNumber, password, credit);
+        new Supporter(username, name, familyName, email, phoneNumber, password, 0);
         return Response.createSuccessResponse();
     }
 
-    private Response controlCreateCustomer(String username, String name, String familyName, String email, String phoneNumber,
-                                       String password, int credit, int bankAccountNumber) {
-        new Customer(username, name, familyName, email, phoneNumber, password, credit,bankAccountNumber);
+    private Response controlCreateCustomer(String username, String name, String familyName, String email,
+                                           String phoneNumber, String password, int bankAccountNumber) {
+        new Customer(username, name, familyName, email, phoneNumber, password, 0, bankAccountNumber);
         return Response.createSuccessResponse();
     }
 
     private Response controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber,
-                                       String password, int credit, String nameOfCompany, int bankAccountNumber){
+                                           String password, String nameOfCompany, int bankAccountNumber) {
         if (Supplier.getSupplierByCompanyName(nameOfCompany) != null) {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate company name."));
         }
-        new Supplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany,bankAccountNumber);
+        new Supplier(username, name, familyName, email, phoneNumber, password, 0, nameOfCompany, bankAccountNumber);
         return Response.createSuccessResponse();
     }
 
     private Response controlCreateSupervisor(String username, String name, String familyName, String email,
-                                         String phoneNumber, String password, int credit){
+                                             String phoneNumber, String password) {
         mainController.setIsFirstSupervisorCreated(Account.isSupervisorCreated());
         int bankAccountNumber;
         if (mainController.getIsFirstSupervisorCreated()) {
@@ -162,16 +151,15 @@ public class AccountController {
                 return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must login as supervisor before create a supervisor account."));
             if (!(mainController.getAccount() instanceof Supervisor))
                 return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must be a supervisor to create supervisor account."));
-            bankAccountNumber = Account.getASupervisor().getBankAccountNumber();
-        }else {
-
+            bankAccountNumber = Account.getStoreBankAccount();
+        } else {
             try {
                 bankAccountNumber = controlInternalCreateBankAccount(name, familyName, username, password);
             } catch (ExceptionalMassage exceptionalMassage) {
                 return Response.createResponseFromExceptionalMassage(exceptionalMassage);
             }
         }
-        new Supervisor(username, name, familyName, email, phoneNumber, password, credit, bankAccountNumber);
+        new Supervisor(username, name, familyName, email, phoneNumber, password, 0, bankAccountNumber);
         mainController.setIsFirstSupervisorCreated(true);
         return Response.createSuccessResponse();
     }

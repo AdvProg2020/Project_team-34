@@ -696,11 +696,11 @@ public class ManageProductsSupplierGMenu extends GMenu {
                 try{
                     controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL, filURL, controller.getPeerNode().getPort());
                     ((Stage)anchorPane0.getScene().getWindow()).close();
-                }  catch (ExceptionalMassage ex){
-                    new AlertBox(this, ex, controller).showAndWait();
-                }
-            } catch (NumberFormatException ex){
-                new AlertBox(this, "Enter number for price or remained number, please","OK",controller).showAndWait();
+            }  catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
+            }
+        } catch (NumberFormatException ex){
+            new AlertBox(this, "Enter number for price or remained number, please","OK",controller).showAndWait();
 
             }
         });

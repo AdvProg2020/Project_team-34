@@ -111,7 +111,7 @@ public class ViewDiscountCodesG extends GMenu {
         removeButton.setLayoutX(505.0);
         removeButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
         removeButton.setLayoutY(337.0);
-        removeButton.setText("Removing");
+        removeButton.setText("Remove");
         removeButton.setMnemonicParsing(false);
 
         anchorPane0.getChildren().add(removeButton);

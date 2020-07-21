@@ -40,7 +40,7 @@ public class Cart {
         if (jsonObject.get("codedDiscount") instanceof JsonNull) {
             this.codedDiscount = null;
         } else {
-            this.codedDiscount = CodedDiscount.convertJsonStringToCodedDiscount(jsonObject.get("codedDiscount").getAsString());
+            this.codedDiscount = CodedDiscount.convertJsonStringToCodedDiscount(jsonObject.get("codedDiscount").toString());
         }
         if (jsonObject.get("shippingInfo") instanceof JsonNull) {
             this.shippingInfo = null;
@@ -149,4 +149,6 @@ public class Cart {
     public int hashCode() {
         return Objects.hash(identifier);
     }
+
+
 }

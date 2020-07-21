@@ -102,4 +102,18 @@ public class CodedDiscount extends Discount{
     public int hashCode() {
         return Objects.hash(discountCode);
     }
+
+    @Override
+    public String toString() {
+
+        String returning =
+                "Discount Code :" + discountCode + '\n' +
+                        ", Max discount percent: " + maxDiscountAmount + '\n' +
+                        ", Percent: " + percent + '\n' +
+                        ", Customers :\n";
+        for (Customer customer : customers) {
+            returning += customer.getUserName() + "\n";
+        }
+        return returning;
+    }
 }

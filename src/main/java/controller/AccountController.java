@@ -187,6 +187,11 @@ public class AccountController {
         return Cart.convertJsonStringToCart(cart.toString());
     }
 
+    public String controlViewCartInfo() throws ExceptionalMassage {
+        JsonElement cartString = communication("controlViewCartInfo", new JsonArray());
+        return cartString.getAsString();
+    }
+
     public void controlSubmitShippingInfo(String firstName, String lastName, String city, String address,
                                           String postalCode, String phoneNumber) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();

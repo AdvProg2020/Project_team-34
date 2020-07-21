@@ -2,6 +2,7 @@ package gui.cartMenu;
 
 import com.google.gson.internal.$Gson$Preconditions;
 import controller.Controller;
+import discount.CodedDiscount;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
@@ -233,25 +234,47 @@ public class PurchaseMenuG extends GMenu {
 
         anchorPane0.getChildren().add(submitShippingInfo);
         //Adding controller!
+        submitShippingInfo.setDisable(true);
         if(!discountCodeCheckBox.isSelected()){
             discountCodeField.setDisable(true);
         }
 
         submitDiscountCode.setDisable(true);
 
+        try {
+            if(controller.getAccountController().controlViewCart().getCodedDiscount() != null){
+                discountCodeCheckBox.setSelected(true);
+            }
+        } catch (ExceptionalMassage exceptionalMassage) {
+            new AlertBox(this, exceptionalMassage, controller).showAndWait();
+        }
+
         discountCodeCheckBox.setOnAction( e -> {
             if(discountCodeCheckBox.isSelected()){
                 discountCodeField.setDisable(false);
                 submitDiscountCode.setDisable(false);
+
             } else {
+                try {
+                    controller.getAccountController().controlRemoveDiscountCode();
+                } catch (ExceptionalMassage ex){
+                    new AlertBox(this, ex, controller).showAndWait();
+                }
+
+                try {
+                    cartInfo.setText(controller.getAccountController().controlViewCartInfo());
+                } catch (ExceptionalMassage exceptionalMassage) {
+                    exceptionalMassage.printStackTrace();
+                }
                 discountCodeField.setDisable(true);
                 submitDiscountCode.setDisable(true);
             }
         });
 
 
+
         try {
-            cartInfo.setText(controller.getAccountController().controlViewCart().toString());
+            cartInfo.setText(controller.getAccountController().controlViewCartInfo());
         } catch (ExceptionalMassage exceptionalMassage) {
             new AlertBox(this, exceptionalMassage, controller).showAndWait();
         }
@@ -259,7 +282,7 @@ public class PurchaseMenuG extends GMenu {
         submitDiscountCode.setOnAction( e -> {
             try{
                 controller.getAccountController().controlSubmitDiscountCode(discountCodeField.getText());
-                cartInfo.setText(controller.getAccountController().controlViewCart().toString());
+                cartInfo.setText(controller.getAccountController().controlViewCartInfo());
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }
@@ -279,7 +302,7 @@ public class PurchaseMenuG extends GMenu {
             try{
                 controller.getAccountController().controlSubmitShippingInfo(firstName,lastName,cityName,address,postalCode,phoneNumber);
                 purchaseButton.setDisable(false);
-                cartInfo.setText(controller.getAccountController().controlViewCart().toString());
+                cartInfo.setText(controller.getAccountController().controlViewCartInfo());
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }

@@ -1,7 +1,6 @@
 package product;
 
 import account.Supplier;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.ProductDataBase;
@@ -33,6 +32,8 @@ public class Product {
     private String futureCategoryName;
     private String imageInStringForm;
     private int numberOfViews;
+    private String filePath;
+    private int supplierPort;
 
     public Product(String json) {
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
@@ -89,6 +90,8 @@ public class Product {
         this.specification = new HashMap<>(product.getSpecification());
         this.futureCategoryName = product.getFutureCategoryName();
         this.imageInStringForm = product.getImageInStringForm();
+        this.filePath = product.getFilePath();
+        this.supplierPort = product.getSupplierPort();
         allCreatedProductNum++;
         allProduct.add(this);
         ProductDataBase.add(this);
@@ -96,7 +99,7 @@ public class Product {
 
     public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,
                    String rootProductId, String futureCategoryName, HashMap<String, String> specification,
-                   String imageInStringForm) {
+                   String imageInStringForm,String filePath , int supplierPort) {
         this.numberOfViews = 0;
         this.productState = State.PREPARING_TO_BUILD;
         this.productId = generateIdentifier();
@@ -113,6 +116,8 @@ public class Product {
         this.futureCategoryName = futureCategoryName;
         this.specification = specification;
         this.imageInStringForm = imageInStringForm;
+        this.filePath = filePath;
+        this.supplierPort = supplierPort;
         allCreatedProductNum++;
         allProduct.add(this);
         ProductDataBase.add(this);
@@ -121,7 +126,8 @@ public class Product {
     public Product(String name, String nameOfCompany, HashMap<Supplier, Integer> priceForEachSupplier,
                    ArrayList<Supplier> listOfSuppliers, HashMap<Supplier, Integer> remainedNumberForEachSupplier,
                    String description, int numberOfViews, String productId, State state, String rootProductId,
-                   String futureCategoryName, HashMap<String, String> specification, String imageInStringForm) {
+                   String futureCategoryName, HashMap<String, String> specification, String imageInStringForm,
+                   String filePath , int supplierPort) {
         this.productState = state;
         this.productId = productId;
         this.name = name;
@@ -135,6 +141,8 @@ public class Product {
         this.futureCategoryName = futureCategoryName;
         this.specification = specification;
         this.imageInStringForm = imageInStringForm;
+        this.filePath = filePath;
+        this.supplierPort = supplierPort;
         allCreatedProductNum++;
         allProduct.add(this);
     }
@@ -208,6 +216,14 @@ public class Product {
         return listOfSuppliers;
     }
 
+    public String getFilePath() {
+        return filePath;
+    }
+
+    public int getSupplierPort() {
+        return supplierPort;
+    }
+
     public void setNumberOfViews(int numberOfViews) {
         this.numberOfViews = numberOfViews;
         ProductDataBase.update(this);
@@ -258,6 +274,14 @@ public class Product {
 
     public void setRootProductId(String rootProductId) {
         this.rootProductId = rootProductId;
+    }
+
+    public void setFilePath(String filePath) {
+        this.filePath = filePath;
+    }
+
+    public void setSupplierPort(int supplierPort) {
+        this.supplierPort = supplierPort;
     }
 
     private static ArrayList<Product> getShouldBeShownProducts() {

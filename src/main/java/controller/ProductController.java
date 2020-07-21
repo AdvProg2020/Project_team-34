@@ -44,7 +44,7 @@ public class ProductController {
     }
 
     public Response controlAddProduct(String name, String nameOfCompany, String price, String remainedNumbers, String category,
-                                  String description, String specification, String imageInStringForm) {
+                                      String description, String specification, String imageInStringForm,String filePath, int port) {
         JsonParser parser = new JsonParser();
         HashMap<String, String> specifications = Utils.convertJsonElementStringToStringToHashMap(parser.parse(specification));
         if (mainController.getAccount() == null)

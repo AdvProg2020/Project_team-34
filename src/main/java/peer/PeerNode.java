@@ -28,43 +28,6 @@ public class PeerNode
         }).start();
         contacts.add(this);
     }
-
-    public void sendRequest(String fileName, String host, int port) throws UnknownHostException, IOException
-    {
-        System.out.println(port);
-        Socket socket = new Socket(host, port);//machine name, port number
-        PrintWriter out = new PrintWriter( socket.getOutputStream(), true );
-        out.println(fileName);
-
-        InputStream is = socket.getInputStream();
-        BufferedReader br = new BufferedReader(new InputStreamReader(is));
-
-        // Get the request line of the HTTP request message.
-        String requestLine = br.readLine();
-        System.out.println(requestLine);
-        requestLine = br.readLine();
-        System.out.println(requestLine);
-        requestLine = br.readLine();
-        System.out.println(requestLine);
-
-        byte[] buffer = new byte[1024];
-        int bytes = 0;
-
-        FileOutputStream fileOutputStream = new FileOutputStream(new File(".\\hi"));
-
-        // Copy requested file into the socket's output stream.
-        while ((bytes = is.read(buffer)) != -1) {
-            System.out.println(buffer[0]);
-            fileOutputStream.write(buffer, 0, bytes);
-        }
-
-
-        fileOutputStream.close();
-        out.close();
-        socket.close();
-
-    }
-
     private void startClientServer( int portNum )
     {
         try
@@ -102,6 +65,41 @@ public class PeerNode
 
     }
 
+    public void sendRequest(String filePath, String host, int port) throws IOException
+    {
+        System.out.println(port);
+        Socket socket = new Socket(host, port);//machine name, port number
+        PrintWriter out = new PrintWriter( socket.getOutputStream(), true );
+        out.println(filePath);
+
+        InputStream is = socket.getInputStream();
+        BufferedReader br = new BufferedReader(new InputStreamReader(is));
+
+        // Get the request line of the HTTP request message.
+        String requestLine = br.readLine();
+        System.out.println(requestLine);
+        requestLine = br.readLine();
+        System.out.println(requestLine);
+        requestLine = br.readLine();
+        System.out.println(requestLine);
+
+        byte[] buffer = new byte[1024];
+        int bytes = 0;
+
+        FileOutputStream fileOutputStream = new FileOutputStream(new File(".\\hi"));
+
+        // Copy requested file into the socket's output stream.
+        while ((bytes = is.read(buffer)) != -1) {
+            System.out.println(buffer[0]);
+            fileOutputStream.write(buffer, 0, bytes);
+        }
+
+
+        fileOutputStream.close();
+        out.close();
+        socket.close();
+
+    }
     public static ArrayList<PeerNode> getContacts() {
         return contacts;
     }

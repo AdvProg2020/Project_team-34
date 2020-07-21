@@ -44,8 +44,9 @@ public class ProductController {
     }
 
     public Response controlAddProduct(String name, String nameOfCompany, String price, String remainedNumbers, String category,
-                                      String description, String specification, String imageInStringForm,String filePath, int port) {
+                                      String description, String specification, String imageInStringForm,String filePath, String portStr) {
         JsonParser parser = new JsonParser();
+        int port = Integer.parseInt(portStr);
         HashMap<String, String> specifications = Utils.convertJsonElementStringToStringToHashMap(parser.parse(specification));
         if (mainController.getAccount() == null)
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sing in first."));
@@ -330,7 +331,11 @@ public class ProductController {
     }
 
     public Response controlGetCategorySpecialFields(String name) {
-        JsonElement jsonElement = Utils.convertStringToStringArrayListHashMapToJsonElement(Category.getCategoryByName(name).getSpecialFields());
+        HashMap<String, ArrayList<String>> specialFields = Category.getCategoryByName(name).getSpecialFields();
+        if(specialFields == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("This is a parent category!"));
+        }
+        JsonElement jsonElement = Utils.convertStringToStringArrayListHashMapToJsonElement(specialFields);
         return new Response(RequestStatus.SUCCESSFUL, jsonElement.toString());
     }
 

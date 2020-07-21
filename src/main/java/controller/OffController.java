@@ -7,6 +7,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import discount.CodedDiscount;
 import discount.Sale;
+import exceptionalMassage.ExceptionalMassage;
 import jdk.jshell.execution.Util;
 import product.Product;
 import server.communications.RequestStatus;
@@ -237,5 +238,20 @@ public class OffController {
         Product product = Product.getProductById(productId);
         Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Sale.isProductInThisSuppliersSale(product,supplier)));
+    }
+
+    public Response controlGetNotSaleProductsForSupplier(String saleId){
+        Sale sale = Sale.getSaleById(saleId);
+        if(sale == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sale doesn't exist!"));
+        }
+        ArrayList<Product> suppliersProduct = Product.getProductForSupplier((Supplier) mainController.getAccount());
+        ArrayList<Product> notSaleProducts = new ArrayList<>();
+        for (Product product : suppliersProduct) {
+            if(!sale.getProducts().contains(product)){
+                notSaleProducts.add(product);
+            }
+        }
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(notSaleProducts).toString());
     }
 }

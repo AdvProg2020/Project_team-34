@@ -47,7 +47,6 @@ public class EditPersonalInfoGMenu extends GMenu {
         Label passwordLabel = new Label("New Password");
 
         Label nameOfCompanyLabel = new Label("Name of Company");
-        Label creditLabel = new Label("Credit");
 
         GridPane layoutPane = new GridPane();
         layoutPane.setAlignment(Pos.CENTER);
@@ -87,17 +86,6 @@ public class EditPersonalInfoGMenu extends GMenu {
         layoutPane.add(phoneNumberField, 1, row);
         row++;
 
-        if (!(controller.getAccount() instanceof Supervisor)) {
-            creditField.setText(String.valueOf(controller.getAccount().getCredit()));
-            creditLabel.setOnKeyTyped(e -> buttonCheckInt(creditField, applyButton));
-            layoutPane.add(creditLabel, 0, row);
-            layoutPane.add(creditField, 1, row);
-            row++;
-            if (controller.getAccount() instanceof Supplier) {
-                creditField.setDisable(true);
-            }
-        }
-
         if (controller.getAccount() instanceof Supplier) {
             nameOfCompanyField.setText(((Supplier) controller.getAccount()).getNameOfCompany());
             nameOfCompanyField.setOnKeyTyped(e -> buttonCheck(nameOfCompanyField, applyButton));
@@ -117,9 +105,8 @@ public class EditPersonalInfoGMenu extends GMenu {
             String phoneNumber = phoneNumberField.getText();
             String password = passwordField.getText();
             String nameOfCompany = nameOfCompanyField.getText();
-            int credit = Integer.parseInt(creditField.getText());
             try {
-                controller.getAccountController().editAllFields(name, familyName, email, phoneNumber, password, credit, nameOfCompany);
+                controller.getAccountController().editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }

@@ -22,11 +22,14 @@ public class WalletGMenu extends GMenu {
 
     @Override
     protected Scene createScene() {
+        Account account = controller.getAccount();
         Label label = new Label("Your credit is $" +
-                (controller.getAccount() == null ? 0 : controller.getAccount().getCredit()) + " now.");
+                (account == null ? 0 : account.getCredit()) + " now.");
         label.setStyle("-fx-font-size: 18px; -fx-font-weight: bolder;");
         VBox vBox = new VBox();
-        vBox.getChildren().addAll(createHeader(), label, depositBox(), withdrawBox());
+        vBox.getChildren().addAll(createHeader(), label, depositBox());
+        if (account instanceof Supplier)
+            vBox.getChildren().add(withdrawBox());
         GridPane background = new GridPane();
         background.getChildren().addAll(vBox);
         vBox.setAlignment(Pos.CENTER);

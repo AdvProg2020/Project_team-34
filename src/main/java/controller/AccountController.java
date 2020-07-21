@@ -389,17 +389,26 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public Response controlSubmitDiscountCode(String discountCode) throws ExceptionalMassage {
+    public Response controlViewCartInfo() {
+        String cartStringForm = mainController.getCart().toString();
+        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(cartStringForm));
+    }
+
+    public Response controlSubmitDiscountCode(String discountCode) {
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.");
         if (!(account instanceof Customer))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login as a customer.");
-        mainController.getCart().applyCodedDiscount(discountCode);
+        try {
+            mainController.getCart().applyCodedDiscount(discountCode);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+        }
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public Response controlRemoveDiscountCode() throws ExceptionalMassage {
+    public Response controlRemoveDiscountCode(){
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.");
@@ -437,6 +446,20 @@ public class AccountController {
             controlInternalCreateCodedDiscountForLoggedInCustomer();
         }
         return new Response(RequestStatus.SUCCESSFUL, String.valueOf(customerLog.getPaidAmount() >= BOUND));
+    }
+
+    public Response controlGetLinksToDownloadFileProducts(){
+        Cart cart = mainController.getCart();
+        ArrayList<Product> products = cart.getFileProductsInCart();
+        JsonArray jsonArray = new JsonArray();
+        JsonObject jsonObject;
+        for (Product product : products) {
+            jsonObject = new JsonObject();
+            jsonObject.addProperty("filePath", product.getFilePath());
+            jsonObject.addProperty("port", product.getSupplierPort());
+            jsonArray.add(jsonObject);
+        }
+        return new Response(RequestStatus.SUCCESSFUL, jsonArray.toString());
     }
 
     public Response getAccountUsername() {
@@ -774,13 +797,17 @@ public class AccountController {
     }
 
     public Response controlPayBack(String accountNumberStr, String amountStr) {
+        int amount = Integer.parseInt(amountStr);
+        if(amount > (mainController.getAccount().getCredit() - WageDataBase.getMinimum())) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Not enough credit in your wallet! MAX: " + (mainController.getAccount().getCredit() - WageDataBase.getMinimum()));
+        }
         if (!(getInternalAccount() instanceof Supplier))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Only suppliers can do this action");
         try {
             Socket socket = new Socket(Controller.BANK_IP, Controller.BANK_SOCKET);
             DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-            dataOutputStream.writeUTF("get_token Team34 343434");
+            dataOutputStream.writeUTF("get_token aryan 1234");//TODO change to Team34
             dataOutputStream.flush();
             String response1 = dataInputStream.readUTF();
             if (!response1.matches("TOKEN_\\w{10}")) {
@@ -798,17 +825,13 @@ public class AccountController {
             String response3 = dataInputStream.readUTF();
             disconnectFromBank(socket, dataOutputStream, dataInputStream);
             if (!response3.equals("done successfully")) {
-                getInternalAccount().setCredit(getInternalAccount().getCredit() - Integer.parseInt(amountStr));
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
+            getInternalAccount().setCredit(getInternalAccount().getCredit() - Integer.parseInt(amountStr));
             return new Response(RequestStatus.SUCCESSFUL, "");
         } catch (IOException e) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");
         }
-    }
-
-    public Response controlPayBack(String amount) {
-        return controlPayBack(String.valueOf(getInternalAccount().getBankAccountNumber()), amount);
     }
 
     public Response controlPay(String username, String password, String accountNumber, String amountStr) {
@@ -836,9 +859,9 @@ public class AccountController {
             String response3 = dataInputStream.readUTF();
             disconnectFromBank(socket, dataOutputStream, dataInputStream);
             if (!response3.equals("done successfully")) {
-                getInternalAccount().setCredit(getInternalAccount().getCredit() + Integer.parseInt(amountStr));
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
+            getInternalAccount().setCredit(getInternalAccount().getCredit() + Integer.parseInt(amountStr));
             return new Response(RequestStatus.SUCCESSFUL, "");
         } catch (IOException e) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");

@@ -507,23 +507,11 @@ public class AccountController {
         communication("controlPayBack", inputs);
     }
 
-    public void controlPayBack(int amount) throws ExceptionalMassage {
-        JsonArray inputs = new JsonArray();
-        inputs.add(String.valueOf(amount));
-        communication("controlPayBack", inputs);
-    }
-
     public void controlPay(String username, int accountNumber, String password, int amount) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(username);
         inputs.add(password);
         inputs.add(String.valueOf(accountNumber));
-        inputs.add(String.valueOf(amount));
-        communication("controlPay", inputs);
-    }
-
-    public void controlPay(int amount) throws ExceptionalMassage {
-        JsonArray inputs = new JsonArray();
         inputs.add(String.valueOf(amount));
         communication("controlPay", inputs);
     }

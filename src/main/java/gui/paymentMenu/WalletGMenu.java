@@ -118,21 +118,12 @@ public class WalletGMenu extends GMenu {
         });
 
         button.setOnAction(e -> {
-            if (useMyDefault.isSelected()) {
-                try {
-                    controller.getAccountController().controlPay(Integer.parseInt(amount.getText()));
-                    stage.setScene(getScene());
-                } catch (ExceptionalMassage exceptionalMassage) {
-                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
-                }
-            } else {
-                try {
-                    controller.getAccountController().controlPay(username.getText(), Integer.parseInt(accountNumber.getText()),
-                            passwordField.getText() ,Integer.parseInt(amount.getText()));
-                    stage.setScene(getScene());
-                } catch (ExceptionalMassage exceptionalMassage) {
-                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
-                }
+            try {
+                controller.getAccountController().controlPay(username.getText(), Integer.parseInt(accountNumber.getText()),
+                        passwordField.getText(), Integer.parseInt(amount.getText()));
+                stage.setScene(getScene());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
         });
 
@@ -200,21 +191,12 @@ public class WalletGMenu extends GMenu {
         });
 
         button.setOnAction(e -> {
-            if (useMyDefault.isSelected()) {
-                try {
-                    controller.getAccountController().controlPayBack(Integer.parseInt(amount.getText()));
-                    stage.setScene(getScene());
-                } catch (ExceptionalMassage exceptionalMassage) {
-                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
-                }
-            } else {
-                try {
-                    controller.getAccountController().controlPayBack(Integer.parseInt(accountNumber.getText()),
-                            Integer.parseInt(amount.getText()));
-                    stage.setScene(getScene());
-                } catch (ExceptionalMassage exceptionalMassage) {
-                    new AlertBox(this, exceptionalMassage, controller).showAndWait();
-                }
+            try {
+                controller.getAccountController().controlPayBack(Integer.parseInt(accountNumber.getText()),
+                        Integer.parseInt(amount.getText()));
+                stage.setScene(getScene());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
         });
 

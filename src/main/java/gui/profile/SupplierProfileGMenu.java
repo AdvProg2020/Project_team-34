@@ -28,25 +28,25 @@ public class SupplierProfileGMenu extends GMenu {
         Button viewProductsForThisSupplier = new Button("View My Products");
         GMenu.addStyleToButton(viewProductsForThisSupplier);
         viewProductsForThisSupplier.setOnMouseClicked(e->{
-            stage.setScene(new ManageProductsSupplierGMenu(this, stage, controller).createScene());
+            stage.setScene(new ManageProductsSupplierGMenu(this, stage, controller).getScene());
         });
 
         Button viewRequestsForThisSupplier = new Button("View My Requests");
         GMenu.addStyleToButton(viewRequestsForThisSupplier);
         viewRequestsForThisSupplier.setOnMouseClicked(e->{
-            stage.setScene(new ManageRequestForSupplierGMenu(this, stage, controller).createScene());
+            stage.setScene(new ManageRequestForSupplierGMenu(this, stage, controller).getScene());
         });
 
         Button viewLogButton = new Button("View Log");
         GMenu.addStyleToButton(viewLogButton);
         viewLogButton.setOnMouseClicked(e->{
-            stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).createScene());
+            stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).getScene());
         });
 
         Button editPersonalInfoButton = new Button("Edit Personal Info");
         GMenu.addStyleToButton(editPersonalInfoButton);
         editPersonalInfoButton.setOnMouseClicked(e->{
-            stage.setScene(new EditPersonalInfoGMenu(this, stage, controller).createScene());
+            stage.setScene(new EditPersonalInfoGMenu(this, stage, controller).getScene());
         });
 
         Button manageOffsButton = new Button("Manage Offs");
@@ -58,6 +58,12 @@ public class SupplierProfileGMenu extends GMenu {
         Button manageAuctionsButton = new Button("Manage Auctions");
         GMenu.addStyleToButton(manageAuctionsButton);
         manageAuctionsButton.setOnMouseClicked(e->{
+            stage.setScene(new ManageAuctionsForSupplierGMenu(this, stage, controller).getScene());
+        });
+
+        Button myWalletButton = new Button("My Wallet");
+        GMenu.addStyleToButton(myWalletButton);
+        myWalletButton.setOnMouseClicked(e->{
             stage.setScene(new ManageAuctionsForSupplierGMenu(this, stage, controller).getScene());
         });
 

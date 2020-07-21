@@ -16,13 +16,15 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class WalletGMenu extends GMenu {
+    private Account account;
+
     public WalletGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Your wallet", parentMenu, stage, controller);
     }
 
     @Override
     protected Scene createScene() {
-        Account account = controller.getAccount();
+        this.account = controller.getAccount();
         Label label = new Label("Your credit is $" +
                 (account == null ? 0 : account.getCredit()) + " now.");
         label.setStyle("-fx-font-size: 18px; -fx-font-weight: bolder;");
@@ -68,8 +70,9 @@ public class WalletGMenu extends GMenu {
         box.add(username, 0, 1);
         box.add(passwordField, 1, 1);
         box.add(accountNumber, 0, 2);
-        box.add(useMyDefault, 1, 2);
-        box.add(amount, 0, 3);
+        box.add(amount, 1, 2);
+        if (account.getBankAccountNumber() != -1)
+            box.add(useMyDefault, 0, 3);
         box.add(button, 1, 3);
 
         box.setHgap(40);
@@ -78,12 +81,13 @@ public class WalletGMenu extends GMenu {
         box.setAlignment(Pos.CENTER);
 
         useMyDefault.setOnAction(e -> {
-            accountNumber.setDisable(useMyDefault.isSelected());
-            username.setDisable(useMyDefault.isSelected());
-            passwordField.setDisable(useMyDefault.isSelected());
-            username.clear();
-            passwordField.clear();
-            accountNumber.clear();
+            if (useMyDefault.isSelected()) {
+                accountNumber.setDisable(true);
+                accountNumber.setText(String.valueOf(account.getBankAccountNumber()));
+            } else {
+                accountNumber.setDisable(false);
+                accountNumber.clear();
+            }
             if (!useMyDefault.isSelected()) {
                 button.setDisable(username.getText().equals("") || passwordField.getText().equals("") || !isInt(accountNumber) || !isInt(amount));
             } else {
@@ -150,14 +154,17 @@ public class WalletGMenu extends GMenu {
                 "-fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: firebrick; -fx-border-width: 2px;");
         button.setStyle("-fx-alignment: center; -fx-max-width: 200; -fx-min-width: 200; -fx-pref-width: 200; " +
                 "-fx-border-radius: 15; -fx-background-radius: 15; -fx-border-width: 2px;");
+        useMyDefault.setAlignment(Pos.CENTER);
 
         accountNumber.setPromptText("Account number");
         amount.setPromptText("Amount of payment");
 
         box.add(deposit, 0, 0);
         box.add(accountNumber, 0, 1);
-        box.add(useMyDefault, 1, 1);
-        box.add(amount, 0, 2);
+        box.add(amount, 1, 1);
+        if (account.getBankAccountNumber() != -1)
+            box.add(useMyDefault, 0, 2);
+
         box.add(button, 1, 2);
 
         box.setHgap(40);
@@ -169,7 +176,10 @@ public class WalletGMenu extends GMenu {
 
         useMyDefault.setOnAction(e -> {
             accountNumber.setDisable(useMyDefault.isSelected());
-            accountNumber.clear();
+            if (useMyDefault.isSelected())
+                accountNumber.setText(String.valueOf(account.getBankAccountNumber()));
+            else
+                accountNumber.clear();
             if (!useMyDefault.isSelected()) {
                 button.setDisable(!isInt(accountNumber) || !isInt(amount));
             } else {

@@ -216,6 +216,12 @@ public abstract class GMenu {
         showingInfoPane.add(phoneNumberValue,2, row);
         row++;
 
+        Label accountNumberLabel = new Label("Account Number");
+        Label accountNumberValue = new Label(String.valueOf(account.getBankAccountNumber()));
+        showingInfoPane.add(accountNumberLabel, 0, row);
+        showingInfoPane.add(accountNumberValue,2, row);
+        row++;
+
         usernameVBox.getChildren().add(showingInfoPane);
 
         if(account instanceof Supplier) {

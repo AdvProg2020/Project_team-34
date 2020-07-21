@@ -7,6 +7,7 @@ import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.mainMenu.MainMenuG;
+import gui.paymentMenu.PaymentMenuForCustomer;
 import gui.profile.ViewLogsForCustomerGMenu;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -212,12 +213,23 @@ public class PurchaseMenuG extends GMenu {
         anchorPane0.getChildren().add(cartInfo);
         Button purchaseButton = new Button();
         purchaseButton.setPrefHeight(33.0);
-        purchaseButton.setPrefWidth(233.0);
-        purchaseButton.setLayoutX(579.0);
+        purchaseButton.setPrefWidth(200.0);
+        purchaseButton.setLayoutX(685.0);
         purchaseButton.setStyle("-fx-background-color: #4678c8;"+"-fx-background-radius: 100PX;"+"-fx-text-fill: #f5f5f2;");
         purchaseButton.setLayoutY(511.0);
-        purchaseButton.setText("Purchase");
+        purchaseButton.setText("Purchase by wallet");
         purchaseButton.setMnemonicParsing(false);
+
+        Button purchaseWithBank = new Button();
+        purchaseWithBank.setText("Purchase with Bank");
+        GMenu.addStyleToButton(purchaseWithBank);
+        purchaseWithBank.setPrefHeight(33);
+        purchaseWithBank.setPrefWidth(200);
+        purchaseWithBank.setLayoutX(480);
+        purchaseWithBank.setLayoutY(511);
+        purchaseWithBank.setDisable(true);
+        anchorPane0.getChildren().add(purchaseWithBank);
+
 
         // Adding child to parent
         anchorPane0.getChildren().add(purchaseButton);
@@ -302,6 +314,7 @@ public class PurchaseMenuG extends GMenu {
             try{
                 controller.getAccountController().controlSubmitShippingInfo(firstName,lastName,cityName,address,postalCode,phoneNumber);
                 purchaseButton.setDisable(false);
+                purchaseWithBank.setDisable(false);
                 cartInfo.setText(controller.getAccountController().controlViewCartInfo());
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
@@ -320,6 +333,15 @@ public class PurchaseMenuG extends GMenu {
             } catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();
             }
+        });
+
+        purchaseWithBank.setOnAction( e -> {
+            try {
+                new PaymentMenuForCustomer(this, stage, controller, controller.getAccountController().controlViewCart().getBill());
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
+            }
+
         });
 
         anchorPane0.onKeyReleasedProperty().set( e -> {

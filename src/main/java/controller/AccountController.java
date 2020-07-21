@@ -120,7 +120,7 @@ public class AccountController {
             }
             if (type.equals("supplier")) {
                 if (nameOfCompany.trim().length() == 0)
-                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("credit cannot be 0"));
+                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Name of company can't be empty"));
                 Response response = controlCreateSupplier(username, name, familyName, email, phoneNumber, password, credit, nameOfCompany, bankAccountNumber);
                 if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
                     return response;
@@ -164,8 +164,9 @@ public class AccountController {
                 return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must be a supervisor to create supervisor account."));
             bankAccountNumber = Account.getASupervisor().getBankAccountNumber();
         }else {
+
             try {
-                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, "Team34", "343434");
+                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, username, password);
             } catch (ExceptionalMassage exceptionalMassage) {
                 return Response.createResponseFromExceptionalMassage(exceptionalMassage);
             }
@@ -752,10 +753,72 @@ public class AccountController {
             if (!response.matches("\\d{6}")) {
                 throw new ExceptionalMassage(response);
             }
+            disconnectFromBank(socket, dataOutputStream, dataInputStream);
             return Integer.parseInt(response);
         } catch (IOException e) {
             throw new ExceptionalMassage("Error communicating with bank");
         }
+    }
+
+    public void disconnectFromBank(Socket socket, DataOutputStream dataOutputStream, DataInputStream dataInputStream) {
+        try {
+            dataOutputStream.writeUTF("exit");
+            dataOutputStream.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            dataOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            dataInputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public Response controlPayBack(String accountNumberStr, String amountStr) {
+        int accountNumber = Integer.parseInt(amountStr);
+        int amount = Integer.parseInt(amountStr);
+        try {
+            Socket socket = new Socket(Controller.BANK_IP, Controller.BANK_SOCKET);
+            DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
+            DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
+            dataOutputStream.writeUTF("get_token Team34 343434");
+            dataOutputStream.flush();
+            String response1 = dataInputStream.readUTF();
+            if (!response1.matches("TOKEN_\\w{10}")) {
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response1);
+            }
+            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + Controller.SHOP_BANK_NUMBER + " " + accountNumberStr +
+                    " TEAM34_ONLINE_STORE");
+            dataOutputStream.flush();
+            String response2 = dataInputStream.readUTF();
+            if (!response2.matches("TRMOV\\d{15}")) {
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response2);
+            }
+            dataOutputStream.writeUTF("pay " + response2);
+            dataOutputStream.flush();
+            String response3 = dataInputStream.readUTF();
+            disconnectFromBank(socket, dataOutputStream, dataInputStream);
+            if (!response3.equals("done successfully")) {
+                return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
+            }
+            return new Response(RequestStatus.SUCCESSFUL, "");
+        } catch (IOException e) {
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server");
+        }
+    }
+
+    public Response controlPayBack(String amount) {
+        return controlPayBack(String.valueOf(getInternalAccount().getBankAccountNumber()), amount);
     }
 
     public Response controlPay(String username, String password, String accountNumber, String amountStr) {
@@ -769,7 +832,7 @@ public class AccountController {
             if (!response1.matches("TOKEN_\\w{10}")) {
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response1);
             }
-            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + accountNumber + " " + Account.getASupervisor().getBankAccountNumber() +
+            dataOutputStream.writeUTF("create_receipt " + response1 + " move " + amountStr + " " + accountNumber + " " + Controller.SHOP_BANK_NUMBER +
                     " TEAM34_ONLINE_STORE");
             dataOutputStream.flush();
             String response2 = dataInputStream.readUTF();
@@ -779,6 +842,7 @@ public class AccountController {
             dataOutputStream.writeUTF("pay " + response2);
             dataOutputStream.flush();
             String response3 = dataInputStream.readUTF();
+            disconnectFromBank(socket, dataOutputStream, dataInputStream);
             if (!response3.equals("done successfully")) {
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, response3);
             }
@@ -788,9 +852,10 @@ public class AccountController {
         }
     }
 
-//    public Response controlPay(String amount) {
-//        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), amount);
-//    }
+    public Response controlPay(String amount) {
+        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), String.valueOf(
+                getInternalAccount().getBankAccountNumber()), amount);
+    }
 
     public Response controlGetMembersOfChatRoom(String chatRoomId){
         ArrayList<String> userNames = new ArrayList<>();

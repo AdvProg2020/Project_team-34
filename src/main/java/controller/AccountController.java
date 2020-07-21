@@ -467,8 +467,8 @@ public class AccountController {
     public void controlPay(String username, int accountNumber, String password, int amount) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(username);
-        inputs.add(String.valueOf(accountNumber));
         inputs.add(password);
+        inputs.add(String.valueOf(accountNumber));
         inputs.add(String.valueOf(amount));
         communication("controlPay", inputs);
     }

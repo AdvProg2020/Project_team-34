@@ -18,6 +18,7 @@ import com.jfoenix.controls.JFXTimePicker;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -39,6 +40,16 @@ public class Main extends Application {
         stage.getIcons().add(logoImage);
 
         Controller controller = new Controller();
+
+        stage.setOnCloseRequest(e -> {
+            e.consume();
+            try {
+                controller.disconnect();
+            } catch (IOException ioException) {
+                System.out.println("Error disconnecting server, never mind");
+            }
+            System.exit(0);
+        });
 
         GMenu mainMenu = new MainMenuG( null, stage, controller);
         GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);

@@ -103,6 +103,7 @@ public class Controller {
     }
 
     public void disconnect() throws IOException {
+        outputStream.writeUTF("1");
         outputStream.writeUTF("goodbye");
         outputStream.close();
         inputStream.close();

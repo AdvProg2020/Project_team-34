@@ -282,7 +282,7 @@ public class AccountController {
 
     public int numberOfProductInCart(ProductInCart productInCart) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(productInCart));
+        inputs.add(productInCart.getIdentifier());
         return Integer.parseInt(communication("numberOfProductInCart", inputs).getAsString());
     }
 
@@ -359,8 +359,8 @@ public class AccountController {
 
     public String createChatRoomBetweenSupporterAndCustomer(Supporter supporter) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(supporter));
-        return communication("createChatRoomBetweenSupporterAndCustomer", inputs).toString();
+        inputs.add(supporter.getUserName());
+        return communication("createChatRoomBetweenSupporterAndCustomer", inputs).getAsString();
 
     }
 
@@ -403,9 +403,44 @@ public class AccountController {
         return Utils.convertJsonElementToSupporterArrayList(communication("getOnlineSupporters", new JsonArray()));
     }
 
-    public ArrayList<Message> getAllMessagesOfChatRoomById(String chatRoomId){
-        //Need modification!
-        return null;
+    public ArrayList<Message> getAllMessagesOfChatRoomById(String chatRoomId) throws ExceptionalMassage{
+        JsonArray input = new JsonArray();
+        input.add(chatRoomId);
+        return Utils.convertJsonElementToMessageArrayList(communication("getAllMessagesOfChatRoomById",input));
+    }
+
+    public ArrayList<String> getRequestingCustomersBySupporter() throws ExceptionalMassage{
+        return Utils.convertJsonElementToStringArrayList(communication("getRequestingCustomersBySupporter",new JsonArray()));
+    }
+
+    public Customer getCustomerOfAChatRoom(String id) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        return Customer.convertJsonStringToCustomer(communication("getCustomerOfAChatRoom", inputs).toString());
+    }
+
+    public void controlCloseChatRoomById(String id) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(id);
+        communication("controlCloseChatRoomById", inputs);
+    }
+
+    public ArrayList<String> controlGetMembersOfChatRoom(String chatRoomId) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(chatRoomId);
+        return Utils.convertJsonElementToStringArrayList(communication("controlGetMembersOfChatRoom", inputs));
+    }
+
+    public void controlJoinChatRoom(String chatRoomId) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(chatRoomId);
+        communication("controlJoinChatRoom", inputs);
+    }
+
+    public void controlLeaveChatRoom(String chatRoomId) throws ExceptionalMassage{
+        JsonArray inputs = new JsonArray();
+        inputs.add(chatRoomId);
+        communication("controlLeaveChatRoom",inputs);
     }
 
     public void controlPayBack(int accountNumber, int amount) throws ExceptionalMassage {

@@ -1,21 +1,24 @@
 package gui.profile;
 
-import account.Supplier;
+
 import auction.Auction;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
-import feedback.Comment;
+
 import gui.GMenu;
 import gui.alerts.AlertBox;
-import gui.cartMenu.CartGMenu;
+
 import gui.productMenu.CompareGMenu;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.chart.ScatterChart;
 import javafx.scene.control.*;
+
 import javafx.scene.effect.BlendMode;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -29,7 +32,7 @@ import javafx.stage.Stage;
 import org.controlsfx.control.Rating;
 import product.Product;
 
-import java.util.ArrayList;
+
 
 import static javafx.geometry.Pos.CENTER;
 import static javafx.geometry.Pos.TOP_CENTER;
@@ -137,6 +140,31 @@ public class AuctionGMenu extends GMenu {
         descriptionText.setText("description sits here!");
         descriptionText.setWrappingWidth(220.0);
 
+        Label highestPromoter = new Label();
+        highestPromoter.setLayoutX(380);
+        highestPromoter.setLayoutY(200);
+        try {
+            highestPromoter.setText("Highest Promoter : " + auction.getHighestPromoter().getUserName());
+        } catch (NullPointerException ex){
+            highestPromoter.setText("Highest Promoter : No Bid yet!");
+        }
+
+        Label highestPromotion = new Label();
+        highestPromotion.setLayoutX(380);
+        highestPromotion.setLayoutY(215);
+        try {
+            highestPromotion.setText("Highest Promotion : " + auction.getHighestPromotion());
+        } catch (NullPointerException ex){
+            highestPromotion.setText("Highest Promotion : No Bid yet!");
+        }
+
+        Button joinChatRoomButton = new Button();
+        joinChatRoomButton.setLayoutX(380);
+        joinChatRoomButton.setLayoutY(230);
+        GMenu.addStyleToButton(joinChatRoomButton);
+        joinChatRoomButton.setText("Join public chat room!");
+
+        anchorPane0.getChildren().addAll(highestPromoter, highestPromotion, joinChatRoomButton);
         // Adding child to parent
         anchorPane0.getChildren().add(descriptionText);
         VBox vBox12 = new VBox();
@@ -155,7 +183,7 @@ public class AuctionGMenu extends GMenu {
         HBox newPriceHBox = new HBox();
         newPriceHBox.setPrefHeight(37.0);
         newPriceHBox.setPrefWidth(433);
-        newPriceHBox.setTranslateX(60);
+        newPriceHBox.setTranslateX(20);
         newPriceHBox.setTranslateY(150);
         newPriceHBox.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         newPriceHBox.setLayoutY(179.0);
@@ -187,8 +215,7 @@ public class AuctionGMenu extends GMenu {
         commentAndDetail.setPrefWidth(1200);
         commentAndDetail.setLayoutY(495);
         Tab details = new Tab("Details");
-        Tab  comments = new Tab("Comments");
-        commentAndDetail.getTabs().addAll(details, comments);
+        commentAndDetail.getTabs().addAll(details);
 
 
         anchorPane0.getChildren().add(commentAndDetail);
@@ -224,6 +251,16 @@ public class AuctionGMenu extends GMenu {
             zoomedImageView.setImage(null);
         });
 
+        ImageView auctionImageView = GMenu.getImageView("./src/main/resources/image/auction.png", 250, 250);
+
+        auctionImageView.setBlendMode(BlendMode.SRC_OVER);
+        Group blend = new Group(
+                imageViewBox,
+                auctionImageView
+        );
+
+        imageViewGridPane.getChildren().addAll( imageViewBox, blend, auctionImageView);
+
         ScrollPane detailsScrollPane = new ScrollPane();
         detailsScrollPane.setContent(createDetails());
 
@@ -233,7 +270,6 @@ public class AuctionGMenu extends GMenu {
         backGround.setAlignment(CENTER);
         backGround.setPadding(new Insets(10,10,10,10));
         details.setClosable(false);
-        comments.setClosable(false);
         detailsScrollPane.setContent(backGround);
         details.setContent(detailsScrollPane);
 
@@ -246,8 +282,8 @@ public class AuctionGMenu extends GMenu {
                 int price = Integer.parseInt(newPriceField.getText());
                 try {
                     int minimumPrice = controller.getAccountController().controlGetMinimum();
-                    controller.getProductController().promoteAuctionPrice(price,minimumPrice,auction);
-                    stage.setScene(new CartGMenu(this, stage, controller).getScene());
+                    controller.getProductController().promoteAuctionPrice(price,minimumPrice,auction.getIdentifier());
+                    stage.setScene(new AuctionGMenu(this, stage,controller,controller.getProductController().controlGetAuctionById(auction.getIdentifier())).getScene());
                 } catch (ExceptionalMassage ex){
                     new AlertBox(this, ex, controller).showAndWait();
                 }
@@ -282,8 +318,26 @@ public class AuctionGMenu extends GMenu {
 
         });
 
-
-
+        joinChatRoomButton.setOnAction( e -> {
+            String chatRoomId = auction.getChatRoomIdentifier();
+            System.out.println(chatRoomId);
+            try{
+                controller.getAccountController().controlJoinChatRoom(chatRoomId);
+                Stage stage1 = new Stage();
+                stage1.setTitle(chatRoomId);
+                stage1.show();
+                stage1.setScene(new ChatRoomGMenu(this, stage, controller, chatRoomId).createScene());
+                stage1.setOnCloseRequest(e1 -> {
+                    try{
+                        controller.getAccountController().controlLeaveChatRoom(chatRoomId);
+                    } catch (ExceptionalMassage ex){
+                        new AlertBox(this, ex, controller).showAndWait();
+                    }
+                });
+            } catch (ExceptionalMassage ex){
+                new AlertBox(this, ex, controller).showAndWait();
+            }
+        });
         return new Scene(anchorPane0);
     }
 

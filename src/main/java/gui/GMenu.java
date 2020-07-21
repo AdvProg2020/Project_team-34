@@ -130,6 +130,9 @@ public abstract class GMenu {
                 user.getItems().addAll(viewPersonalInfo, logs, signOut);
                 viewPersonalInfo.setOnAction(e -> stage.setScene(new SupplierProfileGMenu(this, stage, controller).getScene()));
                 logs.setOnAction(e -> stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).getScene()));
+            } else if(controller.getAccountController().getAccount() instanceof Supporter){
+                user.getItems().addAll(viewPersonalInfo);
+                viewPersonalInfo.setOnAction( e -> stage.setScene(new ChooseRequestingCustomersGMenu(this, stage, controller).getScene()));
             }
         } catch (ExceptionalMassage exceptionalMassage) {
             exceptionalMassage.printStackTrace();
@@ -256,7 +259,7 @@ public abstract class GMenu {
     }
 
     public static void addStyleToButton(Button button){
-        button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+        button.getStylesheets().add(new File("src/main/resources/cssInsider/Style.css").toURI().toString());
         button.getStyleClass().add("button");
         button.setMinHeight(28);
         button.setMinWidth(170);
@@ -264,7 +267,7 @@ public abstract class GMenu {
     }
 
     public static void addStyleToSmallButton(Button button){
-        button.getStylesheets().add(new File("src/main/resources/css/Style.css").toURI().toString());
+        button.getStylesheets().add(new File("src/main/resources/cssInsider/Style.css").toURI().toString());
         button.getStyleClass().add("button");
         button.setMinHeight(25);
         button.setMinWidth(100);

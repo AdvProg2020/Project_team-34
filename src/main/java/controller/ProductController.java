@@ -71,13 +71,13 @@ public class ProductController {
     public void controlEditProductById(String productId, HashMap<String, String> fieldsToChange) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(productId);
-        inputs.add(Utils.convertStringToStringHashMapToJsonElement(fieldsToChange));
+        inputs.add(Utils.convertStringToStringHashMapToJsonElement(fieldsToChange).toString());
         communication("controlEditProductById",inputs);
     }
 
     public ArrayList<Supplier> controlGetAllSuppliersForAProduct(Product product) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(product.getProductId());
         return Utils.convertJsonElementToSupplierArrayList(communication("controlGetAllSuppliersForAProduct",inputs));
     }
 
@@ -89,15 +89,15 @@ public class ProductController {
 
     public boolean doesThisSupplierSellThisProduct(Supplier seller, Product product) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(seller));
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(seller.getUserName());
+        inputs.add(product.getProductId());
         return communication("doesThisSupplierSellThisProduct",inputs).getAsBoolean();
     }
 
     //added by rpirayadi
     public ArrayList<Category> controlGetAllCategoriesInACategory(Category rootCategory) throws ExceptionalMassage{
         JsonArray jsonArray = new JsonArray();
-        jsonArray.add(Utils.convertObjectToJsonString(rootCategory));
+        jsonArray.add(rootCategory.getName());
         JsonElement categories = communication("controlGetAllCategoriesInACategory", jsonArray);
         ArrayList<Category> categoryArrayList = Utils.convertJsonElementToCategoryArrayList(categories);
         return categoryArrayList;
@@ -113,13 +113,13 @@ public class ProductController {
         JsonArray inputs = new JsonArray();
         inputs.add(title);
         inputs.add(content);
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(product.getProductId());
         communication("controlAddCommentToProduct", inputs);
     }
 
     public ArrayList<Comment> controlGetCommentsOfAProduct(Product product) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(product.getProductId());
         JsonElement comments = communication("controlGetCommentsOfAProduct",inputs);
         ArrayList<Comment> commentArrayList = Utils.convertJsonElementToCommentArrayList(comments);
         return commentArrayList;
@@ -134,7 +134,7 @@ public class ProductController {
 
     public float controlGetAverageScoreByProduct(Product product) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(product.getProductId());
         JsonElement score = communication("controlGetAverageScoreByProduct", inputs);
         return score.getAsFloat();
     }
@@ -159,7 +159,7 @@ public class ProductController {
     public String controlShowDetailForRequest(String requestId) throws ExceptionalMassage {
         JsonArray input = new JsonArray();
         input.add(requestId);
-        return communication("controlShowDetailForRequest",input).toString();
+        return communication("controlShowDetailForRequest",input).getAsString();
     }
 
     public State controlGetEnumForRequest(String requestId) throws ExceptionalMassage {
@@ -178,22 +178,22 @@ public class ProductController {
 
     public boolean controlHasCustomerBoughtThisProduct(Customer customer, Product product ) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(customer));
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(customer.getUserName());
+        inputs.add(product.getProductId());
         return communication("controlHasCustomerBoughtThisProduct", inputs).getAsBoolean();
     }
 
     public void controlViewThisProduct(Product product) throws ExceptionalMassage{
         JsonArray input = new JsonArray();
-        input.add(Utils.convertObjectToJsonString(product));
+        input.add(product.getProductId());
         communication("controlViewThisProduct", input);
     }
 
     public ObservableList<Customer> getCustomersBoughtProductObservable(Product product, Supplier supplier) throws ExceptionalMassage{
         ObservableList<Customer> customers = FXCollections.observableArrayList();
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
-        inputs.add(Utils.convertObjectToJsonString(supplier));
+        inputs.add(product.getProductId());
+        inputs.add(supplier.getUserName());
         JsonElement customersJson = communication("getCustomersBoughtProductObservable", inputs);
         customers.addAll(Utils.convertJsonElementToCustomerArrayList(customersJson));
         return customers;
@@ -340,6 +340,12 @@ public class ProductController {
         communication("controlFilterSetAvailabilityFilter", inputs);
     }
 
+    public void controlFilterSetOnlyInAuctionFilter(boolean onlyInAuction) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(onlyInAuction));
+        communication("controlFilterSetOnlyInAuctionFilter", inputs);
+    }
+
     public void controlFilterSetPriceLowerBound(int priceLowerBound) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(String.valueOf(priceLowerBound));
@@ -452,7 +458,7 @@ public class ProductController {
 
     public ArrayList<Supplier> getAllSuppliersThatHaveAvailableProduct(Product product) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(product.getProductId());
         return Utils.convertJsonElementToSupplierArrayList(communication("getAllSuppliersThatHaveAvailableProduct",inputs));
     }
 
@@ -464,7 +470,7 @@ public class ProductController {
 
     public ArrayList<Product> getProductForSupplier(Supplier supplier) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(supplier));
+        inputs.add(supplier.getUserName());
         return Utils.convertJsonElementToProductArrayList(communication("getProductForSupplier",inputs));
     }
 
@@ -474,11 +480,11 @@ public class ProductController {
         return Product.convertJsonStringToProduct(communication("getProductById",inputs).toString());
     }
 
-    public void promoteAuctionPrice(int price, int minimumCredit, Auction auction) throws ExceptionalMassage{
+    public void promoteAuctionPrice(int price, int minimumCredit, String auctionId) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
         inputs.add(String.valueOf(price));
         inputs.add(String.valueOf(minimumCredit));
-        inputs.add(Utils.convertObjectToJsonString(auction));
+        inputs.add(auctionId);
         communication("promoteAuctionPrice",inputs);
     }
 
@@ -492,7 +498,7 @@ public class ProductController {
 
     public void controlAddAuction(Product product, Date date) throws ExceptionalMassage{
         JsonArray inputs = new JsonArray();
-        inputs.add(Utils.convertObjectToJsonString(product));
+        inputs.add(product.getProductId());
         inputs.add(String.valueOf(date.getTime()));
         communication("controlAddAuction", inputs);
     }
@@ -500,6 +506,12 @@ public class ProductController {
     public Auction controlGetAuctionById(String id) throws ExceptionalMassage{
         JsonArray input = new JsonArray();
         input.add(id);
-        return Auction.convertJsonStringToAuction(communication("controlGetAuctionById",input).getAsString());
+        return Auction.convertJsonStringToAuction(communication("controlGetAuctionById",input).toString());
+    }
+
+    public Auction controlGetAuctionForProduct(Product product) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(product.getProductId());
+        return Auction.convertJsonStringToAuction(communication("controlGetAuctionForProduct", inputs).toString());
     }
 }

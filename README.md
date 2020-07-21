@@ -1,7 +1,15 @@
-# Project Team 34
+# [Project Team 34](https://github.com/AdvProg2020/Project_team-34)
 Advanced Programing Project, 2020 Spring
 
-## People
+# Branchs
+This is a client-server project.
+Server is available in [this branch](https://github.com/AdvProg2020/Project_team-34/tree/Server).
+Client is available in [this branch](https://github.com/AdvProg2020/Project_team-34/tree/Client).
+
+# Bank Project
+The bank is a sub-project of this project. In [this repository](https://github.com/AryanAhadinia/Bank) you can see the bank
+
+## Students
 | Name | Student number |
 | :-: | :-: | 
 | _***[Mr. Aryan Ahadinia](https://github.com/AryanAhadinia)***_ |  98103878 |

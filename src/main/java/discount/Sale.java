@@ -25,14 +25,18 @@ public class Sale extends Discount {
     private Supplier supplier;
 
     public Sale(String json) {
-        super(new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("start").toString())),
-                new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("end").toString())),
+        super(new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("start").getAsString())),
+                new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("end").getAsString())),
                 Integer.parseInt((new JsonParser().parse(json).getAsJsonObject()).get("percent").getAsString()));
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
         this.offId = jsonObject.get("offId").toString();
         this.rootSaleId = jsonObject.get("rootSaleId").toString();
-        this.products = Utils.convertJsonElementToProductArrayList(jsonObject.get("rootSaleId"));
-        this.state = State.valueOf(jsonObject.get("state").toString());
+        if(jsonObject.get("rootSaleId") instanceof JsonNull){
+            products = new ArrayList<>();
+        } else {
+            this.products = Utils.convertJsonElementToProductArrayList(jsonObject.get("rootSaleId"));
+        }
+        this.state = State.valueOf(jsonObject.get("state").getAsString());
         this.supplier = Supplier.convertJsonStringToSupplier(jsonObject.get("supplier").toString());
     }
 

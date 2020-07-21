@@ -88,7 +88,7 @@ public class Category {
 
     public Category(String json) {
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
-        this.name = jsonObject.get("name").toString();
+        this.name = jsonObject.get("name").getAsString();
         this.parentCategoryName = jsonObject.get("parentCategoryName").toString();
         if (jsonObject.get("allCategoriesInName") instanceof JsonNull) {
             this.allCategoriesInName = null;

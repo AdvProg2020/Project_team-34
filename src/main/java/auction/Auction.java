@@ -2,6 +2,7 @@ package auction;
 
 import account.Customer;
 import account.Supplier;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -32,10 +33,10 @@ public class Auction {
         } else {
             this.highestPromoter = Customer.convertJsonStringToCustomer(jsonObject.get("highestPromoter").toString());
         }
-        if (jsonObject.get("highestPromotion") instanceof JsonNull) {
+        if (jsonObject.get("highestPromotion").getAsString().equals("null")) {
             this.highestPromotion = null;
         } else {
-            this.highestPromotion = Integer.parseInt(jsonObject.get("highestPromotion").toString());
+            this.highestPromotion = Integer.parseInt(jsonObject.get("highestPromotion").getAsString());
         }
         this.end = new Date(Long.parseLong(jsonObject.get("end").getAsString()));
     }
@@ -119,7 +120,24 @@ public class Auction {
     }
 
     public static Auction convertJsonStringToAuction(String json) {
+        if(json.equals("null"))
+            return null;
         return new Auction(json);
+    }
+
+    @Override
+    public String toString() {
+        String highestPromoterUsername = "NO promoter yet";
+        if(highestPromoter != null)
+            highestPromoterUsername = highestPromoter.getUserName();
+        return "Auction{" +
+                "identifier='" + identifier + '\'' +
+                ", productName=" + product.getName() +
+                ", supplier=" + supplier.getUserName() +
+                ", highestPromoter=" + highestPromoterUsername +
+                ", highestPromotion=" + highestPromotion +
+                ", end=" + end +
+                '}';
     }
 
     @Override

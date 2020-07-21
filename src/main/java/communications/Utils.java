@@ -1,9 +1,6 @@
 package communications;
 
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
-import account.Supporter;
+import account.*;
 import auction.Auction;
 import cart.Cart;
 import cart.ProductInCart;
@@ -234,6 +231,22 @@ public class Utils {
         return productInCartArrayList;
     }
 
+    public static JsonElement convertMessageToJsonElement(ArrayList<Message> array){
+        JsonArray jsonArray = new JsonArray();
+        for (Message message : array) {
+            jsonArray.add(convertObjectToJsonString(message));
+        }
+        return jsonArray;
+    }
+
+    public static ArrayList<Message> convertJsonElementToMessageArrayList(JsonElement jsonElement){
+        ArrayList<Message> messageArrayList = new ArrayList<>();
+        for (JsonElement element : jsonElement.getAsJsonArray()) {
+            messageArrayList.add(Message.convertJsonStringToMessage(element.getAsString()));
+        }
+        return messageArrayList;
+    }
+
     public static JsonElement convertProductInCartToIntegerHashMapToJsonElement(HashMap<ProductInCart, Integer> hashMap) {
         JsonObject jsonObject = new JsonObject();
         JsonParser jsonParser = new JsonParser();
@@ -276,7 +289,7 @@ public class Utils {
         JsonObject jsonObject = new JsonObject();
         JsonParser jsonParser = new JsonParser();
         for (String key : hashMap.keySet()) {
-            jsonObject.add(key, jsonParser.parse(hashMap.get(key)));
+            jsonObject.add(key, jsonParser.parse(Utils.convertObjectToJsonString(hashMap.get(key))));
         }
         return jsonObject;
     }

@@ -47,7 +47,6 @@ public class EditPersonalInfoGMenu extends GMenu {
         Label passwordLabel = new Label("New Password");
 
         Label nameOfCompanyLabel = new Label("Name of Company");
-        Label creditLabel = new Label("Credit");
 
         GridPane layoutPane = new GridPane();
         layoutPane.setAlignment(Pos.CENTER);
@@ -86,17 +85,6 @@ public class EditPersonalInfoGMenu extends GMenu {
         layoutPane.add(phoneNumberLabel, 0, row);
         layoutPane.add(phoneNumberField, 1, row);
         row++;
-
-        if (!(controller.getAccount() instanceof Supervisor)) {
-            creditField.setText(String.valueOf(controller.getAccount().getCredit()));
-            creditLabel.setOnKeyTyped(e -> buttonCheckInt(creditField, applyButton));
-            layoutPane.add(creditLabel, 0, row);
-            layoutPane.add(creditField, 1, row);
-            row++;
-            if (controller.getAccount() instanceof Supplier) {
-                creditField.setDisable(true);
-            }
-        }
 
         if (controller.getAccount() instanceof Supplier) {
             nameOfCompanyField.setText(((Supplier) controller.getAccount()).getNameOfCompany());

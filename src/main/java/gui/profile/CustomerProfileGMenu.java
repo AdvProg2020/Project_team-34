@@ -71,7 +71,7 @@ public class CustomerProfileGMenu extends GMenu {
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setSpacing(10);
         buttonPane.setPadding(new Insets(10, 10 , 10 , 10));
-        buttonPane.getChildren().addAll(viewCartButton, viewOrdersButton, viewDiscountCodesButton,editPersonalInfoButton,chooseSupporterButton);
+        buttonPane.getChildren().addAll(viewCartButton, viewOrdersButton, viewDiscountCodesButton,editPersonalInfoButton,chooseSupporterButton, myWalletButton);
 
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 

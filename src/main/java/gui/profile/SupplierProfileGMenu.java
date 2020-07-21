@@ -71,7 +71,7 @@ public class SupplierProfileGMenu extends GMenu {
         buttonPane.setAlignment(Pos.CENTER);
         buttonPane.setSpacing(10);
         buttonPane.setPadding(new Insets(10, 10 , 10 , 10));
-        buttonPane.getChildren().addAll(viewProductsForThisSupplier,viewRequestsForThisSupplier, viewLogButton, editPersonalInfoButton, manageOffsButton, manageAuctionsButton);
+        buttonPane.getChildren().addAll(viewProductsForThisSupplier,viewRequestsForThisSupplier, viewLogButton, editPersonalInfoButton, manageOffsButton, manageAuctionsButton, myWalletButton);
         buttonPane.setStyle("-fx-background-color : #f8e8e2");
 
         try {

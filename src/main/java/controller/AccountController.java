@@ -465,17 +465,18 @@ public class AccountController {
         communication("controlPayBack", inputs);
     }
 
-    public void controlPay(String username, String accountNumber, String password, int amount) throws ExceptionalMassage {
+    public void controlPay(String username, int accountNumber, String password, int amount) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(username);
-        inputs.add(accountNumber);
+        inputs.add(String.valueOf(accountNumber));
         inputs.add(password);
         inputs.add(String.valueOf(amount));
         communication("controlPay", inputs);
     }
 
-    public void controlPay() throws ExceptionalMassage {
+    public void controlPay(int amount) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(amount));
         communication("controlPay", inputs);
     }
 }

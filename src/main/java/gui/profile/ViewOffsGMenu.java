@@ -314,7 +314,7 @@ public class ViewOffsGMenu extends GMenu {
         newPercentField.setText(String.valueOf(sale.getPercent()));
 
         try {
-            for (Product product : controller.getProductController().getProductForSupplier((Supplier) controller.getAccount())) {
+            for (Product product : controller.getOffController().controlGetNotSaleProductsForSupplier(sale.getOffId())) {
                 addingProducts.getItems().add(product.getProductId());
             }
         } catch (ExceptionalMassage exceptionalMassage) {
@@ -347,7 +347,7 @@ public class ViewOffsGMenu extends GMenu {
                     new AlertBox(this, ex, controller);
                 }
             } catch (NumberFormatException ex){
-                new AlertBox(this, "Enter number for percent or, please","OK",controller).showAndWait();
+                new AlertBox(this, "Enter number for percent please","OK",controller).showAndWait();
             }
         });
 

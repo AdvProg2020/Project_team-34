@@ -164,9 +164,8 @@ public class AccountController {
                 return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must be a supervisor to create supervisor account."));
             bankAccountNumber = Account.getASupervisor().getBankAccountNumber();
         }else {
-
             try {
-                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, username, password);
+                bankAccountNumber = controlInternalCreateBankAccount(name, familyName, "Team34", "343434");
             } catch (ExceptionalMassage exceptionalMassage) {
                 return Response.createResponseFromExceptionalMassage(exceptionalMassage);
             }

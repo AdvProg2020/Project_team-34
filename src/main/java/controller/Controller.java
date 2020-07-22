@@ -134,6 +134,7 @@ public class Controller {
                 if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
                     throw new ExceptionalMassage(response.getContent());
                 }
+                setToken(response.getNextToken());
                 return response;
             } catch (IOException e) {
                 throw new ExceptionalMassage("Response not received");

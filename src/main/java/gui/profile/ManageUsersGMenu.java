@@ -10,6 +10,7 @@ import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -107,6 +108,7 @@ public class ManageUsersGMenu extends GMenu {
 
         backgroundLayout.getChildren().add(mainLayout);
         backgroundLayout.setAlignment(Pos.CENTER);
+        backgroundLayout.setPadding(new Insets(10, 0, 0, 0));
 
         backgroundLayout.setMaxHeight(800);
 

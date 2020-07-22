@@ -116,6 +116,10 @@ public class CustomerLog {
         return cart;
     }
 
+    public boolean isAuction() {
+        return isAuction;
+    }
+
     public static int getAllCustomerLogCreatedCount() {
         return allCustomerLogCreatedCount;
     }

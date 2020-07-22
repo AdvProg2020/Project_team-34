@@ -43,7 +43,7 @@ public class CustomerLogDataBase {
             statement.setString(3, String.valueOf(customerLog.getDeliveryStatus()));
             statement.setString(4, customerLog.getCart().getIdentifier());
             statement.setInt(5,customerLog.getCart().getBill());
-//          TODO  statement.setBoolean(6, customerLog.get);
+            statement.setBoolean(6, customerLog.isAuction());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -73,8 +73,7 @@ public class CustomerLogDataBase {
                 LogStatus deliveryStatus = LogStatus.valueOf(resultSet.getString("deliveryStatus"));
                 Cart cart = Cart.getCartById(resultSet.getString("cartId"));
                 boolean isAuction = resultSet.getBoolean("isAuction");
-                // TODO
-                new CustomerLog(customerLogId,date,deliveryStatus,cart);
+                new CustomerLog(customerLogId,date,deliveryStatus,cart, isAuction);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

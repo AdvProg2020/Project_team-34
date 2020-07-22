@@ -5,6 +5,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import controller.Controller;
+import product.Product;
 import server.communications.*;
 
 import java.io.IOException;

@@ -835,4 +835,13 @@ public class ProductController {
         }
         return new Response(RequestStatus.SUCCESSFUL,result);
     }
+
+    public Response controlRemoveProductWithThisPort(String portString){
+        try {
+            Product.removeProductsWithThisSupplierPort(Integer.parseInt(portString));
+            return Response.createSuccessResponse();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+        }
+    }
 }

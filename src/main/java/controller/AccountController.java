@@ -418,14 +418,13 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, "");
     }
 
-    public Response finalizeOrder() {
+    public Response checkFinalizeOrder(){
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.");
         if (!(account instanceof Customer))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login as a customer.");
         Cart cart = mainController.getCart();
-        Customer customer = (Customer) mainController.getAccount();
         if (cart.isCartClear())
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Your cart is clear.");
         if (account.getCredit() < cart.getBill())
@@ -436,6 +435,12 @@ public class AccountController {
                 return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Product " +
                         productInCart.getProduct().getName() + " is not available in this amount, please reduce.");
         }
+        return Response.createSuccessResponse();
+    }
+
+    public Response finalizeOrder() {
+        Cart cart = mainController.getCart();
+        Customer customer = (Customer) mainController.getAccount();
         if(cart.getCodedDiscount() != null){
             cart.getCodedDiscount().addUsedCountForCustomer((Customer)mainController.getAccount());
         }
@@ -807,7 +812,7 @@ public class AccountController {
             Socket socket = new Socket(Controller.BANK_IP, Controller.BANK_SOCKET);
             DataInputStream dataInputStream = new DataInputStream(new BufferedInputStream(socket.getInputStream()));
             DataOutputStream dataOutputStream = new DataOutputStream(new BufferedOutputStream(socket.getOutputStream()));
-            dataOutputStream.writeUTF("get_token aryan 1234");//TODO change to Team34
+            dataOutputStream.writeUTF("get_token Team34 343434");
             dataOutputStream.flush();
             String response1 = dataInputStream.readUTF();
             if (!response1.matches("TOKEN_\\w{10}")) {

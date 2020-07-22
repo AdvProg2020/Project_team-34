@@ -71,7 +71,7 @@ public class PeerNode
 
             FileOutputStream fileOutputStream = new FileOutputStream(new File(myFilePath));
 
-            while ((bytes = inputStream.read(buffer)) != -1) {
+            while ((bytes = inputStream.read(buffer)) > 0 ) {
                 System.out.println(bytes);
                 fileOutputStream.write(buffer, 0, bytes);
             }

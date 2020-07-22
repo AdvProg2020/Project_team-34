@@ -246,6 +246,10 @@ public class AccountController {
         communication("controlRemoveDiscountCode", new JsonArray());
     }
 
+    public void checkFinalizeOrder() throws ExceptionalMassage{
+        communication("checkFinalizeOrder", new JsonArray());
+    }
+
     public boolean finalizeOrder() throws ExceptionalMassage {
         return Boolean.parseBoolean(communication("finalizeOrder", new JsonArray()).getAsString());
     }

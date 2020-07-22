@@ -107,8 +107,10 @@ public class PaymentMenuForCustomer extends GMenu {
                 controller.getAccountController().controlPay(username.getText(), Integer.parseInt(bankAccountNumber.getText()),
                         password.getText(), amount);
                 stage.setScene(getScene());
-                boolean hasCustomerWonCode =  controller.getAccountController().finalizeOrder();
+
+                controller.getAccountController().checkFinalizeOrder();
                 controller.getAccountController().controlGetLinksToDownloadFileProducts();
+                boolean hasCustomerWonCode =  controller.getAccountController().finalizeOrder();
                 new AlertBox(this, "You have successfully purchased your cart!","OK",controller).showAndWait();
                 if(hasCustomerWonCode){
                     new AlertBox(this, "Congratulations, You have won a coded discount!", "OK",controller).showAndWait();

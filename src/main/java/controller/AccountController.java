@@ -108,11 +108,11 @@ public class AccountController {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(username);
         jsonArray.add(password);
-        mainController.setToken(communication("controlLogin", jsonArray).getAsString());
+        communication("controlLogin", jsonArray);
     }
 
     public void controlLogout() throws ExceptionalMassage {
-        mainController.setToken(communication("controlLogout", new JsonArray()).getAsString());
+        communication("controlLogout", new JsonArray());
     }
 
     public String controlViewPersonalInfo() throws ExceptionalMassage {

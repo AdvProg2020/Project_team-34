@@ -1,6 +1,7 @@
 package main;
 
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.loginMenu.FirstSupervisorMenu;
 import gui.mainMenu.MainMenuG;
@@ -34,6 +35,11 @@ public class Main extends Application {
 
         stage.setOnCloseRequest(e -> {
             e.consume();
+            try {
+                controller.getProductController().controlRemoveProductWithThisPort();
+            } catch (ExceptionalMassage exceptionalMassage) {
+                System.out.println("Error Removing File Products");
+            }
             try {
                 controller.disconnect();
             } catch (IOException ioException) {

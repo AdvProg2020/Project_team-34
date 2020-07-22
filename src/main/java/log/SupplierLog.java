@@ -1,10 +1,8 @@
 package log;
 
 import account.Supplier;
-import discount.CodedDiscount;
 import discount.Sale;
 import product.Product;
-import server.communications.Response;
 import server.communications.Utils;
 
 import java.text.SimpleDateFormat;
@@ -16,7 +14,6 @@ import java.util.HashMap;
  * @author Aryan Ahadinia
  * @since 0.0.1
  */
-
 public class SupplierLog {
     private static final ArrayList<SupplierLog> allSupplierLogs = new ArrayList<>();
     private static int allSupplierLogCreatedCount = 0;
@@ -39,6 +36,21 @@ public class SupplierLog {
         this.earnedMoney = customerLog.getSupplierEarnedMoney(supplier);
         this.discountAmount = customerLog.getSupplierSaleAmount(supplier);
         this.totalPurchase = customerLog.getTotalPurchaseFromSupplier(supplier);
+        this.identifier = generateIdentifier();
+        this.products = customerLog.getProductsBoughtFromSupplier(supplier);
+        this.productsCount = customerLog.getProductsBoughtFromSupplierCount(supplier);
+        this.productsSale = customerLog.getProductsBoughtFromSupplierSale(supplier);
+        this.date = customerLog.getDate();
+        allSupplierLogs.add(this);
+        allSupplierLogCreatedCount++;
+    }
+
+    public SupplierLog(CustomerLog customerLog, Supplier supplier, int amount) {
+        this.customerLog = customerLog;
+        this.supplier = supplier;
+        this.earnedMoney = amount;
+        this.discountAmount = 0;
+        this.totalPurchase = 0;
         this.identifier = generateIdentifier();
         this.products = customerLog.getProductsBoughtFromSupplier(supplier);
         this.productsCount = customerLog.getProductsBoughtFromSupplierCount(supplier);
@@ -114,7 +126,7 @@ public class SupplierLog {
         return supplierLogs;
     }
 
-    public static SupplierLog getSupplierLogById(String identifier){
+    public static SupplierLog getSupplierLogById(String identifier) {
         for (SupplierLog supplierLog : allSupplierLogs) {
             if (supplierLog.getIdentifier().equals(identifier))
                 return supplierLog;
@@ -135,15 +147,24 @@ public class SupplierLog {
         return string.toString();
     }
 
-    public static SupplierLog convertJsonStringToSupplierLog(String jsonString){
+    public static SupplierLog convertJsonStringToSupplierLog(String jsonString) {
         return (SupplierLog) Utils.convertStringToObject(jsonString, "log.SupplierLog");
+    }
+
+    public String regularLogToString() {
+        return "earnedMoney: " + earnedMoney + ", discountAmount: " + discountAmount + ", totalPurchase: " + totalPurchase + "\n" +
+                productsBoughtString();
+    }
+
+    public String auctionLogToString() {
+        return "*Auction* highest promotion: " + customerLog.getPaidAmount() + " highest promoter: " + customerLog.getCustomer().getUserName() +
+                productsBoughtString();
     }
 
     @Override
     public String toString() {
         SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
         return "SupplierLog on " + formatter.format(customerLog.getDate()) + ", Log identifier: " + identifier + "\n" +
-                "earnedMoney: " + earnedMoney + ", discountAmount: " + discountAmount + ", totalPurchase: " + totalPurchase + "\n" +
-                productsBoughtString();
+                ((customerLog.isAuction) ? auctionLogToString() : regularLogToString());
     }
 }

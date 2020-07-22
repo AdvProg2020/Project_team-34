@@ -516,4 +516,10 @@ public class ProductController {
         inputs.add(product.getProductId());
         return Auction.convertJsonStringToAuction(communication("controlGetAuctionForProduct", inputs).toString());
     }
+
+    public void controlRemoveProductWithThisPort() throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(String.valueOf(mainController.getPeerNode().getPort()));
+        communication("controlRemoveProductWithThisPort", inputs);
+    }
 }

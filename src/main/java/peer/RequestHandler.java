@@ -71,7 +71,7 @@ public class RequestHandler implements Runnable {
             {
         byte[] buffer = new byte[1024];
         int bytes = 0;
-        while ((bytes = fileInputStream.read(buffer)) != -1) {
+        while ((bytes = fileInputStream.read(buffer)) > 0) {
             outputStream.write(buffer, 0, bytes);
         }
     }

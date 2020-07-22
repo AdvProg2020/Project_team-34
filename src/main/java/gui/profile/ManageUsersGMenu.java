@@ -43,7 +43,6 @@ public class ManageUsersGMenu extends GMenu {
     private final ScrollPane accountTables;
 
     private boolean updatePermission;
-    private final Task updater;
 
     public ManageUsersGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Manage User", parentMenu, stage, controller);
@@ -57,16 +56,11 @@ public class ManageUsersGMenu extends GMenu {
         this.allSuppliers = new ArrayList<>();
         this.accountTables = createAccountsTables();
         this.updatePermission = true;
-        this.updater = new Task() {
+        Task updater = new Task() {
             @Override
             protected Object call() throws Exception {
                 while (updatePermission) {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            update();
-                        }
-                    });
+                    Platform.runLater(() -> update());
                     Thread.sleep(5000);
                 }
                 return null;
@@ -131,7 +125,6 @@ public class ManageUsersGMenu extends GMenu {
         });
         stage.getIcons().add(logoImage);
         stage.setScene(createScene());
-        stage.setResizable(false);
         stage.showAndWait();
     }
 

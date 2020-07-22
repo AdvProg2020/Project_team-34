@@ -152,19 +152,13 @@ public class Auction {
     }
 
     public static boolean isThisProductInAuction(Product product, Supplier supplier) {
-        for (Auction auction : ALL_AUCTIONS) {
-            if (auction.getProduct().equals(product) && auction.getSupplier().equals(supplier) &&
-                    System.currentTimeMillis() < auction.getEnd().getTime()) {
-                return true;
-            }
-        }
-        return false;
+        return getAuctionForProduct(product, supplier) != null;
     }
 
     public static Auction getAuctionForProduct(Product product, Supplier supplier){
         for (Auction auction : ALL_AUCTIONS) {
-            if(auction.getProduct().equals(product) && auction.getSupplier().equals(supplier)
-            && System.currentTimeMillis() < auction.getEnd().getTime())
+            if (auction.getProduct().equals(product) && auction.getSupplier().equals(supplier) &&
+                    System.currentTimeMillis() < auction.getEnd().getTime())
                 return auction;
         }
         return null;

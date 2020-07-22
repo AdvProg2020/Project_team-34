@@ -122,7 +122,7 @@ public class ClientThread extends Thread {
         String functionName = request.getFunction();
         String token = request.getToken();
         if(!token.equals(controller.getToken())){
-            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Token is not Valid!");
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Token is not Valid!", controller);
         }
         ArrayList<Class> params = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();

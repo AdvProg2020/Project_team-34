@@ -5,7 +5,6 @@ import account.Customer;
 import account.Supervisor;
 import account.Supplier;
 import auction.Auction;
-import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -14,8 +13,6 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
-import jdk.jshell.UnresolvedReferenceException;
-import jdk.jshell.execution.Util;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
@@ -25,7 +22,6 @@ import server.communications.Utils;
 import state.State;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Objects;
 

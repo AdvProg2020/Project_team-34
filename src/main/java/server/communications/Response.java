@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 
 /**
@@ -16,10 +17,13 @@ import exceptionalMassage.ExceptionalMassage;
 public class Response {
     private RequestStatus status;
     private String content;
+    private String nextToken;
 
-    public Response(RequestStatus status, String content) {
+    public Response(RequestStatus status, String content, Controller controller) {
         this.status = status;
         this.content = content;
+        controller.renewToken();
+        nextToken = controller.getToken();
     }
 
     public RequestStatus getStatus() {
@@ -42,27 +46,28 @@ public class Response {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("status", status.toString());
         jsonObject.addProperty("content", content);
+        jsonObject.addProperty("nextToken", nextToken);
         return jsonObject.toString();
     }
 
-    public static Response convertJsonStringToResponse(String jsonString){
-        Gson gson = new Gson();
-        JsonParser jsonParser = new JsonParser();
-        JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);
-        RequestStatus requestStatus = RequestStatus.valueOf(jsonObject.get("status").getAsString());
-        String content = jsonObject.get("content").getAsString();
-        return new Response(requestStatus, content);
+//    public static Response convertJsonStringToResponse(String jsonString){
+//        Gson gson = new Gson();
+//        JsonParser jsonParser = new JsonParser();
+//        JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);
+//        RequestStatus requestStatus = RequestStatus.valueOf(jsonObject.get("status").getAsString());
+//        String content = jsonObject.get("content").getAsString();
+//        return new Response(requestStatus, content);
+//    }
+
+    public static Response createResponseFromExceptionalMassage(ExceptionalMassage exceptionalMassage, Controller controller){
+        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage(),controller);
     }
 
-    public static Response createResponseFromExceptionalMassage(ExceptionalMassage exceptionalMassage){
-        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+    public static Response createResponseFromExceptionalMassage(String message, Controller controller){
+        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, message, controller);
     }
 
-    public static Response createResponseFromExceptionalMassage(String message){
-        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, message);
-    }
-
-    public static Response createSuccessResponse(){
-        return new Response(RequestStatus.SUCCESSFUL, "");
+    public static Response createSuccessResponse(Controller controller){
+        return new Response(RequestStatus.SUCCESSFUL, "", controller);
     }
 }

@@ -6,11 +6,9 @@ import auction.Auction;
 import cart.Cart;
 import cart.ProductInCart;
 import database.CustomerLogDataBase;
-import discount.CodedDiscount;
 import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
-import server.communications.Response;
 import server.communications.Utils;
 
 import java.text.SimpleDateFormat;
@@ -34,7 +32,7 @@ public class CustomerLog {
     private final Customer customer;
     private final Cart cart;
     private LogStatus deliveryStatus;
-    //Suppliers Name Saved In a variable: <cart: cart.Cart>
+    public final boolean isAuction;
 
     //Constructors:
     public CustomerLog(Cart cart, int wage) {
@@ -49,6 +47,7 @@ public class CustomerLog {
         for (ProductInCart productInCart : cart.getProductsIn()) {
             productInCart.getProduct().reduceRemainedNumber(productInCart.getSupplier(), cart.getProductInCount().get(productInCart));
         }
+        this.isAuction = false;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
         addSubLogForSuppliersMainConstructorCall(wage);
@@ -64,16 +63,17 @@ public class CustomerLog {
         this.paidAmount = auction.getHighestPromotion();
         this.codedDiscountAmount = 0;
         this.deliveryStatus = LogStatus.PENDING;
+        this.isAuction = true;
         for (ProductInCart productInCart : cart.getProductsIn()) {
             productInCart.getProduct().reduceRemainedNumber(productInCart.getSupplier(), cart.getProductInCount().get(productInCart));
         }
-        addSubLogForSuppliersMainConstructorCall(wage);
+        new SupplierLog(this, cart.getAllSupplier().get(0), paidAmount);
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
         CustomerLogDataBase.add(this);
     }
 
-    public CustomerLog(String identifier, Date date, LogStatus deliveryStatus, Cart cart) {
+    public CustomerLog(String identifier, Date date, LogStatus deliveryStatus, Cart cart, boolean isAuction) {
         this.identifier = identifier;
         this.date = date;
         this.paidAmount = cart.getBill();
@@ -81,6 +81,7 @@ public class CustomerLog {
         this.customer = cart.getOwner();
         this.deliveryStatus = deliveryStatus;
         this.cart = cart;
+        this.isAuction = isAuction;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
         addSubLogForSuppliersDataBaseConstructorCall();
@@ -142,7 +143,7 @@ public class CustomerLog {
 
     public static ArrayList<CustomerLog> getCustomerCustomerLogs(Customer customer) {
         ArrayList<CustomerLog> customerLogs = new ArrayList<>();
-        for (CustomerLog customerLog: allCustomerLogs) {
+        for (CustomerLog customerLog : allCustomerLogs) {
             if (customerLog.getCustomer().getUserName().equals(customer.getUserName())) {
                 customerLogs.add(customerLog);
             }
@@ -160,7 +161,7 @@ public class CustomerLog {
     public void addSubLogForSuppliersMainConstructorCall(int wage) {
         ArrayList<Supplier> allSupplierInThisLog = cart.getAllSupplier();
         for (Supplier supplier : allSupplierInThisLog) {
-            supplier.setCredit(supplier.getCredit() + (getSupplierEarnedMoney(supplier) * (100- wage)/100));
+            supplier.setCredit(supplier.getCredit() + (getSupplierEarnedMoney(supplier) * (100 - wage) / 100));
             addSubLogForSupplier(supplier);
         }
     }
@@ -203,7 +204,7 @@ public class CustomerLog {
         return customerBoughtProduct;
     }
 
-    public static CustomerLog getCustomerLogById(String identifier){
+    public static CustomerLog getCustomerLogById(String identifier) {
         for (CustomerLog customerLog : allCustomerLogs) {
             if (customerLog.getIdentifier().equals(identifier))
                 return customerLog;
@@ -253,9 +254,9 @@ public class CustomerLog {
         SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
         return
                 "Order on " + formatter.format(date) + ", Order Identifier: " + identifier + "\n" +
-                "delivery status: " + deliveryStatus.toString() + "\n" +
-                "paidAmount: " + paidAmount + "\n" +
-                "codedDiscountAmount: " + codedDiscountAmount + "\n" +
-                ((cart.getBill() == paidAmount) ? cart.toString() : cart.toAuctionString());
+                        "delivery status: " + deliveryStatus.toString() + "\n" +
+                        "paidAmount: " + paidAmount + "\n" +
+                        "codedDiscountAmount: " + codedDiscountAmount + "\n" +
+                        ((isAuction) ? cart.toString() : cart.toAuctionString());
     }
 }

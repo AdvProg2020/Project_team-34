@@ -2,7 +2,9 @@ package server;
 
 import account.*;
 import discount.PeriodicCodedDiscountGenerator;
+import server.security.DenialOfServiceBlocker;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.*;
 import java.util.ArrayList;
@@ -13,11 +15,12 @@ public class Server extends Thread {
     private static final String LETTERS_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private final ServerSocket serverSocket;
     private final HashMap<String, ClientThread> tokenToClientThreadHashMap;
+    private final DenialOfServiceBlocker dosBlocker = new DenialOfServiceBlocker();
     private boolean unlocked;
 
     public Server() throws IOException {
         this.serverSocket = new ServerSocket(8088);
-        tokenToClientThreadHashMap = new HashMap<>();
+        this.tokenToClientThreadHashMap = new HashMap<>();
         this.unlocked = true;
         new PeriodicCodedDiscountGenerator(true).start();
     }
@@ -110,10 +113,16 @@ public class Server extends Thread {
         while (unlocked) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                try {
-                    new ClientThread(this, clientSocket).start();
-                } catch (IOException e) {
-                    System.err.println("Error: ClientThread start");
+                boolean permission = dosBlocker.getIpPermission(clientSocket.getInetAddress().getCanonicalHostName());
+                System.out.println(permission);
+                if (dosBlocker.getIpPermission(clientSocket.getInetAddress().getCanonicalHostName())) {
+                    try {
+                        new ClientThread(this, clientSocket).start();
+                    } catch (IOException e) {
+                        System.err.println("Error: ClientThread start");
+                    }
+                } else {
+                    clientSocket.close();
                 }
             } catch (IOException e) {
                 System.err.println("Error: accepting client socket");

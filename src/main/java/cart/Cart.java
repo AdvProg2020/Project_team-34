@@ -397,13 +397,12 @@ public class Cart {
 
     @Override
     public String toString() {
-        update();
+//        TODO update();
         StringBuilder cart = new StringBuilder("Cart, Identifier: " + identifier + " for <username: " + (owner == null ? "NA" : owner.getUserName()) + ">" + "\n");
         if (shippingInfo != null)
             cart.append(shippingInfo.toString()).append("\n");
         if (codedDiscount != null)
             cart.append(codedDiscount.getDiscountCode()).append("\n");
-        cart.append("Bill: ").append(getBill()).append("\n");
         cart.append("Sale: ").append(getAmountOfSale()).append("\n");
         cart.append("Coded Discount Amount: ").append(getAmountOfCodedDiscount()).append("\n");
         int i = 1;
@@ -425,5 +424,18 @@ public class Cart {
     @Override
     public int hashCode() {
         return Objects.hash(identifier);
+    }
+
+    public String toAuctionString() {
+//       TODO update();
+        StringBuilder cart = new StringBuilder("Cart, Identifier: " + identifier + " for <username: " + (owner == null ? "NA" : owner.getUserName()) + ">" + "\n");
+        if (shippingInfo != null)
+            cart.append(shippingInfo.toString()).append("\n");
+        if (codedDiscount != null)
+            cart.append(codedDiscount.getDiscountCode()).append("\n");
+        for (ProductInCart productInCart : productsIn) {
+            cart.append("Auction").append(". ").append(productInCart.getProduct().getProductId()).append(" from ").append(productInCart.getSupplier().getNameOfCompany()).append(" X ").append(productInCount.get(productInCart)).append("\n");
+        }
+        return cart.toString();
     }
 }

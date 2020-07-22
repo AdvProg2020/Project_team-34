@@ -782,7 +782,7 @@ public class ProductController {
         ArrayList<Auction> allAuctions = Auction.getAllAuctions();
         ArrayList<String> auctionsIds = new ArrayList<>();
         for (Auction allAuction : allAuctions) {
-            if(allAuction.getSupplier().equals(supplier) && Auction.isThisProductInAuction(allAuction.getProduct(),supplier)){
+            if(allAuction.getSupplier().equals(supplier) && allAuction.isActive()){
                 auctionsIds.add(allAuction.getIdentifier());
             }
         }
@@ -810,6 +810,9 @@ public class ProductController {
         }
         Supplier supplier = (Supplier) mainController.getAccount();
         Product product = Product.getProductById(productId);
+        if(product.getRemainedNumberForEachSupplier().get(supplier) == 0) {
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Product sold out!"));
+        }
         Long date = Long.parseLong(dateString);
         int wage = mainController.getAccountController().controlGetWageInternal();
         new Auction(product,supplier,date,wage);
@@ -834,5 +837,14 @@ public class ProductController {
             result = auction.toJson();
         }
         return new Response(RequestStatus.SUCCESSFUL,result);
+    }
+
+    public Response controlRemoveProductWithThisPort(String portString){
+        try {
+            Product.removeProductsWithThisSupplierPort(Integer.parseInt(portString));
+            return Response.createSuccessResponse();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage);
+        }
     }
 }

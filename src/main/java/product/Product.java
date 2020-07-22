@@ -314,9 +314,9 @@ public class Product {
         return null;
     }
 
-    public void removeProduct() {
-        setProductState(State.PREPARING_TO_BE_DELETED);
-    }
+//    public void removeProduct() {
+//        setProductState(State.PREPARING_TO_BE_DELETED);
+//    }
 
     public void addProduct() {
         productState = State.CONFIRMED;
@@ -549,6 +549,15 @@ public class Product {
                 minimumPrice = this.getPrice(supplier);
         }
         return minimumPrice;
+    }
+
+    public static void removeProductsWithThisSupplierPort(int port) throws ExceptionalMassage {
+        for (Product product : allProduct) {
+            if(product.getSupplierPort() == port && product.getProductState() == State.CONFIRMED){
+                product.setProductState(State.DELETED);
+                    Category.getProductCategory(product).removeProduct(product);
+            }
+        }
     }
 
     public static Product convertJsonStringToProduct(String jsonString){

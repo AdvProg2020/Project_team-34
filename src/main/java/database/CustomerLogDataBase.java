@@ -24,6 +24,7 @@ public class CustomerLogDataBase {
         content.put("deliveryStatus", "String");
         content.put("cartId", "String");
         content.put("amount", "int");
+        content.put("isAuction", "boolean");
 
 
         DataBase.createNewTable("CustomerLogs", content);
@@ -33,8 +34,8 @@ public class CustomerLogDataBase {
         if (DataBase.doesIdAlreadyExist("CustomerLogs", "identifier", customerLog.getIdentifier())) {
             return;
         }
-        String sql = "INSERT into CustomerLogs (identifier, date, deliveryStatus, cartId,amount) " +
-                "VALUES (?,?, ? ,?, ?)";
+        String sql = "INSERT into CustomerLogs (identifier, date, deliveryStatus, cartId,amount, isAuction) " +
+                "VALUES (?,?, ? ,?, ?, ?)";
         try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setString(1,customerLog.getIdentifier());
@@ -42,6 +43,7 @@ public class CustomerLogDataBase {
             statement.setString(3, String.valueOf(customerLog.getDeliveryStatus()));
             statement.setString(4, customerLog.getCart().getIdentifier());
             statement.setInt(5,customerLog.getCart().getBill());
+            statement.setBoolean(6, customerLog.isAuction());
 
             statement.executeUpdate();
         } catch (SQLException e) {
@@ -70,7 +72,8 @@ public class CustomerLogDataBase {
                 Date date = new Date(resultSet.getLong("date"));
                 LogStatus deliveryStatus = LogStatus.valueOf(resultSet.getString("deliveryStatus"));
                 Cart cart = Cart.getCartById(resultSet.getString("cartId"));
-                new CustomerLog(customerLogId,date,deliveryStatus,cart);
+                boolean isAuction = resultSet.getBoolean("isAuction");
+                new CustomerLog(customerLogId,date,deliveryStatus,cart, isAuction);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

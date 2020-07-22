@@ -143,7 +143,7 @@ public class CustomerLog {
 
     public static ArrayList<CustomerLog> getCustomerCustomerLogs(Customer customer) {
         ArrayList<CustomerLog> customerLogs = new ArrayList<>();
-        for (CustomerLog customerLog: allCustomerLogs) {
+        for (CustomerLog customerLog : allCustomerLogs) {
             if (customerLog.getCustomer().getUserName().equals(customer.getUserName())) {
                 customerLogs.add(customerLog);
             }
@@ -161,7 +161,7 @@ public class CustomerLog {
     public void addSubLogForSuppliersMainConstructorCall(int wage) {
         ArrayList<Supplier> allSupplierInThisLog = cart.getAllSupplier();
         for (Supplier supplier : allSupplierInThisLog) {
-            supplier.setCredit(supplier.getCredit() + (getSupplierEarnedMoney(supplier) * (100- wage)/100));
+            supplier.setCredit(supplier.getCredit() + (getSupplierEarnedMoney(supplier) * (100 - wage) / 100));
             addSubLogForSupplier(supplier);
         }
     }
@@ -204,7 +204,7 @@ public class CustomerLog {
         return customerBoughtProduct;
     }
 
-    public static CustomerLog getCustomerLogById(String identifier){
+    public static CustomerLog getCustomerLogById(String identifier) {
         for (CustomerLog customerLog : allCustomerLogs) {
             if (customerLog.getIdentifier().equals(identifier))
                 return customerLog;
@@ -254,9 +254,9 @@ public class CustomerLog {
         SimpleDateFormat formatter = new SimpleDateFormat("E, dd MMM yyyy HH:mm:ss");
         return
                 "Order on " + formatter.format(date) + ", Order Identifier: " + identifier + "\n" +
-                "delivery status: " + deliveryStatus.toString() + "\n" +
-                "paidAmount: " + paidAmount + "\n" +
-                "codedDiscountAmount: " + codedDiscountAmount + "\n" +
-                ((isAuction) ? cart.toString() : cart.toAuctionString());
+                        "delivery status: " + deliveryStatus.toString() + "\n" +
+                        "paidAmount: " + paidAmount + "\n" +
+                        "codedDiscountAmount: " + codedDiscountAmount + "\n" +
+                        ((isAuction) ? cart.toString() : cart.toAuctionString());
     }
 }

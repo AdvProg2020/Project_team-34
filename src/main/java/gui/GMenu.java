@@ -88,7 +88,7 @@ public abstract class GMenu {
         allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this,
                 stage,controller, false).getScene()));
         cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu(this, stage, controller).getScene()));
-        manageUsers.setOnAction(e -> stage.setScene(new ManageUsersGMenu(this, stage, controller).getScene()));
+        manageUsers.setOnAction(e -> new ManageUsersGMenu(this, new Stage(), controller).showAndWait());
         saleView.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this, stage, controller, true).getScene()));
 
         userMenuBar.getMenus().addAll(user);

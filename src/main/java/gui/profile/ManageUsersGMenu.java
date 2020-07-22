@@ -6,17 +6,23 @@ import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.alerts.ChoiceBox;
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
 
 /**
@@ -33,51 +39,39 @@ public class ManageUsersGMenu extends GMenu {
     private ArrayList<Supplier> onlineSuppliers;
     private ArrayList<Supplier> allSuppliers;
 
-    private ScrollPane accountTables;
+    private final ScrollPane accountTables;
+
+    private boolean updatePermission;
+    private final Task updater;
 
     public ManageUsersGMenu(GMenu parentMenu, Stage stage, Controller controller) {
         super("Manage User", parentMenu, stage, controller);
-        try {
-            this.onlineSupervisors = controller.getAccountController().getOnlineSupervisors();
-        } catch (ExceptionalMassage exceptionalMassage) {
-            this.onlineSupervisors = new ArrayList<>();
-        }
-        try {
-            this.allSupervisors = controller.getAccountController().getSupervisorObservableList();
-        } catch (ExceptionalMassage exceptionalMassage) {
-            this.allSupervisors = new ArrayList<>();
-        }
-        try {
-            this.onlineSupporters = controller.getAccountController().getOnlineSupporters();
-        } catch (ExceptionalMassage exceptionalMassage) {
-            this.onlineSupporters = new ArrayList<>();
-        }
-        try {
-            this.allSupporters = controller.getAccountController().getSupporterObservableList();
-        } catch (ExceptionalMassage exceptionalMassage) {
-            this.allSupporters = new ArrayList<>();
-        }
-        try {
-            this.onlineCustomers = controller.getAccountController().getOnlineCustomers();
-        } catch (ExceptionalMassage exceptionalMassage) {
-            this.onlineCustomers = new ArrayList<>();
-        }
-        try {
-            this.allCustomers = controller.getAccountController().getCustomerObservableList();
-        } catch (ExceptionalMassage exceptionalMassage) {
-            this.allCustomers = new ArrayList<>();
-        }
-        try {
-            this.onlineSuppliers = controller.getAccountController().getOnlineSuppliers();
-        } catch (ExceptionalMassage exceptionalMassage) {
-            this.onlineSuppliers = new ArrayList<>();
-        }
-        try {
-            this.allSuppliers = controller.getAccountController().getSupplierObservableList();
-        } catch (ExceptionalMassage exceptionalMassage) {
-            this.allSuppliers = new ArrayList<>();
-        }
+        this.onlineSupervisors = new ArrayList<>();
+        this.allSupervisors = new ArrayList<>();
+        this.onlineSupporters = new ArrayList<>();
+        this.allSupporters = new ArrayList<>();
+        this.onlineCustomers = new ArrayList<>();
+        this.allCustomers = new ArrayList<>();
+        this.onlineSuppliers = new ArrayList<>();
+        this.allSuppliers = new ArrayList<>();
         this.accountTables = createAccountsTables();
+        this.updatePermission = true;
+        this.updater = new Task() {
+            @Override
+            protected Object call() throws Exception {
+                while (updatePermission) {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            update();
+                        }
+                    });
+                    Thread.sleep(5000);
+                }
+                return null;
+            }
+        };
+        new Thread(updater).start();
     }
 
     @Override
@@ -108,13 +102,79 @@ public class ManageUsersGMenu extends GMenu {
 
         GridPane backgroundLayout = new GridPane();
 
-        mainLayout.getChildren().addAll(createHeader(), createSupervisorBox(this, true), deleteUserBox);
+        mainLayout.getChildren().addAll(createSupervisorBox(this, true), deleteUserBox);
         mainLayout.getChildren().addAll(accountTables);
 
         backgroundLayout.getChildren().add(mainLayout);
         backgroundLayout.setAlignment(Pos.CENTER);
 
+        backgroundLayout.setMaxHeight(800);
+
         return new Scene(backgroundLayout);
+    }
+
+    @Override
+    public void showAndWait() {
+        stage.initModality(Modality.APPLICATION_MODAL);
+        Image logoImage = null;
+        try {
+            logoImage = new Image(new FileInputStream("./src/main/resources/header/Logo.png"));
+        } catch (FileNotFoundException e) {
+            System.err.println("Logo not found");
+        }
+        stage.setOnCloseRequest(e -> {
+            e.consume();
+            updatePermission = false;
+            stage.close();
+        });
+        stage.getIcons().add(logoImage);
+        stage.setScene(createScene());
+        stage.setResizable(false);
+        stage.showAndWait();
+    }
+
+    private void update() {
+        try {
+            onlineSupervisors = controller.getAccountController().getOnlineSupervisors();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            onlineSupervisors = new ArrayList<>();
+        }
+        try {
+            allSupervisors = controller.getAccountController().getSupervisorObservableList();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            allSupervisors = new ArrayList<>();
+        }
+        try {
+            onlineSupporters = controller.getAccountController().getOnlineSupporters();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            onlineSupporters = new ArrayList<>();
+        }
+        try {
+            allSupporters = controller.getAccountController().getSupporterObservableList();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            allSupporters = new ArrayList<>();
+        }
+        try {
+            onlineCustomers = controller.getAccountController().getOnlineCustomers();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            onlineCustomers = new ArrayList<>();
+        }
+        try {
+            allCustomers = controller.getAccountController().getCustomerObservableList();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            allCustomers = new ArrayList<>();
+        }
+        try {
+            onlineSuppliers = controller.getAccountController().getOnlineSuppliers();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            onlineSuppliers = new ArrayList<>();
+        }
+        try {
+            allSuppliers = controller.getAccountController().getSupplierObservableList();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            allSuppliers = new ArrayList<>();
+        }
+        accountTables.setContent(createAccountsTables().getContent());
     }
 
     private ScrollPane createAccountsTables() {

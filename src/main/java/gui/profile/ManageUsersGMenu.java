@@ -1,15 +1,13 @@
 package gui.profile;
 
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
-import account.Supporter;
+import account.*;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.alerts.ChoiceBox;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -19,31 +17,82 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+
 /**
  * @author Aryan Ahadinia
  * @since 0.0.2
  */
-
 public class ManageUsersGMenu extends GMenu {
+    private ArrayList<Supervisor> onlineSupervisors;
+    private ArrayList<Supervisor> allSupervisors;
+    private ArrayList<Supporter> onlineSupporters;
+    private ArrayList<Supporter> allSupporters;
+    private ArrayList<Customer> onlineCustomers;
+    private ArrayList<Customer> allCustomers;
+    private ArrayList<Supplier> onlineSuppliers;
+    private ArrayList<Supplier> allSuppliers;
+
+    private ScrollPane accountTables;
+
     public ManageUsersGMenu(GMenu parentMenu, Stage stage, Controller controller) {
-        super("Manage Users", parentMenu, stage, controller);
+        super("Manage User", parentMenu, stage, controller);
+        try {
+            this.onlineSupervisors = controller.getAccountController().getOnlineSupervisors();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            this.onlineSupervisors = new ArrayList<>();
+        }
+        try {
+            this.allSupervisors = controller.getAccountController().getSupervisorObservableList();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            this.allSupervisors = new ArrayList<>();
+        }
+        try {
+            this.onlineSupporters = controller.getAccountController().getOnlineSupporters();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            this.onlineSupporters = new ArrayList<>();
+        }
+        try {
+            this.allSupporters = controller.getAccountController().getSupporterObservableList();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            this.allSupporters = new ArrayList<>();
+        }
+        try {
+            this.onlineCustomers = controller.getAccountController().getOnlineCustomers();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            this.onlineCustomers = new ArrayList<>();
+        }
+        try {
+            this.allCustomers = controller.getAccountController().getCustomerObservableList();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            this.allCustomers = new ArrayList<>();
+        }
+        try {
+            this.onlineSuppliers = controller.getAccountController().getOnlineSuppliers();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            this.onlineSuppliers = new ArrayList<>();
+        }
+        try {
+            this.allSuppliers = controller.getAccountController().getSupplierObservableList();
+        } catch (ExceptionalMassage exceptionalMassage) {
+            this.allSuppliers = new ArrayList<>();
+        }
+        this.accountTables = createAccountsTables();
     }
 
     @Override
     protected Scene createScene() {
         VBox mainLayout = new VBox();
-        GridPane backgroundLayout = new GridPane();
-        TableView<Supplier> supplierTableView = supplierTable();
-        TableView<Customer> customerTableView = customerTable();
-        TableView<Supervisor> supervisorTableView = supervisorTable();
-        TableView<Supporter> supporterTableView = supporterTable();
+        mainLayout.setSpacing(20);
+
         HBox deleteUserBox = new HBox();
         TextField deletingUsername = new TextField();
         Button deleteButton = new Button("Delete");
-        Scene scene = new Scene(backgroundLayout);
-
         deletingUsername.setPromptText("Delete username");
         deletingUsername.setAlignment(Pos.CENTER);
+        deleteUserBox.setSpacing(10);
+        deleteUserBox.setAlignment(Pos.CENTER);
+        deleteUserBox.getChildren().addAll(deletingUsername, deleteButton);
         deleteButton.setOnAction(e -> {
             ChoiceBox choiceBox = new ChoiceBox(this, "Are you sure?", "Yes", "No", controller);
             choiceBox.showAndWait();
@@ -56,115 +105,208 @@ public class ManageUsersGMenu extends GMenu {
             }
             stage.setScene(createScene());
         });
-        deleteUserBox.setSpacing(10);
-        deleteUserBox.setAlignment(Pos.CENTER);
-        deleteUserBox.getChildren().addAll(deletingUsername, deleteButton);
 
-        mainLayout.setSpacing(10);
-        mainLayout.getChildren().addAll(createHeader(), createSupervisorBox(this, true), deleteUserBox, new Label("Supervisors:"),
-                supervisorTableView,new Label("Supporters"), supporterTableView,  new Label("Suppliers:"), supplierTableView, new Label("Customers"),
-                customerTableView);
+        GridPane backgroundLayout = new GridPane();
 
-        ScrollPane scrollPane = new ScrollPane(mainLayout);
-        scrollPane.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
+        mainLayout.getChildren().addAll(createHeader(), createSupervisorBox(this, true), deleteUserBox);
+        mainLayout.getChildren().addAll(accountTables);
 
-        backgroundLayout.getChildren().add(scrollPane);
+        backgroundLayout.getChildren().add(mainLayout);
         backgroundLayout.setAlignment(Pos.CENTER);
 
-        return scene;
+        return new Scene(backgroundLayout);
+    }
+
+    private ScrollPane createAccountsTables() {
+        VBox mainLayout = new VBox();
+        mainLayout.setSpacing(10);
+
+        TableView<Supervisor> onlineSupervisors = onlineSupervisorTable(this.onlineSupervisors);
+        TableView<Supervisor> offlineSupervisors = offlineSupervisorTable(this.allSupervisors, this.onlineSupervisors);
+        TableView<Supporter> onlineSupporters = onlineSupporterTable(this.onlineSupporters);
+        TableView<Supporter> offlineSupporters = offlineSupporterTable(this.allSupporters, this.onlineSupporters);
+        TableView<Customer> onlineCustomers = onlineCustomerTable(this.onlineCustomers);
+        TableView<Customer> offlineCustomers = offlineCustomersTable(this.allCustomers, this.onlineCustomers);
+        TableView<Supplier> onlineSuppliers = onlineSupplierTable(this.onlineSuppliers);
+        TableView<Supplier> offlineSuppliers = offlineSupplierTable(this.allSuppliers, this.onlineSuppliers);
+
+        mainLayout.getChildren().addAll(new Label("Online Supervisors:"), onlineSupervisors);
+        mainLayout.getChildren().addAll(new Label("Offline Supervisors"), offlineSupervisors);
+        mainLayout.getChildren().addAll(new Label("Online Supporters"), onlineSupporters);
+        mainLayout.getChildren().addAll(new Label("Offline Supporters"), offlineSupporters);
+        mainLayout.getChildren().addAll(new Label("Online Suppliers"), onlineSuppliers);
+        mainLayout.getChildren().addAll(new Label("Offline Suppliers"), offlineSuppliers);
+        mainLayout.getChildren().addAll(new Label("Online Customers"), onlineCustomers);
+        mainLayout.getChildren().addAll(new Label("Offline Customers"), offlineCustomers);
+
+        ScrollPane scrollPane = new ScrollPane(mainLayout);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setMinWidth(815);
+        return scrollPane;
     }
 
     private TableView<Supervisor> supervisorTable() {
+        TableView<Supervisor> supervisorTableView = new TableView<>();
         TableColumn<Supervisor, String> username = new TableColumn<>("Username");
         username.setCellValueFactory(new PropertyValueFactory<>("userName"));
+        supervisorTableView.getColumns().add(username);
         TableColumn<Supervisor, String> firstName = new TableColumn<>("First Name");
         firstName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        supervisorTableView.getColumns().add(firstName);
         TableColumn<Supervisor, String> lastName = new TableColumn<>("Last Name");
         lastName.setCellValueFactory(new PropertyValueFactory<>("familyName"));
+        supervisorTableView.getColumns().add(lastName);
         TableColumn<Supervisor, String> email = new TableColumn<>("Email");
         email.setCellValueFactory(new PropertyValueFactory<>("email"));
+        supervisorTableView.getColumns().add(email);
         TableColumn<Supervisor, String> phoneNumber = new TableColumn<>("Phone Number");
         phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        TableView<Supervisor> supervisorTableView = new TableView<>();
-        try {
-            supervisorTableView.setItems(controller.getAccountController().getSupervisorObservableList());
-        } catch (ExceptionalMassage exceptionalMassage) {
-            supervisorTableView.setItems(FXCollections.observableArrayList());
-        }
-        supervisorTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber);
+        supervisorTableView.getColumns().add(phoneNumber);
         supervisorTableView.setPrefWidth(800);
         return supervisorTableView;
     }
 
+    private TableView<Supervisor> onlineSupervisorTable(ArrayList<Supervisor> onlineArray) {
+        TableView<Supervisor> supervisorTable = supervisorTable();
+        ObservableList<Supervisor> online = FXCollections.observableArrayList();
+        online.addAll(onlineArray);
+        supervisorTable.setItems(online);
+        return supervisorTable;
+    }
+
+    private TableView<Supervisor> offlineSupervisorTable(ArrayList<Supervisor> all, ArrayList<Supervisor> onlineArray) {
+        TableView<Supervisor> supervisorTable = supervisorTable();
+        ArrayList<Supervisor> offlineArray = new ArrayList<>(all);
+        offlineArray.removeAll(onlineArray);
+        ObservableList<Supervisor> offline = FXCollections.observableArrayList();
+        offline.addAll(offlineArray);
+        supervisorTable.setItems(offline);
+        return supervisorTable;
+    }
+
     private TableView<Supporter> supporterTable() {
+        TableView<Supporter> supporterTableView = new TableView<>();
         TableColumn<Supporter, String> username = new TableColumn<>("Username");
         username.setCellValueFactory(new PropertyValueFactory<>("userName"));
+        supporterTableView.getColumns().add(username);
         TableColumn<Supporter, String> firstName = new TableColumn<>("First Name");
         firstName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        supporterTableView.getColumns().add(firstName);
         TableColumn<Supporter, String> lastName = new TableColumn<>("Last Name");
         lastName.setCellValueFactory(new PropertyValueFactory<>("familyName"));
+        supporterTableView.getColumns().add(lastName);
         TableColumn<Supporter, String> email = new TableColumn<>("Email");
         email.setCellValueFactory(new PropertyValueFactory<>("email"));
+        supporterTableView.getColumns().add(email);
         TableColumn<Supporter, String> phoneNumber = new TableColumn<>("Phone Number");
         phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
-        TableView<Supporter> supporterTableView = new TableView<>();
-        try {
-            supporterTableView.setItems(controller.getAccountController().getSupporterObservableList());
-        } catch (ExceptionalMassage exceptionalMassage) {
-            supporterTableView.setItems(FXCollections.observableArrayList());
-        }
-        supporterTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber);
+        supporterTableView.getColumns().add(phoneNumber);
         supporterTableView.setPrefWidth(800);
         return supporterTableView;
     }
 
+    private TableView<Supporter> onlineSupporterTable(ArrayList<Supporter> onlineArray) {
+        TableView<Supporter> supporterTable = supporterTable();
+        ObservableList<Supporter> online = FXCollections.observableArrayList();
+        online.addAll(onlineArray);
+        supporterTable.setItems(online);
+        return supporterTable;
+    }
+
+    private TableView<Supporter> offlineSupporterTable(ArrayList<Supporter> all, ArrayList<Supporter> onlineArray) {
+        TableView<Supporter> supporterTable = supporterTable();
+        ArrayList<Supporter> offlineArray = new ArrayList<>(all);
+        offlineArray.removeAll(onlineArray);
+        ObservableList<Supporter> offline = FXCollections.observableArrayList();
+        offline.addAll(offlineArray);
+        supporterTable.setItems(offline);
+        return supporterTable;
+    }
+
     private TableView<Supplier> supplierTable() {
+        TableView<Supplier> supplierTableView = new TableView<>();
         TableColumn<Supplier, String> username = new TableColumn<>("Username");
         username.setCellValueFactory(new PropertyValueFactory<>("userName"));
+        supplierTableView.getColumns().add(username);
         TableColumn<Supplier, String> firstName = new TableColumn<>("First Name");
         firstName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        supplierTableView.getColumns().add(firstName);
         TableColumn<Supplier, String> lastName = new TableColumn<>("Last Name");
         lastName.setCellValueFactory(new PropertyValueFactory<>("familyName"));
+        supplierTableView.getColumns().add(lastName);
         TableColumn<Supplier, String> email = new TableColumn<>("Email");
         email.setCellValueFactory(new PropertyValueFactory<>("email"));
+        supplierTableView.getColumns().add(email);
         TableColumn<Supplier, String> phoneNumber = new TableColumn<>("Phone Number");
         phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        supplierTableView.getColumns().add(phoneNumber);
         TableColumn<Supplier, String> nameOfCompany = new TableColumn<>("Name Of Company");
         nameOfCompany.setCellValueFactory(new PropertyValueFactory<>("nameOfCompany"));
+        supplierTableView.getColumns().add(nameOfCompany);
         TableColumn<Supplier, Integer> credit = new TableColumn<>("Credit");
         credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
-        TableView<Supplier> supplierTableView = new TableView<>();
-        try {
-            supplierTableView.setItems(controller.getAccountController().getSupplierObservableList());
-        } catch (ExceptionalMassage exceptionalMassage) {
-            supplierTableView.setItems(FXCollections.observableArrayList());
-        }
+        supplierTableView.getColumns().add(credit);
         supplierTableView.setPrefWidth(800);
-        supplierTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber, nameOfCompany, credit);
         return supplierTableView;
     }
 
+    private TableView<Supplier> onlineSupplierTable(ArrayList<Supplier> onlineArray) {
+        TableView<Supplier> supplierTable = supplierTable();
+        ObservableList<Supplier> online = FXCollections.observableArrayList();
+        online.addAll(onlineArray);
+        supplierTable.setItems(online);
+        return supplierTable;
+    }
+
+    private TableView<Supplier> offlineSupplierTable(ArrayList<Supplier> all, ArrayList<Supplier> onlineArray) {
+        TableView<Supplier> supplierTable = supplierTable();
+        ArrayList<Supplier> offlineArray = new ArrayList<>(all);
+        offlineArray.removeAll(onlineArray);
+        ObservableList<Supplier> offline = FXCollections.observableArrayList();
+        offline.addAll(offlineArray);
+        supplierTable.setItems(offline);
+        return supplierTable;
+    }
+
     private TableView<Customer> customerTable() {
+        TableView<Customer> customerTableView = new TableView<>();
         TableColumn<Customer, String> username = new TableColumn<>("Username");
         username.setCellValueFactory(new PropertyValueFactory<>("userName"));
+        customerTableView.getColumns().add(username);
         TableColumn<Customer, String> firstName = new TableColumn<>("First Name");
         firstName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        customerTableView.getColumns().add(firstName);
         TableColumn<Customer, String> lastName = new TableColumn<>("Last Name");
         lastName.setCellValueFactory(new PropertyValueFactory<>("familyName"));
+        customerTableView.getColumns().add(lastName);
         TableColumn<Customer, String> email = new TableColumn<>("Email");
         email.setCellValueFactory(new PropertyValueFactory<>("email"));
+        customerTableView.getColumns().add(email);
         TableColumn<Customer, String> phoneNumber = new TableColumn<>("Phone number");
         phoneNumber.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        customerTableView.getColumns().add(phoneNumber);
         TableColumn<Customer, Integer> credit = new TableColumn<>("Credit");
         credit.setCellValueFactory(new PropertyValueFactory<>("credit"));
-        TableView<Customer> customerTableView = new TableView<>();
-        try {
-            customerTableView.setItems(controller.getAccountController().getCustomerObservableList());
-        } catch (ExceptionalMassage exceptionalMassage) {
-            customerTableView.setItems(FXCollections.observableArrayList());
-        }
-        customerTableView.getColumns().addAll(username, firstName, lastName, email, phoneNumber, credit);
+        customerTableView.getColumns().add(credit);
         customerTableView.setPrefWidth(800);
         return customerTableView;
+    }
+
+    private TableView<Customer> onlineCustomerTable(ArrayList<Customer> onlineArray) {
+        TableView<Customer> customerTable = customerTable();
+        ObservableList<Customer> online = FXCollections.observableArrayList();
+        online.addAll(onlineArray);
+        customerTable.setItems(online);
+        return customerTable;
+    }
+
+    private TableView<Customer> offlineCustomersTable(ArrayList<Customer> all, ArrayList<Customer> onlineArray) {
+        TableView<Customer> customerTable = customerTable();
+        ArrayList<Customer> offlineArray = new ArrayList<>(all);
+        offlineArray.removeAll(onlineArray);
+        ObservableList<Customer> offline = FXCollections.observableArrayList();
+        offline.addAll(offlineArray);
+        customerTable.setItems(offline);
+        return customerTable;
     }
 }

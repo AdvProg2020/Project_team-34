@@ -256,6 +256,6 @@ public class CustomerLog {
                 "delivery status: " + deliveryStatus.toString() + "\n" +
                 "paidAmount: " + paidAmount + "\n" +
                 "codedDiscountAmount: " + codedDiscountAmount + "\n" +
-                cart.toString();
+                ((cart.getBill() == paidAmount) ? cart.toString() : cart.toAuctionString());
     }
 }

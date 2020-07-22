@@ -1,9 +1,6 @@
 package gui.profile;
 
-import account.Customer;
-import account.Supervisor;
-import account.Supplier;
-import account.Supporter;
+import account.*;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
@@ -130,7 +127,7 @@ public class ManageUsersGMenu extends GMenu {
         TableView<Supporter> offlineSupporters = offlineSupporterTable(this.allSupporters, this.onlineSupporters);
         TableView<Customer> onlineCustomers = onlineCustomerTable(this.onlineCustomers);
         TableView<Customer> offlineCustomers = offlineCustomersTable(this.allCustomers, this.onlineCustomers);
-        TableView<Supplier> onlineSuppliers = onlineSupplierTable(this.allSuppliers);
+        TableView<Supplier> onlineSuppliers = onlineSupplierTable(this.onlineSuppliers);
         TableView<Supplier> offlineSuppliers = offlineSupplierTable(this.allSuppliers, this.onlineSuppliers);
 
         mainLayout.getChildren().addAll(new Label("Online Supervisors:"), onlineSupervisors);
@@ -142,7 +139,10 @@ public class ManageUsersGMenu extends GMenu {
         mainLayout.getChildren().addAll(new Label("Online Customers"), onlineCustomers);
         mainLayout.getChildren().addAll(new Label("Offline Customers"), offlineCustomers);
 
-        return new ScrollPane(mainLayout);
+        ScrollPane scrollPane = new ScrollPane(mainLayout);
+        scrollPane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        scrollPane.setMinWidth(815);
+        return scrollPane;
     }
 
     private TableView<Supervisor> supervisorTable() {

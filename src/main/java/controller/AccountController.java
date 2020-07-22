@@ -186,16 +186,14 @@ public class AccountController {
                 }
             }
         }
-        mainController.renewToken();
-        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(mainController.getToken()), mainController);
+        return new Response(RequestStatus.SUCCESSFUL, "", mainController);
     }
 
     public Response controlLogout() {
         mainController.setAccount(null);
         mainController.setCart(new Cart((Customer) null));
         mainController.getProductController().getFilterAndSort().clear();
-        mainController.renewToken();
-        return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(mainController.getToken()), mainController);
+        return new Response(RequestStatus.SUCCESSFUL, "", mainController);
     }
 
     public Response controlViewPersonalInfo() {

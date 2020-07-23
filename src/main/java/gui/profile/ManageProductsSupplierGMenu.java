@@ -693,8 +693,14 @@ public class ManageProductsSupplierGMenu extends GMenu {
             try{
                 int price = Integer.parseInt(priceField.getText());
                 int remainedNumber = Integer.parseInt(remainedNumberField.getText());
+                int supplierPort;
+                if(filURL.equals("")){
+                    supplierPort = -1;
+                } else {
+                    supplierPort = controller.getPeerNode().getPort();
+                }
                 try{
-                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL, filURL, controller.getPeerNode().getPort());
+                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL, filURL, supplierPort);
                     ((Stage)anchorPane0.getScene().getWindow()).close();
             }  catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();

@@ -304,13 +304,16 @@ public class ProductMenuG extends GMenu {
         addToCartButton.setOnAction( e -> {
             String productId = product.getProductId();
             String supplierNameOfCompany = suppliers.getValue();
-            try {
-                controller.getAccountController().controlAddToCart(productId, supplierNameOfCompany);
-                stage.setScene(new CartGMenu(this, stage, controller).getScene());
-            } catch (ExceptionalMassage ex) {
-                new AlertBox(this, ex, controller).showAndWait();
+            if(supplierNameOfCompany == null){
+                new AlertBox(this,"Select a supplier please","OK", controller).showAndWait();
+            } else {
+                try {
+                    controller.getAccountController().controlAddToCart(productId, supplierNameOfCompany);
+                    stage.setScene(new CartGMenu(this, stage, controller).getScene());
+                } catch (ExceptionalMassage ex) {
+                    new AlertBox(this, ex, controller).showAndWait();
+                }
             }
-
         });
 
         suppliers.setOnAction( e -> {

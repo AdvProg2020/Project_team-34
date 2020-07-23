@@ -2,6 +2,7 @@ package peer;
 
 import java.io.*;
 import java.net.Socket;
+import java.security.PublicKey;
 
 public class RequestHandler implements Runnable {
     private final static String CRLF = "\r\n";
@@ -22,6 +23,12 @@ public class RequestHandler implements Runnable {
 
     private void processRequest() throws Exception {
         DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+
+        ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+        Object object = objectInputStream.readObject();
+        objectInputStream.close();
+        PublicKey publicKey = (PublicKey) object;
+
 
         InputStream inputStream = socket.getInputStream();
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
@@ -55,7 +62,7 @@ public class RequestHandler implements Runnable {
         dataOutputStream.flush();
 
         if (fileExists) {
-            sendBytes(fis, dataOutputStream);
+            sendBytes(fis, dataOutputStream, publicKey);
             fis.close();
         }
 
@@ -66,13 +73,15 @@ public class RequestHandler implements Runnable {
     }
 
 
-    private static void sendBytes(FileInputStream fileInputStream, OutputStream outputStream)
+    private static void sendBytes(FileInputStream fileInputStream, OutputStream outputStream, PublicKey publicKey)
             throws Exception
             {
         byte[] buffer = new byte[1024];
+        byte[] encrypted = new byte[1024];
         int bytes = 0;
         while ((bytes = fileInputStream.read(buffer)) > 0) {
-            outputStream.write(buffer, 0, bytes);
+            encrypted = Asymmetric.do_RSAEncryption(buffer,publicKey );
+            outputStream.write(encrypted, 0, bytes);
         }
     }
 }

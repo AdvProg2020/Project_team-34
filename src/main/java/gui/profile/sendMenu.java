@@ -30,7 +30,7 @@ public class sendMenu extends GMenu {
             ArrayList<PeerNode> contacts = PeerNode.getContacts();
             try {
                 contacts.get(0).sendRequest(filePath.getText(), "localhost", Integer.parseInt(port.getText()));
-            } catch (IOException ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
         });

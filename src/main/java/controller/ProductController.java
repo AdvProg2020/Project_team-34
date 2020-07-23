@@ -13,6 +13,7 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
+import javafx.scene.control.Alert;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
@@ -842,5 +843,19 @@ public class ProductController {
         } catch (ExceptionalMassage exceptionalMassage) {
             return Response.createResponseFromExceptionalMassage(exceptionalMassage, mainController);
         }
+    }
+
+    public Response controlRemoveProductForSupervisor(String productId){
+        Product product = Product.getProductById(productId);
+        if(product == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Product not found!"), mainController);
+        }
+        product.setProductState(State.DELETED);
+        try {
+            Category.getProductCategory(product).removeProduct(product);
+        } catch (ExceptionalMassage ex){
+            return Response.createResponseFromExceptionalMassage(ex, mainController);
+        }
+        return Response.createSuccessResponse(mainController);
     }
 }

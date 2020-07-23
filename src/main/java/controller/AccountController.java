@@ -267,7 +267,7 @@ public class AccountController {
                 public void run() {
                     try {
                         mainController.getPeerNode().sendRequest(filePath, "localhost", port);
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

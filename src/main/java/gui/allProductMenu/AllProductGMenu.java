@@ -425,7 +425,7 @@ public class AllProductGMenu extends GMenu {
             boolean doesProductHaveAnySale = false;
             boolean isSizeOfSuppliersZero = false;
             boolean isInAuction = false;
-            boolean isFile = product.getFilePath() != null;
+            boolean isFile = !(product.getFilePath().equals(""));
             if (auction != null)
                 isInAuction = true;
             try {
@@ -434,7 +434,17 @@ public class AllProductGMenu extends GMenu {
             } catch (ExceptionalMassage exceptionalMassage) {
                 exceptionalMassage.printStackTrace();
             }
-            if (doesProductHaveAnySale) {
+            if (isInAuction) {
+                ImageView AuctionImageView = GMenu.getImageView("./src/main/resources/image/auction.png", 200, 200);
+
+                AuctionImageView.setBlendMode(BlendMode.SRC_OVER);
+                Group blend = new Group(
+                        productImageView,
+                        AuctionImageView
+                );
+
+                gridPane.getChildren().addAll(productImageView, blend, AuctionImageView);
+            } else if (doesProductHaveAnySale) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/Sale.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
@@ -445,7 +455,7 @@ public class AllProductGMenu extends GMenu {
 
                 gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
 //                gridPane.getChildren().add(soldOutImageView);
-            } else if (isSizeOfSuppliersZero) {
+            }  else if (isSizeOfSuppliersZero) {
                 ImageView soldOutImageView = GMenu.getImageView("./src/main/resources/image/soldOut.png", 200, 200);
 
                 soldOutImageView.setBlendMode(BlendMode.SRC_OVER);
@@ -456,16 +466,6 @@ public class AllProductGMenu extends GMenu {
 
                 gridPane.getChildren().addAll(productImageView, blend, soldOutImageView);
 //                gridPane.getChildren().add(soldOutImageView);
-            } else if (isInAuction) {
-                ImageView AuctionImageView = GMenu.getImageView("./src/main/resources/image/auction.png", 200, 200);
-
-                AuctionImageView.setBlendMode(BlendMode.SRC_OVER);
-                Group blend = new Group(
-                        productImageView,
-                        AuctionImageView
-                );
-
-                gridPane.getChildren().addAll(productImageView, blend, AuctionImageView);
             } else if (isFile) {
                 ImageView AuctionImageView = GMenu.getImageView("./src/main/resources/image/file.png", 200, 200);
 

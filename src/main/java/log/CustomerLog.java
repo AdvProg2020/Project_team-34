@@ -68,6 +68,7 @@ public class CustomerLog {
             productInCart.getProduct().reduceRemainedNumber(productInCart.getSupplier(), cart.getProductInCount().get(productInCart));
         }
         auction.getSupplier().setCredit(auction.getSupplier().getCredit() + (paidAmount * (100 - wage) / 100));
+        new SupplierLog(this, cart.getAllSupplier().get(0), paidAmount);
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
         CustomerLogDataBase.add(this);

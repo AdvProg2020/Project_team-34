@@ -92,13 +92,13 @@ public class AccountController {
                                          String email, String phoneNumber, String nameOfCompany, String bankUsername,
                                          String bankPassword, String alsoBankStr) {
         boolean alsoBank = Boolean.parseBoolean(alsoBankStr);
+        if (!Account.isUsernameAvailable(username))
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate username"), mainController);
         try{
-            passwordValidationCheck(password);
+            passwordValidationCheck(password , firstName, lastName);
         } catch (ExceptionalMassage ex){
             return Response.createResponseFromExceptionalMassage(ex, mainController);
         }
-        if (!Account.isUsernameAvailable(username))
-            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate username"), mainController);
         if (type.equals("supporter"))
             return controlCreateSupporter(username, firstName, lastName, email, phoneNumber, password);
         else if (type.equals("supervisor"))
@@ -930,7 +930,7 @@ public class AccountController {
         return Response.createSuccessResponse(mainController);
     }
 
-    private void passwordValidationCheck(String password) throws ExceptionalMassage {
+    private void passwordValidationCheck(String password, String name, String lastName) throws ExceptionalMassage {
         String onlyNumbersPasswordRegex = "^\\d+$";
         String onlyLettersPasswordRegex = "^[A-Za-z]+$";
         Matcher matcher;
@@ -944,6 +944,9 @@ public class AccountController {
         matcher = mainController.getMatcher(password, onlyLettersPasswordRegex);
         if(matcher.find()){
             throw new ExceptionalMassage("Your password must contain both alphabets and numbers!");
+        }
+        if(password.contains(name) || password.contains(lastName)){
+            throw new ExceptionalMassage("Your password can't contain your name or last name!");
         }
     }
 }

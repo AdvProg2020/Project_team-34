@@ -133,6 +133,9 @@ public class Controller {
                 Response response = Response.convertJsonStringToResponse(responseString);
                 setToken(response.getNextToken());
                 if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
+                    if(response.getContent().equals("Your session has expired")){
+                        System.exit(0);
+                    }
                     throw new ExceptionalMassage(response.getContent());
                 }
                 return response;

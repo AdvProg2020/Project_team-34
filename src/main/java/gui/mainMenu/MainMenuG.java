@@ -5,7 +5,7 @@ import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.allProductMenu.AllProductGMenu;
-import gui.loginMenu.LoginGMenu;
+import gui.loginMenu.NewRequestDynamicPasswordGMenu;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -100,7 +100,7 @@ public class MainMenuG extends GMenu {
                 });
             } else {
                 loginMenu.setOnAction(e -> {
-                    new LoginGMenu(this, stage, controller).showAndWait();
+                    new NewRequestDynamicPasswordGMenu(this, new Stage(), stage, controller).showAndWait();
                 });
             }
         } catch (ExceptionalMassage exceptionalMassage){

@@ -148,8 +148,7 @@ public class LoginGMenu extends GMenu {
         signIn.setOnAction(e -> {
             String username = usernameField.getText();
             String password = passwordField.getText();
-            try {
-                controller.getAccountController().controlLogin(username, password);
+               // controller.getAccountController().controlLogin(username, password);
                 if((controller.getAccount() instanceof Supplier || controller.getAccount() instanceof Supervisor) && parentMenu instanceof CartGMenu) {
                     stage.close();
                     popUpCallerStage.setScene(new MainMenuG(null, popUpCallerStage, controller).getScene());
@@ -157,9 +156,6 @@ public class LoginGMenu extends GMenu {
                     stage.close();
                     popUpCallerStage.setScene(parentMenu.getScene());
                 }
-            } catch (ExceptionalMassage ex){
-                new AlertBox(this, ex, controller).showAndWait();
-            }
             passwordField.clear();
         });
 

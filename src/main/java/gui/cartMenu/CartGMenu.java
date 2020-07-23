@@ -8,6 +8,7 @@ import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
 import gui.loginMenu.LoginGMenu;
+import gui.loginMenu.NewRequestDynamicPasswordGMenu;
 import gui.productMenu.ProductMenuG;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -127,7 +128,7 @@ public class CartGMenu extends GMenu {
             if (hasSomeOneLoggedInBoolean) {
                 stage.setScene(new PurchaseMenuG(this, stage, controller).getScene());
             } else {
-                stage.setScene(new LoginGMenu(this, stage, controller).getScene());
+                stage.setScene(new NewRequestDynamicPasswordGMenu(this, new Stage(), stage, controller).getScene());
             }
         });
 

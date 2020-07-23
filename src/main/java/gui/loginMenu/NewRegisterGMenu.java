@@ -59,12 +59,6 @@ public class NewRegisterGMenu extends GMenu {
                 "-fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: #4678c8; -fx-border-width: 2px;" +
                 "-fx-font-size: 14px");
 
-        PasswordField password = new PasswordField();
-        password.setPromptText("Password");
-        password.setStyle("-fx-alignment: center; -fx-max-width: 300; -fx-min-width: 300; -fx-pref-width: 300; " +
-                "-fx-border-radius: 15; -fx-background-radius: 15; -fx-border-color: #4678c8; -fx-border-width: 2px;" +
-                "-fx-font-size: 14px");
-
         TextField firstName = new TextField();
         firstName.setPromptText("First Name");
         firstName.setStyle("-fx-alignment: center; -fx-max-width: 300; -fx-min-width: 300; -fx-pref-width: 300; " +
@@ -119,9 +113,8 @@ public class NewRegisterGMenu extends GMenu {
         signUp.setDefaultButton(true);
 
         registerBox.add(accountTypeBox, 0, 1);
-        registerBox.add(nameOfCompany, 1, 1);
         registerBox.add(username, 0, 2);
-        registerBox.add(password, 1, 2);
+        registerBox.add(nameOfCompany, 1, 2);
         registerBox.add(firstName, 0, 3);
         registerBox.add(lastName, 1, 3);
         registerBox.add(email, 0, 4);
@@ -158,9 +151,9 @@ public class NewRegisterGMenu extends GMenu {
         signUp.setOnAction(e -> {
             String type = accountTypeGroup.getSelectedToggle().equals(customerAccount) ? "customer" : "supplier";
             try {
-                controller.getAccountController().controlCreateAccount(type, username.getText(), password.getText(),
-                        firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
-                        nameOfCompany.getText(), bankUsername.getText(), bankPassword.getText(), bankAccount.isSelected());
+                controller.getAccountController().controlCreateAccount(type, username.getText(), firstName.getText(),
+                        lastName.getText(), email.getText(), phoneNumber.getText(), nameOfCompany.getText(),
+                        bankUsername.getText(), bankPassword.getText(), bankAccount.isSelected());
                 stage.close();
                 popupCaller.setScene(new MainMenuG(null, popupCaller, controller).getScene());
             } catch (ExceptionalMassage exceptionalMassage) {

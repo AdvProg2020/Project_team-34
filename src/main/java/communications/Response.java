@@ -16,10 +16,12 @@ import exceptionalMassage.ExceptionalMassage;
 public class Response {
     private RequestStatus status;
     private String content;
+    private String nextToken;
 
-    public Response(RequestStatus status, String content) {
+    public Response(RequestStatus status, String content, String nextToken) {
         this.status = status;
         this.content = content;
+        this.nextToken = nextToken;
     }
 
     public RequestStatus getStatus() {
@@ -38,6 +40,10 @@ public class Response {
         this.content = content;
     }
 
+    public String getNextToken() {
+        return nextToken;
+    }
+
     public String convertResponseToJsonString(){
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("status", status.toString());
@@ -51,18 +57,19 @@ public class Response {
         JsonObject jsonObject = (JsonObject) jsonParser.parse(jsonString);
         RequestStatus requestStatus = RequestStatus.valueOf(jsonObject.get("status").getAsString());
         String content = jsonObject.get("content").getAsString();
-        return new Response(requestStatus, content);
+        String nextToken = jsonObject.get("nextToken").getAsString();
+        return new Response(requestStatus, content, nextToken);
     }
 
-    public static Response createResponseFromExceptionalMassage(ExceptionalMassage exceptionalMassage){
-        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
-    }
-
-    public static Response createResponseFromExceptionalMassage(String message){
-        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, message);
-    }
-
-    public static Response createSuccessResponse(){
-        return new Response(RequestStatus.SUCCESSFUL, "");
-    }
+//    public static Response createResponseFromExceptionalMassage(ExceptionalMassage exceptionalMassage){
+//        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage());
+//    }
+//
+//    public static Response createResponseFromExceptionalMassage(String message){
+//        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, message);
+//    }
+//
+//    public static Response createSuccessResponse(){
+//        return new Response(RequestStatus.SUCCESSFUL, "");
+//    }
 }

@@ -98,21 +98,18 @@ public class AccountController {
         inputs.add(bankUsername);
         inputs.add(bankPassword);
         inputs.add(String.valueOf(alsoBank));
-        JsonElement response = communication("controlCreateAccount", inputs);
-        if (type.equals("customer") || type.equals("supplier")) {
-            mainController.setToken(response.getAsString());
-        }
+        communication("controlCreateAccount", inputs);
     }
 
     public void controlLogin(String username, String password) throws ExceptionalMassage {
         JsonArray jsonArray = new JsonArray();
         jsonArray.add(username);
         jsonArray.add(password);
-        mainController.setToken(communication("controlLogin", jsonArray).getAsString());
+        communication("controlLogin", jsonArray);
     }
 
     public void controlLogout() throws ExceptionalMassage {
-        mainController.setToken(communication("controlLogout", new JsonArray()).getAsString());
+        communication("controlLogout", new JsonArray());
     }
 
     public void controlRequestDynamicPassword(String username) throws ExceptionalMassage {
@@ -258,6 +255,10 @@ public class AccountController {
         communication("controlRemoveDiscountCode", new JsonArray());
     }
 
+    public void checkFinalizeOrder() throws ExceptionalMassage{
+        communication("checkFinalizeOrder", new JsonArray());
+    }
+
     public boolean finalizeOrder() throws ExceptionalMassage {
         return Boolean.parseBoolean(communication("finalizeOrder", new JsonArray()).getAsString());
     }
@@ -368,36 +369,28 @@ public class AccountController {
         communication("controlCreateCodedDiscountForLoggedInCustomer", new JsonArray());
     }
 
-    public ObservableList<Customer> getCustomerObservableList() throws ExceptionalMassage {
+    public ArrayList<Customer> getCustomerObservableList() throws ExceptionalMassage {
         ArrayList<Customer> arrayList = Utils.convertJsonElementToCustomerArrayList(communication(
                 "getCustomerObservableList", new JsonArray()));
-        ObservableList<Customer> observableList = FXCollections.observableArrayList();
-        observableList.addAll(arrayList);
-        return observableList;
+        return arrayList;
     }
 
-    public ObservableList<Supplier> getSupplierObservableList() throws ExceptionalMassage {
+    public ArrayList<Supplier> getSupplierObservableList() throws ExceptionalMassage {
         ArrayList<Supplier> arrayList = Utils.convertJsonElementToSupplierArrayList(communication(
                 "getSupplierObservableList", new JsonArray()));
-        ObservableList<Supplier> observableList = FXCollections.observableArrayList();
-        observableList.addAll(arrayList);
-        return observableList;
+        return arrayList;
     }
 
-    public ObservableList<Supervisor> getSupervisorObservableList() throws ExceptionalMassage {
+    public ArrayList<Supervisor> getSupervisorObservableList() throws ExceptionalMassage {
         ArrayList<Supervisor> arrayList = Utils.convertJsonElementToSupervisorArrayList(communication(
                 "getSupervisorObservableList", new JsonArray()));
-        ObservableList<Supervisor> observableList = FXCollections.observableArrayList();
-        observableList.addAll(arrayList);
-        return observableList;
+        return arrayList;
     }
 
-    public ObservableList<Supporter> getSupporterObservableList() throws ExceptionalMassage{
+    public ArrayList<Supporter> getSupporterObservableList() throws ExceptionalMassage{
         ArrayList<Supporter> arrayList = Utils.convertJsonElementToSupporterArrayList(communication(
                 "getSupporterObservableList", new JsonArray()));
-        ObservableList<Supporter> observableList = FXCollections.observableArrayList();
-        observableList.addAll(arrayList);
-        return observableList;
+        return arrayList;
     }
 
     public Supplier getSupplierByCompanyName(String companyName) throws ExceptionalMassage {

@@ -202,6 +202,8 @@ public class Product {
         jsonObject.add("futureCategoryName", jsonParser.parse(Utils.convertObjectToJsonString(futureCategoryName)));
         jsonObject.add("imageInStringForm", jsonParser.parse(Utils.convertObjectToJsonString(imageInStringForm)));
         jsonObject.add("numberOfViews", jsonParser.parse(Utils.convertObjectToJsonString(numberOfViews)));
+        jsonObject.add("filePath", jsonParser.parse(Utils.convertObjectToJsonString(filePath)));
+        jsonObject.add("supplierPort", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(supplierPort))));
         return jsonObject.toString();
     }
 
@@ -217,10 +219,12 @@ public class Product {
                 get("remainedNumberForEachSupplier"));
         this.description = jsonObject.get("description").getAsString();
         this.specification = Utils.convertJsonElementStringToStringToHashMap(jsonObject.get("specification"));
-        this.rootProductId = jsonObject.get("rootProductId").toString();
+        this.rootProductId = jsonObject.get("rootProductId").getAsString();
         this.futureCategoryName = jsonObject.get("futureCategoryName").getAsString();
         this.imageInStringForm = jsonObject.get("imageInStringForm").getAsString();
         this.numberOfViews = jsonObject.get("numberOfViews").getAsInt();
+        this.filePath = jsonObject.get("filePath").getAsString();
+        this.supplierPort = Integer.parseInt(jsonObject.get("supplierPort").getAsString());
     }
 
     @Override

@@ -88,7 +88,7 @@ public abstract class GMenu {
         allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this,
                 stage,controller, false).getScene()));
         cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu(this, stage, controller).getScene()));
-        manageUsers.setOnAction(e -> stage.setScene(new ManageUsersGMenu(this, stage, controller).getScene()));
+        manageUsers.setOnAction(e -> new ManageUsersGMenu(this, new Stage(), controller).showAndWait());
         saleView.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this, stage, controller, true).getScene()));
 
         userMenuBar.getMenus().addAll(user);
@@ -216,8 +216,19 @@ public abstract class GMenu {
         showingInfoPane.add(phoneNumberValue,2, row);
         row++;
 
-        Label accountNumberLabel = new Label("Account Number");
-        Label accountNumberValue = new Label(String.valueOf(account.getBankAccountNumber()));
+        int bankAccountNumber = account.getBankAccountNumber();
+        String bankAccountNumberString ;
+        if(bankAccountNumber == -1){
+            bankAccountNumberString = "No Account Yet";
+        }else {
+            bankAccountNumberString = String.valueOf(bankAccountNumber);
+        }
+        String accountNumberSting = "Account Number";
+        if(account instanceof Supervisor){
+            accountNumberSting = "Store Account Number";
+        }
+        Label accountNumberLabel = new Label(accountNumberSting);
+        Label accountNumberValue = new Label(bankAccountNumberString);
         showingInfoPane.add(accountNumberLabel, 0, row);
         showingInfoPane.add(accountNumberValue,2, row);
         row++;
@@ -347,7 +358,7 @@ public abstract class GMenu {
         return label;
     }
 
-    public static long getTime(JFXDatePicker datePicker, JFXTimePicker timePicker) {
+    public static long getTime(JFXDatePicker datePicker, JFXTimePicker timePicker) throws NullPointerException {
         Date fromDatePicker = Date.from(datePicker.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
         long fromTimePicker = (timePicker.getValue().getHour() * 60 + timePicker.getValue().getMinute()) * 60000;
         return fromDatePicker.getTime() + fromTimePicker;

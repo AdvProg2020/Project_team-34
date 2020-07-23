@@ -1,7 +1,11 @@
 package main;
 
 import controller.Controller;
-import gui.loginMenu.NewRequestDynamicPasswordGMenu;
+import exceptionalMassage.ExceptionalMassage;
+import gui.GMenu;
+import gui.loginMenu.FirstSupervisorMenu;
+import gui.mainMenu.MainMenuG;
+import gui.paymentMenu.PaymentMenuForCustomer;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -32,6 +36,11 @@ public class Main extends Application {
         stage.setOnCloseRequest(e -> {
             e.consume();
             try {
+                controller.getProductController().controlRemoveProductWithThisPort();
+            } catch (ExceptionalMassage exceptionalMassage) {
+                System.out.println("Error Removing File Products");
+            }
+            try {
                 controller.disconnect();
             } catch (IOException ioException) {
                 System.out.println("Error disconnecting server, never mind");
@@ -39,10 +48,9 @@ public class Main extends Application {
             System.exit(0);
         });
 
-//        GMenu mainMenu = new MainMenuG( null, stage, controller);
-//        GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
-//        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
-        stage.setScene(new NewRequestDynamicPasswordGMenu(null, stage, null, controller).getScene());
+        GMenu mainMenu = new MainMenuG( null, stage, controller);
+        GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
+        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
         stage.show();
     }
 }

@@ -27,7 +27,7 @@ public class Controller {
     public Controller() {
         peerNode = new PeerNode(0);
         try {
-            this.socket = new Socket("localHost",8088);
+            this.socket = new Socket("localHost",8080);
             try {
                 this.inputStream = new ObjectInputStream(socket.getInputStream());
                 this.outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -131,7 +131,11 @@ public class Controller {
                 }
                 String responseString = Utils.join(receiving);
                 Response response = Response.convertJsonStringToResponse(responseString);
+                setToken(response.getNextToken());
                 if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE) {
+                    if(response.getContent().equals("Your session has expired")){
+                        System.exit(0);
+                    }
                     throw new ExceptionalMassage(response.getContent());
                 }
                 return response;

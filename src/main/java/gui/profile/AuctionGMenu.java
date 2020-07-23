@@ -16,7 +16,6 @@ import javafx.geometry.Rectangle2D;
 
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.chart.ScatterChart;
 import javafx.scene.control.*;
 
 import javafx.scene.effect.BlendMode;
@@ -106,16 +105,8 @@ public class AuctionGMenu extends GMenu {
 
         // Adding child to parent
         anchorPane0.getChildren().add(nameText);
-        Label label4 = new Label();
-        label4.setTranslateX(-100);
-        label4.setTranslateY(170.0);
-        label4.setText("Price:");
 
-        // Adding child to parent
-        Label priceLabel = new Label();
-        priceLabel.setTranslateX(-10);
-        priceLabel.setTranslateY(187);
-        priceLabel.setText("price sits here");
+
 
         // Adding child to parent
 
@@ -151,7 +142,7 @@ public class AuctionGMenu extends GMenu {
 
         Label highestPromotion = new Label();
         highestPromotion.setLayoutX(380);
-        highestPromotion.setLayoutY(215);
+        highestPromotion.setLayoutY(225);
         try {
             highestPromotion.setText("Highest Promotion : " + auction.getHighestPromotion());
         } catch (NullPointerException ex){
@@ -160,7 +151,7 @@ public class AuctionGMenu extends GMenu {
 
         Button joinChatRoomButton = new Button();
         joinChatRoomButton.setLayoutX(380);
-        joinChatRoomButton.setLayoutY(230);
+        joinChatRoomButton.setLayoutY(260);
         GMenu.addStyleToButton(joinChatRoomButton);
         joinChatRoomButton.setText("Join public chat room!");
 
@@ -181,19 +172,22 @@ public class AuctionGMenu extends GMenu {
 
 
         HBox newPriceHBox = new HBox();
-        newPriceHBox.setPrefHeight(37.0);
-        newPriceHBox.setPrefWidth(433);
+        newPriceHBox.setSpacing(20);
+        newPriceHBox.setPrefHeight(50.0);
+        newPriceHBox.setPrefWidth(100);
         newPriceHBox.setTranslateX(20);
         newPriceHBox.setTranslateY(150);
         newPriceHBox.setStyle("-fx-background-color: white;"+"-fx-border-color: #a2a2a2;"+"-fx-border-width: 0px 0px 2px 0px;");
         newPriceHBox.setLayoutY(179.0);
         TextField newPriceField = new TextField();
         newPriceField.setPrefHeight(51.0);
-        newPriceField.setPrefWidth(295.0);
+        newPriceField.setPrefWidth(200.0);
         newPriceField.setStyle("-fx-background-color: transparent;");
         newPriceField.setOpacity(0.83);
         newPriceField.setPromptText("Bid Higher Price!");
-
+        vBox12.setSpacing(20);
+        vBox12.setPadding(new Insets(10,10,10,10));
+        VBox.setMargin(newPriceHBox, new Insets(0,40,0,50));
         // Adding child to parent
         newPriceHBox.getChildren().add(newPriceField);
 
@@ -221,10 +215,6 @@ public class AuctionGMenu extends GMenu {
         anchorPane0.getChildren().add(commentAndDetail);
         // Adding child to parent
         vBox12.getChildren().add(promotePriceButton);
-
-        // Adding
-        vBox12.getChildren().add(priceLabel);
-        vBox12.getChildren().add(label4);
 
         // Adding child to parent
         anchorPane0.getChildren().add(vBox12);

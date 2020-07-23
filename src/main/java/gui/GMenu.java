@@ -82,7 +82,7 @@ public abstract class GMenu {
                 stage.setScene(parentMenu.getScene());
             }
         });
-        signIn.setOnAction(e -> new NewRequestDynamicPasswordGMenu(this, new Stage(), stage, controller).showAndWait());
+        signIn.setOnAction(e -> new NewRequestDynamicPasswordGMenu(this, new Stage(), stage,controller).showAndWait());
         allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this,
                 stage,controller, false).getScene()));
         cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu(this, stage, controller).getScene()));

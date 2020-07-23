@@ -1,9 +1,13 @@
 package gui.loginMenu;
 
+import account.Supervisor;
+import account.Supplier;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import gui.cartMenu.CartGMenu;
+import gui.mainMenu.MainMenuG;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -16,10 +20,12 @@ import javafx.stage.Stage;
 
 public class NewAuthenticationGMenu extends GMenu {
     private final String username;
+    private final Stage popupCaller;
 
-    public NewAuthenticationGMenu(GMenu parentMenu, Stage stage, Controller controller, String username) {
+    public NewAuthenticationGMenu(GMenu parentMenu, Stage stage, Stage popupCaller, Controller controller, String username) {
         super("Authentication", parentMenu, stage, controller);
         this.username = username;
+        this.popupCaller = popupCaller;
     }
 
 
@@ -54,6 +60,13 @@ public class NewAuthenticationGMenu extends GMenu {
         authenticate.setOnAction(e -> {
             try {
                 controller.getAccountController().controlAuthenticate(password.getText());
+                if((controller.getAccount() instanceof Supplier || controller.getAccount() instanceof Supervisor) && parentMenu instanceof CartGMenu) {
+                    stage.close();
+                    popupCaller.setScene(new MainMenuG(null, popupCaller, controller).getScene());
+                } else {
+                    stage.close();
+                    popupCaller.setScene(parentMenu.getScene());
+                }
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }

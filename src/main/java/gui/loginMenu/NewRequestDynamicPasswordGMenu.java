@@ -60,7 +60,7 @@ public class NewRequestDynamicPasswordGMenu extends GMenu {
             try {
                 String username = usernameField.getText();
                 controller.getAccountController().controlRequestDynamicPassword(username);
-                stage.setScene(new NewAuthenticationGMenu(parentMenu, stage, controller, username).getScene());
+                stage.setScene(new NewAuthenticationGMenu(parentMenu, stage, popupCaller, controller, username).getScene());
             } catch (ExceptionalMassage exceptionalMassage) {
                 new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }

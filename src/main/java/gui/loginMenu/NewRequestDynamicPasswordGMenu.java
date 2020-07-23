@@ -7,7 +7,6 @@ import gui.alerts.AlertBox;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.GridPane;
@@ -15,7 +14,7 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 public class NewRequestDynamicPasswordGMenu extends GMenu {
-    private Stage popupCaller;
+    private final Stage popupCaller;
 
     public NewRequestDynamicPasswordGMenu(GMenu parentMenu, Stage stage, Stage popupCaller, Controller controller) {
         super("Login", parentMenu, stage, controller);

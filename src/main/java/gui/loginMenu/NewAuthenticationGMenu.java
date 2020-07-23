@@ -59,7 +59,7 @@ public class NewAuthenticationGMenu extends GMenu {
 
         authenticate.setOnAction(e -> {
             try {
-                controller.getAccountController().controlAuthenticate(password.getText());
+                controller.getAccountController().controlAuthenticate(this.username, password.getText());
                 if((controller.getAccount() instanceof Supplier || controller.getAccount() instanceof Supervisor) && parentMenu instanceof CartGMenu) {
                     stage.close();
                     popupCaller.setScene(new MainMenuG(null, popupCaller, controller).getScene());

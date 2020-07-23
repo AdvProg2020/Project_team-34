@@ -15,6 +15,7 @@ import log.CustomerLog;
 import log.LogStatus;
 import log.SupplierLog;
 import product.Product;
+import server.MailSender;
 import server.communications.RequestStatus;
 import server.communications.Response;
 import server.communications.Utils;
@@ -125,12 +126,24 @@ public class AccountController {
         if (!(mainController.getAccount() instanceof Supervisor))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "You must be a supervisor to create supporter account.", mainController);
         new Supporter(username, name, familyName, email, phoneNumber,0);
+        new MailSender(email, "Welcome to TEAM34",
+                "Dear " + name + " " + familyName + ", Welcome to TEAM34 online store.\n" +
+                        "Each time you want to sign in, we will send you a dynamic password to this email which is " +
+                        "active only for few minutes.\n\n" +
+                        "Sincerely,\n" +
+                        "Department of cyber security").send();
         return Response.createSuccessResponse(mainController);
     }
 
     private Response controlCreateCustomer(String username, String name, String familyName, String email,
                                            String phoneNumber, int bankAccountNumber) {
         new Customer(username, name, familyName, email, phoneNumber, 0, bankAccountNumber);
+        new MailSender(email, "Welcome to TEAM34",
+                "Dear " + name + " " + familyName + ", Welcome to TEAM34 online store.\n" +
+                        "Each time you want to sign in, we will send you a dynamic password to this email which is " +
+                        "active only for few minutes.\n\n" +
+                        "Sincerely,\n" +
+                        "Department of cyber security").send();
         return Response.createSuccessResponse(mainController);
     }
 
@@ -140,6 +153,12 @@ public class AccountController {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate company name."),mainController);
         }
         new Supplier(username, name, familyName, email, phoneNumber, 0, nameOfCompany, bankAccountNumber);
+        new MailSender(email, "Welcome to TEAM34",
+                "Dear " + name + " " + familyName + ", Welcome to TEAM34 online store.\n" +
+                        "Each time you want to sign in, we will send you a dynamic password to this email which is " +
+                        "active only for few minutes.\n\n" +
+                        "Sincerely,\n" +
+                        "Department of cyber security").send();
         return Response.createSuccessResponse(mainController);
     }
 

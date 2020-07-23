@@ -58,6 +58,10 @@ public class ClientThread extends Thread {
         }
         while (true) {
             try {
+                if (!server.getDosBlocker().getIpPermission(socket.getInetAddress().getCanonicalHostName())) {
+                    disconnect();
+                    break;
+                }
                 int requestSize = Integer.parseInt(objectInputStream.readUTF());
                 ArrayList<String> receiving = new ArrayList<>();
                 for (int i = 0; i < requestSize; i++) {

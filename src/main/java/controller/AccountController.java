@@ -115,6 +115,18 @@ public class AccountController {
         mainController.setToken(communication("controlLogout", new JsonArray()).getAsString());
     }
 
+    public void controlRequestDynamicPassword(String username) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(username);
+        communication("controlRequestDynamicPassword", inputs);
+    }
+
+    public void controlAuthenticate(String dynamicPass) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(dynamicPass);
+        communication("controlAuthenticate", inputs);
+    }
+
     public String controlViewPersonalInfo() throws ExceptionalMassage {
         JsonElement response = communication("controlViewPersonalInfo", new JsonArray());
         return response.getAsString();

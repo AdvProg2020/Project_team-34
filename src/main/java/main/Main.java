@@ -1,10 +1,7 @@
 package main;
 
 import controller.Controller;
-import gui.GMenu;
-import gui.loginMenu.FirstSupervisorMenu;
-import gui.mainMenu.MainMenuG;
-import gui.paymentMenu.PaymentMenuForCustomer;
+import gui.loginMenu.NewRequestDynamicPasswordGMenu;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -42,9 +39,10 @@ public class Main extends Application {
             System.exit(0);
         });
 
-        GMenu mainMenu = new MainMenuG( null, stage, controller);
-        GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
-        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
+//        GMenu mainMenu = new MainMenuG( null, stage, controller);
+//        GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
+//        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
+        stage.setScene(new NewRequestDynamicPasswordGMenu(null, stage, null, controller).getScene());
         stage.show();
     }
 }

@@ -3,6 +3,7 @@ package server;
 import account.*;
 import discount.PeriodicCodedDiscountGenerator;
 import server.security.DenialOfServiceBlocker;
+import server.security.DynamicPasswordManager;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -15,7 +16,8 @@ public class Server extends Thread {
     private static final String LETTERS_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
     private final ServerSocket serverSocket;
     private final HashMap<String, ClientThread> tokenToClientThreadHashMap;
-    private final DenialOfServiceBlocker dosBlocker = new DenialOfServiceBlocker();
+    private final DenialOfServiceBlocker dosBlocker;
+    private final DynamicPasswordManager dynamicPasswordManager;
     private boolean unlocked;
 
     public Server() throws IOException {
@@ -23,6 +25,12 @@ public class Server extends Thread {
         this.tokenToClientThreadHashMap = new HashMap<>();
         this.unlocked = true;
         new PeriodicCodedDiscountGenerator(true).start();
+        this.dosBlocker = new DenialOfServiceBlocker();
+        this.dynamicPasswordManager = new DynamicPasswordManager();
+    }
+
+    public DynamicPasswordManager getDynamicPasswordManager() {
+        return dynamicPasswordManager;
     }
 
     public synchronized String assignToken(ClientThread clientThread) {

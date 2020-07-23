@@ -88,21 +88,16 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString("Supplier"), mainController);
     }
 
-    public Response controlCreateAccount(String type, String username, String password, String firstName, String lastName,
+    public Response controlCreateAccount(String type, String username, String firstName, String lastName,
                                          String email, String phoneNumber, String nameOfCompany, String bankUsername,
                                          String bankPassword, String alsoBankStr) {
         boolean alsoBank = Boolean.parseBoolean(alsoBankStr);
         if (!Account.isUsernameAvailable(username))
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate username"), mainController);
-        try{
-            passwordValidationCheck(password , firstName, lastName);
-        } catch (ExceptionalMassage ex){
-            return Response.createResponseFromExceptionalMassage(ex, mainController);
-        }
         if (type.equals("supporter"))
-            return controlCreateSupporter(username, firstName, lastName, email, phoneNumber, password);
+            return controlCreateSupporter(username, firstName, lastName, email, phoneNumber);
         else if (type.equals("supervisor"))
-            return controlCreateSupervisor(username, firstName, lastName, email, phoneNumber, password);
+            return controlCreateSupervisor(username, firstName, lastName, email, phoneNumber);
         else {
             int bankAccountNumber = -1;
             if (alsoBank) {
@@ -114,42 +109,42 @@ public class AccountController {
             }
             Response response;
             if (type.equals("customer")) {
-                response = controlCreateCustomer(username, firstName, lastName, email, phoneNumber, password, bankAccountNumber);
+                response = controlCreateCustomer(username, firstName, lastName, email, phoneNumber, bankAccountNumber);
             }
             else {
-                response = controlCreateSupplier(username, firstName, lastName, email, phoneNumber, password, nameOfCompany, bankAccountNumber);
+                response = controlCreateSupplier(username, firstName, lastName, email, phoneNumber, nameOfCompany, bankAccountNumber);
             }
             if (response.getStatus() == RequestStatus.EXCEPTIONAL_MASSAGE)
                 return response;
-            return controlLogin(username, password);
+            return controlLogin(username);
         }
     }
 
     private Response controlCreateSupporter(String username, String name, String familyName, String email,
-                                            String phoneNumber, String password) {
+                                            String phoneNumber) {
         if (!(mainController.getAccount() instanceof Supervisor))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "You must be a supervisor to create supporter account.", mainController);
-        new Supporter(username, name, familyName, email, phoneNumber, password, 0);
+        new Supporter(username, name, familyName, email, phoneNumber,0);
         return Response.createSuccessResponse(mainController);
     }
 
     private Response controlCreateCustomer(String username, String name, String familyName, String email,
-                                           String phoneNumber, String password, int bankAccountNumber) {
-        new Customer(username, name, familyName, email, phoneNumber, password, 0, bankAccountNumber);
+                                           String phoneNumber, int bankAccountNumber) {
+        new Customer(username, name, familyName, email, phoneNumber, 0, bankAccountNumber);
         return Response.createSuccessResponse(mainController);
     }
 
     private Response controlCreateSupplier(String username, String name, String familyName, String email, String phoneNumber,
-                                           String password, String nameOfCompany, int bankAccountNumber) {
+                                           String nameOfCompany, int bankAccountNumber) {
         if (Supplier.getSupplierByCompanyName(nameOfCompany) != null) {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate company name."),mainController);
         }
-        new Supplier(username, name, familyName, email, phoneNumber, password, 0, nameOfCompany, bankAccountNumber);
+        new Supplier(username, name, familyName, email, phoneNumber, 0, nameOfCompany, bankAccountNumber);
         return Response.createSuccessResponse(mainController);
     }
 
     private Response controlCreateSupervisor(String username, String name, String familyName, String email,
-                                             String phoneNumber, String password) {
+                                             String phoneNumber) {
         mainController.setIsFirstSupervisorCreated(Account.isSupervisorCreated());
         int bankAccountNumber;
         if (mainController.getIsFirstSupervisorCreated()) {
@@ -165,19 +160,15 @@ public class AccountController {
                 return Response.createResponseFromExceptionalMassage(exceptionalMassage, mainController);
             }
         }
-        new Supervisor(username, name, familyName, email, phoneNumber, password, 0, bankAccountNumber);
+        new Supervisor(username, name, familyName, email, phoneNumber, 0, bankAccountNumber);
         mainController.setIsFirstSupervisorCreated(true);
         return Response.createSuccessResponse(mainController);
     }
 
-    public Response controlLogin(String username, String password){
+    public Response controlLogin(String username) {
         if (hasSomeOneLoggedInInternal())
             return  Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Logout first."), mainController);
         Account account = Account.getAccountByUsernameWithinAvailable(username);
-        if (account == null)
-            return  Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Username doesn't exist."), mainController);
-        if (!account.getPassword().equals(password))
-            return  Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Invalid password."), mainController);
         Cart cart = mainController.getCart();
         mainController.setAccount(account);
         if (account instanceof Customer) {
@@ -193,6 +184,22 @@ public class AccountController {
             }
         }
         return new Response(RequestStatus.SUCCESSFUL, "", mainController);
+    }
+
+    public Response controlRequestDynamicPassword(String username) {
+        try {
+            mainController.getClientThread().getServer().getDynamicPasswordManager().requestPassword(username);
+            return Response.createSuccessResponse(mainController);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage, mainController);
+        }
+    }
+
+    public Response controlAuthenticate(String username, String dynamicPass) throws ExceptionalMassage {
+        if (mainController.getClientThread().getServer().getDynamicPasswordManager().authenticatePassword(username, dynamicPass)) {
+            return controlLogin(username);
+        }
+        return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Authentication Error", mainController);
     }
 
     public Response controlLogout() {
@@ -212,56 +219,52 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, credit, mainController);
     }
 
-    public Response controlEditField(String field, String newValue) {
-        Account account = mainController.getAccount();
-        switch (field) {
-            case "name":
-                account.setName(newValue);
-                break;
-            case "familyName":
-                account.setFamilyName(newValue);
-                break;
-            case "email":
-                account.setEmail(newValue);
-                break;
-            case "phoneNumber":
-                account.setPhoneNumber(newValue);
-                break;
-            case "credit":
-                int value;
-                try {
-                    value = Integer.parseInt(newValue);
-                } catch (Exception exception) {
-                   return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must enter a number for credit"), mainController);
-                }
-                account.setCredit(value);
-                break;
-            case "nameOfCompany":
-                if (account instanceof Supplier)
-                    ((Supplier) account).setNameOfCompany(newValue);
-                else
-                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must login as a Supplier to edit company name"), mainController);
-                break;
-            case  "username":
-                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You can not edit username"), mainController);
-            case "password":
-                account.setPassword(newValue);
-                break;
-            default:
-                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No such field " + field), mainController);
-        }
-        return Response.createSuccessResponse(mainController);
-    }
+//    public Response controlEditField(String field, String newValue) {
+//        Account account = mainController.getAccount();
+//        switch (field) {
+//            case "name":
+//                account.setName(newValue);
+//                break;
+//            case "familyName":
+//                account.setFamilyName(newValue);
+//                break;
+//            case "email":
+//                account.setEmail(newValue);
+//                break;
+//            case "phoneNumber":
+//                account.setPhoneNumber(newValue);
+//                break;
+//            case "credit":
+//                int value;
+//                try {
+//                    value = Integer.parseInt(newValue);
+//                } catch (Exception exception) {
+//                   return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must enter a number for credit"), mainController);
+//                }
+//                account.setCredit(value);
+//                break;
+//            case "nameOfCompany":
+//                if (account instanceof Supplier)
+//                    ((Supplier) account).setNameOfCompany(newValue);
+//                else
+//                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must login as a Supplier to edit company name"), mainController);
+//                break;
+//            case  "username":
+//                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You can not edit username"), mainController);
+//            case "password":
+//                account.setPassword(newValue);
+//                break;
+//            default:
+//                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No such field " + field), mainController);
+//        }
+//        return Response.createSuccessResponse(mainController);
+//    }
 
-    public Response editAllFields(String name, String familyName, String email, String phoneNumber, String password,
-                                  String nameOfCompany) {
-        if (password == null || password.trim().length() == 0) {
-            password = getInternalAccount().getPassword();
-        }
+    public Response editAllFields(String name, String familyName, String email, String phoneNumber, String nameOfCompany) {
         if (getInternalAccount() instanceof Supplier) {
-            ((Supplier) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password, nameOfCompany);
+            ((Supplier) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, nameOfCompany);
         } else {
-            (getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, password);
+            (getInternalAccount()).editAllFields(name, familyName, email, phoneNumber);
         }
         return Response.createSuccessResponse( mainController);
     }
@@ -874,11 +877,6 @@ public class AccountController {
         } catch (IOException e) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "cannot connect to bank server", mainController);
         }
-    }
-
-    public Response controlPay(String amount) {
-        return controlPay(getInternalAccount().getUserName(), getInternalAccount().getPassword(), String.valueOf(
-                getInternalAccount().getBankAccountNumber()), amount);
     }
 
     public Response controlGetMembersOfChatRoom(String chatRoomId){

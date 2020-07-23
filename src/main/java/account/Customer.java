@@ -2,10 +2,7 @@ package account;
 
 import cart.Cart;
 import database.AccountDataBase;
-import server.communications.Response;
 import server.communications.Utils;
-
-import java.util.Objects;
 
 /**
  * @author rpirayadi
@@ -14,16 +11,16 @@ import java.util.Objects;
 public class Customer extends Account {
     private String cartIdentifier;
 
-    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password,
-                    int credit, int bankAccountNumber) {
-        super(userName, name, familyName, email, phoneNumber, password, credit,true, bankAccountNumber);
+    public Customer(String userName, String name, String familyName, String email, String phoneNumber, int credit,
+                    int bankAccountNumber) {
+        super(userName, name, familyName, email, phoneNumber, credit,true, bankAccountNumber);
         this.cartIdentifier = new Cart(this).getIdentifier();
         AccountDataBase.add(this);
     }
 
-    public Customer(String userName, String name, String familyName, String email, String phoneNumber, String password,
-                    int credit,  String cartIdentifier, boolean isAvailable, int bankAccountNumber) {
-        super(userName, name, familyName, email, phoneNumber, password, credit,isAvailable, bankAccountNumber);
+    public Customer(String userName, String name, String familyName, String email, String phoneNumber, int credit,
+                    String cartIdentifier, boolean isAvailable, int bankAccountNumber) {
+        super(userName, name, familyName, email, phoneNumber, credit,isAvailable, bankAccountNumber);
         this.cartIdentifier = cartIdentifier;
     }
 
@@ -48,7 +45,6 @@ public class Customer extends Account {
                 "familyName=\'" + familyName + "\'" + "\n" +
                 "email=\'" + email + "\'" + "\n" +
                 "phoneNumber=\'" + phoneNumber + "\'" + "\n" +
-                "password=\'" + password + "\'" + "\n" +
                 "credit=\'" + credit + "\'" + "\n";
     }
 }

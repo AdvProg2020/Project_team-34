@@ -15,16 +15,16 @@ public class Supplier extends Account{
 
     private String nameOfCompany;
 
-    public Supplier(String userName, String name, String familyName, String email, String phoneNumber, String password,
+    public Supplier(String userName, String name, String familyName, String email, String phoneNumber,
                     int credit , String nameOfCompany,int bankAccountNumber) {
-        super(userName, name, familyName, email, phoneNumber, password, credit,true, bankAccountNumber);
+        super(userName, name, familyName, email, phoneNumber, credit,true, bankAccountNumber);
         this.nameOfCompany = nameOfCompany;
         AccountDataBase.add(this);
     }
 
-    public Supplier(String userName, String name, String familyName, String email, String phoneNumber, String password,
+    public Supplier(String userName, String name, String familyName, String email, String phoneNumber,
                     int credit, boolean isAvailable, String nameOfCompany, int bankAccountNumber) {
-        super(userName, name, familyName, email, phoneNumber, password, credit, isAvailable, bankAccountNumber);
+        super(userName, name, familyName, email, phoneNumber, credit, isAvailable, bankAccountNumber);
         this.nameOfCompany = nameOfCompany;
     }
 
@@ -48,21 +48,16 @@ public class Supplier extends Account{
                 "familyName=\'" + familyName +'\''+ "\n" +
                 "email=\'" + email + '\'' + "\n" +
                 "phoneNumber=\'" + '\'' + phoneNumber + "\n" +
-                "password=\'" + password + '\''+ "\n" +
                 "credit=\'" + credit + '\''+ "\n" +
                 "nameOfCompany=\'" + nameOfCompany + '\'' + "\n";
     }
 
 
-    public void editAllFields(String name, String familyName, String email, String phoneNumber,
-                              String password, String nameOfCompany) {
-        this.userName = userName;
+    public void editAllFields(String name, String familyName, String email, String phoneNumber, String nameOfCompany) {
         this.name = name;
         this.familyName = familyName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.password = password;
-        this.credit = credit;
         this.nameOfCompany = nameOfCompany;
         AccountDataBase.update(this);
     }

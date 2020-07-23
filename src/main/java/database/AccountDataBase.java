@@ -21,7 +21,6 @@ public class AccountDataBase {
         content.put("familyName", "String");
         content.put("email", "String");
         content.put("phoneNumber" , "String");
-        content.put("password", "String");
         content.put("credit", "int");
         content.put("cartId", "String");
         content.put("nameOfCompany", "String");
@@ -37,32 +36,31 @@ public class AccountDataBase {
         if (DataBase.doesIdAlreadyExist("Accounts", "username", account.getUserName())){
             return;
         }
-        String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, password, credit, " +
+        String sql = "INSERT into Accounts (username,name,familyName, email, phoneNumber, credit, " +
                 " cartId, nameOfCompany,isAvailable,bankAccountNumber , type)"+
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ?,?, ? ,?)";
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ?,?, ?)";
         try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
             statement.setString(1, account.getUserName());
             statement.setString(2,account.getName());
             statement.setString(3, account.getFamilyName());
             statement.setString(4, account.getEmail());
             statement.setString(5, account.getPhoneNumber());
-            statement.setString(6, account.getPassword());
-            statement.setInt(7, account.getCredit());
-            statement.setBoolean(10,account.getIsAvailable());
-            statement.setInt(11, account.getBankAccountNumber());
-            statement.setString(12, account.getAccountType());
+            statement.setInt(6, account.getCredit());
+            statement.setBoolean(9,account.getIsAvailable());
+            statement.setInt(10, account.getBankAccountNumber());
+            statement.setString(11, account.getAccountType());
 
             if(account instanceof Customer){
-                statement.setString(8,((Customer)account).getCart().getIdentifier());
-                statement.setString(9,null);
+                statement.setString(7,((Customer)account).getCart().getIdentifier());
+                statement.setString(8,null);
             }
             else if(account instanceof Supplier){
-                statement.setString(8,null);
-                statement.setString(9,((Supplier) account).getNameOfCompany());
+                statement.setString(7,null);
+                statement.setString(8,((Supplier) account).getNameOfCompany());
             }
             else{
+                statement.setString(7,null);
                 statement.setString(8,null);
-                statement.setString(9,null);
             }
 
             statement.executeUpdate();
@@ -94,7 +92,6 @@ public class AccountDataBase {
                 String familyName = resultSet.getString("familyName");
                 String email = resultSet.getString("email");
                 String phoneNumber  = resultSet.getString("phoneNumber");
-                String password = resultSet.getString("password");
                 int credit =resultSet.getInt("credit");
                 String cartId = resultSet.getString("cartId");
                 String nameOfCompany = resultSet.getString("nameOfCompany");
@@ -104,16 +101,16 @@ public class AccountDataBase {
 
 
                 if(type.equals("Customer")){
-                    Customer customer = new Customer(username,name,familyName,email,phoneNumber,password,credit,
+                    Customer customer = new Customer(username,name,familyName,email,phoneNumber,credit,
                              cartId, isAvailable,bankAccountNumber);
                 }
                 else if(type.equals("Supplier")){
-                    Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,password,credit,isAvailable,nameOfCompany, bankAccountNumber);
+                    Supplier supplier = new Supplier(username,name,familyName,email,phoneNumber,credit,isAvailable,nameOfCompany, bankAccountNumber);
                 }
                 else if(type.equals("Supervisor")){
-                    Supervisor supervisor = new Supervisor(username,name, familyName, email,phoneNumber,password,credit,isAvailable , bankAccountNumber);
+                    Supervisor supervisor = new Supervisor(username,name, familyName, email,phoneNumber,credit,isAvailable , bankAccountNumber);
                 }else {
-                    Supporter supporter = new Supporter(username,name, familyName, email, phoneNumber, password, credit, isAvailable);
+                    Supporter supporter = new Supporter(username,name, familyName, email, phoneNumber, credit, isAvailable);
                 }
 
             }

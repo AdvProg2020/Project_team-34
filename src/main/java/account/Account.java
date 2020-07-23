@@ -14,20 +14,23 @@ import java.util.Random;
  */
 
 public abstract class Account {
-    protected String userName , name , familyName , email , phoneNumber , password;
+    protected String userName;
+    protected String name;
+    protected String familyName;
+    protected String email;
+    protected String phoneNumber;
     protected int credit;
     protected boolean isAvailable ;
     protected int bankAccountNumber;
     private static final ArrayList<Account> allAccounts = new ArrayList<>();
 
-    public Account(String userName, String name, String familyName, String email, String phoneNumber, String password,
-                   int credit, boolean isAvailable , int bankAccountNumber) {
+    public Account(String userName, String name, String familyName, String email, String phoneNumber, int credit,
+                   boolean isAvailable , int bankAccountNumber) {
         this.userName = userName;
         this.name = name;
         this.familyName = familyName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.password = password;
         this.credit = credit;
         this.isAvailable = isAvailable;
         this.bankAccountNumber = bankAccountNumber;
@@ -56,10 +59,6 @@ public abstract class Account {
 
     public String getPhoneNumber() {
         return phoneNumber;
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     public int getCredit() {
@@ -104,11 +103,6 @@ public abstract class Account {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
-        AccountDataBase.update(this);
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
         AccountDataBase.update(this);
     }
 
@@ -198,13 +192,12 @@ public abstract class Account {
         return null;
     }
 
-    public void editAllFields(String name, String familyName, String email, String phoneNumber, String password) {
+    public void editAllFields(String name, String familyName, String email, String phoneNumber) {
         this.userName = userName;
         this.name = name;
         this.familyName = familyName;
         this.email = email;
         this.phoneNumber = phoneNumber;
-        this.password = password;
         AccountDataBase.update(this);
     }
 

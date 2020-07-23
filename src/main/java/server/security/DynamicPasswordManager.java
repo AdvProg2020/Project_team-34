@@ -51,15 +51,20 @@ public class DynamicPasswordManager {
             }
         };
         activePasswordsCleaner.schedule(passwordExpiryTask, new Date(System.currentTimeMillis() + PASSWORD_EXPIRY_PERIOD));
-        String passwordEmail = "Your dynamic password for @" + account.getUserName() + " is " + password + ".\n" +
+        String passwordEmail = "Your dynamic password for @" + account.getUserName() + " is " + password + "\n" +
                 "This password is valid for " + PASSWORD_EXPIRY_PERIOD /(int) (60 * 1000) + " minutes.";
-        new MailSender(account.getEmail(), "Dynamic Password, Aryan from Team34", passwordEmail).send();
+        System.out.println(passwordEmail);
+        new MailSender(account.getEmail(), "Dynamic Password", passwordEmail).send();
     }
 
     public boolean authenticatePassword(String username, String password) {
         if (!activePasswords.containsKey(username))
             return false;
-        return activePasswords.get(username).equals(password);
+        if (activePasswords.get(username).equals(password)) {
+            activePasswords.remove(username);
+            return true;
+        }
+        return false;
     }
 
     private String generateRandomPassword() {

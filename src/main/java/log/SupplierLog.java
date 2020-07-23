@@ -56,6 +56,7 @@ public class SupplierLog {
         this.productsCount = customerLog.getProductsBoughtFromSupplierCount(supplier);
         this.productsSale = customerLog.getProductsBoughtFromSupplierSale(supplier);
         this.date = customerLog.getDate();
+        supplier.setCredit(supplier.getCredit() + amount);
         allSupplierLogs.add(this);
         allSupplierLogCreatedCount++;
     }

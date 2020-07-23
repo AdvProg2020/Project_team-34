@@ -14,6 +14,7 @@ import java.io.ObjectOutputStream;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class ClientThread extends Thread {
     private final Server server;
@@ -21,6 +22,8 @@ public class ClientThread extends Thread {
     private final ObjectOutputStream objectOutputStream;
     private final ObjectInputStream objectInputStream;
     private final Controller controller;
+    private Date lastRequestTime;
+    private static final long  MAX_TIME_BETWEEN_TWO_REQUESTS = 10000;
 
     public ClientThread(Server server, Socket socket) throws IOException {
         this.server = server;
@@ -28,6 +31,7 @@ public class ClientThread extends Thread {
         this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         this.objectInputStream = new ObjectInputStream(socket.getInputStream());
         this.controller = new Controller(this, server.assignToken(this));
+        this.lastRequestTime = new Date(System.currentTimeMillis());
     }
 
     public String getNewToken() {
@@ -124,6 +128,12 @@ public class ClientThread extends Thread {
         if(!token.equals(controller.getToken())){
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Token is not Valid!", controller);
         }
+        if(System.currentTimeMillis() - lastRequestTime.getTime() > MAX_TIME_BETWEEN_TWO_REQUESTS && controller.getAccountController().getInternalAccount() != null){
+            lastRequestTime.setTime(System.currentTimeMillis());
+            controller.getAccountController().controlLogout();
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Your session has expired", controller);
+        }
+        lastRequestTime.setTime(System.currentTimeMillis());
         ArrayList<Class> params = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
 
@@ -141,7 +151,6 @@ public class ClientThread extends Thread {
                 }
             }
         }
-
 
         Method method;
         try {

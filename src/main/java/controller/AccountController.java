@@ -946,7 +946,7 @@ public class AccountController {
             throw new ExceptionalMassage("Your password must contain both alphabets and numbers!");
         }
         if(password.contains(name) || password.contains(lastName)){
-            throw new ExceptionalMassage("Your password can't contain your name or last name!");
+            throw new ExceptionalMassage("Your password can't contain your first name or last name!");
         }
     }
 }

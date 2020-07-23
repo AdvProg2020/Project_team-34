@@ -1,13 +1,10 @@
 package gui.cartMenu;
 
-import cart.Cart;
 import cart.ProductInCart;
 import controller.Controller;
-import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.alerts.AlertBox;
-import gui.loginMenu.LoginGMenu;
 import gui.loginMenu.NewRequestDynamicPasswordGMenu;
 import gui.productMenu.ProductMenuG;
 import javafx.geometry.Insets;
@@ -21,12 +18,9 @@ import product.Product;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
-import java.util.List;
 
 import static javafx.scene.control.ContentDisplay.CENTER;
-import static javafx.scene.control.ContentDisplay.LEFT;
 
 public class CartGMenu extends GMenu {
 

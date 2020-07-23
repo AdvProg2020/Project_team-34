@@ -4,6 +4,7 @@ import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
 import gui.GMenu;
 import gui.loginMenu.FirstSupervisorMenu;
+import gui.loginMenu.NewRequestDynamicPasswordGMenu;
 import gui.mainMenu.MainMenuG;
 import gui.paymentMenu.PaymentMenuForCustomer;
 import javafx.application.Application;
@@ -47,6 +48,9 @@ public class Main extends Application {
             }
             System.exit(0);
         });
+
+//        stage.setScene(new NewRequestDynamicPasswordGMenu(null, stage, null, null).getScene());
+//        stage.show();
 
         GMenu mainMenu = new MainMenuG( null, stage, controller);
         GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);

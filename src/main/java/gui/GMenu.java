@@ -10,6 +10,7 @@ import gui.alerts.AlertBox;
 import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
 import gui.loginMenu.LoginGMenu;
+import gui.loginMenu.NewRequestDynamicPasswordGMenu;
 import gui.mainMenu.MainMenuG;
 import gui.profile.*;
 import javafx.geometry.Insets;
@@ -84,7 +85,7 @@ public abstract class GMenu {
                 stage.setScene(parentMenu.getScene());
             }
         });
-        signIn.setOnAction(e -> new LoginGMenu(this, stage, controller).showAndWait());
+        signIn.setOnAction(e -> new NewRequestDynamicPasswordGMenu(this, new Stage(), stage, controller).showAndWait());
         allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this,
                 stage,controller, false).getScene()));
         cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu(this, stage, controller).getScene()));
@@ -308,8 +309,6 @@ public abstract class GMenu {
         GridPane mainLayout = new GridPane();
         TextField usernameField = new TextField();
         usernameField.setPromptText("Username");
-        PasswordField passwordField = new PasswordField();
-        passwordField.setPromptText("Password");
         TextField firstName = new TextField();
         firstName.setPromptText("First Name");
         TextField lastName = new TextField();
@@ -326,7 +325,7 @@ public abstract class GMenu {
         done.setOnAction(e -> {
             try {
                 controller.getAccountController().controlCreateAccount(type.getValue().toLowerCase(), usernameField.getText(),
-                        passwordField.getText(), firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
+                        firstName.getText(), lastName.getText(), email.getText(), phoneNumber.getText(),
                         "", "", "", false);
                 stage.setScene(gMenu.createScene());
             } catch (ExceptionalMassage exceptionalMassage) {
@@ -337,13 +336,12 @@ public abstract class GMenu {
         mainLayout.setHgap(10);
         mainLayout.setVgap(10);
         mainLayout.add(usernameField, 0, 0);
-        mainLayout.add(passwordField, 1, 0);
-        mainLayout.add(firstName, 2, 0);
-        mainLayout.add(lastName, 3, 0);
-        mainLayout.add(email, 0, 1);
-        mainLayout.add(phoneNumber, 1, 1);
+        mainLayout.add(firstName, 1, 0);
+        mainLayout.add(lastName, 2, 0);
+        mainLayout.add(email, 3, 0);
+        mainLayout.add(phoneNumber, 0, 1);
         if (alsoSupporter) {
-            mainLayout.add(type, 2, 1);
+            mainLayout.add(type, 1, 1);
         }
         mainLayout.add(done, 3, 1);
         mainLayout.setAlignment(Pos.CENTER);

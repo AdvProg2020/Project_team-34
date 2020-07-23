@@ -57,7 +57,7 @@ public class AccountController {
         return jsonElement.getAsString();
     }
 
-    public void controlCreateAccount(String type, String username, String password, String firstName, String lastName,
+    public void controlCreateAccount(String type, String username, String firstName, String lastName,
                                      String email, String phoneNumber, String nameOfCompany, String bankUsername,
                                      String bankPassword, boolean alsoBank) throws ExceptionalMassage {
         if (!type.equals("customer") && !type.equals("supervisor") && !type.equals("supplier") && !type.equals("supporter"))
@@ -66,10 +66,6 @@ public class AccountController {
             throw new ExceptionalMassage("Username can't be empty");
         if (!username.matches("\\w+"))
             throw new ExceptionalMassage("Invalid username");
-        if (password.trim().length() == 0)
-            throw new ExceptionalMassage("Password can't be empty");
-        if (!password.matches("\\w+"))
-            throw new ExceptionalMassage("Invalid password");
         if (firstName.trim().length() == 0)
             throw new ExceptionalMassage("First name can't be empty");
         if (lastName.trim().length() == 0)
@@ -89,7 +85,6 @@ public class AccountController {
         JsonArray inputs = new JsonArray();
         inputs.add(type);
         inputs.add(username);
-        inputs.add(password);
         inputs.add(firstName);
         inputs.add(lastName);
         inputs.add(email);
@@ -101,15 +96,21 @@ public class AccountController {
         communication("controlCreateAccount", inputs);
     }
 
-    public void controlLogin(String username, String password) throws ExceptionalMassage {
-        JsonArray jsonArray = new JsonArray();
-        jsonArray.add(username);
-        jsonArray.add(password);
-        communication("controlLogin", jsonArray);
-    }
-
     public void controlLogout() throws ExceptionalMassage {
         communication("controlLogout", new JsonArray());
+    }
+
+    public void controlRequestDynamicPassword(String username) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(username);
+        communication("controlRequestDynamicPassword", inputs);
+    }
+
+    public void controlAuthenticate(String username, String dynamicPass) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(username);
+        inputs.add(dynamicPass);
+        communication("controlAuthenticate", inputs);
     }
 
     public String controlViewPersonalInfo() throws ExceptionalMassage {
@@ -129,14 +130,13 @@ public class AccountController {
         communication("controlEditField", input);
     }
 
-    public void editAllFields(String name, String familyName, String email, String phoneNumber, String password,
-                              String nameOfCompany) throws ExceptionalMassage {
+    public void editAllFields(String name, String familyName, String email, String phoneNumber, String nameOfCompany)
+            throws ExceptionalMassage {
         JsonArray input = new JsonArray();
         input.add(name);
         input.add(familyName);
         input.add(email);
         input.add(phoneNumber);
-        input.add(password);
         input.add(nameOfCompany);
         communication("editAllFields", input);
     }
@@ -267,7 +267,7 @@ public class AccountController {
                 public void run() {
                     try {
                         mainController.getPeerNode().sendRequest(filePath, "localhost", port);
-                    } catch (IOException e) {
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }

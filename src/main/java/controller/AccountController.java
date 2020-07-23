@@ -98,10 +98,7 @@ public class AccountController {
         inputs.add(bankUsername);
         inputs.add(bankPassword);
         inputs.add(String.valueOf(alsoBank));
-        JsonElement response = communication("controlCreateAccount", inputs);
-        if (type.equals("customer") || type.equals("supplier")) {
-            mainController.setToken(response.getAsString());
-        }
+        communication("controlCreateAccount", inputs);
     }
 
     public void controlLogin(String username, String password) throws ExceptionalMassage {

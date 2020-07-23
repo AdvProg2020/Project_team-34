@@ -23,7 +23,7 @@ public class ClientThread extends Thread {
     private final ObjectInputStream objectInputStream;
     private final Controller controller;
     private Date lastRequestTime;
-    private static final long  MAX_TIME_BETWEEN_TWO_REQUESTS = 10000;
+    private static final long  MAX_TIME_BETWEEN_TWO_REQUESTS = 60*60*1000;
 
     public ClientThread(Server server, Socket socket) throws IOException {
         this.server = server;

@@ -3,6 +3,7 @@ package server;
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import java.io.UnsupportedEncodingException;
 import java.util.Properties;
 
 public class MailSender extends Thread {
@@ -38,12 +39,12 @@ public class MailSender extends Thread {
                 }
             });
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(SERVER_MAIL_ADDRESS));
+            message.setFrom(new InternetAddress(SERVER_MAIL_ADDRESS, "Aryan from Team34"));
             message.setRecipient(Message.RecipientType.TO, new InternetAddress(receipt));
             message.setSubject(subject);
             message.setText(content);
             Transport.send(message);
-        } catch (MessagingException e) {
+        } catch (MessagingException | UnsupportedEncodingException e) {
             System.err.println("Message failed to send");
         }
     }

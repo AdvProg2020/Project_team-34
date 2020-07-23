@@ -5,6 +5,9 @@ import account.Customer;
 import cart.Cart;
 import server.ClientThread;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 public class Controller {
     public static final String BANK_IP = "localhost";
     public static final int BANK_SOCKET = 9999;
@@ -70,6 +73,11 @@ public class Controller {
 
     public void setIsFirstSupervisorCreated(boolean firstSupervisorCreated) {
         isFirstSupervisorCreated = firstSupervisorCreated;
+    }
+
+    public static Matcher getMatcher(String input, String regex){
+        Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
+        return pattern.matcher(input);
     }
 
     public AccountController getAccountController() {

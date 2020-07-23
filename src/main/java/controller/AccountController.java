@@ -24,6 +24,7 @@ import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.regex.Matcher;
 
 public class AccountController {
     private static final long WEEK = 7*24*60*60000;
@@ -91,6 +92,11 @@ public class AccountController {
                                          String email, String phoneNumber, String nameOfCompany, String bankUsername,
                                          String bankPassword, String alsoBankStr) {
         boolean alsoBank = Boolean.parseBoolean(alsoBankStr);
+        try{
+            passwordValidationCheck(password);
+        } catch (ExceptionalMassage ex){
+            return Response.createResponseFromExceptionalMassage(ex, mainController);
+        }
         if (!Account.isUsernameAvailable(username))
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate username"), mainController);
         if (type.equals("supporter"))
@@ -922,6 +928,23 @@ public class AccountController {
             return Response.createResponseFromExceptionalMassage(exceptionalMassage, mainController);
         }
         return Response.createSuccessResponse(mainController);
+    }
+
+    private void passwordValidationCheck(String password) throws ExceptionalMassage {
+        String onlyNumbersPasswordRegex = "^\\d+$";
+        String onlyLettersPasswordRegex = "^[A-Za-z]+$";
+        Matcher matcher;
+        if (password.length() < 8){
+            throw new ExceptionalMassage("Your password must contain more than 8 characters!");
+        }
+        matcher = mainController.getMatcher(password, onlyNumbersPasswordRegex);
+        if (matcher.find()) {
+            throw new ExceptionalMassage("Your password must contain both alphabets and numbers!");
+        }
+        matcher = mainController.getMatcher(password, onlyLettersPasswordRegex);
+        if(matcher.find()){
+            throw new ExceptionalMassage("Your password must contain both alphabets and numbers!");
+        }
     }
 }
 

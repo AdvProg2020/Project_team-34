@@ -95,7 +95,7 @@ public class Sale extends Discount {
     }
 
     public static String convertSaleIdToRequestId(String requestId) {
-        return "T34SR" + requestId.substring(4);
+        return "T34SAR" + requestId.substring(5);
     }
 
     public static Sale convertJsonStringToSale(String jsonString){

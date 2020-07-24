@@ -188,7 +188,7 @@ public class Product {
     }
 
     public static String convertProductIdToRequestId(String requestId) {
-        return "T34PR" + requestId.substring(4);
+        return "T34PRR" + requestId.substring(5);
     }
 
     public String toJson() {
@@ -235,7 +235,7 @@ public class Product {
         this.numberOfViews = jsonObject.get("numberOfViews").getAsInt();
         this.filePath = jsonObject.get("filePath").getAsString();
         this.supplierPort = Integer.parseInt(jsonObject.get("supplierPort").getAsString());
-        this.supplierHost = jsonObject.get("supplierHost").getAsString();
+        this.supplierHost = jsonObject.get("supplierHost").toString();
     }
 
     @Override

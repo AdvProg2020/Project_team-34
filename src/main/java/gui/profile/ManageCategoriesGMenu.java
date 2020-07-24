@@ -112,7 +112,7 @@ public class ManageCategoriesGMenu extends GMenu {
         box.setStyle("-fx-border-color: #4678c8");
         box.setPadding(new Insets(5, 5, 5, 5));
         box.setSpacing(20);
-        box.setPrefWidth(600);
+        box.setPrefWidth(750);
         box.setAlignment(Pos.CENTER_LEFT);
 
         Region spacer = new Region();

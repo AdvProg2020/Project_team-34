@@ -281,7 +281,7 @@ public class ProductController {
     public boolean isThisCategoryClassifier(String name) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(name);
-        return Boolean.parseBoolean(communication("isThisCategoryClassifier", inputs).toString());
+        return Boolean.parseBoolean(communication("isThisCategoryClassifier", inputs).getAsString());
     }
 
     public HashMap<String, ArrayList<String>> controlGetCategorySpecialFields(String name) throws ExceptionalMassage{

@@ -24,9 +24,12 @@ public class ClientThread extends Thread {
     private Date lastRequestTime;
     private static final long  MAX_TIME_BETWEEN_TWO_REQUESTS = 60*60*1000;
 
+    private String host;
+
     public ClientThread(Server server, Socket socket) throws IOException {
         this.server = server;
         this.socket = socket;
+        this.host = null;
         this.objectOutputStream = new ObjectOutputStream(socket.getOutputStream());
         this.objectInputStream = new ObjectInputStream(socket.getInputStream());
         this.controller = new Controller(this, server.assignToken(this));
@@ -43,6 +46,10 @@ public class ClientThread extends Thread {
 
     public Server getServer() {
         return server;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     @Override

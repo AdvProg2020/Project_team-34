@@ -66,6 +66,7 @@ public class ProductDataBase {
             statement.setString(13, product.getImageInStringForm());
             statement.setString(14, product.getFilePath());
             statement.setInt(15, product.getSupplierPort());
+            statement.setString(16, product.getSupplierHost());
 
             statement.executeUpdate();
         } catch (SQLException e) {

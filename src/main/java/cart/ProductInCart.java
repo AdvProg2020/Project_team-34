@@ -75,7 +75,7 @@ public class ProductInCart {
     }
 
     //Modeling methods:
-    public static String generateIdentifier() {
+    public static synchronized String generateIdentifier() {
         return "T34PC" + String.format("%015d", numberOfObjectCreated + 1);
     }
 

@@ -138,7 +138,7 @@ public class Auction {
         return wage;
     }
 
-    private static String generateIdentifier() {
+    private static synchronized String generateIdentifier() {
         return "T34AC" + String.format("%015d", allAuctionsCount + 1);
     }
 

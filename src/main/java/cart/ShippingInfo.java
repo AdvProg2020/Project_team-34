@@ -85,7 +85,7 @@ public class ShippingInfo {
     }
 
     //Modeling methods
-    public static String generateIdentifier() {
+    public static synchronized String generateIdentifier() {
         return "T34SI" + String.format("%015d", totalShippingInfoCreated + 1);
     }
 

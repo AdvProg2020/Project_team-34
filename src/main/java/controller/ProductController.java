@@ -927,6 +927,9 @@ public class ProductController {
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }
         Product product = Product.getProductByName(name);
+        if(product == null){
+            return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No such product!"), mainController);
+        }
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(product), mainController);
     }
 

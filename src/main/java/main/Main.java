@@ -53,7 +53,7 @@ public class Main extends Application {
 
         GMenu mainMenu = new MainMenuG( null, stage, controller);
         GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
-        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());ن
+        stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
         stage.show();
     }
 }

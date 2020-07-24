@@ -84,7 +84,8 @@ public class ProductController {
 //            product.addNewSupplierForProduct(supplier, price, remainedNumbers);
 //        }
         Product product1 = new Product(supplier, name, nameOfCompany, Integer.parseInt(price), Integer.parseInt(remainedNumbers),
-                description, null, category, specifications, imageInStringForm, filePath, port);
+                description, null, category, specifications, imageInStringForm, filePath, port,null);
+        //TODO
         System.out.println(product1);
         return Response.createSuccessResponse(mainController);
     }
@@ -1064,7 +1065,8 @@ public class ProductController {
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }
         try {
-            Product.removeProductsWithThisSupplierPort(Integer.parseInt(portString));
+            Product.removeProductsWithThisSupplierPort(null,Integer.parseInt(portString));
+            //TODO
             return Response.createSuccessResponse(mainController);
         } catch (ExceptionalMassage exceptionalMassage) {
             return Response.createResponseFromExceptionalMassage(exceptionalMassage, mainController);

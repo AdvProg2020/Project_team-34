@@ -320,6 +320,7 @@ public class AccountController {
         if(username.equals(getInternalAccount().getUserName()))
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You cannot delete Your self"), mainController);
         accountGotByUsername.removeAccount();
+        mainController.getClientThread().getServer().disconnectUser(username);
         return Response.createSuccessResponse(mainController);
     }
 

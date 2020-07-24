@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 
 public class Controller {
     public static final String BANK_IP = "localhost";
-    public static final int BANK_SOCKET = 5050;
+    public static final int BANK_SOCKET = 9999;
 
     private final ClientThread clientThread;
 

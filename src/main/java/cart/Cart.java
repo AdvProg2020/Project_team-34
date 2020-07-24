@@ -11,6 +11,7 @@ import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import server.communications.Utils;
+import state.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -232,6 +233,13 @@ public class Cart {
     }
 
     public void update() {
+        for (ProductInCart productInCart : productsIn) {
+            if (productInCart.getProduct().getProductState() == State.DELETED) {
+                productsIn.remove(productInCart);
+                productInCount.remove(productInCart);
+                productInSale.remove(productInCart);
+            }
+        }
         for (ProductInCart productInCart : productsIn) {
             productInSale.replace(productInCart, Sale.getProductSale(productInCart.getProduct(), productInCart.getSupplier()));
         }

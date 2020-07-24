@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 public class PeerNode
 {
+    private String host;
     private int port;
     private static ArrayList<PeerNode> contacts = new ArrayList<>();
     private Asymmetric asymmetric;
@@ -19,8 +20,9 @@ public class PeerNode
         return port;
     }
 
-    public PeerNode(int port)
+    public PeerNode(String host, int port)
     {
+        this.host = host;
         this.port = port;
         new Thread(new Runnable() {
             public void run() {

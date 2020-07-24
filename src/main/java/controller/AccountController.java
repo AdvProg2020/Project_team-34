@@ -256,17 +256,17 @@ public class AccountController {
         JsonObject jsonObject;
         for (JsonElement jsonElement : jsonArray) {
             jsonObject =  jsonElement.getAsJsonObject();
-            controlInsiderDownloadProductWithP2P(jsonObject.get("filePath").getAsString(), jsonObject.get("port").getAsInt());
+            controlInsiderDownloadProductWithP2P(jsonObject.get("filePath").getAsString(), jsonObject.get("host").getAsString(),
+                    jsonObject.get("port").getAsInt());
         }
     }
 
-    private void controlInsiderDownloadProductWithP2P (String filePath, int port) throws ExceptionalMassage{
-            System.out.println("daram mifrestam be khoda");
+    private void controlInsiderDownloadProductWithP2P (String filePath,String host ,  int port) throws ExceptionalMassage{
             new Thread(new Runnable() {
                 @Override
                 public void run() {
                     try {
-                        mainController.getPeerNode().sendRequest(filePath, "localhost", port);
+                        mainController.getPeerNode().sendRequest(filePath, host, port);
                     } catch (Exception e) {
                         e.printStackTrace();
                     }

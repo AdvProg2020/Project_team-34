@@ -353,7 +353,7 @@ public class AccountController {
         try {
             mainController.getCart().increaseProductCount(product, supplier);
         } catch (ExceptionalMassage exceptionalMassage) {
-            return new Response(RequestStatus.SUCCESSFUL, exceptionalMassage.getMessage(), mainController);
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, exceptionalMassage.getMessage(), mainController);
         }
         return new Response(RequestStatus.SUCCESSFUL, "", mainController);
     }

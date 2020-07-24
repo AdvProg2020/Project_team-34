@@ -60,6 +60,8 @@ public class Validation {
     }
 
     public static void filePathValidation(String filePath) throws ExceptionalMassage{
+        if(filePath.equals(""))
+            return;
         File file = new File(filePath);
         if(! file.exists()){
             throw new ExceptionalMassage("Invalid file path");

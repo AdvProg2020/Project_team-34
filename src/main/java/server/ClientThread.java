@@ -4,7 +4,9 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
+import com.sun.mail.imap.protocol.INTERNALDATE;
 import controller.Controller;
+import exceptionalMassage.ExceptionalMassage;
 import server.communications.*;
 
 import java.io.IOException;
@@ -73,8 +75,12 @@ public class ClientThread extends Thread {
             objectOutputStream.flush();
             objectOutputStream.writeUTF(String.valueOf(controller.getToken()));
             objectOutputStream.flush();
+            host = (String) objectInputStream.readObject();
+            port = (Integer) objectInputStream.readObject();
         } catch (IOException e) {
             System.err.println("Error, Initializing Client");
+        }catch (ClassNotFoundException e){
+            System.err.println("Class Not found");
         }
         while (true) {
             try {
@@ -122,6 +128,7 @@ public class ClientThread extends Thread {
     }
 
     public boolean disconnect() {
+        controller.getProductController().controlRemoveProductWithThisPort(host , String.valueOf(port));
         boolean status = true;
         server.getDosBlocker().reduceConnection(socket.getInetAddress().getCanonicalHostName());
         try {

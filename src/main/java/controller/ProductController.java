@@ -42,7 +42,7 @@ public class ProductController {
     }
 
     public Response controlAddProduct(String name, String nameOfCompany, String price, String remainedNumbers, String category,
-                                      String description, String specification, String imageInStringForm,String filePath, String portStr) {
+                                      String description, String specification, String imageInStringForm,String filePath, String portStr, String host) {
         try {
             Validation.normalStringValidation(name);
             Validation.normalStringValidation(nameOfCompany);
@@ -84,7 +84,7 @@ public class ProductController {
 //            product.addNewSupplierForProduct(supplier, price, remainedNumbers);
 //        }
         Product product1 = new Product(supplier, name, nameOfCompany, Integer.parseInt(price), Integer.parseInt(remainedNumbers),
-                description, null, category, specifications, imageInStringForm, filePath, port);
+                description, null, category, specifications, imageInStringForm, filePath, port,host );
         System.out.println(product1);
         return Response.createSuccessResponse(mainController);
     }
@@ -1057,14 +1057,14 @@ public class ProductController {
         return new Response(RequestStatus.SUCCESSFUL,result, mainController);
     }
 
-    public Response controlRemoveProductWithThisPort(String portString){
+    public Response controlRemoveProductWithThisPort(String host , String portString){
         try {
             Validation.normalIntValidation(portString);
         }catch (ExceptionalMassage e){
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }
         try {
-            Product.removeProductsWithThisSupplierPort(Integer.parseInt(portString));
+            Product.removeProductsWithThisSupplierPort(host , Integer.parseInt(portString));
             return Response.createSuccessResponse(mainController);
         } catch (ExceptionalMassage exceptionalMassage) {
             return Response.createResponseFromExceptionalMassage(exceptionalMassage, mainController);

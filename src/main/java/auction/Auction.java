@@ -136,6 +136,10 @@ public class Auction {
         return end;
     }
 
+    public boolean isEnded() {
+        return isEnded;
+    }
+
     public static ArrayList<Auction> getAllAuctions() {
         return ALL_AUCTIONS;
     }
@@ -197,11 +201,13 @@ public class Auction {
     }
 
     public void end() {
-        if (highestPromoter != null) {
-            try {
-                new CustomerLog(this, wage);
-            } catch (ExceptionalMassage exceptionalMassage) {
-                System.err.println("Couldn't add log.");
+        if (isEnded) {
+            if (highestPromoter != null) {
+                try {
+                    new CustomerLog(this, wage);
+                } catch (ExceptionalMassage exceptionalMassage) {
+                    System.err.println("Couldn't add log.");
+                }
             }
         }
         //product out

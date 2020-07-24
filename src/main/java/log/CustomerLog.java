@@ -70,17 +70,22 @@ public class CustomerLog {
         CustomerLogDataBase.add(this);
     }
 
-    public CustomerLog(String identifier, Date date, LogStatus deliveryStatus, Cart cart, boolean isAuction) {
+    public CustomerLog(String identifier, Date date, LogStatus deliveryStatus, Cart cart, boolean isAuction, int paidAmount) {
         this.identifier = identifier;
         this.date = date;
-        this.paidAmount = cart.getBill();
+        this.isAuction = isAuction;
         this.codedDiscountAmount = cart.getAmountOfCodedDiscount();
         this.customer = cart.getOwner();
         this.deliveryStatus = deliveryStatus;
         this.cart = cart;
-        this.isAuction = isAuction;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
+        if (isAuction) {
+
+        } else {
+
+        }
+        this.paidAmount = cart.getBill();
         addSubLogForSuppliersDataBaseConstructorCall();
     }
 

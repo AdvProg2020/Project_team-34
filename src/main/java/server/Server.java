@@ -134,6 +134,7 @@ public class Server extends Thread {
                         new ClientThread(this, clientSocket).start();
                     } catch (IOException e) {
                         System.err.println("Error: ClientThread start");
+                        dosBlocker.reduceConnection(clientSocket.getInetAddress().getCanonicalHostName());
                     }
                 } else {
                     clientSocket.close();

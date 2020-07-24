@@ -43,6 +43,11 @@ public class DenialOfServiceBlocker {
         }).start();
     }
 
+    public void reduceConnection(String ip) {
+        if (connectionRequests.containsKey(ip))
+            connectionRequests.replace(ip, connectionRequests.get(ip) - 1);
+    }
+
     public boolean getIpPermissionForConnection(String ip) {
         System.out.println(ip);
         if (connectionRequests.containsKey(ip) && connectionRequests.get(ip) >= MAX_CONNECTIONS) {

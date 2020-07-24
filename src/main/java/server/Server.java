@@ -129,7 +129,7 @@ public class Server extends Thread {
                 Socket clientSocket = serverSocket.accept();
                 boolean permission = dosBlocker.getIpPermissionForConnection(clientSocket.getInetAddress().getCanonicalHostName());
                 System.out.println(permission);
-                if (dosBlocker.getIpPermissionForConnection(clientSocket.getInetAddress().getCanonicalHostName())) {
+                if (permission) {
                     try {
                         new ClientThread(this, clientSocket).start();
                     } catch (IOException e) {

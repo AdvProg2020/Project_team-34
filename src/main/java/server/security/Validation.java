@@ -2,6 +2,7 @@ package server.security;
 
 import com.google.gson.JsonParser;
 import exceptionalMassage.ExceptionalMassage;
+import product.Category;
 import server.communications.Utils;
 
 import java.io.File;
@@ -13,8 +14,11 @@ public class Validation {
 
     public static final int STRING_MAX_LENGTH = 20;
     public static final int EMAIL_MAX_LENGTH = 40;
+    public static final int DESCRIPTION_MAX_LENGTH = 120;
     public static final int ADDRESS_MAX_LENGTH = 150;
+    public static final int SPECIFICATION_MAX_LENGTH = 200;
     public static final int MESSAGE_MAX_LENGTH = 250;
+    public static final int IMAGE_MAX_LENGTH = 4000000;
 
     public static void normalStringValidation(String input) throws ExceptionalMassage {
         if(input.length() > STRING_MAX_LENGTH){
@@ -151,6 +155,52 @@ public class Validation {
         }
     }
 
+    public static void categoryValidation(String input)throws ExceptionalMassage{
+        if(input.length() > STRING_MAX_LENGTH)
+            throw new ExceptionalMassage("You Have Exceeded MaxLength");
+        Category category = Category.getCategoryByName(input);
+        if(category == null)
+            throw new ExceptionalMassage("Category Not Found");
+    }
+
+    public static void specificationValidation(String input)throws ExceptionalMassage{
+        if(input.length() > SPECIFICATION_MAX_LENGTH)
+            throw new ExceptionalMassage("You Have Exceeded MaxLength");
+        JsonParser parser = new JsonParser();
+        try {
+            Utils.convertJsonElementStringToStringToHashMap(parser.parse(input));
+        }catch (Exception exception){
+            throw new ExceptionalMassage("Invalid Exception");
+        }
+    }
+
+    public static void descriptionValidation(String input)throws ExceptionalMassage{
+        if(input.length() > DESCRIPTION_MAX_LENGTH){
+            throw new ExceptionalMassage("You have Exceeded maxLength");
+        }
+        if(!getMatcher(input, "^\\w+$").matches()){
+            throw new ExceptionalMassage("Invalid String ");
+        }
+    }
+
+    public static void imageInStringFormValidation(String input)throws ExceptionalMassage{
+        if(input.length() > IMAGE_MAX_LENGTH){
+            throw new ExceptionalMassage("You have Exceeded max image size");
+        }
+        try{
+            Utils.convertStringToImage(input);
+        }catch (Exception e){
+            throw new ExceptionalMassage("Invalid Image");
+        }
+    }
+
+    public static void floatValidation(String input)throws ExceptionalMassage{
+        try {
+            Float.parseFloat(input);
+        }catch (Exception e) {
+            throw new ExceptionalMassage("Invalid Float");
+        }
+    }
 
     public static Matcher getMatcher(String input , String regexString){
         Pattern pattern = Pattern.compile(regexString);

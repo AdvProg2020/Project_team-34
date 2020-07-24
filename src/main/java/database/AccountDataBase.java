@@ -19,7 +19,7 @@ public class AccountDataBase {
         content.put("name" , "String");
         content.put("familyName", "String");
         content.put("email", "String");
-        content.put("phoneNumber" , "String");
+        content.put("phoneNumber" , "TEXT");
         content.put("credit", "int");
         content.put("cartId", "String");
         content.put("nameOfCompany", "String");

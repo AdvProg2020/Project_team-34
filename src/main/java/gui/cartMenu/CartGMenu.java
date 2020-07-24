@@ -122,7 +122,7 @@ public class CartGMenu extends GMenu {
             if (hasSomeOneLoggedInBoolean) {
                 stage.setScene(new PurchaseMenuG(this, stage, controller).getScene());
             } else {
-                stage.setScene(new NewRequestDynamicPasswordGMenu(this, new Stage(), stage, controller).getScene());
+                new NewRequestDynamicPasswordGMenu(this, new Stage(), stage, controller).showAndWait();
             }
         });
 

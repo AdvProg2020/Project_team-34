@@ -100,7 +100,7 @@ public class ClientThread extends Thread {
         }
     }
 
-    private boolean disconnect() {
+    public boolean disconnect() {
         boolean status = true;
         server.getDosBlocker().reduceConnection(socket.getInetAddress().getCanonicalHostName());
         try {

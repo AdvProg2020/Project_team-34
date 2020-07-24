@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -23,7 +24,7 @@ public class Server extends Thread {
     private boolean unlocked;
 
     public Server() throws IOException {
-        this.serverSocket = new ServerSocket(8080);
+        this.serverSocket = new ServerSocket(8081);
         this.tokenToClientThreadHashMap = new HashMap<>();
         this.unlocked = true;
         new PeriodicCodedDiscountGenerator(true).start();
@@ -116,6 +117,15 @@ public class Server extends Thread {
         this.unlocked = unlocked;
     }
 
+    public void disconnectUser(String username) {
+        Collection<ClientThread> clients = tokenToClientThreadHashMap.values();
+        for (ClientThread thread : clients) {
+            if (thread.getController().getAccount().getUserName().equals(username)) {
+                thread.disconnect();
+            }
+        }
+    }
+
     @Override
     public void run() {
         try {
@@ -134,6 +144,7 @@ public class Server extends Thread {
                         new ClientThread(this, clientSocket).start();
                     } catch (IOException e) {
                         System.err.println("Error: ClientThread start");
+                        dosBlocker.reduceConnection(clientSocket.getInetAddress().getCanonicalHostName());
                     }
                 } else {
                     clientSocket.close();

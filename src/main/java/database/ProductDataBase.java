@@ -35,6 +35,7 @@ public class ProductDataBase {
         content.put("imageInStringForm", "String");
         content.put("filePath", "String");
         content.put("supplierPort", "int");
+        content.put("supplierHost", "String");
 
         DataBase.createNewTable("Products", content);
     }
@@ -46,8 +47,8 @@ public class ProductDataBase {
         }
         String sql = "INSERT into Products (numberOfViews,productId ,productState, name,nameOfCompany,  priceForEachSupplier," +
                 "listOfSuppliers, remainedNumberForEachSupplier, description , specification, rootProductId,futureCategoryName, " +
-                "imageInStringForm, filePath, supplierPort)" +
-                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?, ?, ?, ?)";
+                "imageInStringForm, filePath, supplierPort, supplierHost)" +
+                "VALUES (?, ? , ? , ? , ?, ? ,?, ?, ? ,?,?,?, ?, ?, ?, ?)";
         try (PreparedStatement statement = DataBase.getConnection().prepareStatement(sql)) {
 
             statement.setInt(1, product.getNumberOfViews());
@@ -152,8 +153,9 @@ public class ProductDataBase {
                 String imageInStringForm = resultSet.getString("imageInStringForm");
                 String filePath = resultSet.getString("filePath");
                 int supplierPort = resultSet.getInt("supplierPort");
+                String supplierHost = resultSet.getString("supplierHost");
                 new Product(name,nameOfCompany,priceForEachSupplier,listOfSuppliers,remainedNumberForEachSupplier,description,
-                        numberOfViews,productId,state,rootProductId,futureCategoryName,specification, imageInStringForm, filePath, supplierPort);
+                        numberOfViews,productId,state,rootProductId,futureCategoryName,specification, imageInStringForm, filePath, supplierPort, supplierHost);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

@@ -7,7 +7,7 @@ import server.MailSender;
 import java.util.*;
 
 public class DynamicPasswordManager {
-    private static final int MAX_REQUESTS_IN_TIME_PERIOD_HOUR = 5;
+    private static final int MAX_REQUESTS_IN_TIME_PERIOD_HOUR = 20;
     private static final int MAX_REQUEST_TIME_PERIOD = (60 * 60 * 1000);
     private static final int PASSWORD_EXPIRY_PERIOD = 5 * 60 * 1000;
 

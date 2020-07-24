@@ -61,7 +61,7 @@ public class ManageUsersGMenu extends GMenu {
             protected Object call() throws Exception {
                 while (updatePermission) {
                     Platform.runLater(() -> update());
-                    Thread.sleep(5000);
+                    Thread.sleep(60000);
                 }
                 return null;
             }

@@ -50,14 +50,10 @@ public class Main extends Application {
             System.exit(0);
         });
 
-//        stage.setScene(new NewRequestDynamicPasswordGMenu(null, stage, null, null).getScene());
-//        stage.show();
 
         GMenu mainMenu = new MainMenuG( null, stage, controller);
         GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
         stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
-
-//        stage.setScene(new sendMenu(null, stage, controller).getScene());
-//        stage.show();
+        stage.show();
     }
 }

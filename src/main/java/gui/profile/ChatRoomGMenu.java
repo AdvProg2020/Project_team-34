@@ -139,7 +139,7 @@ public class ChatRoomGMenu extends GMenu {
                             updateUi();
                         }
                     });
-                    Thread.sleep(3000);
+                    Thread.sleep(15000);
                 }
                 System.out.println("Chat room thread closed!");
                 return null;

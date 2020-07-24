@@ -15,11 +15,10 @@ import java.util.HashMap;
  * @author rpirayadi
  * @since 0.0.1
  */
-
 public class Product {
     private static final ArrayList<Product> allProduct = new ArrayList<>();
     private static int allCreatedProductNum = 0;
-    private String productId;
+    private final String productId;
     private String name;
     private String nameOfCompany;
     private State productState;
@@ -151,8 +150,8 @@ public class Product {
         allProduct.add(this);
     }
 
-    private static String generateIdentifier() {
-        return "T34P" + String.format("%015d", allCreatedProductNum + 1);
+    private static synchronized String generateIdentifier() {
+        return "T34PR" + String.format("%015d", allCreatedProductNum + 1);
     }
 
     public String getProductId() {

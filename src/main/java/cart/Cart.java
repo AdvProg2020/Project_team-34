@@ -157,7 +157,7 @@ public class Cart {
         this.shippingInfo = null;
     }
 
-    public static String generateIdentifier() {
+    public static synchronized String generateIdentifier() {
         return "T34CA" + String.format("%015d", countOfCartCreated + 1);
     }
 
@@ -233,6 +233,13 @@ public class Cart {
     }
 
     public void update() {
+        for (ProductInCart productInCart : productsIn) {
+            if (productInCart.getProduct().getProductState() == State.DELETED) {
+                productsIn.remove(productInCart);
+                productInCount.remove(productInCart);
+                productInSale.remove(productInCart);
+            }
+        }
         for (ProductInCart productInCart : productsIn) {
             productInSale.replace(productInCart, Sale.getProductSale(productInCart.getProduct(), productInCart.getSupplier()));
         }
@@ -411,6 +418,17 @@ public class Cart {
             i++;
         }
         return cart.toString();
+    }
+
+    public static synchronized void reduceNumberOfProducts(Cart cart) throws ExceptionalMassage {
+        for (ProductInCart productInCart : cart.getProductsIn()) {
+            if (productInCart.getProduct().getRemainedNumber(productInCart.getSupplier()) < cart.getProductInCount().get(productInCart)) {
+                throw new ExceptionalMassage("Products are not available that much");
+            }
+        }
+        for (ProductInCart productInCart : cart.getProductsIn()) {
+            productInCart.getProduct().reduceRemainedNumber(productInCart.getSupplier(), cart.getProductInCount().get(productInCart));
+        }
     }
 
     @Override

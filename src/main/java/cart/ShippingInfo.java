@@ -1,8 +1,6 @@
 package cart;
 
-import account.Supplier;
 import database.ShippingInfoDataBase;
-import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;
@@ -12,7 +10,6 @@ import java.util.Objects;
  * @author Aryan Ahadinia
  * @since 0.0.1
  */
-
 public class ShippingInfo {
     private static final ArrayList<ShippingInfo> allShippingInfo = new ArrayList<>();
     private static int totalShippingInfoCreated = 0;
@@ -85,7 +82,7 @@ public class ShippingInfo {
     }
 
     //Modeling methods
-    public static String generateIdentifier() {
+    public static synchronized String generateIdentifier() {
         return "T34SI" + String.format("%015d", totalShippingInfoCreated + 1);
     }
 

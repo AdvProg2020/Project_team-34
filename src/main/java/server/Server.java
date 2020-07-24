@@ -5,9 +5,11 @@ import discount.PeriodicCodedDiscountGenerator;
 import server.security.DenialOfServiceBlocker;
 import server.security.DynamicPasswordManager;
 
-import java.io.DataOutputStream;
 import java.io.IOException;
-import java.net.*;
+import java.net.InetAddress;
+import java.net.ServerSocket;
+import java.net.Socket;
+import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -125,9 +127,9 @@ public class Server extends Thread {
         while (unlocked) {
             try {
                 Socket clientSocket = serverSocket.accept();
-                boolean permission = dosBlocker.getIpPermission(clientSocket.getInetAddress().getCanonicalHostName());
+                boolean permission = dosBlocker.getIpPermissionForConnection(clientSocket.getInetAddress().getCanonicalHostName());
                 System.out.println(permission);
-                if (dosBlocker.getIpPermission(clientSocket.getInetAddress().getCanonicalHostName())) {
+                if (permission) {
                     try {
                         new ClientThread(this, clientSocket).start();
                     } catch (IOException e) {

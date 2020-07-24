@@ -13,13 +13,14 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
-import javafx.scene.control.Alert;
+import javafx.scene.chart.ValueAxis;
 import log.CustomerLog;
 import product.Category;
 import product.Product;
 import server.communications.RequestStatus;
 import server.communications.Response;
 import server.communications.Utils;
+import server.security.Validation;
 import state.State;
 
 import java.util.ArrayList;
@@ -42,6 +43,20 @@ public class ProductController {
 
     public Response controlAddProduct(String name, String nameOfCompany, String price, String remainedNumbers, String category,
                                       String description, String specification, String imageInStringForm,String filePath, String portStr) {
+        try {
+            Validation.normalStringValidation(name);
+            Validation.normalStringValidation(nameOfCompany);
+            Validation.normalIntValidation(price);
+            Validation.normalIntValidation(remainedNumbers);
+            Validation.categoryValidation(category);
+            Validation.descriptionValidation(description);
+            Validation.specificationValidation(specification);
+            Validation.imageInStringFormValidation(imageInStringForm);
+            Validation.filePathValidation(filePath);
+            Validation.normalIntValidation(portStr);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         JsonParser parser = new JsonParser();
         int port = Integer.parseInt(portStr);
         HashMap<String, String> specifications = Utils.convertJsonElementStringToStringToHashMap(parser.parse(specification));
@@ -75,6 +90,11 @@ public class ProductController {
     }
 
     public Response controlRemoveProductById(String productId) {
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         if (product == null) {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Invalid Id"), mainController);
@@ -88,66 +108,13 @@ public class ProductController {
         return Response.createSuccessResponse(mainController);
     }
 
-    /*public String controlGetDigestInfosOfProduct(Product product) throws ExceptionalMassage {
-        Product productGotById = Product.getProductById(product.getProductId());
-        if (productGotById == null) {
-            throw new ExceptionalMassage("Invalid Id");
-        } else {
-            // !!
-            //needs sale for all
-            String result = "description= " + product.getDescription() + "\n" +
-                    "listOfSuppliers= " + product.getListOfSuppliers() + "\n" +
-                    "priceForEachSupplier= " + product.getPriceForEachSupplier() + "\n" +
-                    "category= " + Category.getProductCategory(product) + "\n" +
-                    "Score= " + Score.getAverageScoreForProduct(product) + "\n";
-            return String.valueOf(result);
-        }
-    }*/
-
-    /*public String controlGetAttributesOfProduct(String productId) throws ExceptionalMassage {
-        Product product = Product.getProductById(productId);
-        if (product == null) {
-            throw new ExceptionalMassage("Invalid Id");
-        } else {
-            StringBuilder result = new StringBuilder();
-            result.append("name= ").append(product.getName()).append("\n");
-            result.append("numberOfViews= ").append(product.getNumberOfViews()).append("\n");
-            result.append("nameOfCompany= ").append(product.getNameOfCompany()).append("\n");
-            result.append("description= ").append(product.getDescription()).append("\n");
-            result.append("listOfSuppliers= ").append(product.getListOfSuppliers()).append("\n");
-            result.append("priceForEachSupplier= ").append(product.getPriceForEachSupplier()).append("\n");
-            result.append("category= ").append(Category.getProductCategory(product)).append("\n");
-            HashMap<String, String> specification = product.getSpecification();
-            for (String specialField : specification.keySet()) {
-                result.append(specialField).append("= ").append(specification.get(specialField)).append("\n");
-            }
-            return String.valueOf(result);
-        }
-    }*/
-
-    /*public String controlCompare(String firstProductId, String secondProductId) throws ExceptionalMassage {
-        Product firstProduct = Product.getProductById(firstProductId);
-        Product secondProduct = Product.getProductById(secondProductId);
-        if (firstProduct == null || secondProduct == null) {
-            throw new ExceptionalMassage("Invalid Id");
-        } else if (!(Category.getProductCategory(firstProduct).equals(Category.getProductCategory(secondProduct))))
-            throw new ExceptionalMassage("You can not compare products in different categories");
-        else {
-            StringBuilder result = new StringBuilder();
-            result.append("name= ").append(firstProduct.getName()).append(" , ").append(secondProduct.getName()).append("\n");
-            result.append("numberOfViews= ").append(firstProduct.getNumberOfViews()).append(" , ").append(secondProduct.getNumberOfViews()).append("\n");
-            result.append("nameOfCompany= ").append(firstProduct.getNameOfCompany()).append(" , ").append(secondProduct.getNameOfCompany()).append("\n");
-            result.append("description= ").append(firstProduct.getDescription()).append(" , ").append(secondProduct.getDescription()).append("\n");
-            HashMap<String, String> firstSpecification = firstProduct.getSpecification();
-            HashMap<String, String> secondSpecification = firstProduct.getSpecification();
-            for (String specialField : firstSpecification.keySet()) {
-                result.append(specialField).append("= ").append(firstSpecification.get(specialField)).append(" , ").append(secondSpecification.get(specialField)).append("\n");
-            }
-            return String.valueOf(result);
-        }
-    }*/
-
     public Response controlEditProductById(String productId, String fieldToChange) {
+        try {
+            Validation.identifierValidation(productId);
+            Validation.normalStringValidation(fieldToChange);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         JsonParser parser = new JsonParser();
         HashMap<String, String> fieldsToChange = Utils.convertJsonElementStringToStringToHashMap(parser.parse(fieldToChange));
         Product product = Product.getProductById(productId);
@@ -185,17 +152,33 @@ public class ProductController {
     }
 
     public Response controlGetAllSuppliersForAProduct(String productId) {
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         JsonElement suppliers = Utils.convertSupplierArrayListToJsonElement(product.getListOfSuppliers());
         return new Response(RequestStatus.SUCCESSFUL, suppliers.toString(), mainController);
     }
 
     public Response controlViewBuyersOfProduct(String productId) {
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         JsonElement customers = Utils.convertCustomerArrayListToJsonElement(CustomerLog.getAllCustomersBoughtProduct(Product.getProductById(productId)));
         return new Response(RequestStatus.SUCCESSFUL, customers.toString(), mainController);
     }
 
     public Response doesThisSupplierSellThisProduct(String sellerUsername, String productId) {
+        try {
+            Validation.identifierValidation(productId);
+            Validation.normalStringValidation(sellerUsername);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Supplier seller = (Supplier) Account.getAccountByUsernameWithinAvailable(sellerUsername);
         Product product = Product.getProductById(productId);
         if (mainController.getAccount() == null)
@@ -206,6 +189,11 @@ public class ProductController {
 
     //added by rpirayadi
     public Response controlGetAllCategoriesInACategory(String rootCategoryName){
+        try {
+            Validation.categoryValidation(rootCategoryName);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Category rootCategory = Category.getCategoryByName(rootCategoryName);
         JsonElement categories = Utils.convertCategoryArrayListToJsonElement(rootCategory.getAllCategoriesIn());
         return new Response(RequestStatus.SUCCESSFUL,categories.toString(), mainController);
@@ -218,6 +206,13 @@ public class ProductController {
 
     //related to feedback:
     public Response controlAddCommentToProduct(String title, String content, String productId){
+        try {
+            Validation.normalStringValidation(title);
+            Validation.identifierValidation(productId);
+            Validation.messageValidation(content);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         if (!(mainController.getAccount() instanceof Customer)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sign in as a customer first!"), mainController);
@@ -227,6 +222,11 @@ public class ProductController {
     }
 
     public Response controlGetCommentsOfAProduct(String productId) {
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         ArrayList<Comment> productComment = new ArrayList<>();
         for (Comment comment : Comment.getComments()) {
@@ -239,6 +239,12 @@ public class ProductController {
     }
 
     public Response controlRateProductById(String id, String score)  {
+        try {
+            Validation.identifierValidation(id);
+            Validation.floatValidation(score);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if (Product.getProductById(id) == null) {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No such product with id!"), mainController);
         } else if (!(mainController.getAccount() instanceof Customer)){
@@ -253,6 +259,11 @@ public class ProductController {
     }
 
     public Response controlGetAverageScoreByProduct(String productId) {
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(Score.
                 getAverageScoreForProduct(product))), mainController);
@@ -291,6 +302,11 @@ public class ProductController {
     }
 
     public Response controlShowDetailForRequest(String requestId) {
+        try {
+            Validation.identifierValidation(requestId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if (requestId.charAt(3) == 'P') {
             return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Product.getDetailsForProductRequest(requestId)), mainController);
         } else {
@@ -303,6 +319,11 @@ public class ProductController {
     }
 
     public Response controlGetEnumForRequest(String requestId)  {
+        try {
+            Validation.identifierValidation(requestId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if(requestId.charAt(3) == 'P'){
             return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Product.getProductById(Product.convertRequestIdToProductId(requestId)).getProductState()), mainController);
         } else {
@@ -311,6 +332,12 @@ public class ProductController {
     }
 
     public Response controlAcceptOrDeclineRequest(String requestId, String isAccepted) {
+        try {
+            Validation.identifierValidation(requestId);
+            Validation.booleanValidation(isAccepted);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if (requestId.charAt(3) == 'P') {
             try {
                 Product.acceptOrDeclineRequest(requestId, Boolean.parseBoolean(isAccepted));
@@ -328,6 +355,11 @@ public class ProductController {
     }
 
     public Response controlGetCategorySpecialFields(String name) {
+        try {
+            Validation.normalStringValidation(name);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         HashMap<String, ArrayList<String>> specialFields = Category.getCategoryByName(name).getSpecialFields();
         if(specialFields == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("This is a parent category!"), mainController);
@@ -337,6 +369,12 @@ public class ProductController {
     }
 
     public Response controlHasCustomerBoughtThisProduct(String customerUsername, String productId){
+        try {
+            Validation.normalStringValidation(customerUsername);
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Customer customer = (Customer) Account.getAccountByUsernameWithinAvailable(customerUsername);
         Product product = Product.getProductById(productId);
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(CustomerLog.
@@ -348,12 +386,23 @@ public class ProductController {
     }
 
     public Response controlViewThisProduct(String productId){
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         product.setNumberOfViews(product.getNumberOfViews()+ 1);
         return Response.createSuccessResponse(mainController);
     }
 
     public Response getCustomersBoughtProductObservable(String productId ,String supplierUsername) {
+        try {
+            Validation.identifierValidation(productId);
+            Validation.userPassStringValidation(supplierUsername);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         JsonElement returning = Utils.convertCustomerArrayListToJsonElement(CustomerLog.getAllCustomersBoughtProductFromSupplier(product, supplier));
@@ -362,6 +411,13 @@ public class ProductController {
 
     //related to Category:
     public Response controlAddCategory(String name, String isParentCategoryStr, String parentCategoryName) {
+        try {
+            Validation.normalStringValidation(name);
+            Validation.booleanValidation(isParentCategoryStr);
+            Validation.categoryValidation(parentCategoryName);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         boolean isParentCategory = Boolean.parseBoolean(isParentCategoryStr);
         Account account = mainController.getAccount();
         if (account == null)
@@ -377,6 +433,11 @@ public class ProductController {
     }
 
     public Response controlRemoveCategory(String name) {
+        try {
+            Validation.normalStringValidation(name);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First. <Controller.controlRemoveCategory>", mainController);
@@ -391,6 +452,12 @@ public class ProductController {
     }
 
     public Response controlAddProductToCategory(String categoryName, String productIdentifier) {
+        try {
+            Validation.categoryValidation(categoryName);
+            Validation.identifierValidation(productIdentifier);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First. <Controller.controlAddProductToCategory>", mainController);
@@ -411,6 +478,12 @@ public class ProductController {
     }
 
     public Response controlRemoveProductFromCategory(String categoryName, String productIdentifier) {
+        try {
+            Validation.categoryValidation(categoryName);
+            Validation.identifierValidation(productIdentifier);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = mainController.getAccount();
         //can modify
         if (account == null)
@@ -433,6 +506,12 @@ public class ProductController {
     }
 
     public Response controlChangeCategoryName(String oldName, String newName) {
+        try {
+            Validation.categoryValidation(oldName);
+            Validation.normalStringValidation(newName);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First. <Controller.controlChangeCategoryName>", mainController);
@@ -450,6 +529,13 @@ public class ProductController {
     }
 
     public Response controlAddSpecialFieldToCategory(String categoryName, String filterKey, String filterValues) {
+        try {
+            Validation.categoryValidation(categoryName);
+            Validation.normalStringValidation(filterKey);
+            //TODO
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.", mainController);
@@ -467,6 +553,13 @@ public class ProductController {
     }
 
     public Response controlRemoveSpecialFieldFromCategory(String categoryName, String filterKey, String filterValue) {
+        try {
+            Validation.categoryValidation(categoryName);
+            Validation.normalStringValidation(filterKey);
+            //TODO
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.", mainController);
@@ -512,6 +605,11 @@ public class ProductController {
     }
 
     public Response controlGetCategoryParentName(String name) {
+        try {
+            Validation.categoryValidation(name);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
 //        String parentCategoryName = Category.getCategoryByName(name).getParentCategoryName();
 //        Response response ;
 //        if(parentCategoryName == null)
@@ -523,6 +621,11 @@ public class ProductController {
     }
 
     public Response isThisCategoryClassifier(String name) {
+        try {
+            Validation.categoryValidation(name);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(String.valueOf(Category.
                 getCategoryByName(name).isCategoryClassifier())), mainController);
     }
@@ -572,12 +675,22 @@ public class ProductController {
     }
 
     public Response controlFilterSetAvailabilityFilter(String availabilityFilterStr) {
+        try {
+            Validation.booleanValidation(availabilityFilterStr);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         boolean availabilityFilter = new JsonParser().parse(availabilityFilterStr).getAsBoolean();
         filterAndSort.setAvailabilityFilter(availabilityFilter);
         return new Response(RequestStatus.SUCCESSFUL, "", mainController);
     }
 
     public Response controlFilterSetOnlyInAuctionFilter(String onlyInAuctionString){
+        try {
+            Validation.booleanValidation(onlyInAuctionString);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         boolean onlyInAuction = new JsonParser().parse(onlyInAuctionString).getAsBoolean();
         filterAndSort.setInAuctionOnly(onlyInAuction);
         return new Response(RequestStatus.SUCCESSFUL, "", mainController);
@@ -585,6 +698,11 @@ public class ProductController {
 
 
     public Response controlFilterSetPriceLowerBound(String priceLowerBoundStr) {
+        try {
+            Validation.normalIntValidation(priceLowerBoundStr);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         int priceLowerBound = new JsonParser().parse(priceLowerBoundStr).getAsInt();
         try {
             filterAndSort.setPriceLowerBound(priceLowerBound);
@@ -595,6 +713,11 @@ public class ProductController {
     }
 
     public Response controlFilterSetPriceUpperBound(String priceUpperBoundStr) {
+        try {
+            Validation.normalIntValidation(priceUpperBoundStr);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         int priceUpperBound = new JsonParser().parse(priceUpperBoundStr).getAsInt();
         try {
             filterAndSort.setPriceUpperBound(priceUpperBound);
@@ -605,6 +728,11 @@ public class ProductController {
     }
 
     public Response controlFilterSetInSaleOnly(String inSaleOnlyString){
+        try {
+            Validation.booleanValidation(inSaleOnlyString);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         boolean inSaleOnly = Boolean.parseBoolean(inSaleOnlyString);
         filterAndSort.setInSaleOnly(inSaleOnly);
         return Response.createSuccessResponse(mainController);
@@ -623,6 +751,11 @@ public class ProductController {
     }
 
     public Response controlFilterSetSortType(String sortType) {
+        try {
+            Validation.normalStringValidation(sortType);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         switch (sortType) {
             case "by number of views":
                 filterAndSort.setSortType(SortType.BY_NUMBER_OF_VIEWS);
@@ -641,6 +774,12 @@ public class ProductController {
 
     public Response controlFilterAddSpecialFilter(String key, String value) {
         try {
+            Validation.normalStringValidation(key);
+            Validation.normalStringValidation(value);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
+        try {
             filterAndSort.addSpecialFilter(key, value);
             return new Response(RequestStatus.SUCCESSFUL, "", mainController);
         } catch (ExceptionalMassage exceptionalMassage) {
@@ -649,6 +788,12 @@ public class ProductController {
     }
 
     public Response controlFilterRemoveSpecialFilter(String key, String value) {
+        try {
+            Validation.normalStringValidation(key);
+            Validation.normalStringValidation(value);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         try {
             filterAndSort.removeSpecialFilter(key, value);
             return new Response(RequestStatus.SUCCESSFUL, "", mainController);
@@ -664,6 +809,11 @@ public class ProductController {
 
     public Response controlFilterAddNameFilter(String name) {
         try {
+            Validation.normalStringValidation(name);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
+        try {
             filterAndSort.addNameFilter(name);
             return new Response(RequestStatus.SUCCESSFUL, "", mainController);
         } catch (ExceptionalMassage exceptionalMassage) {
@@ -672,6 +822,11 @@ public class ProductController {
     }
 
     public Response controlFilterRemoveNameFilter(String name) {
+        try {
+            Validation.normalStringValidation(name);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         try {
             filterAndSort.removeNameFilter(name);
             return new Response(RequestStatus.SUCCESSFUL, "", mainController);
@@ -682,6 +837,11 @@ public class ProductController {
 
     public Response controlFilterAddSupplierFilter(String supplierName){
         try {
+            Validation.normalStringValidation(supplierName);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
+        try {
             filterAndSort.addSupplierFilter(supplierName);
             return Response.createSuccessResponse(mainController);
         } catch (ExceptionalMassage exceptionalMassage) {
@@ -690,6 +850,11 @@ public class ProductController {
     }
 
     public Response controlFilterRemoveSupplierFilter(String supplierName){
+        try {
+            Validation.normalStringValidation(supplierName);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         try {
             filterAndSort.removeSupplierFilter(supplierName);
             return Response.createSuccessResponse(mainController);
@@ -700,6 +865,11 @@ public class ProductController {
 
     public Response controlFilterAddBrandFilter(String brand) {
         try {
+            Validation.normalStringValidation(brand);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
+        try {
             filterAndSort.addBrandFilter(brand);
             return new Response(RequestStatus.SUCCESSFUL, "", mainController);
         } catch (ExceptionalMassage exceptionalMassage) {
@@ -708,6 +878,11 @@ public class ProductController {
     }
 
     public Response controlFilterRemoveBrandFilter(String brand) {
+        try {
+            Validation.normalStringValidation(brand);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         try {
             filterAndSort.removeBrandFilter(brand);
             return new Response(RequestStatus.SUCCESSFUL, "", mainController);
@@ -735,12 +910,22 @@ public class ProductController {
     }
 
     public Response getAllSuppliersThatHaveAvailableProduct(String productId){
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         ArrayList<Supplier> suppliers = product.getAllSuppliersThatHaveAvailableProduct();
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertSupplierArrayListToJsonElement(suppliers).toString(), mainController);
     }
 
     public Response getProductByName(String name){
+        try {
+            Validation.normalStringValidation(name);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductByName(name);
         if(product == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No such product!"), mainController);
@@ -749,16 +934,33 @@ public class ProductController {
     }
 
     public Response getProductForSupplier(String supplierUsername){
+        try {
+            Validation.userPassStringValidation(supplierUsername);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         ArrayList<Product> products = Product.getProductForSupplier(supplier);
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertProductArrayListToJsonElement(products).toString(), mainController);
     }
 
     public Response getProductById(String id){
+        try {
+            Validation.identifierValidation(id);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(Product.getProductById(id)), mainController);
     }
 
     public Response promoteAuctionPrice(String newPrice,String minimum,String auctionId){
+        try {
+            Validation.normalIntValidation(newPrice);
+            Validation.normalIntValidation(minimum);
+            Validation.identifierValidation(auctionId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if(!(mainController.getAccount() instanceof Customer)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Customer!"), mainController);
         }
@@ -805,6 +1007,12 @@ public class ProductController {
     }
 
     public Response controlAddAuction(String productId,String dateString){
+        try {
+            Validation.identifierValidation(productId);
+            Validation.dateValidation(dateString);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if(!(mainController.getAccount() instanceof Supplier)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as Supplier!"), mainController);
         }
@@ -820,6 +1028,11 @@ public class ProductController {
     }
 
     public Response controlGetAuctionById(String id){
+        try {
+            Validation.identifierValidation(id);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Auction auction = Auction.getAuctionByIdentifier(id);
         if(auction == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Auction not found!"), mainController);
@@ -828,6 +1041,11 @@ public class ProductController {
     }
 
     public Response controlGetAuctionForProduct(String productId){
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         Auction auction = Auction.getAuctionForProduct(product, product.getListOfSuppliers().get(0));
         String result;
@@ -841,6 +1059,11 @@ public class ProductController {
 
     public Response controlRemoveProductWithThisPort(String portString){
         try {
+            Validation.normalIntValidation(portString);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
+        try {
             Product.removeProductsWithThisSupplierPort(Integer.parseInt(portString));
             return Response.createSuccessResponse(mainController);
         } catch (ExceptionalMassage exceptionalMassage) {
@@ -849,6 +1072,11 @@ public class ProductController {
     }
 
     public Response controlRemoveProductForSupervisor(String productId){
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         if(product == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Product not found!"), mainController);

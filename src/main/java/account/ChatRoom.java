@@ -26,7 +26,7 @@ public class ChatRoom {
         joinedAccounts.remove(account);
     }
 
-    private static String generateIdentifier() {
+    private static synchronized String generateIdentifier() {
         return "T34CR" + String.format("%015d", numberOfChatRoomsCreated + 1);
     }
 

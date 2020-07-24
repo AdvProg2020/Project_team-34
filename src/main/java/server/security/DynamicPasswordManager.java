@@ -50,9 +50,10 @@ public class DynamicPasswordManager {
                 }
             }
         };
-        activePasswordsCleaner.schedule(passwordExpiryTask, new Date(System.currentTimeMillis() + PASSWORD_EXPIRY_PERIOD));
+        Date expire = new Date(System.currentTimeMillis() + PASSWORD_EXPIRY_PERIOD);
+        activePasswordsCleaner.schedule(passwordExpiryTask, expire);
         String passwordEmail = "Your dynamic password for @" + account.getUserName() + " is " + password + "\n" +
-                "This password is valid for " + PASSWORD_EXPIRY_PERIOD /(int) (60 * 1000) + " minutes.";
+                "This password is valid until " + expire;
         System.out.println(passwordEmail);
         new MailSender(account.getEmail(), "Dynamic Password", passwordEmail).send();
     }

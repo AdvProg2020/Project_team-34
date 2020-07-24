@@ -5,7 +5,6 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import controller.Controller;
-import product.Product;
 import server.communications.*;
 
 import java.io.IOException;
@@ -58,7 +57,7 @@ public class ClientThread extends Thread {
         }
         while (true) {
             try {
-                if (!server.getDosBlocker().getIpPermission(socket.getInetAddress().getCanonicalHostName())) {
+                if (!server.getDosBlocker().getIpPermissionForCommunication(socket.getInetAddress().getCanonicalHostName())) {
                     disconnect();
                     break;
                 }
@@ -103,6 +102,7 @@ public class ClientThread extends Thread {
 
     private boolean disconnect() {
         boolean status = true;
+        server.getDosBlocker().reduceConnection(socket.getInetAddress().getCanonicalHostName());
         try {
             socket.close();
         } catch (IOException e) {

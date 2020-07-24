@@ -4,9 +4,7 @@ import account.Customer;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.CommentDataBase;
-import discount.CodedDiscount;
 import product.Product;
-import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;
@@ -115,8 +113,8 @@ public class Comment {
         return product;
     }
 
-    private String generateIdentifier() {
-        return "T34C" + String.format("%015d", allCommentsNum + 1);
+    private static synchronized String generateIdentifier() {
+        return "T34CO" + String.format("%015d", allCommentsNum + 1);
     }
 
     public static ArrayList<Comment> getCommentsForProduct(Product product) {

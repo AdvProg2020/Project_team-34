@@ -7,12 +7,14 @@ import java.util.*;
  * @since 0.0.3
  */
 public class DenialOfServiceBlocker {
+    private static final int MAX_CONNECTIONS = 4;
     private static final int MAX_FREQUENCY_ALLOWED = 30;
     private static final int FREQUENCY_CALCULATOR_PERIOD_MILLIS = 10000;
     private static final int BLOCKING_PERIOD = 36000;
 
     private final ArrayList<String> blockedIp;
-    private final HashMap<Date, String> connectionRequests;
+    private final HashMap<Date, String> cummonicationRequests;
+    private final HashMap<String, Integer> connectionRequests;
 
     private final Timer blockedIpCleaner;
     private final Timer connectionRequestsCleaner;
@@ -21,6 +23,7 @@ public class DenialOfServiceBlocker {
 
     public DenialOfServiceBlocker() {
         this.blockedIp = new ArrayList<>();
+        this.cummonicationRequests = new HashMap<>();
         this.connectionRequests = new HashMap<>();
         this.blockedIpCleaner = new Timer();
         this.connectionRequestsCleaner = new Timer();
@@ -40,14 +43,31 @@ public class DenialOfServiceBlocker {
         }).start();
     }
 
-    public boolean getIpPermission(String ip) {
+    public void reduceConnection(String ip) {
+        if (connectionRequests.containsKey(ip))
+            connectionRequests.replace(ip, connectionRequests.get(ip) - 1);
+    }
+
+    public boolean getIpPermissionForConnection(String ip) {
+        System.out.println(ip);
+        if (connectionRequests.containsKey(ip) && connectionRequests.get(ip) >= MAX_CONNECTIONS) {
+            return false;
+        } else if (connectionRequests.containsKey(ip)) {
+            connectionRequests.replace(ip, connectionRequests.get(ip) + 1);
+        } else {
+            connectionRequests.put(ip, 1);
+        }
+        return true;
+    }
+
+    public boolean getIpPermissionForCommunication(String ip) {
         System.out.println(ip);
         Date requestDate = new Date(System.currentTimeMillis());
-        connectionRequests.put(requestDate, ip);
+        cummonicationRequests.put(requestDate, ip);
         TimerTask connectionRequestCleaningTask = new TimerTask() {
             @Override
             public void run() {
-                connectionRequests.remove(requestDate);
+                cummonicationRequests.remove(requestDate);
             }
         };
         connectionRequestsCleaner.schedule(connectionRequestCleaningTask, new Date(System.currentTimeMillis() +
@@ -72,8 +92,8 @@ public class DenialOfServiceBlocker {
     private synchronized double checkConnectionsFrequency(String ip) {
         try {
             int c = 0;
-            for (Date date : connectionRequests.keySet()) {
-                if (connectionRequests.get(date).equals(ip)) {
+            for (Date date : cummonicationRequests.keySet()) {
+                if (cummonicationRequests.get(date).equals(ip)) {
                     c++;
                 }
             }

@@ -33,6 +33,7 @@ public class Auction {
     private Integer highestPromotion;
     private final Date end;
     private int wage;
+    private boolean isEnded;
 
     public Auction(Product product, Supplier supplier, long endLong, int wage) {
         this.identifier = Auction.generateIdentifier();
@@ -43,6 +44,7 @@ public class Auction {
         this.highestPromotion = null;
         this.end = new Date(endLong);
         this.wage = wage;
+        this.isEnded = false;
         TimerTask endTask = new TimerTask() {
             @Override
             public void run() {
@@ -56,7 +58,7 @@ public class Auction {
     }
 
     public Auction(String identifier, String chatRoomIdentifier, Product product, Supplier supplier,
-                   Customer highestPromoter, Integer highestPromotion, Date end, int wage) {
+                   Customer highestPromoter, Integer highestPromotion, Date end, int wage, boolean isEnded) {
         this.identifier = identifier;
         this.chatRoomIdentifier = new ChatRoom().getChatRoomId();
         this.product = product;
@@ -65,6 +67,10 @@ public class Auction {
         this.highestPromotion = highestPromotion;
         this.end = end;
         this.wage = wage;
+        this.isEnded = isEnded;
+        if (!isEnded && System.currentTimeMillis() > end.getTime()) {
+            this.end();
+        }
         TimerTask endTask = new TimerTask() {
             @Override
             public void run() {
@@ -130,6 +136,10 @@ public class Auction {
         return end;
     }
 
+    public boolean isEnded() {
+        return isEnded;
+    }
+
     public static ArrayList<Auction> getAllAuctions() {
         return ALL_AUCTIONS;
     }
@@ -138,7 +148,7 @@ public class Auction {
         return wage;
     }
 
-    private static String generateIdentifier() {
+    private static synchronized String generateIdentifier() {
         return "T34AC" + String.format("%015d", allAuctionsCount + 1);
     }
 
@@ -156,9 +166,7 @@ public class Auction {
     }
 
     public boolean isActive(){
-        if(this.getEnd().getTime() > System.currentTimeMillis()){
-            return true;
-        } return false;
+        return this.getEnd().getTime() > System.currentTimeMillis();
     }
 
     public static Auction getAuctionForProduct(Product product, Supplier supplier){
@@ -191,11 +199,14 @@ public class Auction {
     }
 
     public void end() {
-        if (highestPromoter != null) {
-            try {
-                new CustomerLog(this, wage);
-            } catch (ExceptionalMassage exceptionalMassage) {
-                System.err.println("Couldn't add log.");
+        if (isEnded) {
+            if (highestPromoter != null) {
+                try {
+                    new CustomerLog(this, wage);
+                    supplier.setCredit(supplier.getCredit() + highestPromotion);
+                } catch (ExceptionalMassage exceptionalMassage) {
+                    System.err.println("Couldn't add log.");
+                }
             }
         }
         //product out

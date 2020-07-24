@@ -1,29 +1,25 @@
 package discount;
 
 import account.Customer;
-import account.Supplier;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.CodedDiscountDataBase;
-import server.communications.Response;
 import server.communications.Utils;
-import state.State;
 
 import java.util.*;
 
 /**
  * @author soheil
- * @since 0.01
+ * @since 0.0.1
  */
-
 public class CodedDiscount extends Discount{
     private static final String LETTERS_SET = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-    private static ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
-    private String discountCode;
+    private static final ArrayList<CodedDiscount> codedDiscounts = new ArrayList<>();
+    private final String discountCode;
     private int maxDiscountAmount;
-    private HashMap<Customer, Integer> usedDiscountPerCustomer;
-    private HashMap<Customer, Integer> maximumNumberOfUsagePerCustomer;
-    private ArrayList<Customer> customers;
+    private final HashMap<Customer, Integer> usedDiscountPerCustomer;
+    private final HashMap<Customer, Integer> maximumNumberOfUsagePerCustomer;
+    private final ArrayList<Customer> customers;
 
     public CodedDiscount(String json) {
         super(new Date(Long.parseLong((new JsonParser().parse(json).getAsJsonObject()).get("start").getAsString())),
@@ -84,11 +80,11 @@ public class CodedDiscount extends Discount{
     public static String codeGenerator(){
         Random rand = new Random();
         int upperBound = LETTERS_SET.length()-1;
-        String code = "";
+        StringBuilder code = new StringBuilder();
         for(int i = 0;i < 8;i++){
-            code += LETTERS_SET.charAt(rand.nextInt(upperBound));
+            code.append(LETTERS_SET.charAt(rand.nextInt(upperBound)));
         }
-        return code;
+        return code.toString();
     }
 
     public String getDiscountCode() {
@@ -126,11 +122,7 @@ public class CodedDiscount extends Discount{
 
     public boolean canCustomerUseCode(Customer customer){
         Date present = new Date(System.currentTimeMillis());
-        if(usedDiscountPerCustomer.get(customer) == maximumNumberOfUsagePerCustomer.get(customer) || (present.before(start)) || (present.after(end))){
-            return false;
-        }   else    {
-            return true;
-        }
+        return !usedDiscountPerCustomer.get(customer).equals(maximumNumberOfUsagePerCustomer.get(customer)) && (!present.before(start)) && (!present.after(end));
     }
 
     public static ArrayList<CodedDiscount> getCodedDiscounts() {
@@ -151,7 +143,6 @@ public class CodedDiscount extends Discount{
         }
         return null;
     }
-
 
     public int getRemainedNumberByCustomer(Customer customer){
         for (Customer eachCustomer : usedDiscountPerCustomer.keySet()) {
@@ -191,14 +182,14 @@ public class CodedDiscount extends Discount{
     @Override
     public String toString() {
 
-        String returning =
-                "Discount Code :" + discountCode + '\n' +
-                ", Max discount percent: " + maxDiscountAmount + '\n' +
-                ", Percent: " + percent + '\n' +
-                ", Customers :\n";
+        StringBuilder returning =
+                new StringBuilder("Discount Code :" + discountCode + '\n' +
+                        ", Max discount percent: " + maxDiscountAmount + '\n' +
+                        ", Percent: " + percent + '\n' +
+                        ", Customers :\n");
         for (Customer customer : customers) {
-            returning += customer.getUserName() + "\n";
+            returning.append(customer.getUserName()).append("\n");
         }
-        return returning;
+        return returning.toString();
     }
 }

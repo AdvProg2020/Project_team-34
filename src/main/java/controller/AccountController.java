@@ -15,9 +15,11 @@ import log.CustomerLog;
 import log.LogStatus;
 import log.SupplierLog;
 import product.Product;
+import server.MailSender;
 import server.communications.RequestStatus;
 import server.communications.Response;
 import server.communications.Utils;
+import server.security.Validation;
 
 import java.io.*;
 import java.net.Socket;
@@ -91,6 +93,23 @@ public class AccountController {
     public Response controlCreateAccount(String type, String username, String firstName, String lastName,
                                          String email, String phoneNumber, String nameOfCompany, String bankUsername,
                                          String bankPassword, String alsoBankStr) {
+        try {
+            Validation.booleanValidation(alsoBankStr);
+            boolean alsoBank = Boolean.parseBoolean(alsoBankStr);
+            Validation.userPassStringValidation(username);
+            Validation.normalStringValidation(firstName);
+            Validation.normalStringValidation(lastName);
+            Validation.emailValidation(email);
+            Validation.phoneNumberValidation(phoneNumber);
+            if (type.equals("supplier"))
+                Validation.normalStringValidation(nameOfCompany);
+            if (alsoBank) {
+                Validation.userPassStringValidation(bankUsername);
+                Validation.userPassStringValidation(bankPassword);
+            }
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         boolean alsoBank = Boolean.parseBoolean(alsoBankStr);
         if (!Account.isUsernameAvailable(username))
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate username"), mainController);
@@ -125,12 +144,24 @@ public class AccountController {
         if (!(mainController.getAccount() instanceof Supervisor))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "You must be a supervisor to create supporter account.", mainController);
         new Supporter(username, name, familyName, email, phoneNumber,0);
+        new MailSender(email, "Welcome to TEAM34",
+                "Dear " + name + " " + familyName + ", Welcome to TEAM34 online store.\n" +
+                        "Each time you want to sign in, we will send you a dynamic password to this email which is " +
+                        "active only for few minutes.\n\n" +
+                        "Sincerely,\n" +
+                        "Department of cyber security").send();
         return Response.createSuccessResponse(mainController);
     }
 
     private Response controlCreateCustomer(String username, String name, String familyName, String email,
                                            String phoneNumber, int bankAccountNumber) {
         new Customer(username, name, familyName, email, phoneNumber, 0, bankAccountNumber);
+        new MailSender(email, "Welcome to TEAM34",
+                "Dear " + name + " " + familyName + ", Welcome to TEAM34 online store.\n" +
+                        "Each time you want to sign in, we will send you a dynamic password to this email which is " +
+                        "active only for few minutes.\n\n" +
+                        "Sincerely,\n" +
+                        "Department of cyber security").send();
         return Response.createSuccessResponse(mainController);
     }
 
@@ -140,6 +171,12 @@ public class AccountController {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Duplicate company name."),mainController);
         }
         new Supplier(username, name, familyName, email, phoneNumber, 0, nameOfCompany, bankAccountNumber);
+        new MailSender(email, "Welcome to TEAM34",
+                "Dear " + name + " " + familyName + ", Welcome to TEAM34 online store.\n" +
+                        "Each time you want to sign in, we will send you a dynamic password to this email which is " +
+                        "active only for few minutes.\n\n" +
+                        "Sincerely,\n" +
+                        "Department of cyber security").send();
         return Response.createSuccessResponse(mainController);
     }
 
@@ -166,6 +203,11 @@ public class AccountController {
     }
 
     public Response controlLogin(String username) {
+        try {
+            Validation.userPassStringValidation(username);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if (hasSomeOneLoggedInInternal())
             return  Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Logout first."), mainController);
         Account account = Account.getAccountByUsernameWithinAvailable(username);
@@ -188,6 +230,11 @@ public class AccountController {
 
     public Response controlRequestDynamicPassword(String username) {
         try {
+            Validation.userPassStringValidation(username);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
+        try {
             mainController.getClientThread().getServer().getDynamicPasswordManager().requestPassword(username);
             return Response.createSuccessResponse(mainController);
         } catch (ExceptionalMassage exceptionalMassage) {
@@ -196,6 +243,12 @@ public class AccountController {
     }
 
     public Response controlAuthenticate(String username, String dynamicPass) throws ExceptionalMassage {
+        try {
+            Validation.userPassStringValidation(username);
+            Validation.userPassStringValidation(dynamicPass);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if (mainController.getClientThread().getServer().getDynamicPasswordManager().authenticatePassword(username, dynamicPass)) {
             return controlLogin(username);
         }
@@ -219,48 +272,15 @@ public class AccountController {
         return new Response(RequestStatus.SUCCESSFUL, credit, mainController);
     }
 
-//    public Response controlEditField(String field, String newValue) {
-//        Account account = mainController.getAccount();
-//        switch (field) {
-//            case "name":
-//                account.setName(newValue);
-//                break;
-//            case "familyName":
-//                account.setFamilyName(newValue);
-//                break;
-//            case "email":
-//                account.setEmail(newValue);
-//                break;
-//            case "phoneNumber":
-//                account.setPhoneNumber(newValue);
-//                break;
-//            case "credit":
-//                int value;
-//                try {
-//                    value = Integer.parseInt(newValue);
-//                } catch (Exception exception) {
-//                   return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must enter a number for credit"), mainController);
-//                }
-//                account.setCredit(value);
-//                break;
-//            case "nameOfCompany":
-//                if (account instanceof Supplier)
-//                    ((Supplier) account).setNameOfCompany(newValue);
-//                else
-//                    return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You must login as a Supplier to edit company name"), mainController);
-//                break;
-//            case  "username":
-//                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("You can not edit username"), mainController);
-//            case "password":
-//                account.setPassword(newValue);
-//                break;
-//            default:
-//                return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("No such field " + field), mainController);
-//        }
-//        return Response.createSuccessResponse(mainController);
-//    }
-
     public Response editAllFields(String name, String familyName, String email, String phoneNumber, String nameOfCompany) {
+        try {
+            Validation.normalStringValidation(name);
+            Validation.emailValidation(email);
+            Validation.phoneNumberValidation(phoneNumber);
+            Validation.normalStringValidation(nameOfCompany);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if (getInternalAccount() instanceof Supplier) {
             ((Supplier) getInternalAccount()).editAllFields(name, familyName, email, phoneNumber, nameOfCompany);
         } else {
@@ -269,15 +289,6 @@ public class AccountController {
         return Response.createSuccessResponse( mainController);
     }
 
-    /*public String controlGetListOfAccounts() {
-        ArrayList<String> allUsername = Account.getAllUsername();
-        StringBuilder result = new StringBuilder();
-        for (String username : allUsername) {
-            result.append(username).append('\n');
-        }
-        return result.toString();
-    }*/
-
     public Response controlGetListOfAccountUserNames(){
         ArrayList<String> allUsername = Account.getAllUsername();
         JsonElement jsonElement = Utils.convertStringArrayListToJsonElement(allUsername);
@@ -285,6 +296,11 @@ public class AccountController {
     }
 
     public Response controlViewUserInfo(String username) {
+        try {
+            Validation.userPassStringValidation(username);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = Account.getAccountByUsernameWithinAvailable(username);
         if (account == null)
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Account not found."), mainController);
@@ -292,6 +308,11 @@ public class AccountController {
     }
 
     public Response controlDeleteUser(String username) {
+        try {
+            Validation.userPassStringValidation(username);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account accountGotByUsername = Account.getAccountByUsernameWithinAvailable(username);
         if (accountGotByUsername == null)
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Account not found."), mainController);
@@ -309,23 +330,13 @@ public class AccountController {
         return new Response(RequestStatus.EXCEPTIONAL_MASSAGE,"Sign in as a Supplier!", mainController);
     }
 
-    /*public String controlGetListOfProductsForThisSupplier() throws  ExceptionalMassage{
-        Account account = mainController.getAccount();
-        if (!(account instanceof Supplier)) {
-            throw new ExceptionalMassage("Sign in as a supplier");
-        }
-        else {
-            ArrayList<Product> products = Product.getProductForSupplier((Supplier)account);
-            String.valueOf(products);
-            StringBuilder result = new StringBuilder("");
-            for (Product product : products) {
-                result.append(product.getName()).append("   ").append(product.getProductId()).append("\n");
-            }
-            return String.valueOf(result);
-        }
-    }*/
-
     public Response controlAddToCart(String productId, String supplierNameOfCompany)  {
+        try {
+            Validation.identifierValidation(productId);
+            Validation.normalStringValidation(supplierNameOfCompany);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if (getInternalAccount() instanceof Supplier || getInternalAccount() instanceof Supervisor) {
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("logout, Supervisor and Supplier are denied"), mainController);
         }
@@ -344,6 +355,12 @@ public class AccountController {
     }
 
     public Response increaseProductQuantity(String productId, String supplierNameOfCompany) {
+        try {
+            Validation.identifierValidation(productId);
+            Validation.normalStringValidation(supplierNameOfCompany);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         if (product == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Product not found.", mainController);
@@ -359,6 +376,12 @@ public class AccountController {
     }
 
     public Response decreaseProductQuantity(String productId, String supplierNameOfCompany) throws ExceptionalMassage {
+        try {
+            Validation.identifierValidation(productId);
+            Validation.normalStringValidation(supplierNameOfCompany);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         if (product == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Product not found.", mainController);
@@ -376,6 +399,16 @@ public class AccountController {
 
     public Response controlSubmitShippingInfo(String firstName, String lastName, String city, String address,
                                           String postalCode, String phoneNumber)  {
+        try {
+            Validation.normalStringValidation(firstName);
+            Validation.normalStringValidation(lastName);
+            Validation.normalStringValidation(city);
+            Validation.addressValidation(address);
+            Validation.postalCodeValidation(postalCode);
+            Validation.phoneNumberValidation(phoneNumber);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = mainController.getAccount();
         if (account == null)
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login First."), mainController);
@@ -401,6 +434,11 @@ public class AccountController {
     }
 
     public Response controlSubmitDiscountCode(String discountCode) {
+        try {
+            Validation.discountCodeValidation(discountCode);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.", mainController);
@@ -449,6 +487,11 @@ public class AccountController {
         Customer customer = (Customer) mainController.getAccount();
         if(cart.getCodedDiscount() != null){
             cart.getCodedDiscount().addUsedCountForCustomer((Customer)mainController.getAccount());
+        }
+        try {
+            Cart.reduceNumberOfProducts(cart);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage, mainController);
         }
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());
@@ -529,6 +572,11 @@ public class AccountController {
     }
 
     public Response getCustomerLogById(String id) {
+        try {
+            Validation.identifierValidation(id);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         CustomerLog customerLog = CustomerLog.getCustomerLogById(id);
         if (customerLog == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Log not found", mainController);
@@ -536,6 +584,11 @@ public class AccountController {
     }
 
     public Response getSupplierLogById(String id) {
+        try {
+            Validation.identifierValidation(id);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         SupplierLog supplierLog = SupplierLog.getSupplierLogById(id);
         if (supplierLog == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Log not found", mainController);
@@ -543,6 +596,11 @@ public class AccountController {
     }
 
     public Response proceedCustomerLog(String id) {
+        try {
+            Validation.identifierValidation(id);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         try {
             CustomerLog customerLog = CustomerLog.getCustomerLogById(id);
             if (customerLog == null)
@@ -555,6 +613,11 @@ public class AccountController {
     }
 
     public Response isLogProcessable(String id) {
+        try {
+            Validation.identifierValidation(id);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         CustomerLog customerLog = CustomerLog.getCustomerLogById(id);
         if (customerLog == null) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Log not found", mainController);
@@ -564,6 +627,11 @@ public class AccountController {
     }
 
     public Response numberOfProductInCart(String productInCartId) {
+        try {
+            Validation.identifierValidation(productInCartId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         ProductInCart productInCart = ProductInCart.getProductInCartByIdentifier(productInCartId);
         int c;
         try {
@@ -632,10 +700,20 @@ public class AccountController {
     }
 
     public Response getSupplierByCompanyName(String name){
+        try {
+            Validation.normalStringValidation(name);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Supplier.getSupplierByCompanyName(name)), mainController);
     }
 
     public Response getAccountByUsernameWithinAvailable(String username){
+        try {
+            Validation.userPassStringValidation(username);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Account account = Account.getAccountByUsernameWithinAvailable(username);
         JsonArray jsonArray = new JsonArray();
         if (account == null) {
@@ -666,6 +744,11 @@ public class AccountController {
 
     //Supporter methods!
     public Response createChatRoomBetweenSupporterAndCustomer(String supporterUsername){
+        try {
+            Validation.userPassStringValidation(supporterUsername);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Supporter supporter = (Supporter) Account.getAccountByUsernameWithinAvailable(supporterUsername);
         if(!(mainController.getAccount() instanceof Customer)){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login as customer!"), mainController);
@@ -679,6 +762,13 @@ public class AccountController {
 
     public Response addMessageToChatRoom(String senderUsername,String content,String chatRoomId){
         try {
+            Validation.userPassStringValidation(senderUsername);
+            Validation.messageValidation(content);
+            Validation.identifierValidation(chatRoomId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
+        try {
             Message.getInstance(senderUsername, content, chatRoomId);
             return Response.createSuccessResponse( mainController);
         } catch (ExceptionalMassage ex){
@@ -687,6 +777,11 @@ public class AccountController {
     }
 
     public Response getAllMessagesOfChatRoomById(String chatRoomId){
+        try {
+            Validation.identifierValidation(chatRoomId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
         if(chatRoom == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat Room is closed!"), mainController);
@@ -695,6 +790,12 @@ public class AccountController {
     }
 
     public Response controlSetWageAndMinimum(String wageString , String minimumString ){
+        try {
+            Validation.percentValidation(wageString);
+            Validation.normalIntValidation(minimumString);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         int wage = Integer.parseInt(wageString);
         int minimum = Integer.parseInt(minimumString);
         WageDataBase.update(wage, minimum);
@@ -744,6 +845,11 @@ public class AccountController {
     }
 
     public Response getCustomerOfAChatRoom(String chatRoomId){
+        try {
+            Validation.identifierValidation(chatRoomId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
         if(chatRoom == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room doesn't exist!"), mainController);
@@ -757,6 +863,11 @@ public class AccountController {
     }
 
     public Response controlCloseChatRoomById(String id){
+        try {
+            Validation.identifierValidation(id);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         ChatRoom chatRoom = ChatRoom.getChatRoomById(id);
         if(chatRoom == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room doesn't exist!"), mainController);
@@ -808,6 +919,12 @@ public class AccountController {
     }
 
     public Response controlPayBack(String accountNumberStr, String amountStr) {
+        try {
+            Validation.accountNumberValidation(accountNumberStr);
+            Validation.normalIntValidation(amountStr);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         int amount = Integer.parseInt(amountStr);
         if(amount > (mainController.getAccount().getCredit() - WageDataBase.getMinimum())) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Not enough credit in your wallet! MAX: " + (mainController.getAccount().getCredit() - WageDataBase.getMinimum()), mainController);
@@ -846,6 +963,14 @@ public class AccountController {
     }
 
     public Response controlPay(String username, String password, String accountNumber, String amountStr) {
+        try {
+            Validation.userPassStringValidation(username);
+            Validation.userPassStringValidation(password);
+            Validation.accountNumberValidation(accountNumber);
+            Validation.normalIntValidation(amountStr);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         if (!(getInternalAccount() instanceof Supplier) && !(getInternalAccount() instanceof  Customer))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Only suppliers and customers can do this action", mainController);
         try {
@@ -880,6 +1005,11 @@ public class AccountController {
     }
 
     public Response controlGetMembersOfChatRoom(String chatRoomId){
+        try {
+            Validation.identifierValidation(chatRoomId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         ArrayList<String> userNames = new ArrayList<>();
         ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
         if(mainController.getAccount() == null){
@@ -895,6 +1025,11 @@ public class AccountController {
     }
 
     public Response controlJoinChatRoom(String chatRoomId){
+        try {
+            Validation.identifierValidation(chatRoomId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
         if(mainController.getAccount() == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Login first!"), mainController);
@@ -915,6 +1050,11 @@ public class AccountController {
     }
 
     public Response controlLeaveChatRoom(String chatRoomId){
+        try {
+            Validation.identifierValidation(chatRoomId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         ChatRoom chatRoom = ChatRoom.getChatRoomById(chatRoomId);
         if(chatRoom == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Chat room is closed!"), mainController);

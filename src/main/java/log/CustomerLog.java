@@ -2,6 +2,7 @@ package log;
 
 import account.Customer;
 import account.Supplier;
+import account.Supporter;
 import auction.Auction;
 import cart.Cart;
 import cart.ProductInCart;
@@ -20,7 +21,6 @@ import java.util.HashMap;
  * @author Aryan Ahadinia
  * @since 0.0.1
  */
-
 public class CustomerLog {
     private static final ArrayList<CustomerLog> allCustomerLogs = new ArrayList<>();
     private static int allCustomerLogCreatedCount = 0;
@@ -44,9 +44,6 @@ public class CustomerLog {
         this.codedDiscountAmount = cart.getAmountOfCodedDiscount();
         this.deliveryStatus = LogStatus.PENDING;
         this.customer.setCredit(this.customer.getCredit() - this.paidAmount);
-        for (ProductInCart productInCart : cart.getProductsIn()) {
-            productInCart.getProduct().reduceRemainedNumber(productInCart.getSupplier(), cart.getProductInCount().get(productInCart));
-        }
         this.isAuction = false;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
@@ -74,18 +71,22 @@ public class CustomerLog {
         CustomerLogDataBase.add(this);
     }
 
-    public CustomerLog(String identifier, Date date, LogStatus deliveryStatus, Cart cart, boolean isAuction) {
+    public CustomerLog(String identifier, Date date, LogStatus deliveryStatus, Cart cart, boolean isAuction, int paidAmount) {
         this.identifier = identifier;
         this.date = date;
-        this.paidAmount = cart.getBill();
+        this.isAuction = isAuction;
         this.codedDiscountAmount = cart.getAmountOfCodedDiscount();
         this.customer = cart.getOwner();
         this.deliveryStatus = deliveryStatus;
         this.cart = cart;
-        this.isAuction = isAuction;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
-        addSubLogForSuppliersDataBaseConstructorCall();
+        this.paidAmount = paidAmount;
+        if (isAuction) {
+            new SupplierLog(this, cart.getAllSupplier().get(0), paidAmount);
+        } else {
+            addSubLogForSuppliersDataBaseConstructorCall();
+        }
     }
 
     //Getters:
@@ -136,7 +137,7 @@ public class CustomerLog {
     }
 
     //Modeling Methods:
-    private static String generateIdentifier() {
+    private static synchronized String generateIdentifier() {
         return "T34CL" + String.format("%015d", allCustomerLogCreatedCount + 1);
     }
 

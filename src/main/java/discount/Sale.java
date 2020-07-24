@@ -4,11 +4,9 @@ import account.Supplier;
 import com.google.gson.JsonNull;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import database.ProductDataBase;
 import database.SaleDataBase;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
-import server.communications.Response;
 import server.communications.Utils;
 import state.State;
 
@@ -18,17 +16,16 @@ import java.util.Objects;
 
 /**
  * @author soheil
- * @since 0.01
+ * @since 0.0.1
  */
-
 public class Sale extends Discount {
-    private static ArrayList<Sale> sales = new ArrayList<>();
+    private static final ArrayList<Sale> sales = new ArrayList<>();
     private static int allCreatedSalesNum = 0;
     private String offId;
-    private String rootSaleId;
+    private final String rootSaleId;
     private ArrayList<Product> products;
     private State state;
-    private Supplier supplier;
+    private final Supplier supplier;
 
     public Sale(Supplier supplier, Date start, Date end, int percent, String rootSaleId) {
         super(start, end, percent);
@@ -84,8 +81,8 @@ public class Sale extends Discount {
         return jsonObject.toString();
     }
 
-    private String generateOffId() {
-        return "T34S" + String.format("%015d", allCreatedSalesNum + 1);
+    private static synchronized String generateOffId() {
+        return "T34SA" + String.format("%015d", allCreatedSalesNum + 1);
     }
 
     public static void addSale(Sale sale) {
@@ -174,11 +171,7 @@ public class Sale extends Discount {
 
     public boolean isSaleActive() {
         Date date = new Date(System.currentTimeMillis());
-        if (this.getState() == State.CONFIRMED && (this.start.before(date) && this.end.after(date))) {
-            return true;
-        } else {
-            return false;
-        }
+        return this.getState() == State.CONFIRMED && (this.start.before(date) && this.end.after(date));
     }
 
     public static boolean isProductInThisSuppliersSale(Product product, Supplier supplier){

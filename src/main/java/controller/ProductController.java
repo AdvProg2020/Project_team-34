@@ -36,7 +36,7 @@ public class ProductController {
 
     public void controlAddProduct(String name, String nameOfCompany, int price, int remainedNumbers, String category,
                                   String description, HashMap<String, String> specifications, String imageURL,
-                                  String filePath , int port) throws ExceptionalMassage {
+                                  String filePath , int port, String host) throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
         inputs.add(name);
         inputs.add(nameOfCompany);
@@ -48,6 +48,7 @@ public class ProductController {
         inputs.add(Utils.convertImageToJsonElement(imageURL));
         inputs.add(filePath);
         inputs.add(String.valueOf(port));
+        inputs.add(host);
         communication("controlAddProduct",inputs);
     }
 
@@ -519,6 +520,7 @@ public class ProductController {
 
     public void controlRemoveProductWithThisPort() throws ExceptionalMassage {
         JsonArray inputs = new JsonArray();
+        inputs.add(mainController.getPeerNode().getHost());
         inputs.add(String.valueOf(mainController.getPeerNode().getPort()));
         communication("controlRemoveProductWithThisPort", inputs);
     }

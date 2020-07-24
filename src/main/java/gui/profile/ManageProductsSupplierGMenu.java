@@ -700,7 +700,8 @@ public class ManageProductsSupplierGMenu extends GMenu {
                     supplierPort = controller.getPeerNode().getPort();
                 }
                 try{
-                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,specification,imgURL, filURL, supplierPort);
+                    controller.getProductController().controlAddProduct(name,companyName,price,remainedNumber,categoryName,description,
+                            specification,imgURL, filURL, supplierPort,controller.getPeerNode().getHost());
                     ((Stage)anchorPane0.getScene().getWindow()).close();
             }  catch (ExceptionalMassage ex){
                 new AlertBox(this, ex, controller).showAndWait();

@@ -25,7 +25,7 @@ public class Controller {
     private final OffController offController;
 
     public Controller() {
-        peerNode = new PeerNode(0);
+        peerNode = new PeerNode("localhost", 0);
         try {
             this.socket = new Socket("localhost",8080);
             try {

@@ -277,7 +277,8 @@ public class AccountController {
             Validation.normalStringValidation(name);
             Validation.emailValidation(email);
             Validation.phoneNumberValidation(phoneNumber);
-            Validation.normalStringValidation(nameOfCompany);
+            if (getInternalAccount() instanceof Supplier)
+                Validation.normalStringValidation(nameOfCompany);
         }catch (ExceptionalMassage e){
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }
@@ -927,7 +928,7 @@ public class AccountController {
         }
         int amount = Integer.parseInt(amountStr);
         if(amount > (mainController.getAccount().getCredit() - WageDataBase.getMinimum())) {
-            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Not enough credit in your wallet! MAX: " + (mainController.getAccount().getCredit() - WageDataBase.getMinimum()), mainController);
+            return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Not enough credit in your wallet! MAX: " + Integer.max((mainController.getAccount().getCredit() - WageDataBase.getMinimum()), 0), mainController);
         }
         if (!(getInternalAccount() instanceof Supplier))
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Only suppliers can do this action", mainController);

@@ -85,7 +85,7 @@ public class OffController {
             Validation.dateValidation(endDateStr);
             Validation.percentValidation(percentStr);
             Validation.normalIntValidation(maxDiscountAmountStr);
-            Validation.normalIntValidation(maxNumberOfUsageStr);
+//            Validation.normalIntValidation(maxNumberOfUsageStr);
         }catch (ExceptionalMassage e){
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }
@@ -125,7 +125,7 @@ public class OffController {
             Validation.dateValidation(startDateString);
             Validation.dateValidation(endDateString);
             Validation.percentValidation(percentString);
-            Validation.identifierValidation(productIds);
+//            Validation.identifierValidation(productIds);
         }catch (ExceptionalMassage e){
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }
@@ -235,11 +235,6 @@ public class OffController {
     }
 
     public Response controlGetRemainedNumberInCodedDiscountForCustomer(String codedDiscountCode) {
-        try {
-            Validation.identifierValidation(codedDiscountCode);
-        }catch (ExceptionalMassage e){
-            return Response.createResponseFromExceptionalMassage(e, mainController);
-        }
         CodedDiscount codedDiscount = CodedDiscount.getCodedDiscountByCode(codedDiscountCode);
         if (!(mainController.getAccount() instanceof Customer)) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Sign in as a Customer", mainController);
@@ -272,11 +267,6 @@ public class OffController {
     }
 
     public Response removeCodedDiscount(String codedDiscountId) {
-        try {
-            Validation.identifierValidation(codedDiscountId);
-        }catch (ExceptionalMassage e){
-            return Response.createResponseFromExceptionalMassage(e, mainController);
-        }
         CodedDiscount codedDiscount = CodedDiscount.getCodedDiscountByCode(codedDiscountId);
         CodedDiscount.removeCodeFromList(codedDiscount);
         return new Response(RequestStatus.SUCCESSFUL, "", mainController);

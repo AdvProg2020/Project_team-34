@@ -6,6 +6,7 @@ import product.Category;
 import server.communications.Utils;
 
 import java.io.File;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -85,6 +86,12 @@ public class Validation {
     public static void identifierValidation(String input)throws  ExceptionalMassage{
         if(!getMatcher(input, "T34(CR|AC|CA|PC|SI|SA|CO|SC|PR|SAR|PRR)\\d{14,15}").matches())
             throw new ExceptionalMassage("Invalid identifier");
+    }
+
+    public static void identifierArrayList(ArrayList<String> identifiers) throws ExceptionalMassage {
+        for (String identifier : identifiers) {
+            identifierValidation(identifier);
+        }
     }
 
     public static void addressValidation(String input)throws ExceptionalMassage{

@@ -112,7 +112,7 @@ public class ProductController {
     public Response controlEditProductById(String productId, String fieldToChange) {
         try {
             Validation.identifierValidation(productId);
-            Validation.normalStringValidation(fieldToChange);
+//            Validation.normalStringValidation(fieldToChange);
         }catch (ExceptionalMassage e){
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }

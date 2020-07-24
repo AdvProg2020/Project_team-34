@@ -204,7 +204,7 @@ public class Auction {
             if (highestPromoter != null) {
                 try {
                     new CustomerLog(this, wage);
-                    supplier.setCredit(supplier.getCredit() + highestPromotion);
+                    supplier.setCredit(supplier.getCredit() + (highestPromotion * (100 - wage) / 100));
                     AuctionDataBase.update(this);
                 } catch (ExceptionalMassage exceptionalMassage) {
                     System.err.println("Couldn't add log.");

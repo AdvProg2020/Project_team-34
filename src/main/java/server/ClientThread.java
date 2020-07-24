@@ -57,7 +57,7 @@ public class ClientThread extends Thread {
         }
         while (true) {
             try {
-                if (!server.getDosBlocker().getIpPermission(socket.getInetAddress().getCanonicalHostName())) {
+                if (!server.getDosBlocker().getIpPermissionForCommunication(socket.getInetAddress().getCanonicalHostName())) {
                     disconnect();
                     break;
                 }

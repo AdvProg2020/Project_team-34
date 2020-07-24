@@ -11,6 +11,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -114,6 +115,15 @@ public class Server extends Thread {
 
     public void setUnlocked(boolean unlocked) {
         this.unlocked = unlocked;
+    }
+
+    public void disconnectUser(String username) {
+        Collection<ClientThread> clients = tokenToClientThreadHashMap.values();
+        for (ClientThread thread : clients) {
+            if (thread.getController().getAccount().getUserName().equals(username)) {
+                thread.disconnect();
+            }
+        }
     }
 
     @Override

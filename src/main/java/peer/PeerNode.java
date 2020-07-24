@@ -73,33 +73,29 @@ public class PeerNode
         System.out.println(response);
 
         if(response.equals("Successful")) {
-            System.out.println("gand");
             String[] data = filePath.split("\\\\");
             String myFilePath = ".\\src\\main\\resources\\download\\" + data[data.length-1 ];
 
             byte[] buffer = new byte[256];
             byte[] decrypted ;
-            int bytes = 0;
-
+            int bytes = 256;
+            System.out.println("onja");
             FileOutputStream fileOutputStream = new FileOutputStream(new File(myFilePath));
 
-            while ((bytes = inputStream.read(buffer, 0, bytes)) > 0 ) {
+            boolean b = (bytes = inputStream.read(buffer)) > 0 ;
+            System.out.println(bytes);
+            while ((bytes = inputStream.read(buffer)) > 0 ) {
                 System.out.println(bytes);
-                System.out.println("[[");
                 System.out.println(new String(buffer));
-//                inputStream.read(buffer, 0 , bytes);
-                System.out.println(new String(buffer));
-                System.out.println("[[");
                 decrypted = asymmetric.do_RSADecryption(buffer);
                 System.out.println(new String(decrypted));
-                fileOutputStream.write(decrypted, 0, 256);
+                fileOutputStream.write(decrypted);
             }
 
             fileOutputStream.close();
         }
         bufferedReader.close();
         socket.close();
-//
 
         }
     public static ArrayList<PeerNode> getContacts() {

@@ -74,8 +74,9 @@ public class RequestHandler implements Runnable {
     }
 
 
-    private static void sendBytes(FileInputStream fileInputStream, DataOutputStream dataOutputStream, PublicKey publicKey)
+    private static void sendBytes(FileInputStream fileInputStream, OutputStream outputStream, PublicKey publicKey)
             throws Exception {
+        System.out.println("i came to send ");
         byte[] buffer = new byte[64];
         byte[] encrypted;
         int bytes = 0;
@@ -84,8 +85,8 @@ public class RequestHandler implements Runnable {
             encrypted = Asymmetric.do_RSAEncryption(buffer,publicKey);
             System.out.println(encrypted.length);
             System.out.println(new String(encrypted));
-            dataOutputStream.write(encrypted);
-            dataOutputStream.flush();
+            outputStream.write(encrypted);
+            outputStream.flush();
         }
     }
 }

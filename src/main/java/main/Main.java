@@ -7,6 +7,7 @@ import gui.loginMenu.FirstSupervisorMenu;
 import gui.loginMenu.NewRequestDynamicPasswordGMenu;
 import gui.mainMenu.MainMenuG;
 import gui.paymentMenu.PaymentMenuForCustomer;
+import gui.profile.sendMenu;
 import javafx.application.Application;
 import javafx.scene.image.Image;
 import javafx.stage.Stage;
@@ -55,6 +56,8 @@ public class Main extends Application {
         GMenu mainMenu = new MainMenuG( null, stage, controller);
         GMenu initialMenu = new FirstSupervisorMenu(null, stage, controller);
         stage.setScene((controller.getIsFirstSupervisorCreated() ? mainMenu : initialMenu).getScene());
-        stage.show();
+
+//        stage.setScene(new sendMenu(null, stage, controller).getScene());
+//        stage.show();
     }
 }

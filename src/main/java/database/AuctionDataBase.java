@@ -57,7 +57,7 @@ public class AuctionDataBase {
             }
             statement.setLong(7, auction.getEnd().getTime());
             statement.setInt(8, auction.getWage());
-            statement.setBoolean(9, auction.);
+            statement.setBoolean(9, auction.isEnded());
 
             statement.executeUpdate();
 
@@ -94,8 +94,9 @@ public class AuctionDataBase {
                     highestPromotionInteger = highestPromotion;
                 Date endDate = new Date(resultSet.getLong("endDate"));
                 int wage = resultSet.getInt("wage");
+                boolean isEnded = resultSet.getBoolean("isEnded");
 
-                new Auction(identifier, chatRoomIdentifier,product, supplier,highestPromoter,highestPromotionInteger, endDate, wage);
+                new Auction(identifier, chatRoomIdentifier,product, supplier,highestPromoter,highestPromotionInteger, endDate, wage, isEnded);
 
             }
         } catch (SQLException e) {

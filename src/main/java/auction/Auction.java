@@ -33,6 +33,7 @@ public class Auction {
     private Integer highestPromotion;
     private final Date end;
     private int wage;
+    private boolean isEnded;
 
     public Auction(Product product, Supplier supplier, long endLong, int wage) {
         this.identifier = Auction.generateIdentifier();
@@ -43,6 +44,7 @@ public class Auction {
         this.highestPromotion = null;
         this.end = new Date(endLong);
         this.wage = wage;
+        this.isEnded = false;
         TimerTask endTask = new TimerTask() {
             @Override
             public void run() {
@@ -56,7 +58,7 @@ public class Auction {
     }
 
     public Auction(String identifier, String chatRoomIdentifier, Product product, Supplier supplier,
-                   Customer highestPromoter, Integer highestPromotion, Date end, int wage) {
+                   Customer highestPromoter, Integer highestPromotion, Date end, int wage, boolean isEnded) {
         this.identifier = identifier;
         this.chatRoomIdentifier = new ChatRoom().getChatRoomId();
         this.product = product;
@@ -65,6 +67,10 @@ public class Auction {
         this.highestPromotion = highestPromotion;
         this.end = end;
         this.wage = wage;
+        this.isEnded = isEnded;
+        if (!isEnded && System.currentTimeMillis() > end.getTime()) {
+            this.end();
+        }
         TimerTask endTask = new TimerTask() {
             @Override
             public void run() {

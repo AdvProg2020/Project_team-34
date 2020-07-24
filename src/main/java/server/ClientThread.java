@@ -31,9 +31,6 @@ public class ClientThread extends Thread {
         this.objectInputStream = new ObjectInputStream(socket.getInputStream());
         this.controller = new Controller(this, server.assignToken(this));
         this.lastRequestTime = new Date(System.currentTimeMillis());
-        byte[] a = new byte[]{};
-        objectInputStream.read(a, 1, 1);
-        socket.getInputStream().read(a, 1, 1);
     }
 
     public String getNewToken() {

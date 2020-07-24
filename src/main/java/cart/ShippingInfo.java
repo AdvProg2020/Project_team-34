@@ -10,7 +10,6 @@ import java.util.Objects;
  * @author Aryan Ahadinia
  * @since 0.0.1
  */
-
 public class ShippingInfo {
     private static final ArrayList<ShippingInfo> allShippingInfo = new ArrayList<>();
     private static int totalShippingInfoCreated = 0;

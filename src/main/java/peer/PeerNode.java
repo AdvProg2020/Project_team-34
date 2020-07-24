@@ -20,6 +20,10 @@ public class PeerNode
         return port;
     }
 
+    public String getHost() {
+        return host;
+    }
+
     public PeerNode(String host, int port)
     {
         this.host = host;

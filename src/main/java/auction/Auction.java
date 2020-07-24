@@ -136,6 +136,10 @@ public class Auction {
         return end;
     }
 
+    public boolean isEnded() {
+        return isEnded;
+    }
+
     public static ArrayList<Auction> getAllAuctions() {
         return ALL_AUCTIONS;
     }

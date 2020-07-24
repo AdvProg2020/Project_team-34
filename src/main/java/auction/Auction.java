@@ -166,9 +166,7 @@ public class Auction {
     }
 
     public boolean isActive(){
-        if(this.getEnd().getTime() > System.currentTimeMillis()){
-            return true;
-        } return false;
+        return this.getEnd().getTime() > System.currentTimeMillis();
     }
 
     public static Auction getAuctionForProduct(Product product, Supplier supplier){

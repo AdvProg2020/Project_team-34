@@ -45,7 +45,7 @@ public class Validation {
         }catch (NumberFormatException exception){
             throw new ExceptionalMassage("Not an Integer");
         }
-        if(number <= 0){
+        if(number < 0){
             throw new ExceptionalMassage("Negative values are not allowed");
         }
     }

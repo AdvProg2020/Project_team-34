@@ -6,6 +6,9 @@ This is a client-server project.
 Server is available in [this branch](https://github.com/AdvProg2020/Project_team-34/tree/Server).
 Client is available in [this branch](https://github.com/AdvProg2020/Project_team-34/tree/Client).
 
+# Security Doc
+Security doc is available in securityDoc/Security.pdf
+
 # Bank Project
 The bank is a sub-project of this project. In [this repository](https://github.com/AryanAhadinia/Bank) you can see the bank
 

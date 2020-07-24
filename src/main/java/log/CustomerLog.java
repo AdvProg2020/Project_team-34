@@ -2,6 +2,7 @@ package log;
 
 import account.Customer;
 import account.Supplier;
+import account.Supporter;
 import auction.Auction;
 import cart.Cart;
 import cart.ProductInCart;
@@ -80,13 +81,12 @@ public class CustomerLog {
         this.cart = cart;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;
+        this.paidAmount = paidAmount;
         if (isAuction) {
-
+            new SupplierLog(this, cart.getAllSupplier().get(0), paidAmount);
         } else {
-
+            addSubLogForSuppliersDataBaseConstructorCall();
         }
-        this.paidAmount = cart.getBill();
-        addSubLogForSuppliersDataBaseConstructorCall();
     }
 
     //Getters:

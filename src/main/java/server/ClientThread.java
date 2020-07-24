@@ -8,9 +8,7 @@ import controller.Controller;
 import product.Product;
 import server.communications.*;
 
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -32,6 +30,9 @@ public class ClientThread extends Thread {
         this.objectInputStream = new ObjectInputStream(socket.getInputStream());
         this.controller = new Controller(this, server.assignToken(this));
         this.lastRequestTime = new Date(System.currentTimeMillis());
+        byte[] a = new byte[]{};
+        objectInputStream.read(a, 1, 1);
+        socket.getInputStream().read(a, 1, 1);
     }
 
     public String getNewToken() {
@@ -58,6 +59,10 @@ public class ClientThread extends Thread {
         }
         while (true) {
             try {
+                if (!server.getDosBlocker().getIpPermission(socket.getInetAddress().getCanonicalHostName())) {
+                    disconnect();
+                    break;
+                }
                 int requestSize = Integer.parseInt(objectInputStream.readUTF());
                 ArrayList<String> receiving = new ArrayList<>();
                 for (int i = 0; i < requestSize; i++) {

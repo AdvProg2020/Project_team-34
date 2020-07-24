@@ -1,7 +1,6 @@
 package account;
 
 import database.AccountDataBase;
-import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.Objects;

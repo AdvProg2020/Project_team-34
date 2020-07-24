@@ -11,7 +11,6 @@ import discount.Sale;
 import exceptionalMassage.ExceptionalMassage;
 import product.Product;
 import server.communications.Utils;
-import state.State;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -157,7 +156,7 @@ public class Cart {
         this.shippingInfo = null;
     }
 
-    public static String generateIdentifier() {
+    public static synchronized String generateIdentifier() {
         return "T34CA" + String.format("%015d", countOfCartCreated + 1);
     }
 

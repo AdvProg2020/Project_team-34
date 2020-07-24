@@ -4,11 +4,9 @@ import java.util.Date;
 
 /**
  * @author soheil
- * @since 0.01
+ * @since 0.0.1
  * This class represents the parent for all kinds of discounts in the Online Market!
  */
-
-
 public abstract class Discount {
     protected Date start;
     protected Date end;

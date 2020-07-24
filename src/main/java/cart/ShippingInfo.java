@@ -1,8 +1,6 @@
 package cart;
 
-import account.Supplier;
 import database.ShippingInfoDataBase;
-import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;
@@ -85,7 +83,7 @@ public class ShippingInfo {
     }
 
     //Modeling methods
-    public static String generateIdentifier() {
+    public static synchronized String generateIdentifier() {
         return "T34SI" + String.format("%015d", totalShippingInfoCreated + 1);
     }
 

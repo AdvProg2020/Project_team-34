@@ -13,7 +13,6 @@ import java.util.Scanner;
  * @author Aryan Ahadinia
  * @since 0.0.3
  */
-
 public class PeriodicCodedDiscountGenerator extends Thread {
     private final String filePath;
     private final int percent;

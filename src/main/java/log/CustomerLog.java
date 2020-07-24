@@ -20,7 +20,6 @@ import java.util.HashMap;
  * @author Aryan Ahadinia
  * @since 0.0.1
  */
-
 public class CustomerLog {
     private static final ArrayList<CustomerLog> allCustomerLogs = new ArrayList<>();
     private static int allCustomerLogCreatedCount = 0;
@@ -67,6 +66,7 @@ public class CustomerLog {
         for (ProductInCart productInCart : cart.getProductsIn()) {
             productInCart.getProduct().reduceRemainedNumber(productInCart.getSupplier(), cart.getProductInCount().get(productInCart));
         }
+        auction.getSupplier().setCredit(auction.getSupplier().getCredit() + (paidAmount * (100 - wage) / 100));
         new SupplierLog(this, cart.getAllSupplier().get(0), paidAmount);
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;

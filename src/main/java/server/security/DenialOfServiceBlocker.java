@@ -7,7 +7,7 @@ import java.util.*;
  * @since 0.0.3
  */
 public class DenialOfServiceBlocker {
-    private static final int MAX_FREQUENCY_ALLOWED = 1;
+    private static final int MAX_FREQUENCY_ALLOWED = 30;
     private static final int FREQUENCY_CALCULATOR_PERIOD_MILLIS = 10000;
     private static final int BLOCKING_PERIOD = 36000;
 

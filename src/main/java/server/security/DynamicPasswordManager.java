@@ -28,8 +28,6 @@ public class DynamicPasswordManager {
         Account account = Account.getAccountByUsernameWithinAvailable(username);
         if (account == null)
             throw new ExceptionalMassage("Username is not available. DPM");
-        if (!permissionForGettingPassword(username))
-            throw new ExceptionalMassage("This account is Temporary blocked for requesting Dynamic password. DPM");
         activePasswords.remove(username);
         Date requestDate = new Date(System.currentTimeMillis());
         requestsHistory.put(requestDate, username);
@@ -40,6 +38,8 @@ public class DynamicPasswordManager {
             }
         };
         requestsCleaner.schedule(requestCleaningTask, new Date(System.currentTimeMillis() + MAX_REQUEST_TIME_PERIOD));
+        if (!permissionForGettingPassword(username))
+            throw new ExceptionalMassage("This account is Temporary blocked for requesting Dynamic password. DPM");
         String password = generateRandomPassword();
         activePasswords.put(username, password);
         TimerTask passwordExpiryTask = new TimerTask() {
@@ -64,6 +64,7 @@ public class DynamicPasswordManager {
             activePasswords.remove(username);
             return true;
         }
+        activePasswords.remove(username);
         return false;
     }
 
@@ -85,7 +86,6 @@ public class DynamicPasswordManager {
                 c++;
             }
         }
-        int frequency = (c * 60 * 60 * 1000) / MAX_REQUEST_TIME_PERIOD;
         return c <= MAX_REQUESTS_IN_TIME_PERIOD_HOUR;
     }
 }

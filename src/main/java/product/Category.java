@@ -13,7 +13,6 @@ import java.util.*;
  * @author Aryan Ahadinia
  * @since 0.0.1
  */
-
 public class Category {
     public static final ArrayList<Category> allCategories = new ArrayList<>();
     public static final Category superCategory = new Category();

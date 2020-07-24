@@ -1,12 +1,12 @@
 package database;
 
-import account.Account;
-import account.Supplier;
 import exceptionalMassage.ExceptionalMassage;
-import log.CustomerLog;
 import log.SupplierLog;
 
-import java.sql.*;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 

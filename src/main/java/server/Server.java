@@ -33,6 +33,10 @@ public class Server extends Thread {
         return dynamicPasswordManager;
     }
 
+    public DenialOfServiceBlocker getDosBlocker() {
+        return dosBlocker;
+    }
+
     public synchronized String assignToken(ClientThread clientThread) {
         String token;
         do {

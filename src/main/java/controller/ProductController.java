@@ -532,7 +532,7 @@ public class ProductController {
         try {
             Validation.categoryValidation(categoryName);
             Validation.normalStringValidation(filterKey);
-            //TODO
+            Validation.normalStringValidation(filterValues);
         }catch (ExceptionalMassage e){
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }

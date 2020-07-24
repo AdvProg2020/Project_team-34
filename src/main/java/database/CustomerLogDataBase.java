@@ -77,7 +77,7 @@ public class CustomerLogDataBase {
                 Cart cart = Cart.getCartById(resultSet.getString("cartId"));
                 boolean isAuction = resultSet.getBoolean("isAuction");
                 int paidAmount = resultSet.getInt("paidAmount");
-                new CustomerLog(customerLogId,date,deliveryStatus,cart, isAuction);
+                new CustomerLog(customerLogId,date,deliveryStatus,cart, isAuction, paidAmount);
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());

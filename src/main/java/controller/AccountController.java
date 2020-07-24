@@ -473,7 +473,7 @@ public class AccountController {
         Cart cart = mainController.getCart();
         if (cart.isCartClear())
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Your cart is clear.", mainController);
-        if (account.getCredit() < cart.getBill())
+        if (account.getCredit()  < cart.getBill() + WageDataBase.getMinimum())
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "You don't have enough credit.", mainController);
         HashMap<ProductInCart, Integer> productInCount = cart.getProductInCount();
         for (ProductInCart productInCart : cart.getProductsIn()) {

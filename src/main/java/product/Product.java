@@ -33,6 +33,7 @@ public class Product {
     private int numberOfViews;
     private String filePath;
     private int supplierPort;
+    private String supplierHost;
 
     public Product(String json) {
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
@@ -52,6 +53,7 @@ public class Product {
         this.numberOfViews = jsonObject.get("numberOfViews").getAsInt();
         this.filePath = jsonObject.get("filePath").getAsString();
         this.supplierPort = Integer.parseInt(jsonObject.get("supplierPort").getAsString());
+        this.supplierHost = jsonObject.get("supplierHost").getAsString();
     }
 
     public String toJson() {
@@ -76,6 +78,7 @@ public class Product {
         jsonObject.add("numberOfViews", jsonParser.parse(Utils.convertObjectToJsonString(numberOfViews)));
         jsonObject.add("filePath", jsonParser.parse(Utils.convertObjectToJsonString(filePath)));
         jsonObject.add("supplierPort", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(supplierPort))));
+        jsonObject.add("supplierHost", jsonParser.parse(Utils.convertObjectToJsonString(supplierHost)));
         return jsonObject.toString();
     }
 
@@ -95,6 +98,7 @@ public class Product {
         this.imageInStringForm = product.getImageInStringForm();
         this.filePath = product.getFilePath();
         this.supplierPort = product.getSupplierPort();
+        this.supplierHost = product.getSupplierHost();
         allCreatedProductNum++;
         allProduct.add(this);
         ProductDataBase.add(this);
@@ -102,7 +106,7 @@ public class Product {
 
     public Product(Supplier supplier, String name, String nameOfCompany, int price, int remainedNumber, String description,
                    String rootProductId, String futureCategoryName, HashMap<String, String> specification,
-                   String imageInStringForm,String filePath , int supplierPort) {
+                   String imageInStringForm,String filePath , int supplierPort, String supplierHost) {
         this.numberOfViews = 0;
         this.productState = State.PREPARING_TO_BUILD;
         this.productId = generateIdentifier();
@@ -121,6 +125,7 @@ public class Product {
         this.imageInStringForm = imageInStringForm;
         this.filePath = filePath;
         this.supplierPort = supplierPort;
+        this.supplierHost = supplierHost;
         allCreatedProductNum++;
         allProduct.add(this);
         ProductDataBase.add(this);
@@ -130,7 +135,7 @@ public class Product {
                    ArrayList<Supplier> listOfSuppliers, HashMap<Supplier, Integer> remainedNumberForEachSupplier,
                    String description, int numberOfViews, String productId, State state, String rootProductId,
                    String futureCategoryName, HashMap<String, String> specification, String imageInStringForm,
-                   String filePath , int supplierPort) {
+                   String filePath , int supplierPort, String supplierHost) {
         this.productState = state;
         this.productId = productId;
         this.name = name;
@@ -146,6 +151,7 @@ public class Product {
         this.imageInStringForm = imageInStringForm;
         this.filePath = filePath;
         this.supplierPort = supplierPort;
+        this.supplierHost = supplierHost;
         allCreatedProductNum++;
         allProduct.add(this);
     }
@@ -227,6 +233,10 @@ public class Product {
         return supplierPort;
     }
 
+    public String getSupplierHost() {
+        return supplierHost;
+    }
+
     public void setNumberOfViews(int numberOfViews) {
         this.numberOfViews = numberOfViews;
         ProductDataBase.update(this);
@@ -285,6 +295,10 @@ public class Product {
 
     public void setSupplierPort(int supplierPort) {
         this.supplierPort = supplierPort;
+    }
+
+    public void setSupplierHost(String supplierHost) {
+        this.supplierHost = supplierHost;
     }
 
     private static ArrayList<Product> getShouldBeShownProducts() {
@@ -550,9 +564,9 @@ public class Product {
         return minimumPrice;
     }
 
-    public static void removeProductsWithThisSupplierPort(int port) throws ExceptionalMassage {
+    public static void removeProductsWithThisSupplierPort(String host , int port) throws ExceptionalMassage {
         for (Product product : allProduct) {
-            if(product.getSupplierPort() == port && product.getProductState() == State.CONFIRMED){
+            if(product.getSupplierHost().equals(host) && product.getSupplierPort() == port && product.getProductState() == State.CONFIRMED){
                 product.setProductState(State.DELETED);
                     Category.getProductCategory(product).removeProduct(product);
             }

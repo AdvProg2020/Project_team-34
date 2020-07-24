@@ -1,5 +1,9 @@
 package peer;
 
+import javafx.scene.chart.PieChart;
+
+import javax.crypto.Cipher;
+import javax.crypto.CipherOutputStream;
 import java.io.*;
 import java.net.Socket;
 import java.security.PublicKey;
@@ -22,18 +26,14 @@ public class RequestHandler implements Runnable {
     }
 
     private void processRequest() throws Exception {
-        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
-
         ObjectInputStream objectInputStream = new ObjectInputStream(socket.getInputStream());
+        System.err.println("==================");
         Object object = objectInputStream.readObject();
-        objectInputStream.close();
+        System.err.println("}}}}}}}}}}}}}}}}}}}");
         PublicKey publicKey = (PublicKey) object;
 
 
-        InputStream inputStream = socket.getInputStream();
-        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
-
-        String filePath = bufferedReader.readLine();
+        String filePath = (String) objectInputStream.readObject();
         System.out.println(filePath);
 
         // Open the requested file.
@@ -58,6 +58,8 @@ public class RequestHandler implements Runnable {
             statusLine = "Error" + CRLF;
         }
 
+        DataOutputStream dataOutputStream = new DataOutputStream(socket.getOutputStream());
+
         dataOutputStream.writeBytes(statusLine);
         dataOutputStream.flush();
 
@@ -67,21 +69,23 @@ public class RequestHandler implements Runnable {
         }
 
         dataOutputStream.close();
-        bufferedReader.close();
         socket.close();
 
     }
 
 
-    private static void sendBytes(FileInputStream fileInputStream, OutputStream outputStream, PublicKey publicKey)
-            throws Exception
-            {
-        byte[] buffer = new byte[1024];
-        byte[] encrypted = new byte[1024];
+    private static void sendBytes(FileInputStream fileInputStream, DataOutputStream dataOutputStream, PublicKey publicKey)
+            throws Exception {
+        byte[] buffer = new byte[64];
+        byte[] encrypted;
         int bytes = 0;
         while ((bytes = fileInputStream.read(buffer)) > 0) {
-            encrypted = Asymmetric.do_RSAEncryption(buffer,publicKey );
-            outputStream.write(encrypted, 0, bytes);
+            System.out.println(new String(buffer));
+            encrypted = Asymmetric.do_RSAEncryption(buffer,publicKey);
+            System.out.println(encrypted.length);
+            System.out.println(new String(encrypted));
+            dataOutputStream.write(encrypted);
+            dataOutputStream.flush();
         }
     }
 }

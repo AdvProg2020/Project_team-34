@@ -522,4 +522,10 @@ public class ProductController {
         inputs.add(String.valueOf(mainController.getPeerNode().getPort()));
         communication("controlRemoveProductWithThisPort", inputs);
     }
+
+    public void controlRemoveProductForSupervisor(String productId) throws ExceptionalMassage {
+        JsonArray inputs = new JsonArray();
+        inputs.add(productId);
+        communication("controlRemoveProductForSupervisor",inputs);
+    }
 }

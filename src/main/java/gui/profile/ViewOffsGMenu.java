@@ -462,7 +462,9 @@ public class ViewOffsGMenu extends GMenu {
 
         try {
             for (Product product : controller.getProductController().getProductForSupplier((Supplier) controller.getAccount())) {
-                productsList.getItems().add(product.getProductId());
+                if(!controller.getOffController().isProductHasAnySale(product)) {
+                    productsList.getItems().add(product.getProductId());
+                }
             }
         } catch (ExceptionalMassage exceptionalMassage) {
             exceptionalMassage.printStackTrace();

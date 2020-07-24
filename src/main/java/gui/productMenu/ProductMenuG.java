@@ -7,6 +7,7 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import gui.GMenu;
 import gui.alerts.AlertBox;
+import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
@@ -269,6 +270,17 @@ public class ProductMenuG extends GMenu {
                 imageViewGridPane.getChildren().addAll( imageViewBox, blend,soldOutImageView);
     //                gridPane.getChildren().add(soldOutImageView);
             }
+            else if(!(product.getFilePath().equals(""))){
+                ImageView fileImageView = GMenu.getImageView("./src/main/resources/image/file.png", 250, 250);
+
+                fileImageView.setBlendMode(BlendMode.SRC_OVER);
+                Group blend = new Group(
+                        imageViewBox,
+                        fileImageView
+                );
+
+                imageViewGridPane.getChildren().addAll( imageViewBox, blend,fileImageView);
+            }
             else {
                 imageViewGridPane.getChildren().add(imageViewBox);
             }
@@ -289,18 +301,39 @@ public class ProductMenuG extends GMenu {
 
         descriptionText.setText(product.getDescription());
         nameText.setText(product.getName());
+        String accountType = "";
+        try{
+            accountType = controller.getAccountController().loggedInAccountType();
+        } catch (ExceptionalMassage ex){
+            new AlertBox(this, ex, controller).showAndWait();
+        }
 
-        addToCartButton.setOnAction( e -> {
-            String productId = product.getProductId();
-            String supplierNameOfCompany = suppliers.getValue();
-            try {
-                controller.getAccountController().controlAddToCart(productId, supplierNameOfCompany);
-                stage.setScene(new CartGMenu(this, stage, controller).getScene());
-            } catch (ExceptionalMassage ex) {
-                new AlertBox(this, ex, controller).showAndWait();
-            }
-
-        });
+        if(accountType.equals("Supervisor")){
+            addToCartButton.setText("Delete Product");
+            addToCartButton.setOnAction( e-> {
+                try{
+                    controller.getProductController().controlRemoveProductForSupervisor(product.getProductId());
+                    stage.setScene(new AllProductGMenu(this, stage, controller, false).getScene());
+                } catch (ExceptionalMassage ex){
+                    new AlertBox(this, ex, controller).showAndWait();
+                }
+            });
+        } else {
+            addToCartButton.setOnAction(e -> {
+                String productId = product.getProductId();
+                String supplierNameOfCompany = suppliers.getValue();
+                if (supplierNameOfCompany == null) {
+                    new AlertBox(this, "Select a supplier please", "OK", controller).showAndWait();
+                } else {
+                    try {
+                        controller.getAccountController().controlAddToCart(productId, supplierNameOfCompany);
+                        stage.setScene(new CartGMenu(this, stage, controller).getScene());
+                    } catch (ExceptionalMassage ex) {
+                        new AlertBox(this, ex, controller).showAndWait();
+                    }
+                }
+            });
+        }
 
         suppliers.setOnAction( e -> {
             try {

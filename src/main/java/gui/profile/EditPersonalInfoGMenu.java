@@ -33,7 +33,6 @@ public class EditPersonalInfoGMenu extends GMenu {
         TextField phoneNumberField = new TextField();
         PasswordField passwordField = new PasswordField();
         TextField nameOfCompanyField = new TextField();
-        TextField creditField = new TextField();
         Button cancelButton = new Button("Cancel");
         Button applyButton = new Button("Apply");
 
@@ -44,7 +43,6 @@ public class EditPersonalInfoGMenu extends GMenu {
         Label familyNameLabel = new Label("Last Name");
         Label emailLabel = new Label("Email");
         Label phoneNumberLabel = new Label("Phone Number");
-        Label passwordLabel = new Label("New Password");
 
         Label nameOfCompanyLabel = new Label("Name of Company");
 
@@ -94,16 +92,11 @@ public class EditPersonalInfoGMenu extends GMenu {
             row++;
         }
 
-        layoutPane.add(passwordLabel, 0, row);
-        layoutPane.add(passwordField, 1, row);
-        row++;
-
         applyButton.setOnAction(e -> {
             String name = nameField.getText();
             String familyName = familyNameField.getText();
             String email = emailField.getText();
             String phoneNumber = phoneNumberField.getText();
-            String password = passwordField.getText();
             String nameOfCompany = nameOfCompanyField.getText();
             try {
                 controller.getAccountController().editAllFields(name, familyName, email, phoneNumber, nameOfCompany);

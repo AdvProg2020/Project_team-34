@@ -5,11 +5,9 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTimePicker;
 import controller.Controller;
 import exceptionalMassage.ExceptionalMassage;
-import feedback.Comment;
 import gui.alerts.AlertBox;
 import gui.allProductMenu.AllProductGMenu;
 import gui.cartMenu.CartGMenu;
-import gui.loginMenu.LoginGMenu;
 import gui.loginMenu.NewRequestDynamicPasswordGMenu;
 import gui.mainMenu.MainMenuG;
 import gui.profile.*;
@@ -22,7 +20,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -85,7 +82,7 @@ public abstract class GMenu {
                 stage.setScene(parentMenu.getScene());
             }
         });
-        signIn.setOnAction(e -> new NewRequestDynamicPasswordGMenu(this, new Stage(), stage, controller).showAndWait());
+        signIn.setOnAction(e -> new NewRequestDynamicPasswordGMenu(this, new Stage(), stage,controller).showAndWait());
         allProducts.setOnMouseClicked(e -> stage.setScene(new AllProductGMenu(this,
                 stage,controller, false).getScene()));
         cartView.setOnMouseClicked(e -> stage.setScene(new CartGMenu(this, stage, controller).getScene()));
@@ -132,8 +129,8 @@ public abstract class GMenu {
                 viewPersonalInfo.setOnAction(e -> stage.setScene(new SupplierProfileGMenu(this, stage, controller).getScene()));
                 logs.setOnAction(e -> stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).getScene()));
             } else if(controller.getAccountController().getAccount() instanceof Supporter){
-                user.getItems().addAll(viewPersonalInfo);
-                viewPersonalInfo.setOnAction( e -> stage.setScene(new ChooseRequestingCustomersGMenu(this, stage, controller).getScene()));
+                user.getItems().addAll(viewPersonalInfo,signOut);
+                viewPersonalInfo.setOnAction( e -> stage.setScene(new SupporterProfileGMenu(this, stage, controller).getScene()));
             }
         } catch (ExceptionalMassage exceptionalMassage) {
             exceptionalMassage.printStackTrace();

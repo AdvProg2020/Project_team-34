@@ -118,7 +118,7 @@ public class Server extends Thread {
     }
 
     public void disconnectUser(String username) {
-        Collection<ClientThread> clients = tokenToClientThreadHashMap.values();
+        Collection<ClientThread> clients = new ArrayList<>(tokenToClientThreadHashMap.values());
         for (ClientThread thread : clients) {
             if (thread.getController().getAccount().getUserName().equals(username)) {
                 thread.disconnect();

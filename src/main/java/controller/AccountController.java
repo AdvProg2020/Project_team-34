@@ -436,11 +436,6 @@ public class AccountController {
     }
 
     public Response controlSubmitDiscountCode(String discountCode) {
-        try {
-            Validation.discountCodeValidation(discountCode);
-        }catch (ExceptionalMassage e){
-            return Response.createResponseFromExceptionalMassage(e, mainController);
-        }
         Account account = mainController.getAccount();
         if (account == null)
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Login First.", mainController);
@@ -513,6 +508,7 @@ public class AccountController {
             jsonObject = new JsonObject();
             jsonObject.addProperty("filePath", product.getFilePath());
             jsonObject.addProperty("port", product.getSupplierPort());
+            jsonObject.addProperty("host", product.getSupplierHost());
             jsonArray.add(jsonObject);
         }
         return new Response(RequestStatus.SUCCESSFUL, jsonArray.toString(), mainController);

@@ -240,11 +240,12 @@ public class Sale extends Discount {
     }
 
     public static String convertSaleIdToRequestId(String requestId) {
-        return "T34SR" + requestId.substring(4);
+        System.err.println("!!!!!!!!!!!!!!!!!!!!!!!!!!");
+        return "T34SAR" + requestId.substring(5);
     }
 
     public static String convertRequestIdToSaleId(String productId) {
-        return "T34S" + productId.substring(5);
+        return "T34SA" + productId.substring(6);
     }
 
     public static void acceptOrDeclineRequest(String requestId, boolean isAccepted) throws ExceptionalMassage {

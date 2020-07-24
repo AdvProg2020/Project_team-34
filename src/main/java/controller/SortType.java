@@ -39,7 +39,7 @@ public enum SortType {
             }
 
             private int convertProductIdToInt(String productId){
-                return Integer.parseInt(productId.substring(4));
+                return Integer.parseInt(productId.substring(5));
             }
         };
     }

@@ -17,8 +17,8 @@ public class ShippingInfoDataBase {
         content.put("lastName", "String");
         content.put("city", "String");
         content.put("address", "String");
-        content.put("postalCode", "String");
-        content.put("phoneNumber", "String");
+        content.put("postalCode", "TEXT");
+        content.put("phoneNumber", "TEXT");
 
         DataBase.createNewTable("ShippingInfos", content);
     }

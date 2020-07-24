@@ -540,11 +540,11 @@ public class Product {
     }
 
     public static String convertProductIdToRequestId(String requestId) {
-        return "T34PR" + requestId.substring(4);
+        return "T34PRR" + requestId.substring(5);
     }
 
     public static String convertRequestIdToProductId(String productId) {
-        return "T34P" + productId.substring(5);
+        return "T34PR" + productId.substring(6);
     }
 
     public String getStringListOfSuppliers() {

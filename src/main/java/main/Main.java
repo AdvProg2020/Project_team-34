@@ -37,11 +37,11 @@ public class Main extends Application {
 
         stage.setOnCloseRequest(e -> {
             e.consume();
-            try {
-                controller.getProductController().controlRemoveProductWithThisPort();
-            } catch (ExceptionalMassage exceptionalMassage) {
-                System.out.println("Error Removing File Products");
-            }
+//            try {
+//                controller.getProductController().controlRemoveProductWithThisPort();
+//            } catch (ExceptionalMassage exceptionalMassage) {
+//                System.out.println("Error Removing File Products");
+//            }
             try {
                 controller.disconnect();
             } catch (IOException ioException) {

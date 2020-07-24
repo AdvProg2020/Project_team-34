@@ -27,7 +27,7 @@ public class Controller {
     public Controller() {
         peerNode = new PeerNode("localhost", 0);
         try {
-            this.socket = new Socket("0.tcp.ngrok.io", 15171);
+            this.socket = new Socket("localhost", 8081);
             try {
                 this.inputStream = new ObjectInputStream(socket.getInputStream());
                 this.outputStream = new ObjectOutputStream(socket.getOutputStream());
@@ -46,6 +46,10 @@ public class Controller {
             this.isFirstSupervisorCreated = Boolean.parseBoolean(inputStream.readUTF());
             this.token = inputStream.readUTF();
             System.out.println(token);
+            outputStream.writeObject(peerNode.getHost());
+            outputStream.flush();
+            outputStream.writeObject(peerNode.getPort());
+            outputStream.flush();
         } catch (IOException e) {
             e.printStackTrace();
         }

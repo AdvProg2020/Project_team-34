@@ -129,8 +129,8 @@ public abstract class GMenu {
                 viewPersonalInfo.setOnAction(e -> stage.setScene(new SupplierProfileGMenu(this, stage, controller).getScene()));
                 logs.setOnAction(e -> stage.setScene(new ViewLogsForSupplierGMenu(this, stage, controller).getScene()));
             } else if(controller.getAccountController().getAccount() instanceof Supporter){
-                user.getItems().addAll(viewPersonalInfo);
-                viewPersonalInfo.setOnAction( e -> stage.setScene(new ChooseRequestingCustomersGMenu(this, stage, controller).getScene()));
+                user.getItems().addAll(viewPersonalInfo,signOut);
+                viewPersonalInfo.setOnAction( e -> stage.setScene(new SupporterProfileGMenu(this, stage, controller).getScene()));
             }
         } catch (ExceptionalMassage exceptionalMassage) {
             exceptionalMassage.printStackTrace();

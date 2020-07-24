@@ -113,7 +113,7 @@ public class Comment {
         return product;
     }
 
-    private String generateIdentifier() {
+    private static synchronized String generateIdentifier() {
         return "T34C" + String.format("%015d", allCommentsNum + 1);
     }
 

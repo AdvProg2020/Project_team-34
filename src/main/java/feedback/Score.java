@@ -12,16 +12,16 @@ import java.util.Objects;
 
 /**
  * @author soheil
- * @since 0.01
+ * @since 0.0.1
  */
 
 public class Score {
-    private static ArrayList<Score> scores = new ArrayList<>();
+    private static final ArrayList<Score> scores = new ArrayList<>();
     private static int allCreatedScoreNum = 0 ;
-    private String identifier ;
-    private Customer customer;
-    private Product product;
-    private float score;
+    private final String identifier ;
+    private final Customer customer;
+    private final Product product;
+    private final float score;
 
     public Score(String json) {
         JsonObject jsonObject = new JsonParser().parse(json).getAsJsonObject();
@@ -93,7 +93,7 @@ public class Score {
         return total/counter;
     }
 
-    private String generateIdentifier(){
+    private static synchronized String generateIdentifier(){
         return "T34P" + String.format("%015d", allCreatedScoreNum + 1);
     }
 

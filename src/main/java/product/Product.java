@@ -150,7 +150,7 @@ public class Product {
         allProduct.add(this);
     }
 
-    private static String generateIdentifier() {
+    private static synchronized String generateIdentifier() {
         return "T34P" + String.format("%015d", allCreatedProductNum + 1);
     }
 

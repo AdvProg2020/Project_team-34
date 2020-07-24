@@ -135,7 +135,7 @@ public class CustomerLog {
     }
 
     //Modeling Methods:
-    private static String generateIdentifier() {
+    private static synchronized String generateIdentifier() {
         return "T34CL" + String.format("%015d", allCustomerLogCreatedCount + 1);
     }
 

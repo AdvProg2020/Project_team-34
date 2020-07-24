@@ -31,6 +31,7 @@ public class Product {
     private int numberOfViews;
     private String filePath;
     private int supplierPort;
+    private String supplierHost;
 
     public int getNumberOfViews() {
         return numberOfViews;
@@ -74,6 +75,10 @@ public class Product {
 
     public void setSupplierPort(int supplierPort) {
         this.supplierPort = supplierPort;
+    }
+
+    public String getSupplierHost() {
+        return supplierHost;
     }
 
     public void setName(String name) {
@@ -144,6 +149,10 @@ public class Product {
         this.futureCategoryName = futureCategoryName;
     }
 
+    public void setSupplierHost(String supplierHost) {
+        this.supplierHost = supplierHost;
+    }
+
     public static Product convertJsonStringToProduct(String jsonString){
         return new Product(jsonString);
         //return (Product) Utils.convertStringToObject(jsonString, "product.Product");
@@ -204,6 +213,7 @@ public class Product {
         jsonObject.add("numberOfViews", jsonParser.parse(Utils.convertObjectToJsonString(numberOfViews)));
         jsonObject.add("filePath", jsonParser.parse(Utils.convertObjectToJsonString(filePath)));
         jsonObject.add("supplierPort", jsonParser.parse(Utils.convertObjectToJsonString(String.valueOf(supplierPort))));
+        jsonObject.add("supplierHost", jsonParser.parse(Utils.convertObjectToJsonString(supplierHost)));
         return jsonObject.toString();
     }
 
@@ -225,6 +235,7 @@ public class Product {
         this.numberOfViews = jsonObject.get("numberOfViews").getAsInt();
         this.filePath = jsonObject.get("filePath").getAsString();
         this.supplierPort = Integer.parseInt(jsonObject.get("supplierPort").getAsString());
+        this.supplierHost = jsonObject.get("supplierHost").getAsString();
     }
 
     @Override

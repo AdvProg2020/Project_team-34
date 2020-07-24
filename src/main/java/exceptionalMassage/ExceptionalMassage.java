@@ -1,7 +1,5 @@
 package exceptionalMassage;
 
-import discount.CodedDiscount;
-import server.communications.Response;
 import server.communications.Utils;
 
 /**

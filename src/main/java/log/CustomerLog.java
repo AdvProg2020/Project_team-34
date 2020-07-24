@@ -20,7 +20,6 @@ import java.util.HashMap;
  * @author Aryan Ahadinia
  * @since 0.0.1
  */
-
 public class CustomerLog {
     private static final ArrayList<CustomerLog> allCustomerLogs = new ArrayList<>();
     private static int allCustomerLogCreatedCount = 0;

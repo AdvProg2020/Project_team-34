@@ -1,14 +1,10 @@
 package feedback;
 
 import account.Customer;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
-import database.DataBase;
 import database.ScoreDataBase;
-import discount.CodedDiscount;
 import product.Product;
-import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;

@@ -13,7 +13,6 @@ import exceptionalMassage.ExceptionalMassage;
 import feedback.Comment;
 import feedback.CommentState;
 import feedback.Score;
-import javafx.scene.control.Alert;
 import log.CustomerLog;
 import product.Category;
 import product.Product;

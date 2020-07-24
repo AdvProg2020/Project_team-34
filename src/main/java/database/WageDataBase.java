@@ -6,7 +6,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.HashMap;
 
-
 /**
  * @author rpirayadi
  * @since 0.0.3

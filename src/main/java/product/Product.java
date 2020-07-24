@@ -15,11 +15,10 @@ import java.util.HashMap;
  * @author rpirayadi
  * @since 0.0.1
  */
-
 public class Product {
     private static final ArrayList<Product> allProduct = new ArrayList<>();
     private static int allCreatedProductNum = 0;
-    private String productId;
+    private final String productId;
     private String name;
     private String nameOfCompany;
     private State productState;

@@ -1,8 +1,6 @@
 package cart;
 
-import account.Supplier;
 import database.ShippingInfoDataBase;
-import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;

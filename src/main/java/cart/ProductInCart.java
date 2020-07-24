@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import database.ProductInCartDataBase;
 import product.Product;
-import server.communications.Response;
 import server.communications.Utils;
 
 import java.util.ArrayList;

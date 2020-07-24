@@ -114,7 +114,7 @@ public class Comment {
     }
 
     private static synchronized String generateIdentifier() {
-        return "T34C" + String.format("%015d", allCommentsNum + 1);
+        return "T34CO" + String.format("%015d", allCommentsNum + 1);
     }
 
     public static ArrayList<Comment> getCommentsForProduct(Product product) {

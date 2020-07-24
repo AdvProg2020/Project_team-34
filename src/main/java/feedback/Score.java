@@ -94,7 +94,7 @@ public class Score {
     }
 
     private static synchronized String generateIdentifier(){
-        return "T34P" + String.format("%015d", allCreatedScoreNum + 1);
+        return "T34SC" + String.format("%015d", allCreatedScoreNum + 1);
     }
 
     //Added by rpirayadi

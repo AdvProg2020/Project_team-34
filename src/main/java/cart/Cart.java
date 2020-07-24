@@ -412,6 +412,17 @@ public class Cart {
         return cart.toString();
     }
 
+    public static synchronized void reduceNumberOfProducts(Cart cart) throws ExceptionalMassage {
+        for (ProductInCart productInCart : cart.getProductsIn()) {
+            if (productInCart.getProduct().getRemainedNumber(productInCart.getSupplier()) < cart.getProductInCount().get(productInCart)) {
+                throw new ExceptionalMassage("Products are not available that much");
+            }
+        }
+        for (ProductInCart productInCart : cart.getProductsIn()) {
+            productInCart.getProduct().reduceRemainedNumber(productInCart.getSupplier(), cart.getProductInCount().get(productInCart));
+        }
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -82,7 +82,7 @@ public class Sale extends Discount {
     }
 
     private static synchronized String generateOffId() {
-        return "T34S" + String.format("%015d", allCreatedSalesNum + 1);
+        return "T34SA" + String.format("%015d", allCreatedSalesNum + 1);
     }
 
     public static void addSale(Sale sale) {

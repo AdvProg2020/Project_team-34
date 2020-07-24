@@ -469,6 +469,11 @@ public class AccountController {
         if(cart.getCodedDiscount() != null){
             cart.getCodedDiscount().addUsedCountForCustomer((Customer)mainController.getAccount());
         }
+        try {
+            Cart.reduceNumberOfProducts(cart);
+        } catch (ExceptionalMassage exceptionalMassage) {
+            return Response.createResponseFromExceptionalMassage(exceptionalMassage, mainController);
+        }
         customer.setCart(new Cart(customer));
         mainController.setCart(customer.getCart());
         CustomerLog customerLog = new CustomerLog(cart,WageDataBase.getWage());

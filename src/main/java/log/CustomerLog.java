@@ -43,9 +43,6 @@ public class CustomerLog {
         this.codedDiscountAmount = cart.getAmountOfCodedDiscount();
         this.deliveryStatus = LogStatus.PENDING;
         this.customer.setCredit(this.customer.getCredit() - this.paidAmount);
-        for (ProductInCart productInCart : cart.getProductsIn()) {
-            productInCart.getProduct().reduceRemainedNumber(productInCart.getSupplier(), cart.getProductInCount().get(productInCart));
-        }
         this.isAuction = false;
         allCustomerLogs.add(this);
         allCustomerLogCreatedCount++;

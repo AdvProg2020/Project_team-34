@@ -151,7 +151,7 @@ public class Product {
     }
 
     private static synchronized String generateIdentifier() {
-        return "T34P" + String.format("%015d", allCreatedProductNum + 1);
+        return "T34PR" + String.format("%015d", allCreatedProductNum + 1);
     }
 
     public String getProductId() {

@@ -94,15 +94,19 @@ public class AccountController {
                                          String email, String phoneNumber, String nameOfCompany, String bankUsername,
                                          String bankPassword, String alsoBankStr) {
         try {
+            Validation.booleanValidation(alsoBankStr);
+            boolean alsoBank = Boolean.parseBoolean(alsoBankStr);
             Validation.userPassStringValidation(username);
             Validation.normalStringValidation(firstName);
             Validation.normalStringValidation(lastName);
             Validation.emailValidation(email);
             Validation.phoneNumberValidation(phoneNumber);
-            Validation.normalStringValidation(nameOfCompany);
-            Validation.userPassStringValidation(bankUsername);
-            Validation.userPassStringValidation(bankPassword);
-            Validation.booleanValidation(alsoBankStr);
+            if (type.equals("supplier"))
+                Validation.normalStringValidation(nameOfCompany);
+            if (alsoBank) {
+                Validation.userPassStringValidation(bankUsername);
+                Validation.userPassStringValidation(bankPassword);
+            }
         }catch (ExceptionalMassage e){
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }

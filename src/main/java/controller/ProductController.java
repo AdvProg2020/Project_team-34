@@ -53,7 +53,8 @@ public class ProductController {
             Validation.specificationValidation(specification);
             Validation.imageInStringFormValidation(imageInStringForm);
             Validation.filePathValidation(filePath);
-            Validation.normalIntValidation(portStr);
+            if (!portStr.equals("-1"))
+                Validation.normalIntValidation(portStr);
         }catch (ExceptionalMassage e){
             return Response.createResponseFromExceptionalMassage(e, mainController);
         }

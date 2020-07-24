@@ -27,7 +27,7 @@ public class Controller {
     public Controller() {
         peerNode = new PeerNode(0);
         try {
-            this.socket = new Socket("0.tcp.ngrok.io", 15171);
+            this.socket = new Socket("localhost",8080);
             try {
                 this.inputStream = new ObjectInputStream(socket.getInputStream());
                 this.outputStream = new ObjectOutputStream(socket.getOutputStream());

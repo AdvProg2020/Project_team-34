@@ -11,6 +11,7 @@ import product.Product;
 import server.communications.RequestStatus;
 import server.communications.Response;
 import server.communications.Utils;
+import server.security.Validation;
 import state.State;
 
 import java.util.ArrayList;
@@ -38,6 +39,11 @@ public class OffController {
     }
 
     public Response controlGetDiscountByCode(String code) {
+        try {
+            Validation.discountCodeValidation(code);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         CodedDiscount codedDiscount = controlInternalGetDiscountByCode(code);
         if (codedDiscount == null) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "no such code!", mainController);
@@ -47,6 +53,15 @@ public class OffController {
 
     public Response controlEditDiscountByCode(String code, String newStartDateString, String newEndDateString,
                                               String newPercentString, String newMaxDiscountString) {
+        try {
+            Validation.discountCodeValidation(code);
+            Validation.dateValidation(newStartDateString);
+            Validation.dateValidation(newEndDateString);
+            Validation.percentValidation(newPercentString);
+            Validation.normalIntValidation(newMaxDiscountString);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Date newStartDate = new Date(Long.parseLong(newStartDateString));
         Date newEndDate = new Date(Long.parseLong(newEndDateString));
         int newPercent = Integer.parseInt(newPercentString);
@@ -64,6 +79,16 @@ public class OffController {
 
     public Response controlCreateCodedDiscount(String code, String startDateStr, String endDateStr, String percentStr,
                                            String maxDiscountAmountStr, String maxNumberOfUsageStr) {
+        try {
+            Validation.discountCodeValidation(code);
+            Validation.dateValidation(startDateStr);
+            Validation.dateValidation(endDateStr);
+            Validation.percentValidation(percentStr);
+            Validation.normalIntValidation(maxDiscountAmountStr);
+            Validation.normalIntValidation(maxNumberOfUsageStr);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Date startDate = new Date(Long.parseLong(startDateStr));
         Date endDate = new Date(Long.parseLong(endDateStr));
         int percent = Integer.parseInt(percentStr);
@@ -81,6 +106,11 @@ public class OffController {
     }
 
     public Response controlRemoveDiscountCode(String code) {
+        try {
+            Validation.discountCodeValidation(code);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         CodedDiscount codedDiscount = controlInternalGetDiscountByCode(code);
         if (codedDiscount == null) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "No such code!", mainController);
@@ -91,6 +121,14 @@ public class OffController {
 
     public Response controlCreateSale(String startDateString, String endDateString, String percentString,
                                       String productIds) {
+        try {
+            Validation.dateValidation(startDateString);
+            Validation.dateValidation(endDateString);
+            Validation.percentValidation(percentString);
+            Validation.identifierValidation(productIds);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Date startDate = new Date(Long.parseLong(startDateString));
         Date endDate = new Date(Long.parseLong(endDateString));
         int percent = Integer.parseInt(percentString);
@@ -126,11 +164,26 @@ public class OffController {
     }
 
     public Response controlGetSaleById(String id) {
+        try {
+            Validation.identifierValidation(id);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         return new Response(RequestStatus.SUCCESSFUL, Utils.convertObjectToJsonString(controlInternalGetSaleById(id)), mainController);
     }
 
     public Response controlEditSaleById(String id, String newEndDateStr, String newStartDateStr, String newPercentStr,
                                         String addingProductStr, String removingProductStr) {
+        try {
+            Validation.identifierValidation(id);
+            Validation.dateValidation(newEndDateStr);
+            Validation.dateValidation(newStartDateStr);
+            Validation.percentValidation(newPercentStr);
+            Validation.productArrayValidation(addingProductStr);
+            Validation.productArrayValidation(removingProductStr);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Date newEndDate = new Date(Long.parseLong(newEndDateStr));
         Date newStartDate = new Date(Long.parseLong(newStartDateStr));
         int newPercent = Integer.parseInt(newPercentStr);
@@ -156,6 +209,12 @@ public class OffController {
     }
 
     public Response controlRemoveSaleById(String id) {
+        try {
+            Validation.identifierValidation(id);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
+
         Sale sale = controlInternalGetSaleById(id);
         if (sale == null) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "No such sale with id!", mainController);
@@ -176,6 +235,11 @@ public class OffController {
     }
 
     public Response controlGetRemainedNumberInCodedDiscountForCustomer(String codedDiscountCode) {
+        try {
+            Validation.identifierValidation(codedDiscountCode);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         CodedDiscount codedDiscount = CodedDiscount.getCodedDiscountByCode(codedDiscountCode);
         if (!(mainController.getAccount() instanceof Customer)) {
             return new Response(RequestStatus.EXCEPTIONAL_MASSAGE, "Sign in as a Customer", mainController);
@@ -190,6 +254,12 @@ public class OffController {
     }
 
     public Response controlGetPriceForEachProductAfterSale(String productId, String supplierUsername) {
+        try {
+            Validation.identifierValidation(productId);
+            Validation.userPassStringValidation(supplierUsername);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         Sale sale = Sale.getProductSale(product, supplier);
@@ -202,36 +272,68 @@ public class OffController {
     }
 
     public Response removeCodedDiscount(String codedDiscountId) {
+        try {
+            Validation.identifierValidation(codedDiscountId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         CodedDiscount codedDiscount = CodedDiscount.getCodedDiscountByCode(codedDiscountId);
         CodedDiscount.removeCodeFromList(codedDiscount);
         return new Response(RequestStatus.SUCCESSFUL, "", mainController);
     }
 
     public Response isProductHasAnySale(String productId){
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(String.valueOf(Sale.
                 isProductHasAnySale(product))), mainController);
     }
 
     public Response getProductSale(String productId,String supplierUsername){
+        try {
+            Validation.identifierValidation(productId);
+            Validation.normalStringValidation(supplierUsername);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(Sale.getProductSale(product,supplier)), mainController);
     }
 
     public Response controlGetMaxSaleForThisProduct(String productId){
+        try {
+            Validation.identifierValidation(productId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         Sale sale = Sale.getMaxSaleForThisProduct(product);
         return new Response(RequestStatus.SUCCESSFUL,Utils.convertObjectToJsonString(sale), mainController);
     }
 
     public Response isProductInThisSuppliersSale(String productId,String supplierUsername){
+        try {
+            Validation.identifierValidation(productId);
+            Validation.userPassStringValidation(supplierUsername);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Product product = Product.getProductById(productId);
         Supplier supplier = (Supplier) Account.getAccountByUsernameWithinAvailable(supplierUsername);
         return new Response(RequestStatus.SUCCESSFUL, String.valueOf(Sale.isProductInThisSuppliersSale(product,supplier)), mainController);
     }
 
     public Response controlGetNotSaleProductsForSupplier(String saleId){
+        try {
+            Validation.identifierValidation(saleId);
+        }catch (ExceptionalMassage e){
+            return Response.createResponseFromExceptionalMassage(e, mainController);
+        }
         Sale sale = Sale.getSaleById(saleId);
         if(sale == null){
             return Response.createResponseFromExceptionalMassage(new ExceptionalMassage("Sale doesn't exist!"), mainController);

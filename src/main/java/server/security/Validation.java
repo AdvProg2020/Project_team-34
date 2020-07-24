@@ -1,8 +1,11 @@
 package server.security;
 
+import com.google.gson.JsonParser;
 import exceptionalMassage.ExceptionalMassage;
+import server.communications.Utils;
 
 import java.io.File;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -128,6 +131,24 @@ public class Validation {
         }
         if(!getMatcher(input, "\\d{6}").matches())
             throw new ExceptionalMassage("Not a Valid Account Number");
+    }
+
+    public static void dateValidation(String input)throws ExceptionalMassage{
+        try {
+            Long longNumber= Long.parseLong(input);
+            Date date = new Date(longNumber);
+        }catch (Exception e){
+            throw new ExceptionalMassage("Not a Valid Date");
+        }
+    }
+
+    public static void productArrayValidation(String input)throws ExceptionalMassage{
+        try {
+            Utils.convertProductIdArrayListToProductArrayList(Utils.convertJsonElementToStringArrayList(new JsonParser().
+                    parse(input)));
+        }catch (Exception e){
+            throw new ExceptionalMassage("Invalid Product Array");
+        }
     }
 
 

@@ -406,20 +406,24 @@ public class ProductMenuG extends GMenu {
         gridPane.add(compareButton,1,i);
         gridPane.add(productName,0,i);
         compareButton.setOnAction( e -> {
-            Product comparing = null;
+            Product comparing;
             try {
                 comparing = controller.getProductController().getProductByName(productName.getText());
-            } catch (ExceptionalMassage exceptionalMassage) {
-                new AlertBox(this, exceptionalMassage, controller);
-            }
-            if(comparing == null){
-                new AlertBox(this,"No such product","OK",controller).showAndWait();
-            } else {
                 stage.setScene(new CompareGMenu("Compare menu", this, stage, controller, product,comparing ).createScene());
+            } catch (ExceptionalMassage exceptionalMassage) {
+                new AlertBox(this, exceptionalMassage, controller).showAndWait();
             }
         });
 
+        compareButton.setDisable(true);
+
         gridPane.setPadding(new Insets(10,10,10,10));
+
+        background.setOnKeyReleased(e -> {
+            boolean isDisable = productName.getText().trim().equals("");
+            compareButton.setDisable(isDisable);
+        });
+
 
         background.getChildren().add(gridPane);
         return background;

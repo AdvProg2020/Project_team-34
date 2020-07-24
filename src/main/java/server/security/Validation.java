@@ -24,7 +24,7 @@ public class Validation {
         if(input.length() > STRING_MAX_LENGTH){
             throw new ExceptionalMassage("You have Exceeded maxLength");
         }
-        if(!getMatcher(input, "^[a-zA-Z]+$").matches()){
+        if(!getMatcher(input, "^[a-zA-Z \\s]+$").matches()){
             throw new ExceptionalMassage("Invalid String ");
         }
     }
@@ -81,7 +81,7 @@ public class Validation {
     }
 
     public static void identifierValidation(String input)throws  ExceptionalMassage{
-        if(!getMatcher(input, "T34(CR|AC|CA|PC|SI|SA|CO|SC|PR)\\d{15}").matches())
+        if(!getMatcher(input, "T34(CR|AC|CA|PC|SI|SA|CO|SC|PR|SAR|PRR)\\d{14,15}").matches())
             throw new ExceptionalMassage("Invalid identifier");
     }
 
@@ -178,7 +178,7 @@ public class Validation {
         if(input.length() > DESCRIPTION_MAX_LENGTH){
             throw new ExceptionalMassage("You have Exceeded maxLength");
         }
-        if(!getMatcher(input, "^\\w+$").matches()){
+        if(!getMatcher(input, "^[\\w \\s]+$").matches()){
             throw new ExceptionalMassage("Invalid String ");
         }
     }

@@ -196,14 +196,16 @@ public class Auction {
         highestPromoter = customer;
         highestPromotion = promotionAmount;
         Objects.requireNonNull(ChatRoom.getChatRoomById(chatRoomIdentifier)).getJoinedAccounts().add(customer);
+        AuctionDataBase.update(this);
     }
 
     public void end() {
-        if (isEnded) {
+        if (!isEnded) {
             if (highestPromoter != null) {
                 try {
                     new CustomerLog(this, wage);
                     supplier.setCredit(supplier.getCredit() + highestPromotion);
+                    AuctionDataBase.update(this);
                 } catch (ExceptionalMassage exceptionalMassage) {
                     System.err.println("Couldn't add log.");
                 }
